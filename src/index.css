@@ -1,0 +1,192 @@
+@import "tailwindcss";
+
+@layer base {
+  body {
+    font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+    background-color: #050b08;
+    color: #e2e8f0;
+    overflow-x: hidden;
+  }
+}
+
+/* 3D Spatial Atom Gyroscope System */
+.preserve-3d {
+  transform-style: preserve-3d;
+}
+
+@keyframes atom3DRing1 {
+  0% {
+    transform: rotateX(68deg) rotateY(22deg) rotateZ(0deg);
+  }
+  100% {
+    transform: rotateX(68deg) rotateY(22deg) rotateZ(360deg);
+  }
+}
+
+@keyframes atom3DRing2 {
+  0% {
+    transform: rotateX(68deg) rotateY(82deg) rotateZ(0deg);
+  }
+  100% {
+    transform: rotateX(68deg) rotateY(82deg) rotateZ(360deg);
+  }
+}
+
+@keyframes atom3DRing3 {
+  0% {
+    transform: rotateX(68deg) rotateY(-38deg) rotateZ(0deg);
+  }
+  100% {
+    transform: rotateX(68deg) rotateY(-38deg) rotateZ(360deg);
+  }
+}
+
+.animate-atom-3d-1 {
+  animation: atom3DRing1 14s linear infinite;
+}
+
+.animate-atom-3d-2 {
+  animation: atom3DRing2 18s linear infinite;
+}
+
+.animate-atom-3d-3 {
+  animation: atom3DRing3 22s linear infinite;
+}
+
+/* Revolving Orbit Animation for Category Badges */
+@keyframes orbitSpinButtons {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes counterSpinButtons {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(-360deg);
+  }
+}
+
+.animate-orbit-buttons {
+  animation: orbitSpinButtons 28s linear infinite;
+}
+
+.animate-counter-spin {
+  animation: counterSpinButtons 28s linear infinite;
+}
+
+/* 3D Atom Electron Orbit for Vendor Badges (Travels In Front & Behind Logo) */
+@keyframes orbitAtom3DVendor {
+  0% {
+    transform: rotate(0deg) translateY(calc(-1 * var(--orbit-vendor-r))) rotate(0deg) translateZ(45px) scale(1);
+    z-index: 35;
+    opacity: 1;
+    filter: drop-shadow(0 0 16px rgba(0, 255, 136, 0.65));
+  }
+  25% {
+    transform: rotate(90deg) translateY(calc(-1 * var(--orbit-vendor-r))) rotate(-90deg) translateZ(10px) scale(0.92);
+    z-index: 25;
+    opacity: 0.9;
+    filter: drop-shadow(0 0 12px rgba(0, 255, 136, 0.45));
+  }
+  42% {
+    z-index: 21;
+  }
+  48% {
+    z-index: 5;
+  }
+  50% {
+    /* At 180 deg: Passes behind the central logo with dimmed depth */
+    transform: rotate(180deg) translateY(calc(-1 * var(--orbit-vendor-r))) rotate(-180deg) translateZ(-45px) scale(0.76);
+    z-index: 5;
+    opacity: 0.45;
+    filter: drop-shadow(0 0 4px rgba(0, 255, 136, 0.2)) blur(0.4px);
+  }
+  58% {
+    z-index: 5;
+  }
+  65% {
+    z-index: 22;
+  }
+  75% {
+    transform: rotate(270deg) translateY(calc(-1 * var(--orbit-vendor-r))) rotate(-270deg) translateZ(10px) scale(0.92);
+    z-index: 25;
+    opacity: 0.9;
+    filter: drop-shadow(0 0 12px rgba(0, 255, 136, 0.45));
+  }
+  100% {
+    transform: rotate(360deg) translateY(calc(-1 * var(--orbit-vendor-r))) rotate(-360deg) translateZ(45px) scale(1);
+    z-index: 35;
+    opacity: 1;
+    filter: drop-shadow(0 0 16px rgba(0, 255, 136, 0.65));
+  }
+}
+
+.animate-orbit-atom-vendor {
+  animation: orbitAtom3DVendor 24s linear infinite;
+}
+
+@keyframes orbitSpinVendors {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes counterSpinVendors {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(-360deg);
+  }
+}
+
+.animate-orbit-vendors {
+  animation: orbitSpinVendors 36s linear infinite;
+}
+
+.animate-counter-spin-vendors {
+  animation: counterSpinVendors 36s linear infinite;
+}
+
+@keyframes pulseGlow {
+  0%, 100% {
+    opacity: 0.65;
+    transform: scale(1);
+    filter: drop-shadow(0 0 15px rgba(0, 255, 136, 0.35));
+  }
+  50% {
+    opacity: 0.95;
+    transform: scale(1.03);
+    filter: drop-shadow(0 0 30px rgba(0, 255, 136, 0.7));
+  }
+}
+
+.animate-pulse-glow {
+  animation: pulseGlow 4s ease-in-out infinite;
+}
+
+@keyframes spinSlow {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-spin-slow {
+  animation: spinSlow 36s linear infinite;
+}
+
+.neon-glow-green {
+  text-shadow: 0 0 15px rgba(0, 255, 136, 0.8), 0 0 30px rgba(0, 255, 136, 0.4);
+}
