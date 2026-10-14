@@ -364,7 +364,7 @@ export const AdminModal: React.FC<AdminModalProps> = ({
       active: true,
       rating: 5.0,
       salesCount: 0,
-      role: 'vendedor',
+      role: 'vendor',
       avatar: '/imagenes/monograma.png',
       pin: '1234',
       paymentMethods: ['Yape', 'Plin', 'BCP'],

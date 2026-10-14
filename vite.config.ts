@@ -2,36 +2,40 @@ import tailwindcss from '@tailwindcss/vite';
 import react from '@vitejs/plugin-react';
 import path from 'path';
 import { defineConfig, Plugin } from 'vite';
-import { app as expressApp } from './server/app';
 
 function expressApiPlugin(): Plugin {
   return {
     name: 'express-api-plugin',
-    configureServer(server) {
-      // Monta el backend Express en el servidor de desarrollo de Vite
-      // Todas las rutas /api son manejadas por el servidor de forma segura
-      server.middlewares.use(expressApp);
+    async configureServer(server) {
+      try {
+        const { app: expressApp } = await import('./server/app');
+        server.middlewares.use(expressApp);
+      } catch (err) {
+        console.warn('Express dev server not loaded:', err);
+      }
     }
   };
 }
 
-export default defineConfig(() => {
+export default defineConfig(({ command }) => {
+  const plugins = [react(), tailwindcss()];
+  if (command === 'serve') {
+    plugins.push(expressApiPlugin());
+  }
+
   return {
-    plugins: [react(), tailwindcss(), expressApiPlugin()],
+    plugins,
     resolve: {
       alias: {
-        '@': path.resolve(__dirname, '.'),
+        '@': path.resolve(process.cwd(), '.'),
       },
     },
     build: {
       outDir: 'dist',
-      emptyOutDir: true,
+      emptyOutDir: false,
     },
     server: {
-      // HMR is disabled in AI Studio via DISABLE_HMR env var.
-      // Do not modify—file watching is disabled to prevent flickering during agent edits.
       hmr: process.env.DISABLE_HMR !== 'true',
-      // Disable file watching when DISABLE_HMR is true to save CPU during agent edits.
       watch: process.env.DISABLE_HMR === 'true' ? null : {},
     },
   };

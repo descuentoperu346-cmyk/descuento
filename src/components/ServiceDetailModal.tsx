@@ -31,6 +31,7 @@ export const ServiceDetailModal: React.FC<ServiceDetailModalProps> = ({
 }) => {
   const [selectedPlanIndex, setSelectedPlanIndex] = useState<number>(0);
   const [showQrModal, setShowQrModal] = useState<boolean>(false);
+  const [selectedVendorId, setSelectedVendorId] = useState<string>('');
 
   if (!service) return null;
 
@@ -40,12 +41,10 @@ export const ServiceDetailModal: React.FC<ServiceDetailModalProps> = ({
       (v.allowedServiceIds?.includes(service.id) || v.id === service.vendorId)
   );
 
-  const [selectedVendorId, setSelectedVendorId] = useState<string>(() => {
-    return service.vendorId || authorizedVendors[0]?.id || '';
-  });
+  const effectiveVendorId = selectedVendorId || service.vendorId || authorizedVendors[0]?.id || '';
 
   const chosenVendor =
-    authorizedVendors.find((v) => v.id === selectedVendorId) ||
+    authorizedVendors.find((v) => v.id === effectiveVendorId) ||
     authorizedVendors[0] ||
     vendors[0];
 
