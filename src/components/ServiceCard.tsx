@@ -1,8 +1,9 @@
 import React from 'react';
-import { List, FileText, GraduationCap, ArrowRight, ShieldCheck, Zap, ShieldAlert } from 'lucide-react';
+import { List, FileText, GraduationCap, ArrowRight, ShieldCheck, Zap, ShieldAlert, Flame, Headphones, Sparkles, Bot, Search, Shield, Palette, Laptop, User, Tag } from 'lucide-react';
 import { ServiceItem } from '../data/servicesData';
 import { Vendor } from '../data/vendorsData';
 import { StreamingVisual, InvestigacionVisual, EducacionVisual, LeaksVisual } from './CardVisuals';
+import { ServiceAppLogo } from './BrandLogos';
 
 interface ServiceCardProps {
   service: ServiceItem;
@@ -49,8 +50,41 @@ export const ServiceCard: React.FC<ServiceCardProps> = ({
       ? service.details.plans[0].price
       : 'S/ 10.00');
 
-  // Badge text
-  const badgeText = service.badge || (service.popular ? '🔥 MÁS VENDIDO' : null);
+  // Badge text - sanitized from any emoji
+  const rawBadge = service.badge || (service.popular ? 'MÁS VENDIDO' : null);
+  const badgeText = rawBadge
+    ? rawBadge.replace(/[\u{1F300}-\u{1FAFF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}]/gu, '').trim()
+    : null;
+
+  const renderBadgeIcon = () => {
+    if (!badgeText) return null;
+    const lower = badgeText.toLowerCase();
+    if (lower.includes('vendido') || lower.includes('popular')) {
+      return <Flame className="w-3 h-3 text-amber-400 fill-amber-400 shrink-0" />;
+    }
+    if (lower.includes('hifi') || lower.includes('audio') || lower.includes('spotify')) {
+      return <Headphones className="w-3 h-3 text-emerald-400 shrink-0" />;
+    }
+    if (lower.includes('estreno') || lower.includes('disney')) {
+      return <Sparkles className="w-3 h-3 text-cyan-400 shrink-0" />;
+    }
+    if (lower.includes('ia') || lower.includes('gpt')) {
+      return <Bot className="w-3 h-3 text-violet-400 shrink-0" />;
+    }
+    if (lower.includes('osint') || lower.includes('intel')) {
+      return <Search className="w-3 h-3 text-[#00ff88] shrink-0" />;
+    }
+    if (lower.includes('pentesting') || lower.includes('seguridad')) {
+      return <Shield className="w-3 h-3 text-rose-400 shrink-0" />;
+    }
+    if (lower.includes('diseño') || lower.includes('canva')) {
+      return <Palette className="w-3 h-3 text-pink-400 shrink-0" />;
+    }
+    if (lower.includes('oem') || lower.includes('licencia') || lower.includes('windows')) {
+      return <Laptop className="w-3 h-3 text-blue-400 shrink-0" />;
+    }
+    return <Tag className="w-3 h-3 text-[#00ff88] shrink-0" />;
+  };
 
   const renderVisual = () => {
     switch (service.visualType) {
@@ -91,9 +125,10 @@ export const ServiceCard: React.FC<ServiceCardProps> = ({
       <div className="w-full relative overflow-hidden group/visual">
         {renderVisual()}
 
-        {/* Floating Top Badge */}
+        {/* Floating Top Badge with SVG Icon */}
         {badgeText && (
           <div className="absolute top-3 left-3 z-20 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider bg-black/85 text-[#00ff88] border border-emerald-500/40 shadow-lg backdrop-blur-md flex items-center gap-1.5 select-none">
+            {renderBadgeIcon()}
             <span>{badgeText}</span>
           </div>
         )}
@@ -143,10 +178,18 @@ export const ServiceCard: React.FC<ServiceCardProps> = ({
             </span>
           </div>
 
-          {/* Product Title */}
-          <h3 className="text-lg sm:text-xl font-black text-white group-hover:text-emerald-300 transition-colors tracking-tight line-clamp-1">
-            {service.title}
-          </h3>
+          {/* Product Title with Real Official App Logo */}
+          <div className="flex items-center gap-2.5">
+            <ServiceAppLogo
+              serviceId={service.id}
+              serviceTitle={service.title}
+              size={24}
+              className="shrink-0 shadow-sm"
+            />
+            <h3 className="text-lg sm:text-xl font-black text-white group-hover:text-emerald-300 transition-colors tracking-tight line-clamp-1">
+              {service.title}
+            </h3>
+          </div>
 
           {/* Description */}
           <p className="text-xs text-slate-400 mt-1.5 leading-relaxed line-clamp-2">
@@ -180,7 +223,9 @@ export const ServiceCard: React.FC<ServiceCardProps> = ({
                     className="w-5 h-5 rounded-full object-cover shrink-0 border border-emerald-500/50 shadow-sm"
                   />
                 ) : (
-                  <span className="text-xs shrink-0">{primaryVendor.avatar || '👤'}</span>
+                  <div className="w-5 h-5 rounded-full bg-emerald-950 flex items-center justify-center border border-emerald-500/50 shrink-0">
+                    <User className="w-3 h-3 text-[#00ff88]" />
+                  </div>
                 )}
                 <div className="truncate text-left leading-tight">
                   <span className="text-[10px] font-bold text-white block truncate">

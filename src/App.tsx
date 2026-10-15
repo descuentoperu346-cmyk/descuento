@@ -10,6 +10,8 @@ import { ServicesPage } from './pages/ServicesPage';
 import { AboutPage } from './pages/AboutPage';
 import { ContactPage } from './pages/ContactPage';
 import { LeaksTab } from './components/LeaksTab';
+import { LeaksBanner } from './components/LeaksBanner';
+import { PaymentMethodsBanner } from './components/PaymentMethodsBanner';
 import { FloatingVendorsDock } from './components/FloatingVendorsDock';
 import {
   ServiceItem,
@@ -59,7 +61,7 @@ export default function App() {
     if (typeof window !== 'undefined') {
       const hash = window.location.hash.toLowerCase();
       if (hash.includes('leaks') || hash.includes('filtrac')) return 'leaks';
-      if (hash.includes('servicios') || hash.includes('catalogo')) return 'servicios';
+      if (hash.includes('servicios') || hash.includes('catalogo')) return 'inicio';
       if (hash.includes('nosotros') || hash.includes('about')) return 'nosotros';
       if (hash.includes('contacto') || hash.includes('contact')) return 'contacto';
     }
@@ -177,7 +179,7 @@ export default function App() {
         if (hash.includes('leaks') || hash.includes('filtrac')) {
           setActiveNavTab('leaks');
         } else if (hash.includes('servicios') || hash.includes('catalogo')) {
-          setActiveNavTab('servicios');
+          setActiveNavTab('inicio');
         } else if (hash.includes('nosotros') || hash.includes('about')) {
           setActiveNavTab('nosotros');
         } else if (hash.includes('contacto') || hash.includes('contact')) {
@@ -273,7 +275,7 @@ export default function App() {
 
         {/* ======================= PAGE: LEAKS & FILTRACIONES ======================= */}
         {activeNavTab === 'leaks' && (
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-10 pb-16">
+          <div className="w-full max-w-[1560px] mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 pb-20">
             <LeaksTab
               articles={leakArticles}
               onOpenContact={() => handleTabChange('contacto')}
@@ -315,7 +317,7 @@ export default function App() {
             />
 
             {/* Quick Section Jump Cards */}
-            <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+            <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-1 pb-6 sm:pt-2 sm:pb-8">
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                 {/* Card 1: Servicios */}
                 <div
@@ -463,104 +465,56 @@ export default function App() {
                 ))}
               </div>
 
-              {/* Banner to catalog */}
-              <div className="mt-8 text-center p-6 rounded-2xl bg-[#06140c] border border-emerald-900/50 flex flex-col sm:flex-row items-center justify-between gap-4">
-                <div className="text-center sm:text-left">
-                  <p className="text-sm font-bold text-white">
-                    ¿Buscas Spotify, Crunchyroll, ChatGPT, licencias de software o bases OSINT?
-                  </p>
-                  <p className="text-xs text-slate-400 mt-0.5">
-                    Tenemos más de {services.length} planes disponibles con filtros por categoría y asesor asignado.
-                  </p>
-                </div>
-                <button
-                  type="button"
-                  onClick={() => handleTabChange('servicios')}
-                  className="px-5 py-2.5 rounded-xl text-xs font-black text-black bg-[#00ff88] hover:bg-[#00e676] cursor-pointer whitespace-nowrap shrink-0 shadow-md"
-                >
-                  Abrir Catálogo de Servicios →
-                </button>
-              </div>
-            </section>
+              {/* Interactive Kusi AI Catalog Callout Banner */}
+              <div
+                onClick={() => handleTabChange('servicios')}
+                className="mt-10 relative rounded-3xl overflow-hidden border-2 border-emerald-500/35 shadow-[0_0_35px_rgba(0,255,136,0.12)] p-6 sm:p-7 bg-gradient-to-r from-[#03130a]/95 via-[#062414]/95 to-[#020e06]/95 cursor-pointer group transition-all duration-300 hover:scale-[1.01] hover:border-[#00ff88]"
+              >
+                {/* Cyber Corner Brackets */}
+                <div className="absolute top-2.5 left-2.5 w-3 h-3 border-t-2 border-l-2 border-[#00ff88]/60 pointer-events-none" />
+                <div className="absolute top-2.5 right-2.5 w-3 h-3 border-t-2 border-r-2 border-[#00ff88]/60 pointer-events-none" />
+                <div className="absolute bottom-2.5 left-2.5 w-3 h-3 border-b-2 border-l-2 border-[#00ff88]/60 pointer-events-none" />
+                <div className="absolute bottom-2.5 right-2.5 w-3 h-3 border-b-2 border-r-2 border-[#00ff88]/60 pointer-events-none" />
 
-            {/* Leaks & Threat Intel Spotlight Banner */}
-            <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-              <div className="rounded-3xl p-6 sm:p-8 bg-gradient-to-r from-[#170505] via-[#100303] to-[#080202] border border-rose-600/35 shadow-[0_0_40px_rgba(244,63,94,0.15)] flex flex-col md:flex-row items-center justify-between gap-6 relative overflow-hidden">
-                <div
-                  className="absolute inset-0 opacity-20 bg-cover bg-center pointer-events-none mix-blend-screen"
-                  style={{ backgroundImage: "url('/imagenes/banner-filtraciones.png')" }}
-                />
-
-                <div className="space-y-2 text-center md:text-left relative z-10">
-                  <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-rose-950/80 border border-rose-500/40 text-[10px] font-mono font-bold text-rose-300">
-                    <span className="w-2 h-2 rounded-full bg-rose-500 animate-ping" />
-                    <span>ALERTA DE SEGURIDAD & CIBERINTELIGENCIA</span>
-                  </div>
-                  <h3 className="text-xl sm:text-2xl font-black text-white">
-                    Monitoreo Activo de Brechas y Filtraciones en Perú
-                  </h3>
-                  <p className="text-xs sm:text-sm text-slate-300 max-w-2xl leading-relaxed">
-                    Publicamos análisis técnicos periódicos sobre filtraciones corporativas, bases de datos expuestas y recomendaciones para proteger tu identidad digital y contraseñas con el equipo de <strong>Tin9o</strong>.
-                  </p>
-                </div>
-
-                <div className="shrink-0 flex items-center gap-4 relative z-10 w-full md:w-auto justify-center md:justify-end">
-                  <div className="hidden lg:block w-16 h-16 rounded-2xl overflow-hidden border border-rose-500/40 shadow-[0_0_20px_rgba(244,63,94,0.3)]">
-                    <img
-                      src="/imagenes/banner-escudo.png"
-                      alt="Escudo Ciberseguridad"
-                      className="w-full h-full object-cover"
-                    />
+                <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-5">
+                  <div className="flex items-center gap-4 text-left">
+                    <div className="w-14 h-14 rounded-2xl overflow-hidden bg-emerald-950/80 border border-emerald-400/60 shadow-[0_0_15px_rgba(0,255,136,0.3)] shrink-0 flex items-center justify-center">
+                      <img
+                        src="/imagenes/llama-about.png"
+                        alt="Kusi AI"
+                        className="w-full h-full object-contain filter drop-shadow animate-float-card"
+                      />
+                    </div>
+                    <div>
+                      <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-950 border border-emerald-500/40 text-[10px] font-mono text-[#00ff88] uppercase tracking-wider mb-1">
+                        <span className="w-1.5 h-1.5 rounded-full bg-[#00ff88] animate-ping" />
+                        <span>Kusi AI · Monitoreo en Tiempo Real</span>
+                      </div>
+                      <h4 className="text-base sm:text-lg font-black text-white group-hover:text-[#00ff88] transition-colors">
+                        ¿Buscas Spotify, ChatGPT Plus, licencias originales o bases OSINT?
+                      </h4>
+                      <p className="text-xs text-slate-300 mt-0.5">
+                        Explora más de {services.length} cuentas y servicios verificados con reposición 100% garantizada.
+                      </p>
+                    </div>
                   </div>
 
                   <button
                     type="button"
-                    onClick={() => handleTabChange('leaks')}
-                    className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full text-xs font-bold text-white bg-rose-600 hover:bg-rose-500 shadow-[0_0_25px_rgba(244,63,94,0.45)] transition-all cursor-pointer whitespace-nowrap"
+                    className="px-6 py-3 rounded-xl text-xs font-black text-slate-950 bg-[#00ff88] hover:bg-[#00e676] shadow-[0_0_20px_rgba(0,255,136,0.5)] cursor-pointer whitespace-nowrap shrink-0 transition-transform group-hover:scale-105"
                   >
-                    <ShieldAlert className="w-4 h-4" />
-                    <span>Explorar Revista de Leaks</span>
+                    Abrir Catálogo de Servicios →
                   </button>
                 </div>
               </div>
             </section>
 
-            {/* Payment Methods Showcase Banner */}
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-              {paymentMethods.filter((p) => p.active).length > 0 && (
-                <div className="p-6 sm:p-8 rounded-3xl bg-[#06140c]/90 border border-emerald-900/50 shadow-[0_0_30px_rgba(0,0,0,0.6)] backdrop-blur-md">
-                  <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
-                    <div>
-                      <span className="text-[10px] font-black uppercase tracking-[0.2em] text-[#00ff88] block mb-1">
-                        FORMAS DE PAGO GARANTIZADAS
-                      </span>
-                      <h3 className="text-xl sm:text-2xl font-black text-white">
-                        Paga con total confianza y rapidez
-                      </h3>
-                      <p className="text-xs sm:text-sm text-slate-400 mt-1 max-w-xl">
-                        Aceptamos transferencias bancarias peruanas inmediatas, billeteras digitales y criptomonedas con activación en minutos.
-                      </p>
-                    </div>
+            {/* Leaks & Threat Intel Spotlight Banner */}
+            <LeaksBanner onExploreLeaks={() => handleTabChange('leaks')} />
 
-                    <div className="flex flex-wrap items-center gap-2.5">
-                      {paymentMethods
-                        .filter((p) => p.active)
-                        .map((method) => (
-                          <div
-                            key={method.id}
-                            className="flex items-center gap-2 px-3.5 py-2 rounded-2xl bg-[#030d07] border border-emerald-900/60 shadow-sm"
-                          >
-                            <span className="text-base">{method.icon}</span>
-                            <div className="leading-tight">
-                              <span className="text-xs font-bold text-white block">{method.name}</span>
-                              <span className="text-[9px] text-[#00ff88] font-mono">100% Verificado</span>
-                            </div>
-                          </div>
-                        ))}
-                    </div>
-                  </div>
-                </div>
-              )}
+            {/* Payment Methods Showcase Banner with Real Official App Logos */}
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6">
+              <PaymentMethodsBanner paymentMethods={paymentMethods} />
 
               {/* Telegram Connect Banner */}
               <div className="mt-8">
@@ -571,6 +525,7 @@ export default function App() {
                 />
               </div>
             </div>
+
           </>
         )}
       </main>

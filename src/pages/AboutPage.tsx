@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React from 'react';
 import {
   ShieldCheck,
   Zap,
@@ -8,8 +8,6 @@ import {
   Clock,
   Sparkles,
   CheckCircle2,
-  ChevronDown,
-  ChevronUp,
   Send,
   ArrowRight,
   Database,
@@ -20,11 +18,16 @@ import {
   Phone,
   Crown,
   ExternalLink,
-  MessageCircle
+  MessageCircle,
+  AlertTriangle,
+  Search,
+  Laptop,
+  Film
 } from 'lucide-react';
 import { TELEGRAM_URL, TELEGRAM_USERNAME } from '../data/servicesData';
 import { Vendor } from '../data/vendorsData';
 import { recordVendorClickEvent } from '../data/telemetryData';
+import { Vendors3DFloatingCarousel } from '../components/Vendors3DFloatingCarousel';
 
 interface AboutPageProps {
   onNavigateToServices: () => void;
@@ -39,172 +42,144 @@ export const AboutPage: React.FC<AboutPageProps> = ({
   onNavigateToLeaks,
   vendors
 }) => {
-  const [openFaq, setOpenFaq] = useState<number | null>(0);
-  const [isAutoScrolling, setIsAutoScrolling] = useState(true);
-  const carouselRef = useRef<HTMLDivElement>(null);
-
   // Group / Central Vendor is the MAIN card
   const centralVendor = vendors.find((v) => v.role === 'admin' || v.id === 'vendedor-central') || vendors[0];
-
-  // The 4 verified creators for the cards carousel
-  const creatorVendors = vendors.filter((v) => v.id !== centralVendor.id && v.active !== false);
-
-  // Auto-moving carousel interval
-  useEffect(() => {
-    if (!isAutoScrolling) return;
-
-    const interval = setInterval(() => {
-      if (carouselRef.current) {
-        const { scrollLeft, scrollWidth, clientWidth } = carouselRef.current;
-        if (scrollLeft + clientWidth >= scrollWidth - 25) {
-          carouselRef.current.scrollTo({ left: 0, behavior: 'smooth' });
-        } else {
-          carouselRef.current.scrollBy({ left: 320, behavior: 'smooth' });
-        }
-      }
-    }, 3400);
-
-    return () => clearInterval(interval);
-  }, [isAutoScrolling, creatorVendors.length]);
-
-  const pauseAutoScroll = () => setIsAutoScrolling(false);
-  const resumeAutoScroll = () => setIsAutoScrolling(true);
-
-  const scrollLeft = () => {
-    pauseAutoScroll();
-    if (carouselRef.current) {
-      carouselRef.current.scrollBy({ left: -320, behavior: 'smooth' });
-    }
-  };
-
-  const scrollRight = () => {
-    pauseAutoScroll();
-    if (carouselRef.current) {
-      carouselRef.current.scrollBy({ left: 320, behavior: 'smooth' });
-    }
-  };
-
-  const faqs = [
-    {
-      q: '¿Cómo se realiza la entrega de las cuentas y servicios?',
-      a: 'Una vez coordinado el pago por Yape, Plin o transferencia bancaria, el asesor asignado te envía los datos de acceso o el reporte digital directamente por Telegram en un lapso promedio de 3 a 10 minutos.'
-    },
-    {
-      q: '¿Qué garantía tengo si una cuenta presenta problemas?',
-      a: 'Todos nuestros servicios cuentan con Garantía Total de Reposición durante el periodo contratado. Si experimentas cualquier caída de señal o inconveniente técnico, nuestro equipo te reactiva o sustituye el servicio sin costo adicional.'
-    },
-    {
-      q: '¿Los servicios de investigación OSINT son confidenciales?',
-      a: 'Absolutamente. Aplicamos protocolos de borrado seguro. No almacenamos historiales de búsquedas personales ni compartimos información de clientes con terceros bajo ninguna circunstancia.'
-    },
-    {
-      q: '¿Puedo renovar la misma cuenta mes a mes?',
-      a: 'Sí. En la gran mayoría de servicios (como Spotify a tu propio correo, Disney+, Netflix y YouTube Premium), ofrecemos renovaciones continuas para que mantengas tus listas de reproducción, perfiles y preferencias intactos.'
-    }
-  ];
 
   return (
     <div className="space-y-12 sm:space-y-16 animate-in fade-in duration-300">
       
-      {/* 1. Hero Section with Peruvian Mascot & High-Tech Intro */}
-      <section className="relative rounded-3xl p-6 sm:p-10 md:p-12 bg-gradient-to-r from-[#041108] via-[#06180e] to-[#020b06] border border-emerald-500/35 shadow-[0_0_50px_rgba(0,255,136,0.12)] overflow-hidden">
-        <div className="absolute -top-24 -right-24 w-96 h-96 bg-emerald-500/15 rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute -bottom-24 -left-24 w-80 h-80 bg-emerald-400/10 rounded-full blur-3xl pointer-events-none" />
+      {/* 1. Header: Transparencia, Garantía y Comunidad */}
+      <section className="relative rounded-2xl p-5 sm:p-7 md:p-8 bg-gradient-to-r from-[#02140b] via-[#031d10] to-[#010e07] border border-emerald-500/30 shadow-[0_0_25px_rgba(0,255,136,0.08)] overflow-hidden">
+        {/* Ambient subtle glow */}
+        <div className="absolute top-0 right-1/4 w-80 h-32 bg-[#00ff88]/5 rounded-full blur-3xl pointer-events-none" />
 
-        <div className="relative z-10 flex flex-col lg:flex-row items-center justify-between gap-8">
-          <div className="max-w-2xl space-y-4 sm:space-y-5">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-emerald-950/80 border border-emerald-500/40 text-[11px] font-mono text-[#00ff88] tracking-widest uppercase">
-              <ShieldCheck className="w-4 h-4 text-[#00ff88]" />
-              <span>CONÓCENOS // COMPROMISO & CONFIANZA</span>
+        <div className="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+          <div className="space-y-3 max-w-2xl">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-950/80 border border-emerald-500/40 text-[11px] font-mono text-[#00ff88]">
+              <ShieldCheck className="w-3.5 h-3.5 text-[#00ff88]" />
+              <span className="font-semibold uppercase tracking-wider">Identidad, Garantía & Comunidad</span>
             </div>
 
-            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight leading-tight">
-              La plataforma líder de <span className="text-[#00ff88] neon-glow-green">servicios digitales</span> y ciberseguridad en el Perú
+            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-black text-white tracking-tight leading-tight">
+              Plataforma Digital Verificada en <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#00ff88] via-emerald-300 to-teal-200">Todo el Perú</span>
             </h1>
 
-            <p className="text-sm sm:text-base md:text-lg text-slate-300 leading-relaxed font-normal">
-              En <strong>Descuentos Perú</strong> centralizamos suscripciones premium oficiales de streaming, auditoría e investigación OSINT en registros públicos y laboratorios de ciberseguridad con la atención directa de nuestros creadores verificados: <strong>Whisky Perú</strong>, <strong>Abbys Perú</strong>, <strong>El Nano VIP</strong> y <strong>Tin9o</strong>.
+            <p className="text-xs sm:text-sm text-slate-300 leading-relaxed font-normal">
+              Conectamos usuarios con creadores y asesores de confianza. Garantizamos cuentas 100% privadas, reposición inmediata ante cualquier contingencia y soporte continuo en Telegram para streaming, herramientas OSINT y software profesional.
             </p>
 
-            <div className="flex flex-wrap items-center gap-3 pt-2">
+            <div className="flex flex-wrap items-center gap-2.5 pt-1">
+              <button
+                type="button"
+                onClick={() => {
+                  const el = document.getElementById('seccion-asesores');
+                  if (el) el.scrollIntoView({ behavior: 'smooth' });
+                }}
+                className="px-3.5 py-1.5 rounded-xl text-xs font-mono font-bold bg-[#00ff88] text-slate-950 shadow-[0_0_15px_rgba(0,255,136,0.35)] hover:bg-[#00e676] transition-all cursor-pointer flex items-center gap-2 active:scale-95"
+              >
+                <Users className="w-3.5 h-3.5 text-slate-950" />
+                <span>Conocer al Equipo</span>
+              </button>
+
               <button
                 type="button"
                 onClick={onNavigateToServices}
-                className="px-6 py-3 rounded-full font-bold text-xs sm:text-sm text-slate-950 bg-[#00ff88] hover:bg-[#00e676] shadow-[0_0_20px_rgba(0,255,136,0.35)] transition-all cursor-pointer flex items-center gap-2"
+                className="px-3.5 py-1.5 rounded-xl text-xs font-mono font-bold bg-emerald-950/60 text-emerald-300 border border-emerald-500/40 hover:border-[#00ff88] hover:text-white transition-all cursor-pointer flex items-center gap-2"
               >
-                <span>Ver Catálogo de Servicios</span>
-                <ArrowRight className="w-4 h-4" />
-              </button>
-              <button
-                type="button"
-                onClick={onNavigateToContact}
-                className="px-6 py-3 rounded-full font-bold text-xs sm:text-sm text-white bg-[#07190e] hover:bg-[#0d2a1b] border border-emerald-500/40 transition-all cursor-pointer flex items-center gap-2"
-              >
-                <Send className="w-4 h-4 text-[#00ff88]" />
-                <span>Contactar con un Asesor</span>
+                <Sparkles className="w-3.5 h-3.5 text-[#00ff88]" />
+                <span>Explorar Catálogo</span>
               </button>
             </div>
           </div>
 
-          {/* Peruvian Mascot Presenting */}
-          <div className="relative shrink-0 w-48 sm:w-56 lg:w-64 flex items-center justify-center">
-            <div className="absolute inset-0 bg-emerald-500/20 rounded-full blur-2xl pointer-events-none" />
-            <img
-              src="/imagenes/llama-about.png"
-              alt="Mascota Descuentos Perú"
-              className="relative z-10 w-full h-auto max-h-72 object-contain filter drop-shadow-[0_15px_30px_rgba(0,0,0,0.8)]"
-            />
+          {/* Quick Metrics Pillar */}
+          <div className="grid grid-cols-2 gap-2.5 shrink-0 w-full lg:w-auto lg:min-w-[280px]">
+            <div className="p-3 rounded-xl bg-black/60 border border-emerald-500/20 backdrop-blur-sm">
+              <div className="flex items-center gap-1.5 text-[#00ff88] text-[10px] font-mono font-bold uppercase mb-0.5">
+                <Users className="w-3 h-3" />
+                <span>Equipo</span>
+              </div>
+              <div className="text-xl font-black text-white">4 Asesores</div>
+              <div className="text-[10px] text-slate-400">Verificados y activos</div>
+            </div>
+
+            <div className="p-3 rounded-xl bg-black/60 border border-emerald-500/20 backdrop-blur-sm">
+              <div className="flex items-center gap-1.5 text-[#00ff88] text-[10px] font-mono font-bold uppercase mb-0.5">
+                <Zap className="w-3 h-3" />
+                <span>Respuesta</span>
+              </div>
+              <div className="text-xl font-black text-white">&lt; 5 min</div>
+              <div className="text-[10px] text-slate-400">Promedio de atención</div>
+            </div>
+
+            <div className="p-3 rounded-xl bg-black/60 border border-emerald-500/20 backdrop-blur-sm">
+              <div className="flex items-center gap-1.5 text-[#00ff88] text-[10px] font-mono font-bold uppercase mb-0.5">
+                <ShieldCheck className="w-3 h-3" />
+                <span>Garantía</span>
+              </div>
+              <div className="text-xl font-black text-white">100% Total</div>
+              <div className="text-[10px] text-slate-400">Reposición sin costo</div>
+            </div>
+
+            <div className="p-3 rounded-xl bg-black/60 border border-emerald-500/20 backdrop-blur-sm">
+              <div className="flex items-center gap-1.5 text-[#00ff88] text-[10px] font-mono font-bold uppercase mb-0.5">
+                <Lock className="w-3 h-3" />
+                <span>Privacidad</span>
+              </div>
+              <div className="text-xl font-black text-white">Segura</div>
+              <div className="text-[10px] text-slate-400">Sin retención de logs</div>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* 2. TEAM SHOWCASE: MAIN GROUP CARD (PRINCIPAL) + CREATOR CAROUSEL */}
-      <section className="space-y-6">
+      {/* 2. TEAM SHOWCASE: MAIN GROUP CARD (PRINCIPAL) + 3D FLOATING CAROUSEL */}
+      <section id="seccion-asesores" className="space-y-6">
         
-        {/* A. EL DEL GRUPO COMO PRINCIPAL (FEATURED HERO CARD) */}
-        <div className="rounded-3xl p-6 sm:p-8 md:p-10 bg-gradient-to-r from-[#04170d] via-[#062415] to-[#020e06] border-2 border-[#00ff88]/60 shadow-[0_0_40px_rgba(0,255,136,0.2)] relative overflow-hidden">
-          <div className="absolute top-0 right-0 px-4 py-1.5 bg-[#00ff88] text-slate-950 text-[10px] sm:text-xs font-black uppercase tracking-widest rounded-bl-2xl font-mono flex items-center gap-1.5 shadow-md">
-            <Crown className="w-3.5 h-3.5 fill-slate-950" />
-            <span>CANAL & GRUPO OFICIAL PRINCIPAL</span>
+        {/* A. EL DEL GRUPO COMO PRINCIPAL (FEATURED HERO CARD - COMPACT) */}
+        <div className="rounded-2xl p-4 sm:p-6 bg-gradient-to-r from-[#04170d] via-[#062415] to-[#020e06] border-2 border-[#00ff88]/60 shadow-[0_0_30px_rgba(0,255,136,0.18)] relative overflow-hidden">
+          <div className="absolute top-0 right-0 px-3 py-1 bg-[#00ff88] text-slate-950 text-[9px] sm:text-[10px] font-black uppercase tracking-wider rounded-bl-xl font-mono flex items-center gap-1 shadow-sm">
+            <Crown className="w-3 h-3 fill-slate-950" />
+            <span>CANAL MATRIZ OFICIAL</span>
           </div>
 
-          <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 relative z-10">
-            <div className="flex flex-col sm:flex-row sm:items-center gap-5 max-w-3xl">
-              <div className="relative w-20 h-20 sm:w-24 sm:h-24 rounded-2xl overflow-hidden border-2 border-[#00ff88] p-1.5 bg-black shadow-[0_0_25px_rgba(0,255,136,0.5)] shrink-0">
+          <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 relative z-10">
+            <div className="flex flex-col sm:flex-row sm:items-center gap-4 max-w-3xl">
+              <div className="relative w-14 h-14 sm:w-16 sm:h-16 rounded-xl overflow-hidden border-2 border-[#00ff88] p-1 bg-black shadow-[0_0_15px_rgba(0,255,136,0.4)] shrink-0">
                 <img
                   src="/imagenes/monograma.png"
                   alt={centralVendor.name}
                   className="w-full h-full object-contain"
                 />
-                <span className="absolute bottom-1 right-1 w-3.5 h-3.5 rounded-full bg-[#00ff88] border-2 border-black animate-ping" />
+                <span className="absolute bottom-0.5 right-0.5 w-2.5 h-2.5 rounded-full bg-[#00ff88] border-2 border-black animate-ping" />
               </div>
 
-              <div className="space-y-1.5">
+              <div className="space-y-1">
                 <div className="flex items-center gap-2">
-                  <span className="px-2.5 py-0.5 rounded text-[10px] font-mono font-bold bg-emerald-950 border border-emerald-500/50 text-[#00ff88]">
+                  <span className="px-2 py-0.2 rounded text-[9px] font-mono font-bold bg-emerald-950 border border-emerald-500/50 text-[#00ff88]">
                     ADMINISTRACIÓN CENTRAL
                   </span>
-                  <span className="text-xs text-slate-400 font-mono">Verificado oficial</span>
+                  <span className="text-[11px] text-slate-400 font-mono">Verificado</span>
                 </div>
-                <h3 className="text-2xl sm:text-3xl font-black text-white leading-tight">
+                <h3 className="text-xl sm:text-2xl font-black text-white leading-tight">
                   {centralVendor.name}
                 </h3>
-                <p className="text-xs sm:text-sm text-slate-300 leading-relaxed font-normal">
+                <p className="text-xs text-slate-300 leading-relaxed font-normal">
                   {centralVendor.customNotes ||
                     'Canal matriz y administración central. Coordinación de compras mayoristas, garantías 24/7, soporte general y comunicados oficiales en todo el Perú.'}
                 </p>
-                <div className="flex items-center gap-4 text-xs font-mono text-emerald-400 pt-1">
-                  <span className="flex items-center gap-1.5">
-                    <span className="w-2 h-2 rounded-full bg-[#00ff88] animate-pulse" />
+                <div className="flex items-center gap-3 text-[11px] font-mono text-emerald-400 pt-0.5">
+                  <span className="flex items-center gap-1">
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#00ff88] animate-pulse" />
                     En Línea 24/7 (Telegram)
                   </span>
                   <span>•</span>
-                  <span>100% Reposición Garantizada</span>
+                  <span>100% Reposición</span>
                 </div>
               </div>
             </div>
 
-            <div className="shrink-0 flex flex-col sm:flex-row lg:flex-col gap-2.5">
+            <div className="shrink-0 flex flex-col sm:flex-row lg:flex-col gap-1.5">
               <a
                 href={centralVendor.telegramUrl}
                 target="_blank"
@@ -212,174 +187,20 @@ export const AboutPage: React.FC<AboutPageProps> = ({
                 onClick={() => {
                   recordVendorClickEvent(centralVendor.id, centralVendor.name, 'telegram', 'Nosotros Grupo Principal');
                 }}
-                className="px-6 py-3.5 rounded-2xl font-black text-xs sm:text-sm text-slate-950 bg-[#00ff88] hover:bg-[#00e676] shadow-[0_0_25px_rgba(0,255,136,0.4)] transition-all cursor-pointer flex items-center justify-center gap-2 font-mono uppercase tracking-wide active:scale-95 whitespace-nowrap"
+                className="px-5 py-2.5 rounded-xl font-black text-xs text-slate-950 bg-[#00ff88] hover:bg-[#00e676] shadow-[0_0_20px_rgba(0,255,136,0.4)] transition-all cursor-pointer flex items-center justify-center gap-2 font-mono uppercase tracking-wide active:scale-95 whitespace-nowrap"
               >
-                <Send className="w-4 h-4 fill-slate-950" />
+                <Send className="w-3.5 h-3.5 fill-slate-950" />
                 <span>Unirse al Canal (@{centralVendor.username})</span>
               </a>
-              <span className="text-[10px] font-mono text-slate-400 text-center">
+              <span className="text-[9px] font-mono text-slate-400 text-center">
                 Canal oficial de broadcasts & soporte
               </span>
             </div>
           </div>
         </div>
 
-        {/* B. BANNER DE CREADORES VIP CON CARRUSEL AUTOMÁTICO EN MOVIMIENTO */}
-        <div className="rounded-3xl p-6 sm:p-8 md:p-10 bg-gradient-to-r from-[#031c10] via-[#052d19] to-[#02130a] border-2 border-emerald-500/50 shadow-[0_0_40px_rgba(0,255,136,0.22)] relative overflow-hidden space-y-6">
-          
-          {/* Ambient Cyber Highlights */}
-          <div className="absolute top-0 right-0 w-96 h-full bg-emerald-500/10 blur-3xl pointer-events-none" />
-          <div className="absolute -bottom-10 -left-10 w-72 h-72 bg-[#00ff88]/10 blur-3xl pointer-events-none" />
-
-          {/* Banner Header Strip */}
-          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-emerald-500/30 pb-5 relative z-10">
-            <div className="space-y-1.5">
-              <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-emerald-950/90 border border-emerald-500/50 text-[10px] font-mono text-[#00ff88] tracking-widest uppercase">
-                <Sparkles className="w-3.5 h-3.5 text-[#00ff88] animate-pulse" />
-                <span>RED DE CREADORES VIP // ATENCIÓN DIRECTA 24/7</span>
-              </div>
-              <h3 className="text-2xl sm:text-3xl font-black text-white tracking-tight">
-                Asesores & Vendedores Certificados
-              </h3>
-              <p className="text-xs sm:text-sm text-slate-300 max-w-2xl leading-relaxed">
-                Cada asesor cuenta con canales oficiales y entrega inmediata por Telegram. El carrusel se desliza automáticamente para que explores todas las especialidades disponibles.
-              </p>
-            </div>
-
-            {/* Live Status Badge & Arrow Controls */}
-            <div className="flex items-center gap-3 shrink-0">
-              <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-black/60 border border-emerald-500/40 text-[11px] font-mono text-[#00ff88]">
-                <span className="w-2 h-2 rounded-full bg-[#00ff88] animate-ping" />
-                <span>{isAutoScrolling ? 'Carrusel en Vivo' : 'Pausado'}</span>
-              </div>
-
-              <div className="flex items-center gap-1.5">
-                <button
-                  type="button"
-                  onClick={scrollLeft}
-                  className="w-10 h-10 rounded-full bg-[#04150c] border border-emerald-500/50 hover:border-[#00ff88] text-white flex items-center justify-center transition-all hover:scale-105 active:scale-95 shadow-md cursor-pointer"
-                  title="Deslizar a la izquierda"
-                >
-                  <ChevronLeft className="w-5 h-5 text-[#00ff88]" />
-                </button>
-                <button
-                  type="button"
-                  onClick={scrollRight}
-                  className="w-10 h-10 rounded-full bg-[#04150c] border border-emerald-500/50 hover:border-[#00ff88] text-white flex items-center justify-center transition-all hover:scale-105 active:scale-95 shadow-md cursor-pointer"
-                  title="Deslizar a la derecha"
-                >
-                  <ChevronRight className="w-5 h-5 text-[#00ff88]" />
-                </button>
-              </div>
-            </div>
-          </div>
-
-          {/* Horizontal Multi-Card Auto-moving Carousel Track */}
-          <div
-            ref={carouselRef}
-            onMouseEnter={pauseAutoScroll}
-            onMouseLeave={resumeAutoScroll}
-            onTouchStart={pauseAutoScroll}
-            onTouchEnd={resumeAutoScroll}
-            className="flex items-stretch gap-5 overflow-x-auto pb-4 pt-1 snap-x snap-mandatory scroll-smooth relative z-10"
-            style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
-          >
-            {creatorVendors.map((vendor) => {
-              const isTino = vendor.username === 'Tin9o' || vendor.id === 'vendedor-tino';
-
-              return (
-                <div
-                  key={vendor.id}
-                  className="w-[280px] sm:w-[320px] md:w-[340px] shrink-0 snap-start rounded-3xl p-6 bg-gradient-to-b from-[#04140a] to-[#020b05] border border-emerald-900/80 hover:border-[#00ff88] shadow-xl hover:shadow-[0_0_25px_rgba(0,255,136,0.2)] flex flex-col justify-between transition-all group"
-                >
-                  <div className="space-y-4">
-                    {/* Creator Header */}
-                    <div className="flex items-center gap-3.5">
-                      <div className="relative w-14 h-14 rounded-2xl overflow-hidden border-2 border-emerald-400 shadow-[0_0_15px_rgba(0,255,136,0.3)] shrink-0 bg-black">
-                        <img
-                          src={vendor.avatar}
-                          alt={vendor.name}
-                          className="w-full h-full object-cover group-hover:scale-105 transition-transform"
-                        />
-                        <span className="absolute bottom-0.5 right-0.5 w-2.5 h-2.5 rounded-full bg-[#00ff88] border-2 border-black animate-pulse" />
-                      </div>
-
-                      <div>
-                        <div className="flex items-center gap-1.5">
-                          <h4 className="text-base font-bold text-white group-hover:text-[#00ff88] transition-colors">
-                            {vendor.name}
-                          </h4>
-                        </div>
-                        <span className="text-xs text-[#00ff88] font-mono block">
-                          @{vendor.username}
-                        </span>
-                        <div className="flex items-center gap-2 text-[10px] text-slate-400 font-mono mt-0.5">
-                          <span>⭐ {vendor.rating.toFixed(1)}</span>
-                          <span>•</span>
-                          <span>+{vendor.salesCount} entregas</span>
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Bio */}
-                    <p className="text-xs text-slate-300 leading-relaxed font-normal min-h-[48px]">
-                      {vendor.customNotes ||
-                        'Asesor verificado con atención personalizada y garantía total de reposición en Descuentos Perú.'}
-                    </p>
-
-                    {/* Specialty Badges */}
-                    <div className="flex flex-wrap gap-1.5">
-                      {vendor.allowedCategories.map((cat) => (
-                        <span
-                          key={cat}
-                          className="px-2 py-0.5 rounded-md bg-emerald-950/80 border border-emerald-800/50 text-[10px] font-mono text-emerald-300 capitalize"
-                        >
-                          {cat === 'streaming' && '🎬 Streaming'}
-                          {cat === 'leaks' && '🚨 Leaks'}
-                          {cat === 'investigacion' && '🕵️ OSINT'}
-                          {cat === 'educacion' && '💻 Software'}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* Actions: Telegram + WhatsApp ONLY for Tin9o */}
-                  <div className="pt-4 mt-4 border-t border-emerald-950/80 space-y-2">
-                    <a
-                      href={vendor.telegramUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      onClick={() => {
-                        recordVendorClickEvent(vendor.id, vendor.name, 'telegram', 'Nosotros Carrusel');
-                      }}
-                      className="w-full py-2.5 rounded-xl font-bold text-xs text-slate-950 bg-[#00ff88] hover:bg-[#00e676] shadow-sm flex items-center justify-center gap-2 transition-all cursor-pointer font-mono uppercase"
-                    >
-                      <Send className="w-3.5 h-3.5 fill-slate-950 text-slate-950 -rotate-12" />
-                      <span>Contactar por Telegram</span>
-                    </a>
-
-                    {/* WhatsApp button ONLY for Tin9o with +51919192244 */}
-                    {isTino && (
-                      <a
-                        href="https://wa.me/51919192244?text=Hola%20Tin9o%2C%20vengo%20de%20la%20web%20Descuentos%20Per%C3%BA%20y%20deseo%20consultar%20por%20tus%20servicios."
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        onClick={() => {
-                          recordVendorClickEvent(vendor.id, vendor.name, 'whatsapp', 'Nosotros Carrusel Tin9o');
-                        }}
-                        className="w-full py-2 rounded-xl font-bold text-xs text-white bg-[#0e3b20] hover:bg-[#13522d] border border-emerald-500/50 flex items-center justify-center gap-2 transition-all cursor-pointer font-mono"
-                        title="WhatsApp directo a Tin9o (+51 919 192 244)"
-                      >
-                        <Phone className="w-3.5 h-3.5 text-[#00ff88]" />
-                        <span>WhatsApp (+51 919 192 244)</span>
-                      </a>
-                    )}
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        </div>
+        {/* B. TARJETAS 3D FLOTANDO Y AVANZANDO EN BUCLE (ACTIVA SUPERPUESTA, DEMÁS ATRÁS) */}
+        <Vendors3DFloatingCarousel vendors={vendors} />
       </section>
 
       {/* 3. 4 Informatics KPI Metrics */}
@@ -428,7 +249,7 @@ export const AboutPage: React.FC<AboutPageProps> = ({
             Garantía Local
           </h4>
           <p className="text-[11px] text-slate-400">
-            Yape, Plin, BCP, Interbank y Binance Pay
+            Yape, Plin, BCP, Interbank y BBVA
           </p>
         </div>
       </section>
@@ -567,81 +388,6 @@ export const AboutPage: React.FC<AboutPageProps> = ({
         </div>
       </section>
 
-      {/* 6. FAQ Accordion Section */}
-      <section className="p-6 sm:p-10 rounded-3xl bg-[#030d07] border border-emerald-900/60 shadow-xl space-y-6">
-        <div>
-          <span className="text-xs font-mono font-bold uppercase tracking-widest text-[#00ff88]">
-            RESOLVEMOS TUS DUDAS
-          </span>
-          <h2 className="text-2xl sm:text-3xl font-black text-white tracking-tight mt-1">
-            Preguntas Frecuentes
-          </h2>
-        </div>
-
-        <div className="space-y-3">
-          {faqs.map((faq, index) => {
-            const isOpen = openFaq === index;
-            return (
-              <div
-                key={index}
-                className="rounded-2xl bg-[#05140c] border border-emerald-950/80 overflow-hidden transition-all"
-              >
-                <button
-                  type="button"
-                  onClick={() => setOpenFaq(isOpen ? null : index)}
-                  className="w-full px-5 py-4 flex items-center justify-between text-left font-bold text-white text-sm sm:text-base hover:text-[#00ff88] cursor-pointer"
-                >
-                  <span>{faq.q}</span>
-                  {isOpen ? (
-                    <ChevronUp className="w-5 h-5 text-[#00ff88] shrink-0" />
-                  ) : (
-                    <ChevronDown className="w-5 h-5 text-slate-400 shrink-0" />
-                  )}
-                </button>
-                {isOpen && (
-                  <div className="px-5 pb-4 text-xs sm:text-sm text-slate-300 leading-relaxed border-t border-emerald-950/40 pt-3">
-                    {faq.a}
-                  </div>
-                )}
-              </div>
-            );
-          })}
-        </div>
-      </section>
-
-      {/* 7. Bottom CTA Banner */}
-      <section className="rounded-3xl p-6 sm:p-10 bg-gradient-to-r from-[#00ff88] to-[#00b359] text-slate-950 flex flex-col md:flex-row md:items-center justify-between gap-6 shadow-[0_0_50px_rgba(0,255,136,0.25)]">
-        <div className="space-y-2">
-          <span className="text-xs font-black uppercase tracking-widest bg-black/10 px-3 py-1 rounded-full inline-block">
-            ÚNETE A MILES DE CLIENTES
-          </span>
-          <h3 className="text-2xl sm:text-3xl font-black tracking-tight leading-tight">
-            ¿Listo para activar tu servicio digital hoy?
-          </h3>
-          <p className="text-xs sm:text-sm font-medium text-slate-900 max-w-xl">
-            Revisa nuestro catálogo en tiempo real con precios en soles o consúltanos cualquier duda directamente por Telegram.
-          </p>
-        </div>
-
-        <div className="flex flex-wrap items-center gap-3 shrink-0">
-          <button
-            type="button"
-            onClick={onNavigateToServices}
-            className="px-6 py-3 rounded-full font-black text-xs sm:text-sm text-white bg-slate-950 hover:bg-black shadow-lg transition-all cursor-pointer"
-          >
-            Explorar Servicios
-          </button>
-          <a
-            href={TELEGRAM_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="px-6 py-3 rounded-full font-black text-xs sm:text-sm text-slate-950 bg-white/90 hover:bg-white shadow-lg transition-all cursor-pointer flex items-center gap-2"
-          >
-            <Send className="w-4 h-4 fill-slate-950 text-slate-950" />
-            <span>Hablar en Telegram</span>
-          </a>
-        </div>
-      </section>
 
     </div>
   );

@@ -1,3 +1,4 @@
+process.env.VITE_CONFIG_NATIVE_IGNORE_WARNING = 'true';
 import tailwindcss from '@tailwindcss/vite';
 import react from '@vitejs/plugin-react';
 import path from 'path';
@@ -18,7 +19,7 @@ function expressApiPlugin(): Plugin {
 }
 
 export default defineConfig(({ command }) => {
-  const plugins = [react(), tailwindcss()];
+  const plugins: any[] = [react(), tailwindcss()];
   if (command === 'serve') {
     plugins.push(expressApiPlugin());
   }

@@ -15,6 +15,7 @@ export interface Vendor {
   name: string;
   username: string;
   telegramUrl: string;
+  catalogUrl?: string;
   whatsapp?: string;
   avatar: string;
   pin: string;
@@ -40,13 +41,13 @@ export const INITIAL_VENDORS: Vendor[] = [
     active: true,
     rating: 5.0,
     salesCount: 850,
-    paymentMethods: ['Yape', 'Plin', 'BCP', 'Binance USDT'],
+    paymentMethods: ['Yape', 'Plin', 'BCP', 'Interbank', 'BBVA'],
     paymentConfig: {
       yapePhone: '999 888 777',
       plinPhone: '999 888 777',
       bcpAccount: '193-98765432-0-12',
       bcpCci: '002-193-009876543201-14',
-      binancePayId: '789456123',
+      interbankAccount: '200-3001234567',
       paymentInstructions: 'Envía captura del comprobante al Telegram oficial para activación inmediata.'
     },
     allowedCategories: ['streaming', 'leaks', 'investigacion', 'educacion'],
@@ -69,12 +70,13 @@ export const INITIAL_VENDORS: Vendor[] = [
     name: 'Whisky Perú',
     username: 'whiskyper',
     telegramUrl: 'https://t.me/whiskyper',
+    catalogUrl: 'https://t.me/whiskyrefes',
     avatar: '/imagenes/perfiles/whisky.jpg',
     pin: '1234',
     active: true,
     rating: 5.0,
     salesCount: 340,
-    paymentMethods: ['Yape', 'Plin', 'BCP', 'Binance USDT'],
+    paymentMethods: ['Yape', 'Plin', 'BCP', 'Interbank'],
     paymentConfig: {
       yapePhone: '987 112 233',
       plinPhone: '987 112 233',
@@ -90,6 +92,7 @@ export const INITIAL_VENDORS: Vendor[] = [
     name: 'Abbys Perú',
     username: 'AbbysPeru',
     telegramUrl: 'https://t.me/AbbysPeru',
+    catalogUrl: 'https://t.me/ShopAbbys',
     avatar: '/imagenes/perfiles/abby.jpg',
     pin: '1234',
     active: true,
@@ -116,11 +119,11 @@ export const INITIAL_VENDORS: Vendor[] = [
     active: true,
     rating: 5.0,
     salesCount: 510,
-    paymentMethods: ['Yape', 'Plin', 'BCP', 'Binance USDT'],
+    paymentMethods: ['Yape', 'Plin', 'BCP', 'Interbank'],
     paymentConfig: {
       yapePhone: '955 443 322',
       plinPhone: '955 443 322',
-      binancePayId: '556677889',
+      interbankAccount: '200-445566778',
       paymentInstructions: 'Servicios VIP garantizados con activación directa por @elnanovip'
     },
     allowedCategories: ['streaming', 'investigacion', 'educacion'],
@@ -139,7 +142,7 @@ export const INITIAL_VENDORS: Vendor[] = [
     active: true,
     rating: 4.9,
     salesCount: 380,
-    paymentMethods: ['Yape', 'Plin', 'BCP', 'Binance USDT'],
+    paymentMethods: ['Yape', 'Plin', 'BCP', 'Interbank', 'BBVA'],
     paymentConfig: {
       yapePhone: '919 192 244',
       plinPhone: '919 192 244',
@@ -159,13 +162,21 @@ export function getStoredVendors(): Vendor[] {
     if (saved) {
       const parsed = JSON.parse(saved);
       if (Array.isArray(parsed) && parsed.length > 0) {
-        // Enforce WhatsApp rule: only Tin9o has WhatsApp (+51 919 192 244)
+        // Enforce WhatsApp and catalog rules
         return parsed.map((v: Vendor) => {
-          if (v.username === 'Tin9o' || v.id === 'vendedor-tino') {
-            return { ...v, whatsapp: '+51 919 192 244' };
+          let updated: Vendor = { ...v };
+          if (v.id === 'vendedor-whisky') {
+            updated.catalogUrl = 'https://t.me/whiskyrefes';
           }
-          const { whatsapp, ...rest } = v;
-          return rest;
+          if (v.id === 'vendedor-abby') {
+            updated.catalogUrl = 'https://t.me/ShopAbbys';
+          }
+          if (v.username === 'Tin9o' || v.id === 'vendedor-tino') {
+            updated.whatsapp = '+51 919 192 244';
+          } else {
+            delete updated.whatsapp;
+          }
+          return updated;
         });
       }
     }

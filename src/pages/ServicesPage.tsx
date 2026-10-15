@@ -9,11 +9,13 @@ import {
   ShieldCheck,
   CheckCircle2,
   Zap,
-  FilterX
+  FilterX,
+  Tv,
+  ExternalLink
 } from 'lucide-react';
-import { CategoryFilter } from '../components/CategoryFilter';
 import { ServiceCard } from '../components/ServiceCard';
 import { TelegramBanner } from '../components/TelegramBanner';
+import { PaymentMethodsBanner } from '../components/PaymentMethodsBanner';
 import { ServiceItem, TELEGRAM_URL } from '../data/servicesData';
 import { Vendor } from '../data/vendorsData';
 import { PaymentMethodItem } from '../data/paymentsData';
@@ -91,90 +93,164 @@ export const ServicesPage: React.FC<ServicesPageProps> = ({
   return (
     <div className="space-y-8 animate-in fade-in duration-300">
       
-      {/* 1. Services Header Banner with Peruvian Mascot & Guarantee Seals */}
-      <section className="relative rounded-3xl p-6 sm:p-10 bg-gradient-to-r from-[#03140a] via-[#051c0f] to-[#020d06] border border-emerald-500/35 shadow-[0_0_50px_rgba(0,255,136,0.14)] overflow-hidden">
-        <div className="absolute -top-24 -right-24 w-96 h-96 bg-emerald-500/15 rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute -bottom-24 -left-24 w-80 h-80 bg-emerald-400/10 rounded-full blur-3xl pointer-events-none" />
-
-        <div className="relative z-10 flex flex-col lg:flex-row items-center justify-between gap-8">
-          <div className="max-w-2xl space-y-4">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-emerald-950/80 border border-emerald-500/40 text-[11px] font-mono text-[#00ff88] tracking-widest uppercase">
-              <Package className="w-4 h-4 text-[#00ff88]" />
-              <span>CATÁLOGO DIGITAL // ACTIVACIÓN INMEDIATA 24/7</span>
+      {/* 1. Direct Catalog Header & Filters (Zero repetitive boxes) */}
+      <div className="space-y-4 pt-2">
+        {/* Title & Stats Row */}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-emerald-500/15">
+          <div className="text-left space-y-1">
+            <div className="inline-flex items-center gap-2 text-[10px] font-mono text-[#00ff88] uppercase tracking-wider">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#00ff88] animate-pulse" />
+              <span>CATÁLOGO OFICIAL · ACTIVACIÓN INMEDIATA EN PERÚ</span>
             </div>
-
-            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight leading-tight">
-              Catálogo Oficial de <span className="text-[#00ff88] neon-glow-green">Servicios & Cuentas</span>
+            <h1 className="text-2xl sm:text-3xl font-black text-white tracking-tight">
+              Cuentas Premium & <span className="text-[#00ff88] neon-glow-green">Servicios Digitales</span>
             </h1>
+          </div>
 
-            <p className="text-sm sm:text-base text-slate-300 leading-relaxed font-normal">
-              Suscripciones privadas 4K UHD, auditorías de fuentes abiertas OSINT y software original. Todas las compras cuentan con reposición inmediata por parte de nuestros creadores autorizados.
-            </p>
+          {/* Quick Value Indicators & Official Sales Catalogs */}
+          <div className="flex flex-wrap items-center gap-2 text-[11px] font-mono">
+            <a
+              href="https://t.me/ShopAbbys"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="px-3 py-1.5 rounded-xl bg-[#041a0e] border border-emerald-500/40 hover:border-[#00ff88] text-white hover:text-[#00ff88] transition-all flex items-center gap-1.5 shadow-sm font-bold group"
+              title="Abrir Catálogo Oficial de Ventas de Abbys en Telegram"
+            >
+              <Send className="w-3 h-3 text-[#00ff88] group-hover:scale-110 transition-transform" />
+              <span>Catálogo Abbys</span>
+              <ExternalLink className="w-2.5 h-2.5 text-slate-400" />
+            </a>
 
-            {/* Quick Guarantees Grid */}
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5 pt-2">
-              <div className="flex items-center gap-2 px-3 py-2 rounded-xl bg-[#020b05] border border-emerald-900/60 text-xs">
-                <Zap className="w-4 h-4 text-[#00ff88] shrink-0" />
-                <span className="font-bold text-white font-mono text-[11px]">3 a 5 min entrega</span>
-              </div>
-              <div className="flex items-center gap-2 px-3 py-2 rounded-xl bg-[#020b05] border border-emerald-900/60 text-xs">
-                <ShieldCheck className="w-4 h-4 text-[#00ff88] shrink-0" />
-                <span className="font-bold text-white font-mono text-[11px]">100% Reposición</span>
-              </div>
-              <div className="flex items-center gap-2 px-3 py-2 rounded-xl bg-[#020b05] border border-emerald-900/60 text-xs col-span-2 sm:col-span-1">
-                <CheckCircle2 className="w-4 h-4 text-[#00ff88] shrink-0" />
-                <span className="font-bold text-white font-mono text-[11px]">Cuentas privadas</span>
-              </div>
+            <a
+              href="https://t.me/whiskyrefes"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="px-3 py-1.5 rounded-xl bg-[#041a0e] border border-emerald-500/40 hover:border-[#00ff88] text-white hover:text-[#00ff88] transition-all flex items-center gap-1.5 shadow-sm font-bold group"
+              title="Abrir Catálogo y Referencias de Whisky en Telegram"
+            >
+              <Send className="w-3 h-3 text-[#00ff88] group-hover:scale-110 transition-transform" />
+              <span>Catálogo Whisky</span>
+              <ExternalLink className="w-2.5 h-2.5 text-slate-400" />
+            </a>
+
+            <span className="px-2.5 py-1.5 rounded-xl bg-black/60 border border-emerald-500/25 text-emerald-300 hidden md:flex items-center gap-1.5">
+              <Zap className="w-3 h-3 text-[#00ff88]" />
+              3 a 5 min entrega
+            </span>
+          </div>
+        </div>
+
+        {/* 2. Category Switcher Tabs + Search Input */}
+        <div className="flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-3">
+          {/* Category Tabs */}
+          <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
+            <button
+              type="button"
+              onClick={() => {
+                setSelectedCategory('todos');
+                setSelectedVendorId('todos');
+                setSearchQuery('');
+              }}
+              className={`px-3.5 py-2 rounded-xl text-xs font-bold font-mono transition-all cursor-pointer flex items-center gap-1.5 select-none ${
+                selectedCategory === 'todos' && selectedVendorId === 'todos' && searchQuery === ''
+                  ? 'bg-[#00ff88] text-slate-950 shadow-[0_0_18px_rgba(0,255,136,0.45)] font-black scale-102'
+                  : 'bg-[#030d07] text-slate-300 hover:text-white border border-emerald-900/80 hover:border-emerald-500/60'
+              }`}
+            >
+              <Sparkles className="w-3.5 h-3.5" />
+              <span>Todos ({categoryCounts.todos})</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => setSelectedCategory('streaming')}
+              className={`px-3.5 py-2 rounded-xl text-xs font-bold font-mono transition-all cursor-pointer flex items-center gap-1.5 select-none ${
+                selectedCategory === 'streaming'
+                  ? 'bg-[#00ff88] text-slate-950 shadow-[0_0_18px_rgba(0,255,136,0.45)] font-black scale-102'
+                  : 'bg-[#030d07] text-cyan-300 hover:text-white border border-cyan-900/60 hover:border-cyan-500/60'
+              }`}
+            >
+              <Tv className="w-3.5 h-3.5" />
+              <span>Streaming 4K ({categoryCounts.streaming})</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => setSelectedCategory('investigacion')}
+              className={`px-3.5 py-2 rounded-xl text-xs font-bold font-mono transition-all cursor-pointer flex items-center gap-1.5 select-none ${
+                selectedCategory === 'investigacion'
+                  ? 'bg-[#00ff88] text-slate-950 shadow-[0_0_18px_rgba(0,255,136,0.45)] font-black scale-102'
+                  : 'bg-[#030d07] text-rose-300 hover:text-white border border-rose-900/60 hover:border-rose-500/60'
+              }`}
+            >
+              <Search className="w-3.5 h-3.5" />
+              <span>Investigación OSINT ({categoryCounts.investigacion})</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => setSelectedCategory('educacion')}
+              className={`px-3.5 py-2 rounded-xl text-xs font-bold font-mono transition-all cursor-pointer flex items-center gap-1.5 select-none ${
+                selectedCategory === 'educacion'
+                  ? 'bg-[#00ff88] text-slate-950 shadow-[0_0_18px_rgba(0,255,136,0.45)] font-black scale-102'
+                  : 'bg-[#030d07] text-amber-300 hover:text-white border border-amber-900/60 hover:border-amber-500/60'
+              }`}
+            >
+              <Package className="w-3.5 h-3.5" />
+              <span>Software & Apps ({categoryCounts.educacion})</span>
+            </button>
+          </div>
+
+          {/* Instant Search Bar */}
+          <div className="flex items-center gap-2">
+            <div className="relative w-full sm:w-64">
+              <Search className="w-3.5 h-3.5 text-[#00ff88] absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Buscar servicio (ej. Netflix, OSINT)..."
+                className="w-full pl-8 pr-7 py-2 rounded-xl bg-black/70 border border-emerald-500/40 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-[#00ff88] focus:ring-1 focus:ring-[#00ff88] transition-all font-sans shadow-inner"
+              />
+              {searchQuery && (
+                <button
+                  type="button"
+                  onClick={() => setSearchQuery('')}
+                  className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white cursor-pointer"
+                  title="Limpiar búsqueda"
+                >
+                  <FilterX className="w-3 h-3" />
+                </button>
+              )}
             </div>
-          </div>
 
-          {/* Peruvian Llama Character */}
-          <div className="relative shrink-0 w-44 sm:w-52 lg:w-56 flex items-center justify-center">
-            <div className="absolute inset-0 bg-emerald-500/20 rounded-full blur-2xl pointer-events-none" />
-            <img
-              src="/imagenes/llama-about.png"
-              alt="Mascota Descuentos Perú"
-              className="relative z-10 w-full h-auto max-h-64 object-contain filter drop-shadow-[0_15px_30px_rgba(0,0,0,0.85)]"
-            />
+            {isFiltered && (
+              <button
+                type="button"
+                onClick={() => {
+                  setSelectedCategory('todos');
+                  setSelectedVendorId('todos');
+                  setSearchQuery('');
+                }}
+                className="inline-flex items-center gap-1 px-2.5 py-2 rounded-xl text-xs font-mono font-bold text-rose-300 bg-rose-950/60 border border-rose-800/60 hover:bg-rose-900 hover:text-white transition-all cursor-pointer whitespace-nowrap"
+                title="Restablecer todos los filtros"
+              >
+                <FilterX className="w-3.5 h-3.5" />
+                <span>Limpiar</span>
+              </button>
+            )}
           </div>
         </div>
-      </section>
 
-      {/* 2. Interactive Category Filter Deck & Creator Avatars */}
-      <CategoryFilter
-        selectedCategory={selectedCategory}
-        onSelectCategory={setSelectedCategory}
-        searchQuery={searchQuery}
-        onSearchChange={setSearchQuery}
-        vendors={vendors}
-        selectedVendorId={selectedVendorId}
-        onSelectVendorId={setSelectedVendorId}
-        categoryCounts={categoryCounts}
-      />
-
-      {/* 3. Results Summary Strip */}
-      <div className="flex items-center justify-between gap-4 px-2">
-        <div className="text-xs font-mono text-slate-400 flex items-center gap-2">
-          <span className="w-2 h-2 rounded-full bg-[#00ff88] animate-pulse" />
-          <span>
-            Mostrando <strong className="text-white font-bold">{filteredServices.length}</strong> de {services.filter(s => s.active !== false).length} servicios disponibles
-          </span>
+        {/* Results Counter Strip */}
+        <div className="flex items-center justify-between text-xs font-mono text-slate-400 pt-1">
+          <div className="flex items-center gap-2">
+            <span className="w-2 h-2 rounded-full bg-[#00ff88] animate-pulse" />
+            <span>
+              Mostrando <strong className="text-white font-bold">{filteredServices.length}</strong> de {services.filter((s) => s.active !== false).length} servicios oficiales
+            </span>
+          </div>
         </div>
-
-        {isFiltered && (
-          <button
-            type="button"
-            onClick={() => {
-              setSelectedCategory('todos');
-              setSelectedVendorId('todos');
-              setSearchQuery('');
-            }}
-            className="inline-flex items-center gap-1.5 px-3 py-1 rounded-xl text-xs font-mono font-bold text-rose-300 bg-rose-950/60 border border-rose-800/60 hover:bg-rose-900 hover:text-white transition-all cursor-pointer"
-          >
-            <FilterX className="w-3.5 h-3.5" />
-            <span>Limpiar filtros</span>
-          </button>
-        )}
       </div>
 
       {/* 4. 3-Column Service Cards Grid */}
@@ -212,38 +288,8 @@ export const ServicesPage: React.FC<ServicesPageProps> = ({
         </div>
       )}
 
-      {/* 5. Payment Methods Guaranteed Banner */}
-      {paymentMethods.filter((p) => p.active).length > 0 && (
-        <div className="mt-12 p-6 sm:p-8 rounded-3xl bg-[#06140c]/90 border border-emerald-900/50 shadow-[0_0_30px_rgba(0,0,0,0.6)] backdrop-blur-md">
-          <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
-            <div>
-              <span className="text-[10px] font-black uppercase tracking-[0.2em] text-[#00ff88] block mb-1">
-                FORMAS DE PAGO GARANTIZADAS
-              </span>
-              <h3 className="text-xl sm:text-2xl font-black text-white">
-                Paga con total confianza y rapidez
-              </h3>
-              <p className="text-xs sm:text-sm text-slate-400 mt-1 max-w-xl">
-                Aceptamos transferencias bancarias peruanas inmediatas, billeteras digitales y criptomonedas con activación en minutos.
-              </p>
-            </div>
-
-            <div className="flex flex-wrap items-center gap-2.5">
-              {paymentMethods
-                .filter((p) => p.active)
-                .map((method) => (
-                  <div
-                    key={method.id}
-                    className="flex items-center gap-2 px-3.5 py-2 rounded-2xl bg-[#030d07] border border-emerald-900/60 shadow-sm"
-                  >
-                    <div className="w-2 h-2 rounded-full bg-[#00ff88]" />
-                    <span className="text-xs font-bold text-white">{method.name}</span>
-                  </div>
-                ))}
-            </div>
-          </div>
-        </div>
-      )}
+      {/* 5. Payment Methods Guaranteed Banner with Real Official App Logos */}
+      <PaymentMethodsBanner paymentMethods={paymentMethods} className="mt-12" />
 
       {/* 6. Support Coordination Banner */}
       <TelegramBanner onNavigateToContact={onNavigateToContact} />

@@ -2,7 +2,8 @@ export interface PaymentMethodItem {
   id: string;
   name: string;
   type: 'wallet' | 'bank' | 'crypto' | 'card' | 'other';
-  icon: string; // identifier or emoji
+  icon: string;
+  logoUrl?: string;
   active: boolean;
   beneficiaryName: string;
   accountNumber?: string;
@@ -19,7 +20,8 @@ export const INITIAL_PAYMENT_METHODS: PaymentMethodItem[] = [
     id: 'yape',
     name: 'Yape',
     type: 'wallet',
-    icon: '🟣',
+    icon: 'wallet',
+    logoUrl: '/imagenes/iconos-pago/yape.png',
     active: true,
     beneficiaryName: 'Descuentos Perú Oficial',
     phoneNumber: '999 888 777',
@@ -29,7 +31,8 @@ export const INITIAL_PAYMENT_METHODS: PaymentMethodItem[] = [
     id: 'plin',
     name: 'Plin',
     type: 'wallet',
-    icon: '🔵',
+    icon: 'wallet',
+    logoUrl: '/imagenes/iconos-pago/plin.png',
     active: true,
     beneficiaryName: 'Descuentos Perú Oficial',
     phoneNumber: '999 888 777',
@@ -39,7 +42,8 @@ export const INITIAL_PAYMENT_METHODS: PaymentMethodItem[] = [
     id: 'bcp',
     name: 'BCP Banco de Crédito',
     type: 'bank',
-    icon: '🏦',
+    icon: 'bank',
+    logoUrl: '/imagenes/iconos-pago/bcp.png',
     active: true,
     beneficiaryName: 'Descuentos Perú',
     accountNumber: '193-98765432-0-12',
@@ -50,7 +54,8 @@ export const INITIAL_PAYMENT_METHODS: PaymentMethodItem[] = [
     id: 'interbank',
     name: 'Interbank',
     type: 'bank',
-    icon: '🟩',
+    icon: 'bank',
+    logoUrl: '/imagenes/iconos-pago/interbank.png',
     active: true,
     beneficiaryName: 'Descuentos Perú',
     accountNumber: '200-3001234567',
@@ -61,24 +66,13 @@ export const INITIAL_PAYMENT_METHODS: PaymentMethodItem[] = [
     id: 'bbva',
     name: 'BBVA Continental',
     type: 'bank',
-    icon: '🟦',
-    active: false,
+    icon: 'bank',
+    logoUrl: '/imagenes/iconos-pago/bbva.png',
+    active: true,
     beneficiaryName: 'Descuentos Perú',
     accountNumber: '0011-0123-0200123456',
     cciNumber: '011-123-000200123456-12',
     instructions: 'Depósito o transferencia BBVA sin comisiones nacionales.'
-  },
-  {
-    id: 'binance',
-    name: 'Binance Pay / USDT',
-    type: 'crypto',
-    icon: '🟡',
-    active: true,
-    beneficiaryName: 'DescuentosPeru_Binance',
-    accountNumber: 'Pay ID: 789456123',
-    cryptoNetwork: 'USDT (TRC20 / BEP20)',
-    cryptoWallet: 'TN3x9XjL8...K91mP',
-    instructions: 'Cero comisiones con Binance Pay (Pay ID) o envíos directos USDT red TRC20/BEP20.'
   }
 ];
 
@@ -90,7 +84,24 @@ export function getStoredPaymentMethods(): PaymentMethodItem[] {
     if (saved) {
       const parsed = JSON.parse(saved);
       if (Array.isArray(parsed) && parsed.length > 0) {
-        return parsed;
+        // Filter out binance if it was stored in localStorage previously
+        const cleaned: PaymentMethodItem[] = parsed
+          .filter((p: PaymentMethodItem) => p.id !== 'binance')
+          .map((p: PaymentMethodItem) => {
+            const init = INITIAL_PAYMENT_METHODS.find((i) => i.id === p.id);
+            return {
+              ...p,
+              // Always use updated high-res logoUrl from initial list if it's one of standard peruvian banks
+              logoUrl: init?.logoUrl || p.logoUrl || ''
+            };
+          });
+        // Make sure all 5 initial methods exist
+        INITIAL_PAYMENT_METHODS.forEach((initMethod) => {
+          if (!cleaned.some((p: PaymentMethodItem) => p.id === initMethod.id)) {
+            cleaned.push(initMethod);
+          }
+        });
+        return cleaned;
       }
     }
   } catch (e) {

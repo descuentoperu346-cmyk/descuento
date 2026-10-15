@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Send, MessageCircle, X, ChevronUp, ChevronDown, Sparkles } from 'lucide-react';
+import { Send, MessageCircle, X, ChevronUp, ChevronDown, Sparkles, Crown, Star, Film, Shield, Zap } from 'lucide-react';
 import { recordVendorClickEvent } from '../data/telemetryData';
 
 interface CreatorContact {
@@ -19,7 +19,7 @@ const CREATORS_LIST: CreatorContact[] = [
     username: 'whiskyper',
     telegramUrl: 'https://t.me/whiskyper',
     avatar: '/imagenes/perfiles/whisky.jpg',
-    badge: '👑 Creador VIP',
+    badge: 'Creador VIP',
     role: 'Streaming 4K'
   },
   {
@@ -28,7 +28,7 @@ const CREATORS_LIST: CreatorContact[] = [
     username: 'AbbysPeru',
     telegramUrl: 'https://t.me/AbbysPeru',
     avatar: '/imagenes/perfiles/abby.jpg',
-    badge: '⭐ Verificada',
+    badge: 'Verificada',
     role: 'Música & Diseño'
   },
   {
@@ -37,7 +37,7 @@ const CREATORS_LIST: CreatorContact[] = [
     username: 'elnanovip',
     telegramUrl: 'https://t.me/elnanovip',
     avatar: '/imagenes/perfiles/nanovip.jpg',
-    badge: '🎬 Entretenimiento',
+    badge: 'Entretenimiento',
     role: 'Cine & IA Plus'
   },
   {
@@ -46,7 +46,7 @@ const CREATORS_LIST: CreatorContact[] = [
     username: 'Tin9o',
     telegramUrl: 'https://t.me/Tin9o',
     avatar: '/imagenes/perfiles/tino.gif',
-    badge: '🛡️ Ciberseguridad',
+    badge: 'Ciberseguridad',
     role: 'OSINT & Leaks'
   },
   {
@@ -55,7 +55,7 @@ const CREATORS_LIST: CreatorContact[] = [
     username: 'DESCUENTOSPER2',
     telegramUrl: 'https://t.me/descuentosper2',
     avatar: '/imagenes/monograma.png',
-    badge: '⚡ Soporte 24/7',
+    badge: 'Soporte 24/7',
     role: 'Administración'
   }
 ];
@@ -139,8 +139,9 @@ export const FloatingVendorsDock: React.FC = () => {
           </div>
 
           <div className="pt-1 text-center">
-            <span className="text-[9px] font-mono text-slate-400">
-              ⚡ Respuesta inmediata en menos de 5 minutos
+            <span className="inline-flex items-center gap-1.5 text-[9px] font-mono text-slate-400">
+              <Zap className="w-2.5 h-2.5 text-[#00ff88]" />
+              <span>Respuesta inmediata en menos de 5 minutos</span>
             </span>
           </div>
         </div>
@@ -174,8 +175,9 @@ export const FloatingVendorsDock: React.FC = () => {
 
         {/* Hover / Active Tooltip */}
         {!isOpen && (
-          <span className="absolute right-full mr-3 px-2.5 py-1 rounded-xl bg-black/90 border border-emerald-500/50 text-[10px] font-mono font-bold text-[#00ff88] shadow-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none hidden sm:inline-block">
-            ⚡ Creadores en Línea
+          <span className="absolute right-full mr-3 px-2.5 py-1 rounded-xl bg-black/90 border border-emerald-500/50 text-[10px] font-mono font-bold text-[#00ff88] shadow-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none hidden sm:inline-flex items-center gap-1.5">
+            <Zap className="w-3 h-3 text-[#00ff88]" />
+            <span>Creadores en Línea</span>
           </span>
         )}
       </button>

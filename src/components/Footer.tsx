@@ -42,15 +42,7 @@ export const Footer: React.FC<FooterProps> = ({ onOpenAdmin, onNavigateTab, acti
               >
                 Inicio
               </button>
-              <button
-                type="button"
-                onClick={() => onNavigateTab('servicios')}
-                className={`transition-colors cursor-pointer ${
-                  activeTab === 'servicios' ? 'text-[#00ff88]' : 'text-slate-300 hover:text-white'
-                }`}
-              >
-                Servicios
-              </button>
+              {/* Servicios link temporarily hidden as requested */}
               <button
                 type="button"
                 onClick={() => onNavigateTab('leaks')}

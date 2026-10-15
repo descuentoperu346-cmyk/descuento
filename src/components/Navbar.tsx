@@ -73,18 +73,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             )}
           </button>
 
-          <button
-            type="button"
-            onClick={() => handleNavClick('servicios')}
-            className={`relative py-1.5 transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
-              activeTab === 'servicios' ? 'text-[#00ff88] font-bold' : 'text-slate-300 hover:text-white'
-            }`}
-          >
-            Servicios
-            {activeTab === 'servicios' && (
-              <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#00ff88] shadow-[0_0_8px_#00ff88]" />
-            )}
-          </button>
+          {/* Servicios tab temporarily hidden as requested */}
 
           <button
             type="button"
@@ -168,17 +157,7 @@ export const Navbar: React.FC<NavbarProps> = ({
           >
             Inicio
           </button>
-          <button
-            type="button"
-            onClick={() => handleNavClick('servicios')}
-            className={`block w-full text-left px-3.5 py-2.5 text-base rounded-xl transition-all ${
-              activeTab === 'servicios'
-                ? 'bg-emerald-950/80 text-[#00ff88] font-bold border border-emerald-500/40'
-                : 'text-slate-200 hover:bg-emerald-950/40 font-medium'
-            }`}
-          >
-            Servicios
-          </button>
+          {/* Mobile Servicios tab temporarily hidden as requested */}
           <button
             type="button"
             onClick={() => handleNavClick('leaks')}

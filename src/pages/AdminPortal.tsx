@@ -60,7 +60,9 @@ import {
   Tablet,
   MapPin,
   Play,
-  Pause
+  Pause,
+  User,
+  AlertTriangle
 } from 'lucide-react';
 import { Vendor, VendorPaymentConfig } from '../data/vendorsData';
 import { ServiceItem } from '../data/servicesData';
@@ -104,11 +106,11 @@ interface AdminPortalProps {
 export const PRODUCT_PRESETS = [
   {
     id: 'osint-express',
-    label: '🕵️ Auditoría OSINT Express',
+    label: 'Auditoría OSINT Express',
     title: 'Auditoría OSINT & Huella Digital Express',
     category: 'investigacion' as const,
     categoryLabel: 'INTELIGENCIA DIGITAL',
-    badge: '🕵️‍♂️ OSINT & AUDITORÍA',
+    badge: 'OSINT & AUDITORÍA',
     description: 'Análisis confidencial de fuentes públicas, número de DNI, teléfono o datos corporativos con reporte en PDF.',
     subItemLabel: 'Reporte confidencial en PDF',
     customImageUrl: '/imagenes/card-investigacion.png',
@@ -121,11 +123,11 @@ export const PRODUCT_PRESETS = [
   },
   {
     id: 'netflix',
-    label: '🎬 Netflix 4K UHD',
+    label: 'Netflix 4K UHD',
     title: 'Netflix Premium 4K UHD',
     category: 'streaming' as const,
     categoryLabel: 'STREAMING 4K',
-    badge: '🔥 MÁS VENDIDO',
+    badge: 'MÁS VENDIDO',
     description: 'Cuentas y perfiles 100% estables con garantía total de 30 días y PIN privado.',
     subItemLabel: 'Perfiles privados & Cuentas completas',
     customImageUrl: '/imagenes/card-netflix.jpg',
@@ -138,11 +140,11 @@ export const PRODUCT_PRESETS = [
   },
   {
     id: 'spotify',
-    label: '🎧 Spotify HiFi',
+    label: 'Spotify HiFi',
     title: 'Spotify Premium Individual & Duo',
     category: 'streaming' as const,
     categoryLabel: 'MÚSICA HIFI',
-    badge: '🎧 AUDIO HIFI',
+    badge: 'AUDIO HIFI',
     description: 'Música ilimitada sin anuncios a tu propio correo o cuenta nueva con descargas.',
     subItemLabel: 'A tu cuenta propia o nueva',
     customImageUrl: '/imagenes/card-spotify.jpg',
@@ -155,11 +157,11 @@ export const PRODUCT_PRESETS = [
   },
   {
     id: 'disney',
-    label: '🏰 Disney+ & ESPN',
+    label: 'Disney+ & ESPN',
     title: 'Disney+ Premium & ESPN Combo',
     category: 'streaming' as const,
     categoryLabel: 'CINE & DEPORTES',
-    badge: '✨ ESTRENOS & ESPN',
+    badge: 'ESTRENOS & ESPN',
     description: 'Estrenos exclusivos de Disney, Marvel, Star Wars y partidos en vivo por ESPN.',
     subItemLabel: 'ESPN en vivo & IMAX Enhanced',
     customImageUrl: '/imagenes/card-disney.jpg',
@@ -172,11 +174,11 @@ export const PRODUCT_PRESETS = [
   },
   {
     id: 'chatgpt',
-    label: '🤖 ChatGPT Plus GPT-4o',
+    label: 'ChatGPT Plus GPT-4o',
     title: 'ChatGPT Plus OpenAI GPT-4o & Canvas',
     category: 'educacion' as const,
     categoryLabel: 'INTELIGENCIA ARTIFICIAL',
-    badge: '🤖 IA GENERATIVA',
+    badge: 'IA GENERATIVA',
     description: 'Acceso a GPT-4o con DALL-E 3, análisis avanzado de documentos PDF y Canvas.',
     subItemLabel: 'GPT-4o + DALL-E 3 + Canvas',
     customImageUrl: '/imagenes/card-chatgpt.jpg',
@@ -189,11 +191,11 @@ export const PRODUCT_PRESETS = [
   },
   {
     id: 'canva',
-    label: '🎨 Canva Pro Anual',
+    label: 'Canva Pro Anual',
     title: 'Canva Pro Anual + Brand Kit',
     category: 'educacion' as const,
     categoryLabel: 'DISEÑO DIGITAL',
-    badge: '🎨 DISEÑO ILIMITADO',
+    badge: 'DISEÑO ILIMITADO',
     description: 'Diseño gráfico ilimitado, removedor de fondos con IA y millones de recursos premium.',
     subItemLabel: 'Activación a tu correo personal',
     customImageUrl: '/imagenes/card-canva.jpg',
@@ -206,11 +208,11 @@ export const PRODUCT_PRESETS = [
   },
   {
     id: 'windows',
-    label: '💻 Windows 11 Pro',
+    label: 'Windows 11 Pro',
     title: 'Windows 11 Pro + Office 365 Original',
     category: 'educacion' as const,
     categoryLabel: 'SOFTWARE ORIGINAL',
-    badge: '💻 LICENCIA OEM DIGITAL',
+    badge: 'LICENCIA OEM DIGITAL',
     description: 'Claves de activación digital permanente para Windows 11 Pro y suites Office oficiales.',
     subItemLabel: 'Activación digital en línea',
     customImageUrl: '/imagenes/card-windows.jpg',
@@ -223,11 +225,11 @@ export const PRODUCT_PRESETS = [
   },
   {
     id: 'osint',
-    label: '🕵️ OSINT Dossier',
+    label: 'OSINT Dossier',
     title: 'Investigación OSINT & Dossier Forense',
     category: 'investigacion' as const,
     categoryLabel: 'INTELIGENCIA DIGITAL',
-    badge: '🕵️‍♂️ INTEL & OSINT',
+    badge: 'INTEL & OSINT',
     description: 'Análisis de fuentes públicas, trazabilidad de datos y consolidación de reportes.',
     subItemLabel: 'Reportes confidenciales en PDF',
     customImageUrl: '/imagenes/card-investigacion.png',
@@ -240,11 +242,11 @@ export const PRODUCT_PRESETS = [
   },
   {
     id: 'rat',
-    label: '🛡️ Lab RAT Pentesting',
+    label: 'Lab RAT Pentesting',
     title: 'Laboratorios RAT & Red Team Educativo',
     category: 'educacion' as const,
     categoryLabel: 'CIBERSEGURIDAD ÉTICA',
-    badge: '🛡️ PENTESTING ÉTICO',
+    badge: 'PENTESTING ÉTICO',
     description: 'Máquinas virtuales y guías para aprender telemetría, sockets y administración ética.',
     subItemLabel: 'Máquinas virtuales & Guías',
     customImageUrl: '/imagenes/card-educacion.png',
@@ -377,7 +379,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
     title: 'Netflix Premium 4K UHD',
     category: 'streaming' as 'streaming' | 'investigacion' | 'educacion' | 'leaks',
     categoryLabel: 'STREAMING 4K',
-    badge: '🔥 POPULAR',
+    badge: 'POPULAR',
     description: 'Cuentas y perfiles 100% estables con garantía total de 30 días y PIN privado.',
     subItemLabel: 'Perfiles privados & Cuentas completas',
     buttonLabel: 'Ver planes →',
@@ -757,16 +759,16 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
       const resVendors = await syncVendorsToSupabase(vendors);
 
       if (resServices.success && resVendors.success) {
-        setSupabaseSyncResult('✅ ¡Catálogo completo y vendedores sincronizados con Supabase Cloud con éxito!');
+        setSupabaseSyncResult('¡Catálogo completo y vendedores sincronizados con Supabase Cloud con éxito!');
         showToast('¡Catálogo sincronizado con Supabase Cloud!');
       } else {
         setSupabaseSyncResult(
-          `⚠️ Supabase respondió: ${resServices.message || resVendors.message}. Recuerda ejecutar el script SQL si las tablas aún no existen.`
+          `Supabase respondió: ${resServices.message || resVendors.message}. Recuerda ejecutar el script SQL si las tablas aún no existen.`
         );
         showToast('Aviso de sincronización');
       }
     } catch (err: any) {
-      setSupabaseSyncResult(`❌ Error de conexión con Supabase: ${err.message || 'Desconocido'}`);
+      setSupabaseSyncResult(`Error de conexión con Supabase: ${err.message || 'Desconocido'}`);
     } finally {
       setIsSyncingSupabase(false);
     }
@@ -800,15 +802,15 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
 
   // Presets gallery for quick image assignment
   const presets = [
-    { label: '🚨 Leaks & Cyber', url: '/imagenes/card-leaks.jpg' },
-    { label: '🎬 Netflix 4K UHD', url: '/imagenes/card-netflix.jpg' },
-    { label: '🎧 Spotify HiFi', url: '/imagenes/card-spotify.jpg' },
-    { label: '🤖 ChatGPT Plus', url: '/imagenes/card-chatgpt.jpg' },
-    { label: '🏰 Disney+ & ESPN', url: '/imagenes/card-disney.jpg' },
-    { label: '🎨 Canva Pro Anual', url: '/imagenes/card-canva.jpg' },
-    { label: '💻 Windows 11 OEM', url: '/imagenes/card-windows.jpg' },
-    { label: '🔍 Ciber OSINT', url: '/imagenes/card-investigacion.png' },
-    { label: '🛡️ Lab RAT Pentest', url: '/imagenes/card-educacion.png' }
+    { label: 'Leaks & Cyber', url: '/imagenes/card-leaks.jpg' },
+    { label: 'Netflix 4K UHD', url: '/imagenes/card-netflix.jpg' },
+    { label: 'Spotify HiFi', url: '/imagenes/card-spotify.jpg' },
+    { label: 'ChatGPT Plus', url: '/imagenes/card-chatgpt.jpg' },
+    { label: 'Disney+ & ESPN', url: '/imagenes/card-disney.jpg' },
+    { label: 'Canva Pro Anual', url: '/imagenes/card-canva.jpg' },
+    { label: 'Windows 11 OEM', url: '/imagenes/card-windows.jpg' },
+    { label: 'Ciber OSINT', url: '/imagenes/card-investigacion.png' },
+    { label: 'Lab RAT Pentest', url: '/imagenes/card-educacion.png' }
   ];
 
   // Backup Export
@@ -881,7 +883,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
       saveStoredTelemetry(updated);
       return updated;
     });
-    showToast('⚡ Evento de telemetría simulado registrado en la consola.');
+    showToast('Evento de telemetría simulado registrado en la consola.');
   };
 
   // Clear Terminal Log
@@ -1088,8 +1090,9 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
             <Clock className="w-3 h-3" />
             <span className="font-bold">{currentTime || '21:20:00'} (GMT-5)</span>
           </div>
-          <span className="px-2 py-0.5 rounded bg-emerald-500/20 text-[#00ff88] font-bold border border-emerald-500/30">
-            🟢 {telemetry.activeVisitorsNow} VISITANTES ACTIVOS
+          <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded bg-emerald-500/20 text-[#00ff88] font-bold border border-emerald-500/30">
+            <span className="w-2 h-2 rounded-full bg-[#00ff88] animate-pulse" />
+            <span>{telemetry.activeVisitorsNow} VISITANTES ACTIVOS</span>
           </span>
         </div>
       </div>
@@ -1122,7 +1125,9 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
             {currentUser.avatar && (currentUser.avatar.startsWith('/') || currentUser.avatar.startsWith('http') || currentUser.avatar.includes('.')) ? (
               <img src={currentUser.avatar} alt={currentUser.name} className="w-6 h-6 rounded-full object-cover border border-emerald-500/50 shrink-0" />
             ) : (
-              <span className="text-sm">{currentUser.avatar || '👤'}</span>
+              <div className="w-6 h-6 rounded-full bg-emerald-950 flex items-center justify-center border border-emerald-500/50 shrink-0">
+                <User className="w-3.5 h-3.5 text-[#00ff88]" />
+              </div>
             )}
             <div className="hidden sm:block leading-tight text-left">
               <span className="font-bold text-white block text-[11px]">{currentUser.name}</span>
@@ -1242,7 +1247,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
               }`}
             >
               <ShieldAlert className="w-4 h-4 text-rose-400" />
-              <span>🚨 Artículos Leaks ({localLeakArticles.length})</span>
+              <span>Artículos Leaks ({localLeakArticles.length})</span>
             </button>
 
             <button
@@ -1442,7 +1447,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                     <strong className="text-3xl sm:text-4xl font-black text-white font-mono">
                       {telemetry.ctrGlobal}%
                     </strong>
-                    <span className="text-xs font-bold text-emerald-400 font-mono">visita ➔ clic</span>
+                    <span className="text-xs font-bold text-emerald-400 font-mono">visita → clic</span>
                   </div>
                   <div className="mt-2.5 pt-2 border-t border-emerald-950/80 text-[11px] text-slate-400 flex items-center justify-between">
                     <span>Rendimiento:</span>
@@ -1493,7 +1498,9 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                             {v.avatar && (v.avatar.startsWith('/') || v.avatar.startsWith('http') || v.avatar.includes('.')) ? (
                               <img src={v.avatar} alt={v.name} className="w-8 h-8 rounded-full object-cover border border-emerald-500/50 shrink-0" />
                             ) : (
-                              <span className="text-xl">{v.avatar || '👤'}</span>
+                              <div className="w-8 h-8 rounded-full bg-emerald-950 flex items-center justify-center border border-emerald-500/50 shrink-0">
+                                <User className="w-4 h-4 text-[#00ff88]" />
+                              </div>
                             )}
                             <div>
                               <strong className="text-sm font-bold text-white block leading-tight">
@@ -1745,7 +1752,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                           : 'bg-[#041209] text-slate-400 hover:text-white'
                       }`}
                     >
-                      🚨 Leaks & Breaches
+                      Leaks & Breaches
                     </button>
                     <button
                       type="button"
@@ -1839,7 +1846,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                       {telemetry.productsStats.map((prod) => (
                         <tr key={prod.productId} className="hover:bg-[#05170d]/60 transition-colors">
                           <td className="py-3 px-3 font-bold text-white flex items-center gap-2">
-                            {prod.category === 'leaks' && <span className="text-rose-400">🚨</span>}
+                            {prod.category === 'leaks' && <AlertTriangle className="w-3.5 h-3.5 text-rose-400" />}
                             <span>{prod.title}</span>
                           </td>
                           <td className="py-3 px-3">
@@ -2055,7 +2062,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
               {/* Instant Presets Bar */}
               <div className="p-4 rounded-2xl bg-[#030e06] border border-emerald-900/60 space-y-2">
                 <span className="text-xs font-bold text-slate-300 uppercase tracking-wider block font-mono">
-                  ⚡ Plantillas Rápidas con Artwork 8K:
+                  Plantillas Rápidas con Artwork 8K:
                 </span>
                 <div className="flex flex-wrap gap-2">
                   {PRODUCT_PRESETS.map((preset) => (
@@ -2110,10 +2117,10 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                           }
                           className="w-full px-4 py-2.5 rounded-xl bg-[#020904] border border-emerald-900/80 text-white text-sm focus:border-[#00ff88] outline-none font-mono"
                         >
-                          <option value="leaks">🚨 Leaks & Filtraciones</option>
-                          <option value="streaming">🎬 Streaming 4K</option>
-                          <option value="investigacion">🔍 Investigación Digital</option>
-                          <option value="educacion">🛡️ Tecnología Educativa</option>
+                          <option value="leaks">Leaks & Filtraciones</option>
+                          <option value="streaming">Streaming 4K</option>
+                          <option value="investigacion">Investigación Digital</option>
+                          <option value="educacion">Tecnología Educativa</option>
                         </select>
                       </div>
 
@@ -2123,7 +2130,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                           type="text"
                           value={newProductDraft.badge}
                           onChange={(e) => setNewProductDraft({ ...newProductDraft, badge: e.target.value })}
-                          placeholder="🔥 MÁS VENDIDO, 🚨 LEAKS, etc."
+                          placeholder="MÁS VENDIDO, LEAKS, etc."
                           className="w-full px-4 py-2.5 rounded-xl bg-[#020904] border border-emerald-900/80 text-white text-sm focus:border-[#00ff88] outline-none font-mono"
                         />
                       </div>
@@ -2301,7 +2308,9 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                             {currentUser.avatar && (currentUser.avatar.startsWith('/') || currentUser.avatar.startsWith('http') || currentUser.avatar.includes('.')) ? (
                               <img src={currentUser.avatar} alt={currentUser.name} className="w-4 h-4 rounded-full object-cover shrink-0" />
                             ) : (
-                              <span className="text-xs">{currentUser.avatar || '👤'}</span>
+                              <div className="w-5 h-5 rounded-full bg-emerald-950 flex items-center justify-center border border-emerald-500/50 shrink-0">
+                                <User className="w-3 h-3 text-[#00ff88]" />
+                              </div>
                             )}
                             <span className="text-[10px] font-bold text-white font-mono">{currentUser.name}</span>
                           </div>
@@ -2310,7 +2319,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
 
                       <div className="pt-3 border-t border-emerald-950 flex items-center justify-between">
                         <span className="text-[11px] text-slate-400 font-mono">
-                          ⚡ {newProductDraft.deliveryTime}
+                          <span className="inline-flex items-center gap-1"><Zap className="w-3 h-3 text-[#00ff88]" /> {newProductDraft.deliveryTime}</span>
                         </span>
                         <span className="px-4 py-2 rounded-xl text-xs font-bold text-slate-950 bg-[#00ff88] font-mono">
                           Ver Planes →
@@ -2373,11 +2382,11 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                   </div>
 
                   <div>
-                    <label className="block text-xs font-mono text-slate-300 mb-1">Binance Pay ID (USDT):</label>
+                    <label className="block text-xs font-mono text-slate-300 mb-1">Cuenta Interbank / BBVA:</label>
                     <input
                       type="text"
-                      defaultValue={currentUser.paymentConfig?.binancePayId || '789456123'}
-                      onBlur={(e) => handleUpdatePaymentConfig({ binancePayId: e.target.value })}
+                      defaultValue={currentUser.paymentConfig?.interbankAccount || '200-3001234567'}
+                      onBlur={(e) => handleUpdatePaymentConfig({ interbankAccount: e.target.value })}
                       className="w-full px-4 py-2.5 rounded-xl bg-[#020904] border border-emerald-900/80 text-white font-mono text-sm focus:border-[#00ff88] outline-none"
                     />
                   </div>
@@ -2539,7 +2548,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                       Publicador de Leaks & Alertas de Brechas
                     </h2>
                     <p className="text-xs sm:text-sm text-slate-300 mt-1.5 max-w-2xl leading-relaxed">
-                      Esta sección administra de forma separada los artículos e investigaciones técnicas que se publican en la pestaña exclusiva <strong className="text-rose-400">"🚨 Leaks & Filtraciones"</strong> (no como un producto más de tienda, sino como contenido editorial de ciberseguridad).
+                      Esta sección administra de forma separada los artículos e investigaciones técnicas que se publican en la pestaña exclusiva <strong className="text-rose-400">"Leaks & Filtraciones"</strong> (no como un producto más de tienda, sino como contenido editorial de ciberseguridad).
                     </p>
                   </div>
 
@@ -2667,10 +2676,10 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                         }
                         className="w-full px-4 py-2.5 rounded-xl bg-[#030101] border border-rose-900/80 text-white font-mono text-sm focus:border-rose-500 outline-none cursor-pointer"
                       >
-                        <option value="critico">🔴 Crítico (Alerta Urgente)</option>
-                        <option value="alto">🟠 Alto Riesgo</option>
-                        <option value="medio">🟡 Riesgo Medio</option>
-                        <option value="informativo">🟢 Informativo / Guía Preventiva</option>
+                        <option value="critico">Crítico (Alerta Urgente)</option>
+                        <option value="alto">Alto Riesgo</option>
+                        <option value="medio">Riesgo Medio</option>
+                        <option value="informativo">Informativo / Guía Preventiva</option>
                       </select>
                     </div>
 
@@ -2936,7 +2945,9 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                         {vendor.avatar && (vendor.avatar.startsWith('/') || vendor.avatar.startsWith('http') || vendor.avatar.includes('.')) ? (
                           <img src={vendor.avatar} alt={vendor.name} className="w-10 h-10 rounded-full object-cover border border-emerald-500/50 shrink-0" />
                         ) : (
-                          <span className="text-2xl">{vendor.avatar || '👤'}</span>
+                          <div className="w-8 h-8 rounded-full bg-emerald-950 flex items-center justify-center border border-emerald-500/50 shrink-0">
+                            <User className="w-4 h-4 text-[#00ff88]" />
+                          </div>
                         )}
                         <div>
                           <h3 className="text-base font-black text-white">{vendor.name}</h3>

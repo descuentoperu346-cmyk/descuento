@@ -90,7 +90,7 @@ export const ContactModal: React.FC<ContactModalProps> = ({ isOpen, onClose }) =
                 onChange={(e) => setTopic(e.target.value)}
                 className="w-full px-3.5 py-2.5 rounded-xl bg-[#05140c] border border-emerald-900 text-slate-200 text-sm focus:outline-none focus:border-emerald-400"
               >
-                <option value="leaks">🚨 Auditoría de Leaks & Filtraciones de Datos</option>
+                <option value="leaks">Auditoría de Leaks & Filtraciones de Datos</option>
                 <option value="streaming">Servicios de Streaming (Netflix, Max, Spotify, etc.)</option>
                 <option value="investigacion">Investigación Digital & Reportes OSINT</option>
                 <option value="educacion">Laboratorios RAT Educativos</option>

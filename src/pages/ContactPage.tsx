@@ -1,17 +1,15 @@
 import React, { useState } from 'react';
 import {
   Send,
-  MessageSquare,
   ShieldCheck,
   CheckCircle2,
-  Clock,
   Phone,
   AlertTriangle,
   ExternalLink,
   Users,
   Copy,
   Radio,
-  Sparkles
+  Star
 } from 'lucide-react';
 import { TELEGRAM_URL, TELEGRAM_USERNAME } from '../data/servicesData';
 import { Vendor } from '../data/vendorsData';
@@ -22,83 +20,65 @@ interface ContactPageProps {
 }
 
 export const ContactPage: React.FC<ContactPageProps> = ({ vendors }) => {
-  const [topic, setTopic] = useState<'streaming' | 'leaks' | 'osint' | 'software' | 'soporte' | 'general'>('streaming');
-  const [name, setName] = useState('');
-  const [userHandle, setUserHandle] = useState('');
-  const [message, setMessage] = useState('');
-  const [selectedVendorId, setSelectedVendorId] = useState<string>('vendedor-central');
-  const [submitted, setSubmitted] = useState(false);
   const [copiedHandle, setCopiedHandle] = useState(false);
 
-  const selectedVendor = vendors.find((v) => v.id === selectedVendorId) || vendors[0];
-
   const handleCopyUsername = () => {
-    navigator.clipboard.writeText(`@${selectedVendor.username}`);
+    navigator.clipboard.writeText(`@${TELEGRAM_USERNAME}`);
     setCopiedHandle(true);
     setTimeout(() => setCopiedHandle(false), 2500);
-  };
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-
-    recordVendorClickEvent(
-      selectedVendor.id,
-      selectedVendor.name,
-      'telegram',
-      `Contacto - ${topic.toUpperCase()}`
-    );
-
-    const topicLabel =
-      topic === 'leaks'
-        ? 'Auditoría de Leaks & Filtraciones'
-        : topic === 'streaming'
-        ? 'Servicios de Streaming'
-        : topic === 'osint'
-        ? 'Investigación Digital OSINT'
-        : topic === 'software'
-        ? 'Software & Licencias'
-        : topic === 'soporte'
-        ? 'Soporte de Garantía'
-        : 'Consulta General';
-
-    const text = `¡Hola @${selectedVendor.username}! Vengo desde la página de contacto de Descuentos Perú.\n\n📌 Tema: ${topicLabel}\n👤 Mi Nombre/Alias: ${name || 'Cliente'}\n📱 Contacto: ${userHandle || 'Telegram'}\n\n💬 Mensaje: ${message || 'Deseo solicitar información sobre los servicios disponibles y formas de pago.'}`;
-
-    const url = `https://t.me/${selectedVendor.username}?text=${encodeURIComponent(text)}`;
-    window.open(url, '_blank', 'noopener,noreferrer');
-    setSubmitted(true);
   };
 
   return (
     <div className="space-y-12 sm:space-y-16 animate-in fade-in duration-300">
       
-      {/* Top Header Hero */}
-      <section className="relative rounded-3xl p-6 sm:p-12 bg-gradient-to-r from-[#031107] via-[#05180d] to-[#020b05] border border-emerald-500/30 shadow-[0_0_50px_rgba(0,255,136,0.12)] overflow-hidden">
-        <div className="absolute -top-24 -right-24 w-96 h-96 bg-emerald-500/15 rounded-full blur-3xl pointer-events-none" />
+      {/* Top Header Hero: Canales de Atención & Soporte */}
+      <section className="relative rounded-2xl p-5 sm:p-7 md:p-8 bg-gradient-to-r from-[#02140b] via-[#031d10] to-[#010e07] border border-emerald-500/30 shadow-[0_0_25px_rgba(0,255,136,0.08)] overflow-hidden">
+        <div className="absolute top-0 right-1/4 w-80 h-32 bg-[#00ff88]/5 rounded-full blur-3xl pointer-events-none" />
 
-        <div className="relative z-10 flex flex-col lg:flex-row items-center justify-between gap-8">
-          <div className="max-w-2xl space-y-4">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-emerald-950/80 border border-emerald-500/40 text-[11px] font-mono text-[#00ff88] tracking-widest uppercase">
-              <Radio className="w-4 h-4 text-[#00ff88] animate-pulse" />
-              <span>CENTRO DE ATENCIÓN DIRECTA // LIMA - PERÚ</span>
+        <div className="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+          <div className="space-y-3 max-w-2xl">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-950/80 border border-emerald-500/40 text-[11px] font-mono text-[#00ff88]">
+              <Radio className="w-3.5 h-3.5 text-[#00ff88] animate-pulse" />
+              <span className="font-semibold uppercase tracking-wider">Canales Oficiales Verificados · Perú</span>
             </div>
 
-            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight leading-tight">
-              Canales de Contacto & <span className="text-[#00ff88] neon-glow-green">Soporte Oficial</span>
+            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-black text-white tracking-tight leading-tight">
+              Atención Directa & <span className="text-[#00ff88] neon-glow-green">Soporte Continuo</span>
             </h1>
 
-            <p className="text-sm sm:text-base md:text-lg text-slate-300 leading-relaxed font-normal">
-              Estamos en línea para responder tus consultas, verificar pagos y activar cuentas en cuestión de minutos. Elige al creador de tu preferencia (<strong>Whisky Perú</strong>, <strong>Abbys Perú</strong>, <strong>El Nano VIP</strong> o <strong>Tin9o</strong>) o utiliza el formulario de contacto directo.
+            <p className="text-xs sm:text-sm text-slate-300 leading-relaxed font-normal">
+              Comunícate directamente con nuestros asesores autorizados por Telegram para contrataciones, consultas técnicas o atención de garantías. Todas las transacciones son respaldadas por la comunidad de Descuentos Perú.
             </p>
+
+            <div className="flex flex-wrap items-center gap-2.5 pt-1 text-xs font-mono text-emerald-300">
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-black/60 border border-emerald-500/20">
+                <span className="w-2 h-2 rounded-full bg-[#00ff88] animate-ping" />
+                Respuesta media: &lt; 5 min
+              </span>
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-black/60 border border-emerald-500/20">
+                <ShieldCheck className="w-3.5 h-3.5 text-[#00ff88]" />
+                Garantía 100% activa
+              </span>
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-black/60 border border-emerald-500/20">
+                <CheckCircle2 className="w-3.5 h-3.5 text-[#00ff88]" />
+                Yape / Plin / Bancos
+              </span>
+            </div>
           </div>
 
-          {/* Friendly Peruvian Llama Mascot Greeting */}
-          <div className="relative shrink-0 w-48 sm:w-56 lg:w-60 flex items-center justify-center">
-            <div className="absolute inset-0 bg-emerald-500/20 rounded-full blur-2xl pointer-events-none" />
-            <img
-              src="/imagenes/llama-contact.png"
-              alt="Mascota Descuentos Perú Soporte"
-              className="relative z-10 w-full h-auto max-h-64 object-contain filter drop-shadow-[0_15px_30px_rgba(0,0,0,0.8)]"
-            />
+          <div className="flex flex-col sm:flex-row lg:flex-col gap-2.5 shrink-0 w-full lg:w-auto lg:min-w-[260px]">
+            <a
+              href={TELEGRAM_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="px-5 py-3 rounded-xl font-mono text-xs font-bold bg-[#00ff88] text-slate-950 shadow-[0_0_20px_rgba(0,255,136,0.35)] hover:bg-[#00e676] transition-all flex items-center justify-center gap-2 active:scale-95 text-center"
+            >
+              <Send className="w-4 h-4 text-slate-950" />
+              <span>Canal Matriz Telegram</span>
+            </a>
+            <div className="text-center text-[10px] font-mono text-slate-400">
+              @{TELEGRAM_USERNAME} · Canal Verificado
+            </div>
           </div>
         </div>
       </section>
@@ -190,8 +170,9 @@ export const ContactPage: React.FC<ContactPageProps> = ({ vendors }) => {
                             <span className="text-[11px] text-[#00ff88] font-mono block mt-0.5">
                               @{vendor.username}
                             </span>
-                            <span className="text-[9px] font-mono text-slate-400">
-                              ⭐ {vendor.rating.toFixed(1)} (+{vendor.salesCount} ventas)
+                            <span className="text-[9px] font-mono text-slate-400 flex items-center gap-1 mt-0.5">
+                              <Star className="w-2.5 h-2.5 text-amber-400 fill-amber-400" />
+                              <span>{vendor.rating.toFixed(1)} (+{vendor.salesCount} ventas)</span>
                             </span>
                           </div>
                         </div>
@@ -214,6 +195,18 @@ export const ContactPage: React.FC<ContactPageProps> = ({ vendors }) => {
                           <Send className="w-3.5 h-3.5 fill-slate-950" />
                           <span>Chat en Telegram</span>
                         </a>
+
+                        {vendor.catalogUrl && (
+                          <a
+                            href={vendor.catalogUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="w-full py-2 rounded-xl font-bold text-xs text-emerald-300 bg-[#06170d] hover:bg-emerald-950/80 border border-emerald-500/50 hover:border-[#00ff88] flex items-center justify-center gap-1.5 transition-all cursor-pointer font-mono"
+                          >
+                            <ExternalLink className="w-3.5 h-3.5 text-[#00ff88]" />
+                            <span>Catálogo de Ventas</span>
+                          </a>
+                        )}
 
                         {isTino && (
                           <a
@@ -241,222 +234,55 @@ export const ContactPage: React.FC<ContactPageProps> = ({ vendors }) => {
         })()}
       </section>
 
-      {/* Interactive Form & Telegram Message Generator */}
-      <section className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-        
-        {/* Left: Form Card */}
-        <div className="lg:col-span-7 p-6 sm:p-8 rounded-3xl bg-[#041209] border border-emerald-900/80 shadow-2xl space-y-6">
-          <div className="flex items-center gap-3 border-b border-emerald-950 pb-4">
-            <div className="w-10 h-10 rounded-xl bg-emerald-950 border border-emerald-500/40 flex items-center justify-center text-[#00ff88]">
-              <MessageSquare className="w-5 h-5" />
-            </div>
-            <div>
-              <h3 className="text-lg font-black text-white font-mono">Formulario de Consulta Rápida</h3>
-              <span className="text-xs text-slate-400 font-mono">
-                Genera tu mensaje listo para enviar al asesor de tu elección
-              </span>
-            </div>
+      {/* Aviso de Seguridad Antifraude & Canales Verificados (Compact Trust Strip) */}
+      <section className="p-4 sm:p-5 rounded-2xl bg-gradient-to-r from-[#03150a] via-[#020e06] to-[#03150a] border border-emerald-500/30 shadow-[0_0_20px_rgba(0,255,136,0.06)] flex flex-col md:flex-row items-center justify-between gap-4">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-xl bg-black/60 border border-emerald-500/40 flex items-center justify-center shrink-0 text-[#00ff88]">
+            <ShieldCheck className="w-5 h-5" />
           </div>
-
-          {submitted ? (
-            <div className="py-8 text-center space-y-4">
-              <div className="w-16 h-16 rounded-full bg-emerald-500/20 text-[#00ff88] flex items-center justify-center mx-auto border border-emerald-400">
-                <CheckCircle2 className="w-8 h-8" />
-              </div>
-              <h4 className="text-xl font-bold text-white">¡Enlace a Telegram Generado!</h4>
-              <p className="text-xs sm:text-sm text-slate-300 max-w-md mx-auto">
-                Se ha generado tu enlace directo hacia Telegram con tu mensaje pre-redactado. Si no se abrió la ventana emergente, haz clic en el botón de abajo:
-              </p>
-              <div className="pt-2 flex flex-wrap items-center justify-center gap-3">
-                <a
-                  href={`https://t.me/${selectedVendor.username}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="px-6 py-2.5 rounded-xl font-bold text-slate-950 bg-[#00ff88] hover:bg-[#00e676] text-xs font-mono"
-                >
-                  Abrir Telegram Ahora
-                </a>
-                <button
-                  type="button"
-                  onClick={() => setSubmitted(false)}
-                  className="px-5 py-2.5 rounded-xl font-bold text-white bg-[#06170d] border border-emerald-800 text-xs font-mono"
-                >
-                  Enviar Otra Consulta
-                </button>
-              </div>
+          <div>
+            <div className="flex items-center gap-2">
+              <span className="text-xs font-mono font-bold text-[#00ff88] uppercase tracking-wider">
+                Verificación Oficial Antifraude
+              </span>
+              <span className="w-1.5 h-1.5 rounded-full bg-[#00ff88] animate-ping" />
             </div>
-          ) : (
-            <form onSubmit={handleSubmit} className="space-y-4 text-xs">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div>
-                  <label className="block font-mono font-bold text-slate-300 mb-1.5">
-                    ¿Con qué asesor deseas hablar?
-                  </label>
-                  <select
-                    value={selectedVendorId}
-                    onChange={(e) => setSelectedVendorId(e.target.value)}
-                    className="w-full px-3.5 py-2.5 rounded-xl bg-[#020904] border border-emerald-900/80 text-white font-mono focus:border-[#00ff88] outline-none cursor-pointer"
-                  >
-                    {vendors.map((v) => (
-                      <option key={v.id} value={v.id} className="bg-[#041209] text-white">
-                        {v.name} (@{v.username})
-                      </option>
-                    ))}
-                  </select>
-                </div>
-
-                <div>
-                  <label className="block font-mono font-bold text-slate-300 mb-1.5">
-                    Área o Tema de tu Consulta:
-                  </label>
-                  <select
-                    value={topic}
-                    onChange={(e) => setTopic(e.target.value as any)}
-                    className="w-full px-3.5 py-2.5 rounded-xl bg-[#020904] border border-emerald-900/80 text-white font-mono focus:border-[#00ff88] outline-none cursor-pointer"
-                  >
-                    <option value="streaming">🎬 Cuentas de Streaming (Netflix, Disney, Spotify)</option>
-                    <option value="leaks">🚨 Auditoría de Leaks & Filtraciones de Datos</option>
-                    <option value="osint">🕵️ Dossier & Búsqueda OSINT Forense</option>
-                    <option value="software">💻 Software Original (Windows 11, Office, Canva)</option>
-                    <option value="soporte">🛡️ Soporte Técnico / Garantía de Cuenta</option>
-                    <option value="general">💬 Consulta General o Métodos de Pago</option>
-                  </select>
-                </div>
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div>
-                  <label className="block font-mono font-bold text-slate-300 mb-1.5">
-                    Tu Nombre o Alias:
-                  </label>
-                  <input
-                    type="text"
-                    placeholder="Ej: Carlos M."
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    className="w-full px-3.5 py-2.5 rounded-xl bg-[#020904] border border-emerald-900/80 text-white focus:border-[#00ff88] outline-none font-sans"
-                  />
-                </div>
-
-                <div>
-                  <label className="block font-mono font-bold text-slate-300 mb-1.5">
-                    Tu Usuario de Telegram o Celular:
-                  </label>
-                  <input
-                    type="text"
-                    placeholder="Ej: @carlos_lima o 987654321"
-                    value={userHandle}
-                    onChange={(e) => setUserHandle(e.target.value)}
-                    className="w-full px-3.5 py-2.5 rounded-xl bg-[#020904] border border-emerald-900/80 text-white font-mono focus:border-[#00ff88] outline-none"
-                  />
-                </div>
-              </div>
-
-              <div>
-                <label className="block font-mono font-bold text-slate-300 mb-1.5">
-                  ¿En qué podemos ayudarte?
-                </label>
-                <textarea
-                  rows={4}
-                  placeholder="Escribe aquí tu consulta, servicio de interés o duda sobre los métodos de pago..."
-                  value={message}
-                  onChange={(e) => setMessage(e.target.value)}
-                  className="w-full px-3.5 py-2.5 rounded-xl bg-[#020904] border border-emerald-900/80 text-white focus:border-[#00ff88] outline-none font-sans text-xs sm:text-sm leading-relaxed"
-                />
-              </div>
-
-              <div className="pt-2">
-                <button
-                  type="submit"
-                  className="w-full py-3.5 rounded-xl font-black text-xs sm:text-sm text-slate-950 bg-[#00ff88] hover:bg-[#00e676] shadow-[0_0_25px_rgba(0,255,136,0.35)] transition-all cursor-pointer flex items-center justify-center gap-2 font-mono uppercase tracking-wider"
-                >
-                  <Send className="w-4 h-4 fill-slate-950" />
-                  <span>Enviar Consulta a @{selectedVendor.username} por Telegram</span>
-                </button>
-              </div>
-            </form>
-          )}
+            <p className="text-xs text-slate-300 mt-0.5">
+              Nuestros únicos canales autorizados son los listados en esta web. Canal central:{' '}
+              <strong className="text-white font-mono">@{TELEGRAM_USERNAME}</strong>. Nunca te pediremos datos de tu banca privada.
+            </p>
+          </div>
         </div>
 
-        {/* Right: Security & Schedule Information */}
-        <div className="lg:col-span-5 space-y-6">
-          
-          {/* Schedule Card */}
-          <div className="p-6 rounded-3xl bg-[#030e06] border border-emerald-900/70 shadow-lg space-y-4">
-            <div className="flex items-center gap-2 text-white font-bold text-sm">
-              <Clock className="w-4 h-4 text-[#00ff88]" />
-              <span>Horarios de Atención & Activación</span>
-            </div>
-            
-            <div className="space-y-2 text-xs font-mono">
-              <div className="flex items-center justify-between text-slate-300 py-1 border-b border-emerald-950">
-                <span>Lunes a Viernes:</span>
-                <span className="text-[#00ff88] font-bold">8:00 AM - 11:59 PM</span>
-              </div>
-              <div className="flex items-center justify-between text-slate-300 py-1 border-b border-emerald-950">
-                <span>Sábados y Domingos:</span>
-                <span className="text-[#00ff88] font-bold">9:00 AM - 11:30 PM</span>
-              </div>
-              <div className="flex items-center justify-between text-slate-300 py-1">
-                <span>Feriados Nacionales:</span>
-                <span className="text-emerald-400 font-bold">Atención Activa</span>
-              </div>
-            </div>
+        <div className="shrink-0 flex items-center gap-2">
+          <button
+            type="button"
+            onClick={handleCopyUsername}
+            className="px-3.5 py-2 rounded-xl text-xs font-mono font-bold bg-[#04190d] text-emerald-300 border border-emerald-500/40 hover:border-[#00ff88] hover:text-white transition-all flex items-center gap-1.5 cursor-pointer active:scale-95"
+          >
+            {copiedHandle ? (
+              <>
+                <CheckCircle2 className="w-3.5 h-3.5 text-[#00ff88]" />
+                <span>¡Copiado!</span>
+              </>
+            ) : (
+              <>
+                <Copy className="w-3.5 h-3.5 text-[#00ff88]" />
+                <span>Copiar @{TELEGRAM_USERNAME}</span>
+              </>
+            )}
+          </button>
 
-            <p className="text-[11px] text-slate-400 leading-relaxed pt-1">
-              * Los pagos realizados fuera de horario se programan para activación prioritaria a primera hora de la mañana.
-            </p>
-          </div>
-
-          {/* Anti-fraud Verification Card */}
-          <div className="p-6 rounded-3xl bg-[#070b08] border border-amber-500/30 shadow-lg space-y-3">
-            <div className="flex items-center gap-2 text-amber-400 font-bold text-sm">
-              <AlertTriangle className="w-4 h-4 text-amber-400" />
-              <span>Aviso de Seguridad Antifraude</span>
-            </div>
-            <p className="text-xs text-slate-300 leading-relaxed">
-              Existen imitadores en redes sociales. Recuerda que nuestros únicos canales oficiales son los que figuran en esta página web:
-            </p>
-            <div className="p-3 rounded-xl bg-[#030804] border border-emerald-950 flex items-center justify-between">
-              <span className="text-xs font-mono font-bold text-[#00ff88]">
-                Canal Oficial: @{TELEGRAM_USERNAME}
-              </span>
-              <button
-                type="button"
-                onClick={handleCopyUsername}
-                className="text-[11px] font-mono text-slate-400 hover:text-white flex items-center gap-1 cursor-pointer"
-              >
-                <Copy className="w-3.5 h-3.5" />
-                <span>{copiedHandle ? 'Copiado!' : 'Copiar'}</span>
-              </button>
-            </div>
-            <p className="text-[11px] text-slate-400 leading-relaxed">
-              Nunca te solicitaremos contraseñas personales de tu correo bancario o datos confidenciales privados.
-            </p>
-          </div>
-
-          {/* Official Channel Community Box */}
-          <div className="p-6 rounded-3xl bg-gradient-to-r from-[#03150a] to-[#010804] border border-emerald-500/40 shadow-xl space-y-3">
-            <span className="text-[10px] font-mono font-bold uppercase tracking-widest text-[#00ff88]">
-              COMUNIDAD OFICIAL
-            </span>
-            <h4 className="text-base font-bold text-white">Canal de Telegram Descuentos Perú</h4>
-            <p className="text-xs text-slate-300 leading-relaxed">
-              Únete para enterarte de ofertas relámpago, cuentas en liquidación y alertas tempranas de seguridad.
-            </p>
-            <a
-              href={TELEGRAM_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl font-bold text-xs text-slate-950 bg-[#00ff88] hover:bg-[#00e676] shadow-sm transition-all"
-            >
-              <Send className="w-3.5 h-3.5 fill-slate-950" />
-              <span>Unirme al Canal Oficial</span>
-            </a>
-          </div>
-
+          <a
+            href={TELEGRAM_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="px-4 py-2 rounded-xl text-xs font-mono font-bold bg-[#00ff88] text-slate-950 shadow-[0_0_15px_rgba(0,255,136,0.3)] hover:bg-[#00e676] transition-all flex items-center gap-1.5 active:scale-95"
+          >
+            <Send className="w-3.5 h-3.5 fill-slate-950" />
+            <span>Canal Telegram</span>
+          </a>
         </div>
-
       </section>
 
     </div>

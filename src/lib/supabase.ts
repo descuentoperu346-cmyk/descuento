@@ -53,7 +53,7 @@ CREATE TABLE IF NOT EXISTS public.vendors (
   username TEXT NOT NULL,
   telegram_url TEXT NOT NULL,
   whatsapp TEXT,
-  avatar TEXT DEFAULT '👤',
+  avatar TEXT DEFAULT '/imagenes/monograma.png',
   pin TEXT DEFAULT '1234',
   active BOOLEAN DEFAULT true,
   rating NUMERIC DEFAULT 5.0,

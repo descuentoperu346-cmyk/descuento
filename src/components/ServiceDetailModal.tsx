@@ -9,12 +9,16 @@ import {
   MessageCircle,
   QrCode,
   CreditCard,
-  Check
+  Check,
+  Star,
+  User,
+  ExternalLink
 } from 'lucide-react';
 import { ServiceItem, TELEGRAM_USERNAME, TELEGRAM_URL } from '../data/servicesData';
 import { Vendor } from '../data/vendorsData';
 import { PaymentMethodItem } from '../data/paymentsData';
 import { recordVendorClickEvent } from '../data/telemetryData';
+import { ServiceAppLogo, PaymentBrandLogo } from './BrandLogos';
 
 interface ServiceDetailModalProps {
   service: ServiceItem | null;
@@ -143,10 +147,18 @@ export const ServiceDetailModal: React.FC<ServiceDetailModalProps> = ({
           <span className="text-[11px] font-black tracking-[0.2em] text-[#00ff88] uppercase block">
             {service.categoryLabel}
           </span>
-          <h3 className="text-xl sm:text-2xl font-black text-white mt-1 tracking-tight">
-            {service.title}
-          </h3>
-          <p className="text-xs sm:text-sm text-slate-300 mt-1 leading-relaxed">
+          <div className="flex items-center gap-3 mt-1.5">
+            <ServiceAppLogo
+              serviceId={service.id}
+              serviceTitle={service.title}
+              size={30}
+              className="shrink-0 rounded-xl shadow-md"
+            />
+            <h3 className="text-xl sm:text-2xl font-black text-white tracking-tight">
+              {service.title}
+            </h3>
+          </div>
+          <p className="text-xs sm:text-sm text-slate-300 mt-1.5 leading-relaxed">
             {service.details?.overview || service.description}
           </p>
         </div>
@@ -270,7 +282,9 @@ export const ServiceDetailModal: React.FC<ServiceDetailModalProps> = ({
                               className="w-7 h-7 rounded-full object-cover shrink-0 border border-emerald-500/50 shadow-sm"
                             />
                           ) : (
-                            <span className="text-base">{vendor.avatar || '👤'}</span>
+                            <div className="w-7 h-7 rounded-full bg-emerald-950 flex items-center justify-center border border-emerald-500/50 shrink-0">
+                              <User className="w-4 h-4 text-[#00ff88]" />
+                            </div>
                           )}
                           <span className="text-xs font-bold text-white">{vendor.name}</span>
                         </div>
@@ -284,13 +298,27 @@ export const ServiceDetailModal: React.FC<ServiceDetailModalProps> = ({
 
                       <div className="flex items-center justify-between text-[11px] text-slate-400 font-mono">
                         <span className="text-emerald-400">@{vendor.username}</span>
-                        {vendor.rating && <span>⭐ {vendor.rating} ({vendor.salesCount || 100}+)</span>}
+                        {vendor.rating && (
+                          <span className="flex items-center gap-1">
+                            <Star className="w-3 h-3 text-amber-400 fill-amber-400 shrink-0" />
+                            <span>{vendor.rating} ({vendor.salesCount || 100}+)</span>
+                          </span>
+                        )}
                       </div>
 
                       {/* Vendor's accepted payments */}
                       {vendor.paymentMethods && vendor.paymentMethods.length > 0 && (
-                        <div className="text-[10px] text-slate-400 truncate pt-1.5 border-t border-emerald-950">
-                          Acepta: <strong className="text-slate-300">{vendor.paymentMethods.join(', ')}</strong>
+                        <div className="text-[10px] text-slate-400 pt-2 border-t border-emerald-950 flex items-center gap-1.5 flex-wrap">
+                          <span className="text-slate-400 font-medium">Acepta:</span>
+                          {vendor.paymentMethods.map((pm) => (
+                            <span
+                              key={pm}
+                              className="inline-flex items-center gap-1 px-2 py-0.5 rounded-lg bg-[#020b06] border border-emerald-900/60 shadow-xs"
+                            >
+                              <PaymentBrandLogo methodName={pm} size={14} />
+                              <span className="font-bold text-white text-[10px]">{pm}</span>
+                            </span>
+                          ))}
                         </div>
                       )}
                     </div>
@@ -301,19 +329,32 @@ export const ServiceDetailModal: React.FC<ServiceDetailModalProps> = ({
               {/* Vendor payment details snippet */}
               {chosenVendor?.paymentConfig && (
                 <div className="p-3.5 rounded-2xl bg-[#030d07] border border-emerald-900/60 text-xs space-y-2">
-                  <div className="flex items-center justify-between">
+                  <div className="flex items-center justify-between flex-wrap gap-2">
                     <span className="text-[10px] font-bold uppercase tracking-wider text-emerald-400 flex items-center gap-1">
                       <CreditCard className="w-3 h-3" /> Datos de pago de {chosenVendor.name}
                     </span>
-                    {chosenVendor.paymentConfig.qrImageUrl && (
-                      <button
-                        type="button"
-                        onClick={() => setShowQrModal(true)}
-                        className="text-[10px] font-bold text-[#00ff88] hover:underline flex items-center gap-1 cursor-pointer"
-                      >
-                        <QrCode className="w-3 h-3" /> Ver Código QR
-                      </button>
-                    )}
+                    <div className="flex items-center gap-2">
+                      {chosenVendor.catalogUrl && (
+                        <a
+                          href={chosenVendor.catalogUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-[10px] font-bold text-cyan-300 hover:text-white flex items-center gap-1 cursor-pointer bg-cyan-950/60 px-2 py-0.5 rounded-lg border border-cyan-800/60 hover:border-cyan-400 transition-all"
+                          title="Abrir catálogo completo de ventas en Telegram"
+                        >
+                          <ExternalLink className="w-2.5 h-2.5 text-cyan-400" /> Ver Catálogo Telegram
+                        </a>
+                      )}
+                      {chosenVendor.paymentConfig.qrImageUrl && (
+                        <button
+                          type="button"
+                          onClick={() => setShowQrModal(true)}
+                          className="text-[10px] font-bold text-[#00ff88] hover:underline flex items-center gap-1 cursor-pointer"
+                        >
+                          <QrCode className="w-3 h-3" /> Ver Código QR
+                        </button>
+                      )}
+                    </div>
                   </div>
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-[11px]">
@@ -329,10 +370,10 @@ export const ServiceDetailModal: React.FC<ServiceDetailModalProps> = ({
                         <strong className="text-white font-mono">{chosenVendor.paymentConfig.bcpAccount}</strong>
                       </div>
                     )}
-                    {chosenVendor.paymentConfig.binancePayId && (
+                    {chosenVendor.paymentConfig.interbankAccount && (
                       <div className="bg-[#05140c] p-2 rounded-lg border border-emerald-950 sm:col-span-2">
-                        <span className="text-slate-400 block text-[9px] uppercase">Binance Pay ID</span>
-                        <strong className="text-white font-mono">{chosenVendor.paymentConfig.binancePayId}</strong>
+                        <span className="text-slate-400 block text-[9px] uppercase">Cuenta Interbank</span>
+                        <strong className="text-white font-mono">{chosenVendor.paymentConfig.interbankAccount}</strong>
                       </div>
                     )}
                   </div>

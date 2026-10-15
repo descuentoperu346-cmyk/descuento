@@ -30,6 +30,7 @@ import {
 import { Vendor, INITIAL_VENDORS } from '../data/vendorsData';
 import { ServiceItem, SERVICES_DATA } from '../data/servicesData';
 import { PaymentMethodItem, INITIAL_PAYMENT_METHODS } from '../data/paymentsData';
+import { PaymentBrandLogo } from './BrandLogos';
 
 interface AdminModalProps {
   isOpen: boolean;
@@ -293,11 +294,11 @@ export const AdminModal: React.FC<AdminModalProps> = ({
 
   // Preset image gallery for fast 1-click styling
   const imagePresets = [
-    { label: '🎬 Streaming 4K', url: '/imagenes/card-streaming.png' },
-    { label: '🔍 Ciber OSINT', url: '/imagenes/card-investigacion.png' },
-    { label: '🛡️ Lab RAT & RedTeam', url: '/imagenes/card-educacion.png' },
-    { label: '🌐 Cyber Wide Neon', url: '/imagenes/hero-bg-wide.jpg' },
-    { label: '⚡ Atom Core', url: '/imagenes/hero-circle.png' }
+    { label: 'Streaming 4K', url: '/imagenes/card-streaming.png' },
+    { label: 'Ciber OSINT', url: '/imagenes/card-investigacion.png' },
+    { label: 'Lab RAT & RedTeam', url: '/imagenes/card-educacion.png' },
+    { label: 'Cyber Wide Neon', url: '/imagenes/hero-bg-wide.jpg' },
+    { label: 'Atom Core', url: '/imagenes/hero-circle.png' }
   ];
 
   // ==========================================
@@ -417,7 +418,7 @@ export const AdminModal: React.FC<AdminModalProps> = ({
       id: `pago-${Date.now()}`,
       name: name.trim(),
       type: 'other',
-      icon: '💳',
+      icon: 'card',
       active: true,
       beneficiaryName: 'Descuentos Perú',
       accountNumber: 'Instrucciones al contactar',
@@ -1316,7 +1317,7 @@ export const AdminModal: React.FC<AdminModalProps> = ({
                                 }`}
                               >
                                 <span className={`w-3.5 h-3.5 rounded flex items-center justify-center text-[10px] font-black ${isAuthorized ? 'bg-[#00ff88] text-black' : 'border border-slate-600'}`}>
-                                  {isAuthorized ? '✓' : ''}
+                                  {isAuthorized ? <Check className="w-2.5 h-2.5 text-black stroke-[3]" /> : null}
                                 </span>
                                 <span>{vendor.name}</span>
                                 <span className="font-mono text-[10px] text-slate-400">(@{vendor.username})</span>
@@ -1493,7 +1494,17 @@ export const AdminModal: React.FC<AdminModalProps> = ({
                                       : 'bg-slate-800 text-slate-400'
                                   }`}
                                 >
-                                  {isAuthorized ? '✓ Autorizado' : '✕ Bloqueado'}
+                                  {isAuthorized ? (
+                                    <span className="inline-flex items-center gap-1">
+                                      <Check className="w-2.5 h-2.5 text-[#00ff88]" />
+                                      <span>Autorizado</span>
+                                    </span>
+                                  ) : (
+                                    <span className="inline-flex items-center gap-1">
+                                      <X className="w-2.5 h-2.5 text-slate-400" />
+                                      <span>Bloqueado</span>
+                                    </span>
+                                  )}
                                 </span>
                               </div>
                             );
@@ -1551,7 +1562,7 @@ export const AdminModal: React.FC<AdminModalProps> = ({
                                 e.target.value.split(',').map((s) => s.trim()).filter(Boolean)
                               )
                             }
-                            placeholder="Yape, Plin, BCP, Binance..."
+                            placeholder="Yape, Plin, BCP, Interbank, BBVA..."
                             className="w-full px-3 py-2 rounded-xl bg-[#06170e] border border-emerald-800 text-white text-xs outline-none"
                           />
                         </div>
@@ -1600,8 +1611,8 @@ export const AdminModal: React.FC<AdminModalProps> = ({
                       <div>
                         {/* Header of Payment Card */}
                         <div className="flex items-center justify-between pb-2 border-b border-emerald-950">
-                          <div className="flex items-center gap-2">
-                            <span className="text-xl">{method.icon}</span>
+                          <div className="flex items-center gap-2.5">
+                            <PaymentBrandLogo methodId={method.id} methodName={method.name} size={24} />
                             <span className="text-sm font-extrabold text-white">{method.name}</span>
                           </div>
 
