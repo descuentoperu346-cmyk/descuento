@@ -108,9 +108,9 @@ export const ContactPage: React.FC<ContactPageProps> = ({ vendors }) => {
           return (
             <div className="space-y-6">
               {/* Featured Central Group Card */}
-              <div className="p-6 sm:p-8 rounded-3xl bg-gradient-to-r from-[#04190e] via-[#062616] to-[#021008] border-2 border-[#00ff88]/60 shadow-[0_0_30px_rgba(0,255,136,0.2)] flex flex-col md:flex-row md:items-center justify-between gap-6 relative overflow-hidden">
-                <div className="flex items-center gap-4 sm:gap-5">
-                  <div className="relative w-16 h-16 sm:w-20 sm:h-20 rounded-2xl overflow-hidden border-2 border-[#00ff88] p-1.5 bg-black shadow-[0_0_20px_rgba(0,255,136,0.5)] shrink-0">
+              <div className="p-4 sm:p-7 md:p-8 rounded-3xl bg-gradient-to-r from-[#04190e] via-[#062616] to-[#021008] border-2 border-[#00ff88]/60 shadow-[0_0_30px_rgba(0,255,136,0.2)] flex flex-col md:flex-row md:items-center justify-between gap-6 relative overflow-hidden">
+                <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-5">
+                  <div className="relative w-14 h-14 sm:w-20 sm:h-20 rounded-2xl overflow-hidden border-2 border-[#00ff88] p-1.5 bg-black shadow-[0_0_20px_rgba(0,255,136,0.5)] shrink-0">
                     <img src="/imagenes/monograma.png" alt={central.name} className="w-full h-full object-contain" />
                     <span className="absolute bottom-1 right-1 w-3 h-3 rounded-full bg-[#00ff88] border-2 border-black animate-ping" />
                   </div>
@@ -118,14 +118,14 @@ export const ContactPage: React.FC<ContactPageProps> = ({ vendors }) => {
                     <span className="px-2.5 py-0.5 rounded text-[10px] font-mono font-bold bg-emerald-950 border border-emerald-500/50 text-[#00ff88] uppercase">
                       GRUPO & CANAL PRINCIPAL
                     </span>
-                    <h3 className="text-xl sm:text-2xl font-black text-white mt-1">{central.name}</h3>
+                    <h3 className="text-lg sm:text-2xl font-black text-white mt-1">{central.name}</h3>
                     <p className="text-xs sm:text-sm text-slate-300 mt-1 max-w-xl">
                       {central.customNotes || 'Administración central, activación de cuentas, validación de pagos Yape/Plin y soporte de garantías.'}
                     </p>
                   </div>
                 </div>
 
-                <div className="shrink-0 flex flex-col sm:flex-row md:flex-col gap-2">
+                <div className="shrink-0 flex flex-col sm:flex-row md:flex-col gap-2 w-full md:w-auto">
                   <a
                     href={central.telegramUrl}
                     target="_blank"
@@ -133,7 +133,7 @@ export const ContactPage: React.FC<ContactPageProps> = ({ vendors }) => {
                     onClick={() => {
                       recordVendorClickEvent(central.id, central.name, 'telegram', 'Contacto Principal');
                     }}
-                    className="px-6 py-3 rounded-2xl font-black text-xs sm:text-sm text-slate-950 bg-[#00ff88] hover:bg-[#00e676] shadow-[0_0_20px_rgba(0,255,136,0.35)] flex items-center justify-center gap-2 transition-all font-mono uppercase whitespace-nowrap active:scale-95"
+                    className="w-full sm:w-auto px-5 sm:px-6 py-3 rounded-2xl font-black text-xs sm:text-sm text-slate-950 bg-[#00ff88] hover:bg-[#00e676] shadow-[0_0_20px_rgba(0,255,136,0.35)] flex items-center justify-center gap-2 transition-all font-mono uppercase active:scale-95 text-center"
                   >
                     <Send className="w-4 h-4 fill-slate-950" />
                     <span>Unirse al Canal (@{central.username})</span>

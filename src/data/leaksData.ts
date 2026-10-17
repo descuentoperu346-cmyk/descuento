@@ -60,6 +60,7 @@ export interface LeakArticle {
   suspects?: SuspectEntry[];
   leakedChats?: LeakedChatEntry[];
   openQuestions?: string[];
+  isUpcoming?: boolean;
 }
 
 export const INITIAL_LEAKS_ARTICLES: LeakArticle[] = [
@@ -290,7 +291,129 @@ export const INITIAL_LEAKS_ARTICLES: LeakArticle[] = [
     ]
   },
 
-  // 2. Featured Lead Hero Article (Anterior)
+  // 2. EXPEDIENTE LEAK #02: CORRUPCIÓN CONGRESO & AMÉRICA TV (PRÓXIMA LIBERACIÓN)
+  {
+    id: 'leak-congreso-america-tv',
+    leakNumber: 2,
+    title: 'Nuevo caso de corrupción liberado del Congreso: pagos a América TV para callar coimas en el Congreso',
+    subtitle: 'Comprobantes de transferencias bancarias, facturas de pauta clandestina y chats entre operadores parlamentarios y directivos mediáticos para silenciar investigaciones por cobro de coimas en el Congreso de la República.',
+    slug: 'nuevo-caso-corrupcion-congreso-pagos-america-tv-callar-coimas',
+    category: 'filtraciones',
+    categoryLabel: 'PRÓXIMO LEAK #02 // CONGRESO',
+    severity: 'critico',
+    date: 'Próxima Liberación (Octubre 2026)',
+    readTime: '15 min de lectura',
+    author: 'Unidad de Investigación DP',
+    authorRole: 'Periodismo Forense & Inteligencia OSINT',
+    authorTelegram: 'Tin9o',
+    imageUrl: '/imagenes/leak-congreso-america-tv.jpg',
+    dossierCode: 'DOSSIER-CONG-CORRUPCION-2026-002',
+    classificationNotice: 'EXPEDIENTE EN FASE FINAL DE DESCLASIFICACIÓN PÚBLICA Y COTEJO DE FIRMAS DIGITALES.',
+    summary: 'Filtración documentaria sobre una red de blindaje mediático: legisladores y operadores de comisiones canalizaron fondos públicos y aportes ilícitos hacia emisarios vinculados a América TV con el fin expreso de vetar reportajes sobre cobro de coimas en el Congreso.',
+    affectedScope: 'Congreso de la República, medios de comunicación corporativos y comisiones fiscalizadoras',
+    compromisedData: [
+      'Extractos de transferencias bancarias fraccionadas a operadores de prensa',
+      'Facturas de publicidad institucional simulada para encubrir pagos de sobornos',
+      'Registros de chat de WhatsApp coordinando la censura de coberturas en vivo',
+      'Audios de reuniones reservadas sobre distribución de fondos en comisiones ordinarias',
+      'Nómina de legisladores aportantes del fondo de blindaje mediático',
+      'Registros de visitas a instalaciones televisivas no reportados en agenda oficial'
+    ],
+    tags: ['#CongresoPeru', '#AmericaTV', '#CoimasCongreso', '#PautaClandestina', '#BlindajeMediatico', '#LeakExclusivo', '#Corrupcion'],
+    featured: true,
+    isUpcoming: true,
+    evidenceFigures: [
+      {
+        id: 'cong-01',
+        figureNumber: 'FIGURA 01: MESA DIRECTIVA',
+        title: 'Operadores de Mesa Directiva y Enlaces de Pauta',
+        caption: 'Coordinación de transferencias y asignación presupuestal de pauta publicitaria clandestina del Congreso.',
+        imageUrl: '/imagenes/caso-congreso/figura-01.jpg',
+        evidenceType: 'Expediente Administrativo',
+        source: 'Unidad de Investigación DP'
+      },
+      {
+        id: 'cong-02',
+        figureNumber: 'FIGURA 02: ÓRGANOS DE CONTROL',
+        title: 'Vínculos con Órganos de Control y Fiscalías',
+        caption: 'Seguimiento a carpetas fiscales y comisiones investigadoras sobre cobro de comisiones y blindaje mediático.',
+        imageUrl: '/imagenes/caso-congreso/figura-02.jpg',
+        evidenceType: 'Registros Fiscales',
+        source: 'Unidad de Investigación DP'
+      },
+      {
+        id: 'cong-03',
+        figureNumber: 'FIGURA 03: ANTECEDENTE HISTÓRICO',
+        title: 'Alberto Fujimori - Control de Líneas Editoriales',
+        caption: 'Precedente histórico de control de coberturas televisivas (Caso Vladivideos / América TV).',
+        imageUrl: '/imagenes/caso-congreso/figura-03.jpg',
+        evidenceType: 'Precedente Judicial',
+        source: 'Archivo Histórico Judicial'
+      },
+      {
+        id: 'cong-04',
+        figureNumber: 'FIGURA 04: COMISIONES PARLAMENTARIAS',
+        title: 'Dirección Parlamentaria y Comisiones Ordinarias',
+        caption: 'Gestión de comisiones de fiscalización y distribución de montos encubiertos en publicidad institucional.',
+        imageUrl: '/imagenes/caso-congreso/figura-04.jpg',
+        evidenceType: 'Contratos y Facturas',
+        source: 'Unidad de Investigación DP'
+      },
+      {
+        id: 'cong-05',
+        figureNumber: 'FIGURA 05: EJECUTIVO ANTERIOR',
+        title: 'Martín Vizcarra - Presupuestos de Publicidad Estatal',
+        caption: 'Investigaciones por direccionamiento de gasto publicitario estatal y contrataciones en el Ejecutivo.',
+        imageUrl: '/imagenes/caso-congreso/figura-05.jpg',
+        evidenceType: 'Carpetas Preliminares',
+        source: 'Unidad de Investigación DP'
+      },
+      {
+        id: 'cong-06',
+        figureNumber: 'FIGURA 06: PODER EJECUTIVO',
+        title: 'Dina Boluarte - Decretos de Urgencia y Pauta Oficial',
+        caption: 'Decretos de urgencia y partidas de imagen institucional vinculadas a pactos con bancadas congresales.',
+        imageUrl: '/imagenes/caso-congreso/figura-06.jpg',
+        evidenceType: 'Partidas Presupuestarias',
+        source: 'Unidad de Investigación DP'
+      },
+      {
+        id: 'cong-07',
+        figureNumber: 'FIGURA 07: EJECUTIVO ANTERIOR',
+        title: 'Pedro Castillo - Gestiones y Licitaciones Regionales',
+        caption: 'Expedientes por irregularidades en comisiones, licitaciones regionales y reclamos por pauta periodística.',
+        imageUrl: '/imagenes/caso-congreso/figura-07.jpg',
+        evidenceType: 'Declaraciones Fiscales',
+        source: 'Unidad de Investigación DP'
+      },
+      {
+        id: 'cong-08',
+        figureNumber: 'FIGURA 08: ANTECEDENTE HISTÓRICO',
+        title: 'Alan García - Pauta Oficial y Coberturas Dominicales',
+        caption: 'Patrones históricos de asignación de publicidad estatal y condicionamiento de reportajes dominicales.',
+        imageUrl: '/imagenes/caso-congreso/figura-08.jpg',
+        evidenceType: 'Precedente Documentado',
+        source: 'Archivo Histórico Judicial'
+      },
+      {
+        id: 'cong-09',
+        figureNumber: 'FIGURA 09: FUERZA POPULAR',
+        title: 'Keiko Fujimori - Coordinación de Bancada Parlamentaria',
+        caption: 'Dirección política de la bancada mayoritaria en comisiones de presupuesto y alianzas de veto mediático.',
+        imageUrl: '/imagenes/caso-congreso/figura-09.jpg',
+        evidenceType: 'Registros de Bancada',
+        source: 'Unidad de Investigación DP'
+      }
+    ],
+    content: [
+      'La Unidad de Investigación de Descuentos Perú se encuentra finalizando el peritaje y cotejo forense del expediente "Operación Silencio en el Parlamento", una exhaustiva recopilación de registros bancarios, contratos de servicios de comunicación y mensajes interceptados que revelan pagos encubiertos destinados a evitar que salieran a la luz esquemas de cobro de coimas en el Congreso.',
+      'De acuerdo con las evidencias en custodia, diversos legisladores que integraban comisiones de presupuesto y fiscalización habrían acordado derivaciones de dinero hacia operadores de medios de televisión de alcance nacional —con especial énfasis en América TV— para bloquear o suavizar reportajes de investigación sobre adjudicaciones irregulares en gobiernos regionales.',
+      'El esquema operaba mediante contratos de "asesoría en comunicación estratégica" y pauta publicitaria no devengada, triangulados a través de pequeñas agencias creadas con meses de anticipación. De esta forma, el dinero salía formalmente amparado bajo conceptos de imagen institucional mientras en la práctica condicionaba la línea editorial.',
+      'El informe final incluirá los comprobantes íntegros, los números de operación bancaria, las transcripciones forenses y el análisis balístico y digital de los metadatos correspondientes. La desclasificación total se llevará a cabo en la fecha fijada por el cronómetro de la plataforma.'
+    ]
+  },
+
+  // 3. Featured Lead Hero Article (Anterior)
   {
     id: 'leak-hero-db',
     title: 'Qué hacer cuando se expone una base de datos',
@@ -508,13 +631,13 @@ export const INITIAL_LEAKS_ARTICLES: LeakArticle[] = [
   }
 ];
 
-export const LEAKS_ARTICLES_STORAGE_KEY = 'dp_leaks_articles_v6';
+export const LEAKS_ARTICLES_STORAGE_KEY = 'dp_leaks_articles_v7';
 
 export function getStoredLeakArticles(): LeakArticle[] {
   try {
     // Purge old stale caches so updated media and URLs immediately propagate
     if (typeof window !== 'undefined' && window.localStorage) {
-      ['dp_leaks_articles', 'dp_leaks_articles_v2', 'dp_leaks_articles_v3', 'dp_leaks_articles_v4', 'dp_leaks_articles_v5'].forEach(k => {
+      ['dp_leaks_articles', 'dp_leaks_articles_v2', 'dp_leaks_articles_v3', 'dp_leaks_articles_v4', 'dp_leaks_articles_v5', 'dp_leaks_articles_v6'].forEach(k => {
         try { localStorage.removeItem(k); } catch {}
       });
     }

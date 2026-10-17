@@ -33,7 +33,7 @@ export const Hero: React.FC<HeroProps> = ({
           {/* Left Column: Headline, subtext, and action buttons */}
           <div className="lg:col-span-6 z-10 text-center lg:text-left space-y-3 sm:space-y-3.5">
             {/* Kicker Tag */}
-            <div className="inline-flex items-center gap-2 text-[10px] sm:text-xs font-semibold tracking-[0.16em] text-slate-300 uppercase flex-wrap justify-center lg:justify-start">
+            <div className="inline-flex items-center gap-1.5 sm:gap-2 text-[9px] sm:text-xs font-semibold tracking-[0.14em] sm:tracking-[0.16em] text-slate-300 uppercase flex-wrap justify-center lg:justify-start">
               <span>STREAMING</span>
               <span className="text-emerald-500 font-bold">·</span>
               <button

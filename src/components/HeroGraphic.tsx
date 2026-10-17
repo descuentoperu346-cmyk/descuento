@@ -82,7 +82,7 @@ export const HeroGraphic: React.FC<HeroGraphicProps> = () => {
     <div className="flex flex-col items-center justify-center w-full select-none">
       {/* 3D Celestial Cyber Orbit Stage (Compact Proportional Height) */}
       <div
-        className="relative w-full max-w-[290px] sm:max-w-[360px] md:max-w-[420px] lg:max-w-[460px] h-[240px] sm:h-[285px] md:h-[320px] lg:h-[340px] mx-auto flex items-center justify-center preserve-3d"
+        className="relative w-full max-w-[280px] sm:max-w-[360px] md:max-w-[420px] lg:max-w-[460px] h-[230px] sm:h-[285px] md:h-[320px] lg:h-[340px] mx-auto flex items-center justify-center preserve-3d overflow-hidden sm:overflow-visible"
         style={{ perspective: '1000px' }}
         onMouseEnter={() => setIsPaused(true)}
         onMouseLeave={() => setIsPaused(false)}

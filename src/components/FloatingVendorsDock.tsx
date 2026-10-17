@@ -67,7 +67,7 @@ export const FloatingVendorsDock: React.FC = () => {
     <aside aria-label="Creadores en línea" className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-50 flex flex-col items-end gap-2.5 select-none">
       {/* Expanded Creators Drawer */}
       {isOpen && (
-        <div className="w-72 sm:w-80 rounded-3xl bg-[#04130a]/95 border-2 border-emerald-500/70 p-4 shadow-[0_20px_50px_rgba(0,0,0,0.9),0_0_40px_rgba(0,255,136,0.25)] backdrop-blur-2xl animate-in fade-in slide-in-from-bottom-4 duration-200 space-y-3">
+        <div className="w-[calc(100vw-2rem)] sm:w-80 max-w-sm rounded-3xl bg-[#04130a]/95 border-2 border-emerald-500/70 p-4 shadow-[0_20px_50px_rgba(0,0,0,0.9),0_0_40px_rgba(0,255,136,0.25)] backdrop-blur-2xl animate-in fade-in slide-in-from-bottom-4 duration-200 space-y-3">
           
           {/* Header */}
           <div className="flex items-center justify-between pb-2.5 border-b border-emerald-500/20">

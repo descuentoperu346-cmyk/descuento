@@ -1,6 +1,7 @@
 import React from 'react';
-import { Send, Menu, X, Shield } from 'lucide-react';
+import { Send, Menu, X, Shield, Clock, ShieldAlert } from 'lucide-react';
 import { TELEGRAM_URL } from '../data/servicesData';
+import { useLeakCountdown } from '../hooks/useLeakCountdown';
 
 interface NavbarProps {
   activeTab: string;
@@ -18,6 +19,7 @@ export const Navbar: React.FC<NavbarProps> = ({
   onOpenAdmin
 }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false);
+  const { days, hours, minutes, seconds } = useLeakCountdown();
 
   const handleNavClick = (tabId: string) => {
     onTabChange(tabId);
@@ -26,8 +28,47 @@ export const Navbar: React.FC<NavbarProps> = ({
   };
 
   return (
-    <header className="sticky top-0 z-50 w-full backdrop-blur-xl bg-[#050b08]/92 border-b border-emerald-950/70">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-6">
+    <header className="sticky top-0 z-50 w-full backdrop-blur-xl bg-[#050b08]/95 border-b border-emerald-950/70">
+      {/* Top Breaking Leak Countdown Ticker Bar */}
+      <div
+        onClick={() => handleNavClick('leaks')}
+        className="w-full bg-gradient-to-r from-[#1b0307] via-[#29050d] to-[#150205] border-b border-rose-500/40 px-3 py-1.5 cursor-pointer hover:bg-rose-950/90 transition-colors select-none"
+      >
+        <div className="max-w-7xl mx-auto flex items-center justify-between gap-3 text-xs">
+          <div className="flex items-center gap-2 overflow-hidden text-ellipsis whitespace-nowrap">
+            <span className="relative flex h-2 w-2 shrink-0">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-rose-400 opacity-75" />
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-rose-500" />
+            </span>
+            <span className="text-[10px] sm:text-xs font-mono font-bold text-rose-300 uppercase tracking-wider shrink-0 flex items-center gap-1">
+              <ShieldAlert className="w-3.5 h-3.5 text-rose-400 inline" />
+              <span>PRÓXIMO LEAK #02:</span>
+            </span>
+            <span className="text-[11px] sm:text-xs font-bold text-white tracking-tight truncate hidden sm:inline">
+              NUEVO CASO DE CORRUPCIÓN LIBERADO DEL CONGRESO - PAGOS A AMÉRICA TV
+            </span>
+          </div>
+
+          <div className="flex items-center gap-2.5 shrink-0">
+            <div className="flex items-center gap-1 font-mono text-[11px] font-black text-rose-300">
+              <span className="text-slate-400 text-[9px] uppercase font-bold mr-0.5 hidden md:inline">LIBERACIÓN EN:</span>
+              <span className="px-1.5 py-0.5 rounded bg-black/80 border border-rose-500/40 text-white shadow-sm">{days}d</span>
+              <span>:</span>
+              <span className="px-1.5 py-0.5 rounded bg-black/80 border border-rose-500/40 text-white shadow-sm">{String(hours).padStart(2, '0')}h</span>
+              <span>:</span>
+              <span className="px-1.5 py-0.5 rounded bg-black/80 border border-rose-500/40 text-white shadow-sm">{String(minutes).padStart(2, '0')}m</span>
+              <span>:</span>
+              <span className="px-1.5 py-0.5 rounded bg-rose-900 border border-rose-400 text-rose-100 shadow-sm animate-pulse">{String(seconds).padStart(2, '0')}s</span>
+            </div>
+
+            <span className="text-[10px] font-mono font-bold text-rose-300 hover:text-white bg-rose-900/40 px-2 py-0.5 rounded border border-rose-500/40 hidden lg:inline-flex items-center gap-1">
+              Ver Dossier & 9 Implicados →
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 sm:h-20 flex items-center justify-between gap-4 sm:gap-6">
         {/* Brand Logo Lockup (Crisp, complete, never cut off) */}
         <a
           href="#"
@@ -35,10 +76,10 @@ export const Navbar: React.FC<NavbarProps> = ({
             e.preventDefault();
             handleNavClick('inicio');
           }}
-          className="flex items-center gap-3 shrink-0 group focus-visible:outline-none"
+          className="flex items-center gap-2.5 sm:gap-3 shrink-0 group focus-visible:outline-none"
         >
           {/* Logo Circular Emblem */}
-          <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-full overflow-hidden shrink-0 border border-emerald-400/50 shadow-[0_0_15px_rgba(0,255,136,0.35)] group-hover:shadow-[0_0_22px_rgba(0,255,136,0.6)] transition-all">
+          <div className="w-9 h-9 sm:w-11 sm:h-11 rounded-full overflow-hidden shrink-0 border border-emerald-400/50 shadow-[0_0_15px_rgba(0,255,136,0.35)] group-hover:shadow-[0_0_22px_rgba(0,255,136,0.6)] transition-all">
             <img
               src="/imagenes/hero-circle.png"
               alt="Descuentos Perú"
@@ -47,12 +88,12 @@ export const Navbar: React.FC<NavbarProps> = ({
             />
           </div>
 
-          {/* Typography Lockup (Matching screenshot exact font weights and colors) */}
+          {/* Typography Lockup */}
           <div className="flex flex-col leading-[1.05] select-none">
-            <span className="text-[11px] sm:text-xs font-bold tracking-[0.22em] text-white uppercase">
+            <span className="text-[10px] sm:text-xs font-bold tracking-[0.22em] text-white uppercase">
               DESCUENTOS
             </span>
-            <span className="text-xl sm:text-2xl font-black tracking-wider text-[#00ff88] uppercase neon-glow-green">
+            <span className="text-lg sm:text-2xl font-black tracking-wider text-[#00ff88] uppercase neon-glow-green">
               PERÚ
             </span>
           </div>
@@ -145,7 +186,7 @@ export const Navbar: React.FC<NavbarProps> = ({
 
       {/* Mobile Drawer Menu */}
       {mobileMenuOpen && (
-        <div className="md:hidden border-t border-emerald-950 bg-[#06120b] px-4 pt-3 pb-6 space-y-2">
+        <div className="md:hidden border-t border-emerald-950 bg-[#06120b] px-4 pt-3 pb-6 space-y-2 max-h-[calc(100vh-4.5rem)] overflow-y-auto shadow-2xl animate-in slide-in-from-top-2 duration-200">
           <button
             type="button"
             onClick={() => handleNavClick('inicio')}

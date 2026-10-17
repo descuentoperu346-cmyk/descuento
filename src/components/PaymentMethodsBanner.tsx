@@ -149,7 +149,7 @@ export const PaymentMethodsBanner: React.FC<PaymentMethodsBannerProps> = ({
   };
 
   return (
-    <section className={`relative rounded-3xl p-6 sm:p-8 bg-[#030e07] border border-emerald-500/30 shadow-[0_0_40px_rgba(0,255,136,0.08)] overflow-hidden ${className}`}>
+    <section className={`relative rounded-3xl p-4 sm:p-7 lg:p-8 bg-[#030e07] border border-emerald-500/30 shadow-[0_0_40px_rgba(0,255,136,0.08)] overflow-hidden ${className}`}>
       {/* Background ambient lighting */}
       <div className="absolute top-0 right-1/4 w-96 h-96 bg-emerald-500/8 rounded-full blur-3xl pointer-events-none" />
       <div className="absolute bottom-0 left-1/4 w-96 h-96 bg-[#00ff88]/5 rounded-full blur-3xl pointer-events-none" />
@@ -160,10 +160,10 @@ export const PaymentMethodsBanner: React.FC<PaymentMethodsBannerProps> = ({
       <div className="absolute bottom-3 left-3 w-3 h-3 border-b-2 border-l-2 border-[#00ff88]/60 pointer-events-none" />
       <div className="absolute bottom-3 right-3 w-3 h-3 border-b-2 border-r-2 border-[#00ff88]/60 pointer-events-none" />
 
-      <div className="relative z-10 space-y-6">
+      <div className="relative z-10 space-y-5 sm:space-y-6">
         
         {/* Top Header: Trust Tag, Title, and Kusi AI Trust Pill */}
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-5 border-b border-emerald-500/15">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-4 sm:pb-5 border-b border-emerald-500/15">
           <div className="space-y-1.5 text-left">
             <div className="inline-flex items-center gap-2 px-3 py-0.5 rounded-full bg-emerald-950/80 border border-emerald-500/40 text-[10px] font-mono font-bold text-[#00ff88] uppercase tracking-wider">
               <span className="w-1.5 h-1.5 rounded-full bg-[#00ff88] animate-pulse" />
@@ -181,7 +181,7 @@ export const PaymentMethodsBanner: React.FC<PaymentMethodsBannerProps> = ({
           </div>
 
           {/* Kusi AI Compact Trust Badge */}
-          <div className="flex items-center gap-3 p-2.5 sm:p-3 rounded-2xl bg-black/60 border border-emerald-500/30 backdrop-blur-md shrink-0 shadow-lg">
+          <div className="flex items-center gap-3 p-2.5 sm:p-3 rounded-2xl bg-black/60 border border-emerald-500/30 backdrop-blur-md shrink-0 shadow-lg w-full sm:w-auto">
             <div className="relative w-10 h-10 rounded-xl overflow-hidden bg-emerald-950/80 border border-emerald-400/50 flex items-center justify-center shrink-0">
               <img
                 src="/imagenes/llama-about.png"
@@ -202,15 +202,16 @@ export const PaymentMethodsBanner: React.FC<PaymentMethodsBannerProps> = ({
         </div>
 
         {/* The 5 Official Peruvian Payment Cards Grid (Pure, Clean Fintech Squircle App Icons) */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4">
-          {displayMethods.map((method) => {
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2.5 sm:gap-4">
+          {displayMethods.map((method, idx) => {
             const brand = getBrand(method.id, method.name);
             const logoSrc = method.logoUrl || `/imagenes/iconos-pago/${method.id}.png`;
+            const isLastOdd = idx === displayMethods.length - 1 && displayMethods.length % 2 !== 0;
 
             return (
               <div
                 key={method.id}
-                className={`group relative p-4 rounded-2xl bg-[#05140b]/90 border border-emerald-500/20 backdrop-blur-sm transition-all duration-300 hover:-translate-y-1.5 ${brand.cardHover} cursor-default select-none flex flex-col justify-between overflow-hidden`}
+                className={`group relative p-3 sm:p-4 rounded-2xl bg-[#05140b]/90 border border-emerald-500/20 backdrop-blur-sm transition-all duration-300 hover:-translate-y-1.5 ${brand.cardHover} ${isLastOdd ? 'col-span-2 sm:col-span-1' : ''} cursor-default select-none flex flex-col justify-between overflow-hidden`}
               >
                 {/* Ambient Brand Glow on hover */}
                 <div

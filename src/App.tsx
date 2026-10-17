@@ -318,11 +318,11 @@ export default function App() {
 
             {/* Quick Section Jump Cards */}
             <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-1 pb-6 sm:pt-2 sm:pb-8">
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
                 {/* Card 1: Servicios */}
                 <div
                   onClick={() => handleTabChange('servicios')}
-                  className="group p-5 rounded-2xl bg-gradient-to-b from-[#081a10] to-[#040e08] border border-emerald-900/60 hover:border-emerald-400/80 transition-all cursor-pointer shadow-lg hover:shadow-[0_0_25px_rgba(0,255,136,0.2)]"
+                  className="group p-4 sm:p-5 rounded-2xl bg-gradient-to-b from-[#081a10] to-[#040e08] border border-emerald-900/60 hover:border-emerald-400/80 transition-all cursor-pointer shadow-lg hover:shadow-[0_0_25px_rgba(0,255,136,0.2)]"
                 >
                   <div className="flex items-center justify-between mb-3">
                     <span className="p-2.5 rounded-xl bg-emerald-950/80 text-[#00ff88] border border-emerald-500/30">
@@ -347,7 +347,7 @@ export default function App() {
                 {/* Card 2: Leaks & Filtraciones */}
                 <div
                   onClick={() => handleTabChange('leaks')}
-                  className="group p-5 rounded-2xl bg-gradient-to-b from-[#1c0808] to-[#0a0303] border border-rose-900/60 hover:border-rose-500/80 transition-all cursor-pointer shadow-lg hover:shadow-[0_0_25px_rgba(244,63,94,0.2)]"
+                  className="group p-4 sm:p-5 rounded-2xl bg-gradient-to-b from-[#1c0808] to-[#0a0303] border border-rose-900/60 hover:border-rose-500/80 transition-all cursor-pointer shadow-lg hover:shadow-[0_0_25px_rgba(244,63,94,0.2)]"
                 >
                   <div className="flex items-center justify-between mb-3">
                     <span className="p-2.5 rounded-xl bg-rose-950/80 text-rose-400 border border-rose-500/30">
@@ -373,7 +373,7 @@ export default function App() {
                 {/* Card 3: Quiénes Somos */}
                 <div
                   onClick={() => handleTabChange('nosotros')}
-                  className="group p-5 rounded-2xl bg-gradient-to-b from-[#081a10] to-[#040e08] border border-emerald-900/60 hover:border-emerald-400/80 transition-all cursor-pointer shadow-lg hover:shadow-[0_0_25px_rgba(0,255,136,0.2)]"
+                  className="group p-4 sm:p-5 rounded-2xl bg-gradient-to-b from-[#081a10] to-[#040e08] border border-emerald-900/60 hover:border-emerald-400/80 transition-all cursor-pointer shadow-lg hover:shadow-[0_0_25px_rgba(0,255,136,0.2)]"
                 >
                   <div className="flex items-center justify-between mb-3">
                     <span className="p-2.5 rounded-xl bg-emerald-950/80 text-[#00ff88] border border-emerald-500/30">
@@ -398,7 +398,7 @@ export default function App() {
                 {/* Card 4: Contacto & Asesores */}
                 <div
                   onClick={() => handleTabChange('contacto')}
-                  className="group p-5 rounded-2xl bg-gradient-to-b from-[#081a10] to-[#040e08] border border-emerald-900/60 hover:border-emerald-400/80 transition-all cursor-pointer shadow-lg hover:shadow-[0_0_25px_rgba(0,255,136,0.2)]"
+                  className="group p-4 sm:p-5 rounded-2xl bg-gradient-to-b from-[#081a10] to-[#040e08] border border-emerald-900/60 hover:border-emerald-400/80 transition-all cursor-pointer shadow-lg hover:shadow-[0_0_25px_rgba(0,255,136,0.2)]"
                 >
                   <div className="flex items-center justify-between mb-3">
                     <span className="p-2.5 rounded-xl bg-emerald-950/80 text-[#00ff88] border border-emerald-500/30">
@@ -468,17 +468,17 @@ export default function App() {
               {/* Interactive Kusi AI Catalog Callout Banner */}
               <div
                 onClick={() => handleTabChange('servicios')}
-                className="mt-10 relative rounded-3xl overflow-hidden border-2 border-emerald-500/35 shadow-[0_0_35px_rgba(0,255,136,0.12)] p-6 sm:p-7 bg-gradient-to-r from-[#03130a]/95 via-[#062414]/95 to-[#020e06]/95 cursor-pointer group transition-all duration-300 hover:scale-[1.01] hover:border-[#00ff88]"
+                className="mt-8 relative rounded-3xl overflow-hidden border border-emerald-500/35 shadow-[0_0_35px_rgba(0,255,136,0.12)] p-4 sm:p-7 bg-gradient-to-r from-[#03130a]/95 via-[#062414]/95 to-[#020e06]/95 cursor-pointer group transition-all duration-300 hover:scale-[1.008] hover:border-[#00ff88]"
               >
                 {/* Cyber Corner Brackets */}
-                <div className="absolute top-2.5 left-2.5 w-3 h-3 border-t-2 border-l-2 border-[#00ff88]/60 pointer-events-none" />
-                <div className="absolute top-2.5 right-2.5 w-3 h-3 border-t-2 border-r-2 border-[#00ff88]/60 pointer-events-none" />
-                <div className="absolute bottom-2.5 left-2.5 w-3 h-3 border-b-2 border-l-2 border-[#00ff88]/60 pointer-events-none" />
-                <div className="absolute bottom-2.5 right-2.5 w-3 h-3 border-b-2 border-r-2 border-[#00ff88]/60 pointer-events-none" />
+                <div className="absolute top-3 left-3 w-3 h-3 border-t-2 border-l-2 border-[#00ff88]/60 pointer-events-none group-hover:border-[#00ff88] transition-colors" />
+                <div className="absolute top-3 right-3 w-3 h-3 border-t-2 border-r-2 border-[#00ff88]/60 pointer-events-none group-hover:border-[#00ff88] transition-colors" />
+                <div className="absolute bottom-3 left-3 w-3 h-3 border-b-2 border-l-2 border-[#00ff88]/60 pointer-events-none group-hover:border-[#00ff88] transition-colors" />
+                <div className="absolute bottom-3 right-3 w-3 h-3 border-b-2 border-r-2 border-[#00ff88]/60 pointer-events-none group-hover:border-[#00ff88] transition-colors" />
 
-                <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-5">
-                  <div className="flex items-center gap-4 text-left">
-                    <div className="w-14 h-14 rounded-2xl overflow-hidden bg-emerald-950/80 border border-emerald-400/60 shadow-[0_0_15px_rgba(0,255,136,0.3)] shrink-0 flex items-center justify-center">
+                <div className="relative z-10 flex flex-col md:flex-row items-stretch md:items-center justify-between gap-5">
+                  <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3.5 sm:gap-4 text-left">
+                    <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl overflow-hidden bg-emerald-950/80 border border-emerald-400/60 shadow-[0_0_15px_rgba(0,255,136,0.3)] shrink-0 flex items-center justify-center">
                       <img
                         src="/imagenes/llama-about.png"
                         alt="Kusi AI"
@@ -501,7 +501,7 @@ export default function App() {
 
                   <button
                     type="button"
-                    className="px-6 py-3 rounded-xl text-xs font-black text-slate-950 bg-[#00ff88] hover:bg-[#00e676] shadow-[0_0_20px_rgba(0,255,136,0.5)] cursor-pointer whitespace-nowrap shrink-0 transition-transform group-hover:scale-105"
+                    className="w-full md:w-auto px-6 py-3 rounded-xl text-xs font-black text-slate-950 bg-[#00ff88] hover:bg-[#00e676] shadow-[0_0_20px_rgba(0,255,136,0.5)] cursor-pointer whitespace-nowrap shrink-0 transition-transform group-hover:scale-105 text-center"
                   >
                     Abrir Catálogo de Servicios →
                   </button>
@@ -513,11 +513,11 @@ export default function App() {
             <LeaksBanner onExploreLeaks={() => handleTabChange('leaks')} />
 
             {/* Payment Methods Showcase Banner with Real Official App Logos */}
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 sm:py-4">
               <PaymentMethodsBanner paymentMethods={paymentMethods} />
 
               {/* Telegram Connect Banner */}
-              <div className="mt-8">
+              <div className="mt-6 sm:mt-8">
                 <TelegramBanner
                   onDirectClick={() => {
                     handleTabChange('contacto');

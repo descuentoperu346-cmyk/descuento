@@ -48,6 +48,7 @@ import {
 } from 'lucide-react';
 import { LeakArticle, EvidenceFigure } from '../data/leaksData';
 import { recordVendorClickEvent } from '../data/telemetryData';
+import { UpcomingLeakCountdownBanner } from './UpcomingLeakCountdownBanner';
 
 interface LeaksTabProps {
   articles: LeakArticle[];
@@ -251,27 +252,13 @@ export const LeaksTab: React.FC<LeaksTabProps> = ({ articles, onOpenContact }) =
     );
   }, [articles]);
 
-  // Right column: Últimas publicaciones (3 items)
+  // Right column: Últimas publicaciones (las más recientes excluyendo el artículo principal)
   const latestArticles = useMemo(() => {
-    const list = articles.filter((a) => a.id !== heroArticle?.id);
-    const specificOrder = ['leak-hero-db', 'leak-fake-alert', 'leak-report-reveal'];
-    const found = specificOrder
-      .map((id) => articles.find((a) => a.id === id))
-      .filter((a): a is LeakArticle => Boolean(a));
-
-    if (found.length === 3) return found;
-    return list.slice(0, 3);
+    return articles.filter((a) => a.id !== heroArticle?.id).slice(0, 3);
   }, [articles, heroArticle]);
 
-  // Bottom section: Explora la revista (3 horizontal cards)
+  // Bottom section: Explora la revista (siguientes artículos disponibles)
   const exploreArticles = useMemo(() => {
-    const specificOrder = ['leak-understand-exposure', 'leak-suspicious-email', 'leak-protect-identity'];
-    const found = specificOrder
-      .map((id) => articles.find((a) => a.id === id))
-      .filter((a): a is LeakArticle => Boolean(a));
-
-    if (found.length === 3) return found;
-
     const usedIds = new Set([heroArticle?.id, ...latestArticles.map((a) => a.id)]);
     return articles.filter((a) => !usedIds.has(a.id)).slice(0, 3);
   }, [articles, heroArticle, latestArticles]);
@@ -544,9 +531,9 @@ export const LeaksTab: React.FC<LeaksTabProps> = ({ articles, onOpenContact }) =
         {/* DOSSIER COMMAND BAR: INTERACTIVE HUB & SECTION SELECTOR */}
         {/* ======================================================== */}
         {isChinaPoloReport && (
-          <div className="sticky top-20 z-20 p-2 sm:p-2.5 rounded-2xl bg-[#041208]/95 backdrop-blur-xl border border-emerald-500/40 shadow-[0_10px_35px_rgba(0,0,0,0.8)]">
-            <div className="flex items-center justify-between gap-3 flex-wrap">
-              <div className="flex items-center gap-1.5 overflow-x-auto scrollbar-none py-0.5">
+          <div className="sticky top-16 sm:top-20 z-20 p-2 sm:p-2.5 rounded-2xl bg-[#041208]/95 backdrop-blur-xl border border-emerald-500/40 shadow-[0_10px_35px_rgba(0,0,0,0.8)]">
+            <div className="flex items-center justify-between gap-2 sm:gap-3">
+              <div className="flex-1 min-w-0 flex items-center gap-1.5 overflow-x-auto scrollbar-none py-0.5">
                 <button
                   type="button"
                   onClick={() => setActiveDossierSection('evidencias')}
@@ -941,7 +928,7 @@ export const LeaksTab: React.FC<LeaksTabProps> = ({ articles, onOpenContact }) =
                 </div>
 
                 {/* Active Comparison Viewer (Image + Transcription side by side) */}
-                <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 p-6 sm:p-8 items-start">
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 p-4 sm:p-6 md:p-8 items-start">
                   
                   {/* Left: Real Screenshot with Zoom */}
                   <div className="lg:col-span-5 flex flex-col items-center">
@@ -1506,7 +1493,7 @@ export const LeaksTab: React.FC<LeaksTabProps> = ({ articles, onOpenContact }) =
     <div className="space-y-10 animate-in fade-in duration-300">
       
       {/* 1. Header Banner & Title */}
-      <div className="relative rounded-3xl overflow-hidden border border-emerald-500/35 bg-gradient-to-r from-[#03150d] via-[#052917] to-[#021008] p-6 sm:p-10 shadow-[0_0_50px_rgba(0,255,136,0.12)]">
+      <div className="relative rounded-3xl overflow-hidden border border-emerald-500/35 bg-gradient-to-r from-[#03150d] via-[#052917] to-[#021008] p-4 sm:p-7 md:p-10 shadow-[0_0_50px_rgba(0,255,136,0.12)]">
         <div className="absolute top-0 right-0 w-96 h-full bg-emerald-500/10 blur-3xl pointer-events-none" />
         
         <div className="relative z-10 max-w-3xl space-y-3">
@@ -1515,17 +1502,20 @@ export const LeaksTab: React.FC<LeaksTabProps> = ({ articles, onOpenContact }) =
             <span>REVISTA DIGITAL // INTELIGENCIA OSINT & FILTRACIONES</span>
           </div>
 
-          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight leading-tight">
+          <h1 className="text-2xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight leading-tight">
             Filtraciones, Brechas & Ciberseguridad Perú
           </h1>
 
-          <p className="text-sm sm:text-base text-slate-300 leading-relaxed">
+          <p className="text-xs sm:text-base text-slate-300 leading-relaxed">
             Reportajes especiales de investigación, auditorías forenses a bases de datos expuestas, expedientes clasificados y guías de protección digital para usuarios y empresas en el Perú.
           </p>
         </div>
       </div>
 
-      {/* 2. Magazine Filter Pill Bar & Search */}
+      {/* 2. BREAKING COUNTDOWN ANNOUNCEMENT: CASO CORRUPCIÓN CONGRESO - AMÉRICA TV */}
+      <UpcomingLeakCountdownBanner onNotifyTelegram={onOpenContact} />
+
+      {/* 3. Magazine Filter Pill Bar & Search */}
       <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-2 border-b border-emerald-500/20">
         
         {/* Categories Bar */}
@@ -1584,7 +1574,7 @@ export const LeaksTab: React.FC<LeaksTabProps> = ({ articles, onOpenContact }) =
             {heroArticle && (
               <div
                 onClick={() => handleSelectArticle(heroArticle)}
-                className="lg:col-span-8 group relative rounded-3xl overflow-hidden border border-emerald-500/35 bg-[#030d07] min-h-[440px] sm:min-h-[500px] flex flex-col justify-end p-6 sm:p-9 cursor-pointer shadow-[0_20px_50px_rgba(0,0,0,0.8),0_0_35px_rgba(0,255,136,0.1)] hover:border-emerald-400/80 transition-all duration-500"
+                className="lg:col-span-8 group relative rounded-3xl overflow-hidden border border-emerald-500/35 bg-[#030d07] min-h-[380px] sm:min-h-[500px] flex flex-col justify-end p-4 sm:p-7 md:p-9 cursor-pointer shadow-[0_20px_50px_rgba(0,0,0,0.8),0_0_35px_rgba(0,255,136,0.1)] hover:border-emerald-400/80 transition-all duration-500"
               >
                 <img
                   src={heroArticle.imageUrl}
@@ -1600,7 +1590,7 @@ export const LeaksTab: React.FC<LeaksTabProps> = ({ articles, onOpenContact }) =
                 <div className="absolute inset-0 bg-gradient-to-t from-[#020904] via-[#020904]/80 to-transparent pointer-events-none" />
                 <div className="absolute inset-0 bg-gradient-to-r from-[#020904]/85 via-[#020904]/30 to-transparent pointer-events-none" />
 
-                <div className="absolute top-6 left-6 z-10 flex items-center gap-2">
+                <div className="absolute top-4 sm:top-6 left-4 sm:left-6 z-10 flex items-center gap-2">
                   <span className="px-3 py-1 rounded-full text-[10px] font-mono font-black uppercase tracking-widest bg-black/75 text-[#00ff88] border border-emerald-500/50 backdrop-blur-md shadow-[0_0_15px_rgba(0,255,136,0.25)] flex items-center gap-1.5">
                     <Zap className="w-3 h-3 text-[#00ff88] animate-pulse" />
                     <span>INVESTIGACIÓN ESPECIAL // LEAK #01</span>
@@ -1614,7 +1604,7 @@ export const LeaksTab: React.FC<LeaksTabProps> = ({ articles, onOpenContact }) =
                     </span>
                   </div>
 
-                  <h2 className="text-2xl sm:text-3xl lg:text-[34px] font-black text-white leading-tight tracking-tight drop-shadow-[0_4px_12px_rgba(0,0,0,0.9)] group-hover:text-emerald-300 transition-colors">
+                  <h2 className="text-xl sm:text-3xl lg:text-[34px] font-black text-white leading-tight tracking-tight drop-shadow-[0_4px_12px_rgba(0,0,0,0.9)] group-hover:text-emerald-300 transition-colors">
                     {heroArticle.title}
                   </h2>
 
@@ -1641,7 +1631,7 @@ export const LeaksTab: React.FC<LeaksTabProps> = ({ articles, onOpenContact }) =
                       <span className="text-slate-400">{heroArticle.readTime}</span>
                     </div>
 
-                    <div className="px-5 py-2.5 rounded-full bg-gradient-to-r from-[#00ff88] to-[#00d670] text-slate-950 font-black text-xs sm:text-sm font-mono shadow-[0_0_25px_rgba(0,255,136,0.45)] flex items-center gap-1.5 group-hover:scale-105 transition-all">
+                    <div className="w-full sm:w-auto justify-center px-5 py-2.5 rounded-full bg-gradient-to-r from-[#00ff88] to-[#00d670] text-slate-950 font-black text-xs sm:text-sm font-mono shadow-[0_0_25px_rgba(0,255,136,0.45)] flex items-center gap-1.5 group-hover:scale-105 transition-all">
                       <span>Leer informe completo</span>
                       <ArrowUpRight className="w-4 h-4 text-slate-950 stroke-[2.5]" />
                     </div>

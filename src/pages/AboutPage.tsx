@@ -179,7 +179,7 @@ export const AboutPage: React.FC<AboutPageProps> = ({
               </div>
             </div>
 
-            <div className="shrink-0 flex flex-col sm:flex-row lg:flex-col gap-1.5">
+            <div className="shrink-0 flex flex-col sm:flex-row lg:flex-col gap-1.5 w-full lg:w-auto">
               <a
                 href={centralVendor.telegramUrl}
                 target="_blank"
@@ -187,7 +187,7 @@ export const AboutPage: React.FC<AboutPageProps> = ({
                 onClick={() => {
                   recordVendorClickEvent(centralVendor.id, centralVendor.name, 'telegram', 'Nosotros Grupo Principal');
                 }}
-                className="px-5 py-2.5 rounded-xl font-black text-xs text-slate-950 bg-[#00ff88] hover:bg-[#00e676] shadow-[0_0_20px_rgba(0,255,136,0.4)] transition-all cursor-pointer flex items-center justify-center gap-2 font-mono uppercase tracking-wide active:scale-95 whitespace-nowrap"
+                className="w-full sm:w-auto px-5 py-2.5 rounded-xl font-black text-xs text-slate-950 bg-[#00ff88] hover:bg-[#00e676] shadow-[0_0_20px_rgba(0,255,136,0.4)] transition-all cursor-pointer flex items-center justify-center gap-2 font-mono uppercase tracking-wide active:scale-95 text-center"
               >
                 <Send className="w-3.5 h-3.5 fill-slate-950" />
                 <span>Unirse al Canal (@{centralVendor.username})</span>

@@ -10,7 +10,7 @@ export const config = {
   isProduction: process.env.NODE_ENV === 'production',
 
   // Credenciales privadas de Supabase - SOLO EN SERVIDOR
-  supabaseUrl: process.env.SUPABASE_URL || 'https://mgoufbntqyksunablrzb.supabase.co',
+  supabaseUrl: process.env.SUPABASE_URL || '',
   supabaseAnonKey: process.env.SUPABASE_ANON_KEY || '',
   supabaseServiceRoleKey: process.env.SUPABASE_SERVICE_ROLE_KEY || '',
 

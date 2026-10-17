@@ -1,12 +1,23 @@
 @import "tailwindcss";
 
 @layer base {
+  html,
   body {
     font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
     background-color: #050b08;
     color: #e2e8f0;
     overflow-x: hidden;
+    -webkit-tap-highlight-color: transparent;
   }
+}
+
+/* Cross-browser scrollbar hiding utility for horizontal swipes */
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-none {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
 
 /* 3D Spatial Atom Gyroscope System */

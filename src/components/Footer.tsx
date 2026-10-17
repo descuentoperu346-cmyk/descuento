@@ -80,7 +80,7 @@ export const Footer: React.FC<FooterProps> = ({ onOpenAdmin, onNavigateTab, acti
         {/* Bottom copyright & disclaimers */}
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-400 text-center sm:text-left">
           <p>© {new Date().getFullYear()} Descuentos Perú. Todos los derechos reservados. Activaciones oficiales y soporte 24/7.</p>
-          <div className="flex items-center gap-4 text-[11px] text-slate-400">
+          <div className="flex flex-wrap items-center justify-center sm:justify-end gap-2 sm:gap-4 text-[11px] text-slate-400">
             <span>Privacidad Protegida</span>
             <span>·</span>
             <span>Garantía de Reposición</span>

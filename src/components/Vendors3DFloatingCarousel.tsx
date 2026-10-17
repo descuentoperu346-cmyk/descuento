@@ -50,8 +50,8 @@ export const Vendors3DFloatingCarousel: React.FC<Vendors3DFloatingCarouselProps>
   }, []);
 
   // Proportional horizontal spread inside the 3D stage column
-  const spreadX = windowWidth >= 1200 ? 190 : windowWidth >= 768 ? 165 : 130;
-  const farSpreadX = windowWidth >= 1200 ? 280 : windowWidth >= 768 ? 240 : 180;
+  const spreadX = windowWidth >= 1200 ? 190 : windowWidth >= 768 ? 165 : windowWidth >= 480 ? 115 : 70;
+  const farSpreadX = windowWidth >= 1200 ? 280 : windowWidth >= 768 ? 240 : windowWidth >= 480 ? 165 : 110;
 
   // Auto-advance loop every 4 seconds
   useEffect(() => {
@@ -242,7 +242,7 @@ export const Vendors3DFloatingCarousel: React.FC<Vendors3DFloatingCarouselProps>
         {/* RIGHT COLUMN: 3D Orbital Focused Stage */}
         <div className="lg:col-span-7 flex flex-col items-center justify-center">
           <div
-            className="relative w-full h-[290px] sm:h-[310px] flex items-center justify-center preserve-3d select-none"
+            className="relative w-full h-[290px] sm:h-[310px] flex items-center justify-center preserve-3d select-none overflow-hidden sm:overflow-visible"
             style={{ perspective: '1000px' }}
             onMouseEnter={() => setIsPaused(true)}
             onMouseLeave={() => setIsPaused(false)}
@@ -296,7 +296,7 @@ export const Vendors3DFloatingCarousel: React.FC<Vendors3DFloatingCarouselProps>
                   onClick={() => {
                     if (!isActive) setActiveIndex(index);
                   }}
-                  className="absolute top-1/2 left-1/2 w-[225px] sm:w-[245px] transition-all duration-500 ease-out cursor-pointer select-none"
+                  className="absolute top-1/2 left-1/2 w-[205px] sm:w-[245px] transition-all duration-500 ease-out cursor-pointer select-none"
                   style={{
                     transform: `translate(-50%, -50%) ${transformStyle}`,
                     zIndex,

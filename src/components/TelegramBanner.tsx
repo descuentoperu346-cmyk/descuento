@@ -21,7 +21,7 @@ export const TelegramBanner: React.FC<TelegramBannerProps> = ({ onDirectClick, o
   return (
     <div className="my-10 relative select-none">
       {/* Banner Container */}
-      <div className="relative rounded-2xl sm:rounded-3xl bg-[#041209] border border-emerald-500/40 shadow-[0_4px_35px_rgba(0,0,0,0.8)] p-5 sm:p-6 overflow-hidden group">
+      <div className="relative rounded-2xl sm:rounded-3xl bg-[#041209] border border-emerald-500/40 shadow-[0_4px_35px_rgba(0,0,0,0.8)] p-4 sm:p-6 overflow-hidden group">
         {/* Background Artwork (Fluid emerald waves and cyber texture) */}
         <div
           className="absolute inset-0 bg-cover bg-center opacity-45 pointer-events-none mix-blend-screen"

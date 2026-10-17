@@ -142,8 +142,8 @@ export const ServicesPage: React.FC<ServicesPageProps> = ({
 
         {/* 2. Category Switcher Tabs + Search Input */}
         <div className="flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-3">
-          {/* Category Tabs */}
-          <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
+          {/* Category Tabs: smooth swipe on mobile, wrapped on larger screens */}
+          <div className="flex items-center gap-1.5 sm:gap-2 overflow-x-auto pb-1 sm:pb-0 scrollbar-none sm:flex-wrap">
             <button
               type="button"
               onClick={() => {
@@ -151,7 +151,7 @@ export const ServicesPage: React.FC<ServicesPageProps> = ({
                 setSelectedVendorId('todos');
                 setSearchQuery('');
               }}
-              className={`px-3.5 py-2 rounded-xl text-xs font-bold font-mono transition-all cursor-pointer flex items-center gap-1.5 select-none ${
+              className={`shrink-0 whitespace-nowrap px-3.5 py-2 rounded-xl text-xs font-bold font-mono transition-all cursor-pointer flex items-center gap-1.5 select-none ${
                 selectedCategory === 'todos' && selectedVendorId === 'todos' && searchQuery === ''
                   ? 'bg-[#00ff88] text-slate-950 shadow-[0_0_18px_rgba(0,255,136,0.45)] font-black scale-102'
                   : 'bg-[#030d07] text-slate-300 hover:text-white border border-emerald-900/80 hover:border-emerald-500/60'
@@ -164,7 +164,7 @@ export const ServicesPage: React.FC<ServicesPageProps> = ({
             <button
               type="button"
               onClick={() => setSelectedCategory('streaming')}
-              className={`px-3.5 py-2 rounded-xl text-xs font-bold font-mono transition-all cursor-pointer flex items-center gap-1.5 select-none ${
+              className={`shrink-0 whitespace-nowrap px-3.5 py-2 rounded-xl text-xs font-bold font-mono transition-all cursor-pointer flex items-center gap-1.5 select-none ${
                 selectedCategory === 'streaming'
                   ? 'bg-[#00ff88] text-slate-950 shadow-[0_0_18px_rgba(0,255,136,0.45)] font-black scale-102'
                   : 'bg-[#030d07] text-cyan-300 hover:text-white border border-cyan-900/60 hover:border-cyan-500/60'
@@ -177,7 +177,7 @@ export const ServicesPage: React.FC<ServicesPageProps> = ({
             <button
               type="button"
               onClick={() => setSelectedCategory('investigacion')}
-              className={`px-3.5 py-2 rounded-xl text-xs font-bold font-mono transition-all cursor-pointer flex items-center gap-1.5 select-none ${
+              className={`shrink-0 whitespace-nowrap px-3.5 py-2 rounded-xl text-xs font-bold font-mono transition-all cursor-pointer flex items-center gap-1.5 select-none ${
                 selectedCategory === 'investigacion'
                   ? 'bg-[#00ff88] text-slate-950 shadow-[0_0_18px_rgba(0,255,136,0.45)] font-black scale-102'
                   : 'bg-[#030d07] text-rose-300 hover:text-white border border-rose-900/60 hover:border-rose-500/60'
@@ -190,7 +190,7 @@ export const ServicesPage: React.FC<ServicesPageProps> = ({
             <button
               type="button"
               onClick={() => setSelectedCategory('educacion')}
-              className={`px-3.5 py-2 rounded-xl text-xs font-bold font-mono transition-all cursor-pointer flex items-center gap-1.5 select-none ${
+              className={`shrink-0 whitespace-nowrap px-3.5 py-2 rounded-xl text-xs font-bold font-mono transition-all cursor-pointer flex items-center gap-1.5 select-none ${
                 selectedCategory === 'educacion'
                   ? 'bg-[#00ff88] text-slate-950 shadow-[0_0_18px_rgba(0,255,136,0.45)] font-black scale-102'
                   : 'bg-[#030d07] text-amber-300 hover:text-white border border-amber-900/60 hover:border-amber-500/60'
@@ -202,8 +202,8 @@ export const ServicesPage: React.FC<ServicesPageProps> = ({
           </div>
 
           {/* Instant Search Bar */}
-          <div className="flex items-center gap-2">
-            <div className="relative w-full sm:w-64">
+          <div className="flex items-center gap-2 w-full lg:w-auto">
+            <div className="relative flex-1 sm:w-64">
               <Search className="w-3.5 h-3.5 text-[#00ff88] absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
               <input
                 type="text"
@@ -232,7 +232,7 @@ export const ServicesPage: React.FC<ServicesPageProps> = ({
                   setSelectedVendorId('todos');
                   setSearchQuery('');
                 }}
-                className="inline-flex items-center gap-1 px-2.5 py-2 rounded-xl text-xs font-mono font-bold text-rose-300 bg-rose-950/60 border border-rose-800/60 hover:bg-rose-900 hover:text-white transition-all cursor-pointer whitespace-nowrap"
+                className="inline-flex items-center gap-1 px-2.5 py-2 rounded-xl text-xs font-mono font-bold text-rose-300 bg-rose-950/60 border border-rose-800/60 hover:bg-rose-900 hover:text-white transition-all cursor-pointer whitespace-nowrap shrink-0"
                 title="Restablecer todos los filtros"
               >
                 <FilterX className="w-3.5 h-3.5" />
