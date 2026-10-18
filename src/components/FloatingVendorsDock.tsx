@@ -45,7 +45,7 @@ const CREATORS_LIST: CreatorContact[] = [
     name: 'Tin9o',
     username: 'Tin9o',
     telegramUrl: 'https://t.me/Tin9o',
-    avatar: '/imagenes/perfiles/tino.gif',
+    avatar: '/imagenes/perfiles/tino.webp',
     badge: 'Ciberseguridad',
     role: 'OSINT & Leaks'
   },
@@ -67,10 +67,10 @@ export const FloatingVendorsDock: React.FC = () => {
     <aside aria-label="Creadores en línea" className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-50 flex flex-col items-end gap-2.5 select-none">
       {/* Expanded Creators Drawer */}
       {isOpen && (
-        <div className="w-[calc(100vw-2rem)] sm:w-80 max-w-sm rounded-3xl bg-[#04130a]/95 border-2 border-emerald-500/70 p-4 shadow-[0_20px_50px_rgba(0,0,0,0.9),0_0_40px_rgba(0,255,136,0.25)] backdrop-blur-2xl animate-in fade-in slide-in-from-bottom-4 duration-200 space-y-3">
+        <div className="w-[calc(100vw-2rem)] sm:w-80 max-w-sm rounded-3xl bg-[#0d0d0d]/95 border-2 border-emerald-500/70 p-4 shadow-[0_20px_50px_rgba(0,0,0,0.9),0_0_40px_rgba(0,255,136,0.25)] backdrop-blur-2xl animate-in fade-in slide-in-from-bottom-4 duration-200 space-y-3">
           
           {/* Header */}
-          <div className="flex items-center justify-between pb-2.5 border-b border-emerald-500/20">
+          <div className="flex items-center justify-between pb-2.5 border-b border-zinc-700">
             <div className="flex items-center gap-2">
               <span className="relative flex h-2 w-2">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#00ff88] opacity-75"></span>
@@ -89,7 +89,7 @@ export const FloatingVendorsDock: React.FC = () => {
             <button
               type="button"
               onClick={() => setIsOpen(false)}
-              className="p-1 rounded-full text-slate-400 hover:text-white hover:bg-emerald-950/80 transition-colors cursor-pointer"
+              className="p-1 rounded-full text-slate-400 hover:text-white hover:bg-zinc-900/80 transition-colors cursor-pointer"
               title="Cerrar"
             >
               <X className="w-4 h-4" />
@@ -107,11 +107,11 @@ export const FloatingVendorsDock: React.FC = () => {
                 onClick={() => {
                   recordVendorClickEvent(creator.id, creator.name, 'telegram', 'Floating Dock');
                 }}
-                className="group flex items-center justify-between p-2 sm:p-2.5 rounded-2xl bg-gradient-to-r from-[#061e12] via-[#05170e] to-[#020b06] hover:from-[#0a331f] hover:via-[#0c3e25] hover:to-[#041a0e] border border-emerald-500/30 hover:border-emerald-400/80 shadow-sm hover:shadow-[0_0_20px_rgba(0,255,136,0.35)] transition-all duration-200 cursor-pointer"
+                className="group flex items-center justify-between p-2 sm:p-2.5 rounded-2xl bg-gradient-to-r from-[#151515] via-[#101010] to-[#080808] hover:from-[#242424] hover:via-[#2b2b2b] hover:to-[#121212] border border-zinc-700 hover:border-emerald-400/80 shadow-sm transition-all duration-200 cursor-pointer"
               >
                 <div className="flex items-center gap-2.5">
-                  <div className="relative w-8 h-8 rounded-full overflow-hidden shrink-0 border border-emerald-400/80 shadow-[0_0_8px_rgba(0,255,136,0.3)]">
-                    <img
+                  <div className="relative w-8 h-8 rounded-full overflow-hidden shrink-0 border border-emerald-400/80">
+                    <img loading="lazy" decoding="async"
                       src={creator.avatar}
                       alt={creator.name}
                       className="w-full h-full object-cover"
@@ -131,7 +131,7 @@ export const FloatingVendorsDock: React.FC = () => {
                   </div>
                 </div>
 
-                <div className="w-6 h-6 rounded-full bg-emerald-950/80 group-hover:bg-[#00ff88] border border-emerald-500/40 flex items-center justify-center shrink-0 transition-colors">
+                <div className="w-6 h-6 rounded-full bg-zinc-900/80 group-hover:bg-[#00ff88] border border-zinc-700 flex items-center justify-center shrink-0 transition-colors">
                   <Send className="w-3 h-3 text-[#00ff88] group-hover:text-slate-950 fill-current -rotate-12 transition-colors" />
                 </div>
               </a>
@@ -151,7 +151,7 @@ export const FloatingVendorsDock: React.FC = () => {
       <button
         type="button"
         onClick={() => setIsOpen(!isOpen)}
-        className="group relative w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-gradient-to-br from-[#062413] via-[#031309] to-black border-2 border-[#00ff88] shadow-[0_0_25px_rgba(0,255,136,0.65)] hover:shadow-[0_0_40px_rgba(0,255,136,0.9)] hover:scale-110 active:scale-95 transition-all duration-300 flex items-center justify-center cursor-pointer p-2 backdrop-blur-xl"
+        className="group relative w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-gradient-to-br from-[#181818] via-[#0d0d0d] to-black border-2 border-[#00ff88] hover:scale-110 active:scale-95 transition-all duration-300 flex items-center justify-center cursor-pointer p-2 backdrop-blur-xl"
         title="Creadores oficiales en línea (Telegram)"
         aria-label="Abrir panel de creadores oficiales"
       >
@@ -160,7 +160,7 @@ export const FloatingVendorsDock: React.FC = () => {
         ) : (
           <div className="relative w-full h-full flex items-center justify-center">
             {/* DP Official Monogram Logo */}
-            <img
+            <img loading="lazy" decoding="async"
               src="/imagenes/monograma.png"
               alt="Descuentos Perú"
               className="w-full h-full object-contain filter drop-shadow-[0_0_8px_rgba(0,255,136,0.8)] group-hover:rotate-6 transition-transform"
@@ -184,3 +184,4 @@ export const FloatingVendorsDock: React.FC = () => {
     </aside>
   );
 };
+

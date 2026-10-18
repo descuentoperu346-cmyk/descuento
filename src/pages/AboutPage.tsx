@@ -49,13 +49,13 @@ export const AboutPage: React.FC<AboutPageProps> = ({
     <div className="space-y-12 sm:space-y-16 animate-in fade-in duration-300">
       
       {/* 1. Header: Transparencia, Garantía y Comunidad */}
-      <section className="relative rounded-2xl p-5 sm:p-7 md:p-8 bg-gradient-to-r from-[#02140b] via-[#031d10] to-[#010e07] border border-emerald-500/30 shadow-[0_0_25px_rgba(0,255,136,0.08)] overflow-hidden">
+      <section className="relative rounded-2xl p-5 sm:p-7 md:p-8 bg-gradient-to-r from-[#0d0d0d] via-[#131313] to-[#090909] border border-zinc-700 overflow-hidden">
         {/* Ambient subtle glow */}
         <div className="absolute top-0 right-1/4 w-80 h-32 bg-[#00ff88]/5 rounded-full blur-3xl pointer-events-none" />
 
         <div className="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-6">
           <div className="space-y-3 max-w-2xl">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-950/80 border border-emerald-500/40 text-[11px] font-mono text-[#00ff88]">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-zinc-900/80 border border-zinc-700 text-[11px] font-mono text-[#00ff88]">
               <ShieldCheck className="w-3.5 h-3.5 text-[#00ff88]" />
               <span className="font-semibold uppercase tracking-wider">Identidad, Garantía & Comunidad</span>
             </div>
@@ -75,7 +75,7 @@ export const AboutPage: React.FC<AboutPageProps> = ({
                   const el = document.getElementById('seccion-asesores');
                   if (el) el.scrollIntoView({ behavior: 'smooth' });
                 }}
-                className="px-3.5 py-1.5 rounded-xl text-xs font-mono font-bold bg-[#00ff88] text-slate-950 shadow-[0_0_15px_rgba(0,255,136,0.35)] hover:bg-[#00e676] transition-all cursor-pointer flex items-center gap-2 active:scale-95"
+                className="px-3.5 py-1.5 rounded-xl text-xs font-mono font-bold bg-[#00ff88] text-slate-950 hover:bg-[#00e676] transition-all cursor-pointer flex items-center gap-2 active:scale-95"
               >
                 <Users className="w-3.5 h-3.5 text-slate-950" />
                 <span>Conocer al Equipo</span>
@@ -84,7 +84,7 @@ export const AboutPage: React.FC<AboutPageProps> = ({
               <button
                 type="button"
                 onClick={onNavigateToServices}
-                className="px-3.5 py-1.5 rounded-xl text-xs font-mono font-bold bg-emerald-950/60 text-emerald-300 border border-emerald-500/40 hover:border-[#00ff88] hover:text-white transition-all cursor-pointer flex items-center gap-2"
+                className="px-3.5 py-1.5 rounded-xl text-xs font-mono font-bold bg-zinc-900/60 text-emerald-300 border border-zinc-700 hover:border-[#00ff88] hover:text-white transition-all cursor-pointer flex items-center gap-2"
               >
                 <Sparkles className="w-3.5 h-3.5 text-[#00ff88]" />
                 <span>Explorar Catálogo</span>
@@ -94,7 +94,7 @@ export const AboutPage: React.FC<AboutPageProps> = ({
 
           {/* Quick Metrics Pillar */}
           <div className="grid grid-cols-2 gap-2.5 shrink-0 w-full lg:w-auto lg:min-w-[280px]">
-            <div className="p-3 rounded-xl bg-black/60 border border-emerald-500/20 backdrop-blur-sm">
+            <div className="p-3 rounded-xl bg-black/60 border border-zinc-700 backdrop-blur-sm">
               <div className="flex items-center gap-1.5 text-[#00ff88] text-[10px] font-mono font-bold uppercase mb-0.5">
                 <Users className="w-3 h-3" />
                 <span>Equipo</span>
@@ -103,7 +103,7 @@ export const AboutPage: React.FC<AboutPageProps> = ({
               <div className="text-[10px] text-slate-400">Verificados y activos</div>
             </div>
 
-            <div className="p-3 rounded-xl bg-black/60 border border-emerald-500/20 backdrop-blur-sm">
+            <div className="p-3 rounded-xl bg-black/60 border border-zinc-700 backdrop-blur-sm">
               <div className="flex items-center gap-1.5 text-[#00ff88] text-[10px] font-mono font-bold uppercase mb-0.5">
                 <Zap className="w-3 h-3" />
                 <span>Respuesta</span>
@@ -112,7 +112,7 @@ export const AboutPage: React.FC<AboutPageProps> = ({
               <div className="text-[10px] text-slate-400">Promedio de atención</div>
             </div>
 
-            <div className="p-3 rounded-xl bg-black/60 border border-emerald-500/20 backdrop-blur-sm">
+            <div className="p-3 rounded-xl bg-black/60 border border-zinc-700 backdrop-blur-sm">
               <div className="flex items-center gap-1.5 text-[#00ff88] text-[10px] font-mono font-bold uppercase mb-0.5">
                 <ShieldCheck className="w-3 h-3" />
                 <span>Garantía</span>
@@ -121,7 +121,7 @@ export const AboutPage: React.FC<AboutPageProps> = ({
               <div className="text-[10px] text-slate-400">Reposición sin costo</div>
             </div>
 
-            <div className="p-3 rounded-xl bg-black/60 border border-emerald-500/20 backdrop-blur-sm">
+            <div className="p-3 rounded-xl bg-black/60 border border-zinc-700 backdrop-blur-sm">
               <div className="flex items-center gap-1.5 text-[#00ff88] text-[10px] font-mono font-bold uppercase mb-0.5">
                 <Lock className="w-3 h-3" />
                 <span>Privacidad</span>
@@ -137,7 +137,7 @@ export const AboutPage: React.FC<AboutPageProps> = ({
       <section id="seccion-asesores" className="space-y-6">
         
         {/* A. EL DEL GRUPO COMO PRINCIPAL (FEATURED HERO CARD - COMPACT) */}
-        <div className="rounded-2xl p-4 sm:p-6 bg-gradient-to-r from-[#04170d] via-[#062415] to-[#020e06] border-2 border-[#00ff88]/60 shadow-[0_0_30px_rgba(0,255,136,0.18)] relative overflow-hidden">
+        <div className="rounded-2xl p-4 sm:p-6 bg-gradient-to-r from-[#101010] via-[#191919] to-[#090909] border-2 border-[#00ff88]/60 relative overflow-hidden">
           <div className="absolute top-0 right-0 px-3 py-1 bg-[#00ff88] text-slate-950 text-[9px] sm:text-[10px] font-black uppercase tracking-wider rounded-bl-xl font-mono flex items-center gap-1 shadow-sm">
             <Crown className="w-3 h-3 fill-slate-950" />
             <span>CANAL MATRIZ OFICIAL</span>
@@ -145,8 +145,8 @@ export const AboutPage: React.FC<AboutPageProps> = ({
 
           <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 relative z-10">
             <div className="flex flex-col sm:flex-row sm:items-center gap-4 max-w-3xl">
-              <div className="relative w-14 h-14 sm:w-16 sm:h-16 rounded-xl overflow-hidden border-2 border-[#00ff88] p-1 bg-black shadow-[0_0_15px_rgba(0,255,136,0.4)] shrink-0">
-                <img
+              <div className="relative w-14 h-14 sm:w-16 sm:h-16 rounded-xl overflow-hidden border-2 border-[#00ff88] p-1 bg-black shrink-0">
+                <img loading="lazy" decoding="async"
                   src="/imagenes/monograma.png"
                   alt={centralVendor.name}
                   className="w-full h-full object-contain"
@@ -156,7 +156,7 @@ export const AboutPage: React.FC<AboutPageProps> = ({
 
               <div className="space-y-1">
                 <div className="flex items-center gap-2">
-                  <span className="px-2 py-0.2 rounded text-[9px] font-mono font-bold bg-emerald-950 border border-emerald-500/50 text-[#00ff88]">
+                  <span className="px-2 py-0.2 rounded text-[9px] font-mono font-bold bg-zinc-900 border border-emerald-500/50 text-[#00ff88]">
                     ADMINISTRACIÓN CENTRAL
                   </span>
                   <span className="text-[11px] text-slate-400 font-mono">Verificado</span>
@@ -187,7 +187,7 @@ export const AboutPage: React.FC<AboutPageProps> = ({
                 onClick={() => {
                   recordVendorClickEvent(centralVendor.id, centralVendor.name, 'telegram', 'Nosotros Grupo Principal');
                 }}
-                className="w-full sm:w-auto px-5 py-2.5 rounded-xl font-black text-xs text-slate-950 bg-[#00ff88] hover:bg-[#00e676] shadow-[0_0_20px_rgba(0,255,136,0.4)] transition-all cursor-pointer flex items-center justify-center gap-2 font-mono uppercase tracking-wide active:scale-95 text-center"
+                className="w-full sm:w-auto px-5 py-2.5 rounded-xl font-black text-xs text-slate-950 bg-[#00ff88] hover:bg-[#00e676] transition-all cursor-pointer flex items-center justify-center gap-2 font-mono uppercase tracking-wide active:scale-95 text-center"
               >
                 <Send className="w-3.5 h-3.5 fill-slate-950" />
                 <span>Unirse al Canal (@{centralVendor.username})</span>
@@ -205,7 +205,7 @@ export const AboutPage: React.FC<AboutPageProps> = ({
 
       {/* 3. 4 Informatics KPI Metrics */}
       <section className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="p-5 sm:p-6 rounded-2xl bg-[#041209] border border-emerald-900/60 shadow-lg text-center space-y-1">
+        <div className="p-5 sm:p-6 rounded-2xl bg-[#0c0c0c] border border-zinc-800/60 shadow-lg text-center space-y-1">
           <span className="text-3xl sm:text-4xl font-black text-[#00ff88] font-mono block">
             +15,000
           </span>
@@ -217,7 +217,7 @@ export const AboutPage: React.FC<AboutPageProps> = ({
           </p>
         </div>
 
-        <div className="p-5 sm:p-6 rounded-2xl bg-[#041209] border border-emerald-900/60 shadow-lg text-center space-y-1">
+        <div className="p-5 sm:p-6 rounded-2xl bg-[#0c0c0c] border border-zinc-800/60 shadow-lg text-center space-y-1">
           <span className="text-3xl sm:text-4xl font-black text-[#00ff88] font-mono block">
             99.8%
           </span>
@@ -229,7 +229,7 @@ export const AboutPage: React.FC<AboutPageProps> = ({
           </p>
         </div>
 
-        <div className="p-5 sm:p-6 rounded-2xl bg-[#041209] border border-emerald-900/60 shadow-lg text-center space-y-1">
+        <div className="p-5 sm:p-6 rounded-2xl bg-[#0c0c0c] border border-zinc-800/60 shadow-lg text-center space-y-1">
           <span className="text-3xl sm:text-4xl font-black text-[#00ff88] font-mono block">
             &lt; 5 min
           </span>
@@ -241,7 +241,7 @@ export const AboutPage: React.FC<AboutPageProps> = ({
           </p>
         </div>
 
-        <div className="p-5 sm:p-6 rounded-2xl bg-[#041209] border border-emerald-900/60 shadow-lg text-center space-y-1">
+        <div className="p-5 sm:p-6 rounded-2xl bg-[#0c0c0c] border border-zinc-800/60 shadow-lg text-center space-y-1">
           <span className="text-3xl sm:text-4xl font-black text-[#00ff88] font-mono block">
             100%
           </span>
@@ -270,9 +270,9 @@ export const AboutPage: React.FC<AboutPageProps> = ({
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {/* Pillar 1 */}
-          <div className="p-6 rounded-3xl bg-[#041108] border border-emerald-900/60 hover:border-emerald-500/50 transition-all shadow-xl space-y-4 flex flex-col justify-between">
+          <div className="p-6 rounded-3xl bg-[#0c0c0c] border border-zinc-800/60 hover:border-emerald-500/50 transition-all shadow-xl space-y-4 flex flex-col justify-between">
             <div className="space-y-3">
-              <div className="w-12 h-12 rounded-2xl bg-emerald-950/80 border border-emerald-500/40 flex items-center justify-center text-[#00ff88] shadow-md">
+              <div className="w-12 h-12 rounded-2xl bg-zinc-900/80 border border-zinc-700 flex items-center justify-center text-[#00ff88] shadow-md">
                 <Tv className="w-6 h-6" />
               </div>
               <h3 className="text-lg font-bold text-white">Streaming & Entretenimiento 4K</h3>
@@ -291,9 +291,9 @@ export const AboutPage: React.FC<AboutPageProps> = ({
           </div>
 
           {/* Pillar 2 */}
-          <div className="p-6 rounded-3xl bg-[#041108] border border-emerald-900/60 hover:border-emerald-500/50 transition-all shadow-xl space-y-4 flex flex-col justify-between">
+          <div className="p-6 rounded-3xl bg-[#0c0c0c] border border-zinc-800/60 hover:border-emerald-500/50 transition-all shadow-xl space-y-4 flex flex-col justify-between">
             <div className="space-y-3">
-              <div className="w-12 h-12 rounded-2xl bg-emerald-950/80 border border-emerald-500/40 flex items-center justify-center text-rose-400 shadow-md">
+              <div className="w-12 h-12 rounded-2xl bg-zinc-900/80 border border-zinc-700 flex items-center justify-center text-rose-400 shadow-md">
                 <Database className="w-6 h-6" />
               </div>
               <h3 className="text-lg font-bold text-white">Inteligencia OSINT & Leaks</h3>
@@ -312,9 +312,9 @@ export const AboutPage: React.FC<AboutPageProps> = ({
           </div>
 
           {/* Pillar 3 */}
-          <div className="p-6 rounded-3xl bg-[#041108] border border-emerald-900/60 hover:border-emerald-500/50 transition-all shadow-xl space-y-4 flex flex-col justify-between">
+          <div className="p-6 rounded-3xl bg-[#0c0c0c] border border-zinc-800/60 hover:border-emerald-500/50 transition-all shadow-xl space-y-4 flex flex-col justify-between">
             <div className="space-y-3">
-              <div className="w-12 h-12 rounded-2xl bg-emerald-950/80 border border-emerald-500/40 flex items-center justify-center text-[#00ff88] shadow-md">
+              <div className="w-12 h-12 rounded-2xl bg-zinc-900/80 border border-zinc-700 flex items-center justify-center text-[#00ff88] shadow-md">
                 <Radio className="w-6 h-6" />
               </div>
               <h3 className="text-lg font-bold text-white">Software Original & Educación</h3>
@@ -335,7 +335,7 @@ export const AboutPage: React.FC<AboutPageProps> = ({
       </section>
 
       {/* 5. Guarantees Grid */}
-      <section className="p-6 sm:p-10 rounded-3xl bg-[#030e06] border border-emerald-900/60 shadow-xl space-y-8">
+      <section className="p-6 sm:p-10 rounded-3xl bg-[#0a0a0a] border border-zinc-800/60 shadow-xl space-y-8">
         <div>
           <span className="text-xs font-mono font-bold uppercase tracking-widest text-[#00ff88]">
             POLÍTICAS DE SEGURIDAD
@@ -392,3 +392,4 @@ export const AboutPage: React.FC<AboutPageProps> = ({
     </div>
   );
 };
+

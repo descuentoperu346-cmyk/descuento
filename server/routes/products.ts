@@ -1,6 +1,7 @@
 import { Router, Response } from 'express';
 import { AuthenticatedRequest, requireAuth } from '../session';
 import { serverSupabase } from '../supabase';
+import { getCached, setCached, setCacheHeaders } from '../cache';
 
 export const productsRouter = Router();
 
@@ -13,6 +14,15 @@ export const productsRouter = Router();
 productsRouter.get('/', async (req: AuthenticatedRequest, res: Response): Promise<void> => {
   try {
     const isPrivileged = req.sessionUser && (req.sessionUser.role === 'admin' || req.sessionUser.role === 'vendor');
+
+    setCacheHeaders(res, !isPrivileged);
+    if (!isPrivileged) {
+      const cached = getCached<unknown>('products:public');
+      if (cached) {
+        res.json(cached);
+        return;
+      }
+    }
 
     let query = serverSupabase.from('products').select('*');
 

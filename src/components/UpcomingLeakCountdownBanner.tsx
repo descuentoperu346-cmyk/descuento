@@ -34,6 +34,10 @@ export interface PoliticalFigureEntry {
   category: 'ejecutivo' | 'congreso' | 'historico' | 'todos';
   tag: string;
   notes: string;
+  /** Figura resaltada con marco especial en la cuadrícula */
+  featured?: boolean;
+  /** Cargo vigente que se muestra en la ficha destacada */
+  officeLabel?: string;
 }
 
 export const CONGRESO_FIGURES: PoliticalFigureEntry[] = [
@@ -134,11 +138,21 @@ export const CONGRESO_FIGURES: PoliticalFigureEntry[] = [
     imageUrl: '/imagenes/caso-congreso/figura-09.jpg',
     category: 'congreso',
     tag: 'FUERZA POPULAR / LIDERAZGO',
-    notes: 'Análisis de votaciones coordinadas en comisiones y coincidencias editoriales en programas periodísticos de América TV.'
+    notes: 'Análisis de votaciones coordinadas en comisiones y coincidencias editoriales en programas periodísticos de América TV.',
+    featured: true,
+    officeLabel: 'Presidenta del Perú · 2026–2031'
   }
 ];
 
-import { useLeakCountdown } from '../hooks/useLeakCountdown';
+import { useLeakCountdown, LEAK_DEADLINE_LABEL } from '../hooks/useLeakCountdown';
+import { getFigureBadge, FIGURE_PROFILES, CASE_STATUS_META, PREVIEW_CASE_COUNT } from '../data/figureProfiles';
+
+const FIGURE_TONE: Record<'red' | 'amber' | 'green' | 'zinc', string> = {
+  red: 'bg-rose-500/15 text-rose-300 border-rose-500/50',
+  amber: 'bg-amber-400/15 text-amber-300 border-amber-400/50',
+  green: 'bg-emerald-500/15 text-emerald-300 border-emerald-500/50',
+  zinc: 'bg-zinc-700/40 text-zinc-300 border-zinc-600'
+};
 
 interface UpcomingLeakCountdownBannerProps {
   onNotifyTelegram?: () => void;
@@ -152,7 +166,7 @@ export const UpcomingLeakCountdownBanner: React.FC<UpcomingLeakCountdownBannerPr
   className = ''
 }) => {
   // Live dynamic countdown timer: 1 dia, 13 horas y 20 minutos
-  const { days, hours, minutes, seconds, syncToDefaultDuration } = useLeakCountdown();
+  const { days, hours, minutes, seconds, isExpired } = useLeakCountdown();
 
   const [copiedLink, setCopiedLink] = useState(false);
   const [activeCategory, setActiveCategory] = useState<'todos' | 'ejecutivo' | 'congreso' | 'historico'>('todos');
@@ -259,6 +273,29 @@ export const UpcomingLeakCountdownBanner: React.FC<UpcomingLeakCountdownBannerPr
               Filtración documentaria en fase final de verificación pericial: comprobantes de transferencias bancarias, facturas de pauta clandestina y chats entre operadores parlamentarios y directivos mediáticos para vetar reportajes sobre cobro de coimas en comisiones del Congreso de la República.
             </p>
 
+            {/* Aviso: ficha ampliada de Keiko Fujimori */}
+            <a
+              href="#/leaks/figura/cong-fig-09"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group flex items-start gap-3 rounded-xl border border-amber-400/50 bg-amber-400/5 hover:bg-amber-400/10 px-3.5 py-3 transition-colors"
+            >
+              <Lock className="w-4 h-4 text-amber-300 shrink-0 mt-0.5" />
+              <span className="space-y-0.5">
+                <span className="block text-xs sm:text-sm font-black text-amber-200">
+                  {isExpired
+                    ? 'Información liberada sobre Keiko Fujimori y sus casos más polémicos'
+                    : 'Se revelará información sobre Keiko Fujimori y sus casos más polémicos'}
+                </span>
+                <span className="block text-[11px] sm:text-xs text-slate-300 leading-snug">
+                  {isExpired
+                    ? 'Ya puedes ver todos los casos de su ficha, con fuente enlazada.'
+                    : `Hoy damos un pequeño vistazo: algunos casos siguen ocultos en la sección Implicados y se muestran al cierre del contador (${LEAK_DEADLINE_LABEL}).`}
+                  <span className="text-amber-300 font-bold group-hover:underline"> Ver adelanto →</span>
+                </span>
+              </span>
+            </a>
+
             {/* Quick Evidence Tags */}
             <div className="pt-1 flex flex-wrap items-center gap-1.5 sm:gap-2 text-[10px] font-mono text-rose-300">
               <span className="px-2.5 py-1 rounded-lg bg-black/70 border border-rose-900/80 flex items-center gap-1.5">
@@ -288,7 +325,7 @@ export const UpcomingLeakCountdownBanner: React.FC<UpcomingLeakCountdownBannerPr
                     LIBERACIÓN PÚBLICA EN:
                   </span>
                 </div>
-                <span className="text-[10px] font-mono text-emerald-400 bg-emerald-950/80 px-2 py-0.5 rounded-full border border-emerald-500/40 font-bold">
+                <span className="text-[10px] font-mono text-emerald-400 bg-zinc-900/80 px-2 py-0.5 rounded-full border border-zinc-700 font-bold">
                   EXPEDIENTE #02
                 </span>
               </div>
@@ -340,16 +377,9 @@ export const UpcomingLeakCountdownBanner: React.FC<UpcomingLeakCountdownBannerPr
               <div className="flex items-center justify-between text-[10px] font-mono text-rose-300 bg-rose-950/40 px-3 py-1.5 rounded-xl border border-rose-900/60">
                 <span className="flex items-center gap-1.5">
                   <Clock className="w-3.5 h-3.5 text-rose-400" />
-                  <span>Plazo: 1 día, 13 horas y 20 minutos</span>
+                  <span>Cierre: {LEAK_DEADLINE_LABEL}</span>
                 </span>
-                <button
-                  type="button"
-                  onClick={syncToDefaultDuration}
-                  title="Sincronizar a 1d 13h 20m exactos"
-                  className="text-[9px] text-rose-400 hover:text-white underline cursor-pointer"
-                >
-                  Sincronizar
-                </button>
+
               </div>
 
               {/* Live Verification Telemetry Bar */}
@@ -439,73 +469,167 @@ export const UpcomingLeakCountdownBanner: React.FC<UpcomingLeakCountdownBannerPr
 
           {/* 9-Card Responsive Cyber Grid */}
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 pt-1">
-            {filteredFigures.map((fig) => (
-              <div
-                key={fig.id}
-                onClick={() => setZoomedFigure(fig)}
-                className="group relative p-4 rounded-2xl bg-gradient-to-b from-[#120306]/90 via-[#0a0203]/95 to-[#050102] border border-rose-500/30 hover:border-rose-400/80 shadow-lg hover:shadow-[0_0_25px_rgba(244,63,94,0.25)] transition-all duration-300 cursor-pointer flex flex-col justify-between overflow-hidden"
-              >
-                {/* Cyber Corner Marks */}
-                <div className="absolute top-2 left-2 w-2 h-2 border-t border-l border-rose-500/70 pointer-events-none group-hover:border-rose-400 transition-colors" />
-                <div className="absolute top-2 right-2 w-2 h-2 border-t border-r border-rose-500/70 pointer-events-none group-hover:border-rose-400 transition-colors" />
-                <div className="absolute bottom-2 left-2 w-2 h-2 border-b border-l border-rose-500/70 pointer-events-none group-hover:border-rose-400 transition-colors" />
-                <div className="absolute bottom-2 right-2 w-2 h-2 border-b border-r border-rose-500/70 pointer-events-none group-hover:border-rose-400 transition-colors" />
+            {[...filteredFigures].sort((a, b) => Number(!!b.featured) - Number(!!a.featured)).map((fig) => {
+              const badge = getFigureBadge(fig.id);
+              const href = `#/leaks/figura/${fig.id}`;
 
-                <div className="space-y-3.5">
-                  {/* Card Header: Code & Category Tag */}
-                  <div className="flex items-center justify-between gap-2 border-b border-rose-950/80 pb-2">
-                    <span className="text-[10px] font-mono font-bold text-rose-400 uppercase tracking-wider">
-                      {fig.code}
-                    </span>
-                    <span className="px-2 py-0.5 rounded-full text-[9px] font-mono font-bold bg-rose-950/80 text-rose-300 border border-rose-900/60">
-                      {fig.tag}
-                    </span>
-                  </div>
+              if (fig.featured) {
+                /* Ficha destacada: marco dorado a todo el ancho, primera de la cuadrícula */
+                return (
+                  <div
+                    key={fig.id}
+                    className="relative sm:col-span-2 md:col-span-3 p-[2px] rounded-3xl bg-gradient-to-br from-amber-300 via-amber-500 to-rose-500"
+                  >
+                    <div className="relative rounded-[22px] bg-[#0d0507] p-4 sm:p-6 flex flex-col sm:flex-row items-stretch sm:items-center gap-4 sm:gap-6">
+                      <span className="absolute -top-3 left-5 inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-400 text-[10px] sm:text-[11px] font-mono font-black uppercase tracking-wider text-zinc-950">
+                        <Zap className="w-3 h-3" />
+                        Figura destacada
+                      </span>
 
-                  {/* Figure Portrait and Name Row */}
-                  <div className="flex items-center gap-3.5">
-                    {/* Portrait Photo Frame with Tactical Cyber Styling */}
-                    <div className="relative w-16 h-20 sm:w-18 sm:h-22 rounded-xl overflow-hidden bg-black shrink-0 border border-rose-500/50 group-hover:border-rose-400 transition-colors shadow-md">
-                      <img
-                        src={fig.imageUrl}
-                        alt={fig.name}
-                        className="w-full h-full object-cover group-hover:scale-108 transition-transform duration-500 filter contrast-105"
-                        onError={(e) => {
-                          const target = e.currentTarget as HTMLImageElement;
-                          target.onerror = null;
-                          target.src = '/imagenes/monograma.png';
-                        }}
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent pointer-events-none" />
-                      <div className="absolute bottom-1 right-1 p-1 rounded-full bg-black/80 text-rose-400 opacity-0 group-hover:opacity-100 transition-opacity">
-                        <Maximize2 className="w-2.5 h-2.5" />
+                      <div className="relative w-28 h-36 sm:w-36 sm:h-44 rounded-2xl overflow-hidden bg-black shrink-0 mx-auto sm:mx-0 ring-2 ring-amber-400/80">
+                        <img
+                          loading="lazy"
+                          decoding="async"
+                          src={fig.imageUrl}
+                          alt={fig.name}
+                          className="w-full h-full object-cover"
+                          onError={(e) => {
+                            const target = e.currentTarget as HTMLImageElement;
+                            target.onerror = null;
+                            target.src = '/imagenes/monograma.png';
+                          }}
+                        />
+                      </div>
+
+                      <div className="flex-1 min-w-0 space-y-2 text-center sm:text-left">
+                        <p className="font-mono text-[10px] sm:text-xs font-bold uppercase tracking-widest text-amber-300">{fig.code}</p>
+                        <h4 className="text-2xl sm:text-3xl font-black text-white tracking-tight">{fig.name}</h4>
+                        <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2">
+                          {fig.officeLabel && (
+                            <p className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md border border-amber-400/50 bg-amber-400/10 text-xs font-bold text-amber-200">
+                              <Building2 className="w-3.5 h-3.5" />
+                              {fig.officeLabel}
+                            </p>
+                          )}
+                          {badge && (
+                            <p className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md border text-xs font-bold ${FIGURE_TONE[badge.tone]}`}>
+                              {badge.label}
+                            </p>
+                          )}
+                        </div>
+                        <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">{fig.role}</p>
+                        <p className="text-[10px] sm:text-[11px] font-mono text-slate-500 leading-snug">
+                          Mención en el expediente en revisión; no implica responsabilidad penal. Rige la presunción de inocencia.
+                        </p>
+
+                        {/* Vistazo: algunos casos visibles, el resto reservado hasta el cierre del contador */}
+                        {(() => {
+                          const cases = FIGURE_PROFILES[fig.id]?.cases ?? [];
+                          if (cases.length === 0) return null;
+                          const shown = isExpired ? cases : cases.slice(0, PREVIEW_CASE_COUNT);
+                          const hiddenCount = cases.length - shown.length;
+                          return (
+                            <div className="rounded-xl border border-amber-400/30 bg-black/40 p-3 text-left space-y-1.5">
+                              <p className="text-[10px] font-mono font-bold uppercase tracking-wider text-amber-300">
+                                {isExpired ? 'Casos en su ficha' : 'Vistazo previo a la liberación'}
+                              </p>
+                              <ul className="space-y-1.5">
+                                {shown.map((c) => (
+                                  <li key={c.name} className="flex items-start justify-between gap-2 text-xs text-slate-200">
+                                    <span className="min-w-0 line-clamp-2">{c.name}</span>
+                                    <span className={`shrink-0 px-1.5 py-0.5 rounded border text-[10px] font-bold ${FIGURE_TONE[CASE_STATUS_META[c.status].tone]}`}>
+                                      {CASE_STATUS_META[c.status].label}
+                                    </span>
+                                  </li>
+                                ))}
+                                {Array.from({ length: hiddenCount }).map((_, i) => (
+                                  <li key={`locked-${i}`} className="flex items-center gap-2 text-xs text-zinc-500">
+                                    <Lock className="w-3 h-3 shrink-0" />
+                                    <span className="h-2.5 flex-1 rounded bg-zinc-700/60" aria-hidden="true" />
+                                    <span className="shrink-0 text-[10px] font-mono">Reservado</span>
+                                  </li>
+                                ))}
+                              </ul>
+                              {hiddenCount > 0 && (
+                                <p className="text-[10px] font-mono text-slate-500">
+                                  {hiddenCount} {hiddenCount === 1 ? 'caso más se revela' : 'casos más se revelan'} al cierre: {LEAK_DEADLINE_LABEL}.
+                                </p>
+                              )}
+                            </div>
+                          );
+                        })()}
+                        <div className="flex flex-col sm:flex-row sm:items-center gap-3 pt-1">
+                          <a
+                            href={href}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg text-xs sm:text-sm font-bold text-white border border-amber-400/60 hover:bg-amber-400/10 transition-colors"
+                          >
+                            Ver historial completo
+                            <ArrowRight className="w-4 h-4" />
+                          </a>
+                          <a
+                            href="https://t.me/Tin9o"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg text-xs sm:text-sm font-bold text-zinc-950 bg-amber-400 hover:bg-amber-300 transition-colors"
+                          >
+                            <Send className="w-4 h-4 -rotate-12" />
+                            Pide más información (@Tin9o)
+                          </a>
+                        </div>
                       </div>
                     </div>
+                  </div>
+                );
+              }
 
-                    {/* Figure Details */}
-                    <div className="flex-1 min-w-0 space-y-1">
-                      <h4 className="text-sm font-black text-white group-hover:text-rose-300 transition-colors tracking-tight line-clamp-2">
-                        {fig.name}
-                      </h4>
-                      <p className="text-[11px] text-slate-300 font-sans leading-relaxed line-clamp-3">
-                        {fig.role}
-                      </p>
+              return (
+                <a
+                  key={fig.id}
+                  href={href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group hud-card rounded-2xl bg-gradient-to-b from-zinc-900/80 to-zinc-950 p-4 flex flex-col justify-between gap-3 cursor-pointer"
+                >
+                  <div className="flex items-center justify-between gap-2 border-b border-zinc-800 pb-2">
+                    <span className="text-[10px] font-mono font-bold text-rose-400 uppercase tracking-wider">{fig.code}</span>
+                    <ArrowRight className="w-3.5 h-3.5 text-zinc-500 group-hover:text-white -rotate-45 transition-colors" />
+                  </div>
+
+                  <div className="flex items-start gap-3.5">
+                    <img
+                      loading="lazy"
+                      decoding="async"
+                      src={fig.imageUrl}
+                      alt={fig.name}
+                      width={72}
+                      height={90}
+                      className="w-[72px] h-[90px] rounded-xl object-cover bg-black shrink-0 border border-zinc-700"
+                      onError={(e) => {
+                        const target = e.currentTarget as HTMLImageElement;
+                        target.onerror = null;
+                        target.src = '/imagenes/monograma.png';
+                      }}
+                    />
+                    <div className="flex-1 min-w-0 space-y-1.5">
+                      <h4 className="text-sm font-black text-white group-hover:text-rose-300 transition-colors tracking-tight line-clamp-2">{fig.name}</h4>
+                      {badge && (
+                        <span className={`inline-block px-2 py-0.5 rounded border text-[10px] font-bold leading-tight ${FIGURE_TONE[badge.tone]}`}>
+                          {badge.label}
+                        </span>
+                      )}
+                      <p className="text-[11px] text-slate-400 leading-relaxed line-clamp-3">{fig.role}</p>
                     </div>
                   </div>
-                </div>
 
-                {/* Card Footer: Status Bar */}
-                <div className="pt-2.5 mt-3 border-t border-rose-950/80 flex items-center justify-between text-[10px] font-mono">
-                  <span className="text-slate-400 truncate max-w-[70%]">
-                    {fig.status}
-                  </span>
-                  <span className="text-rose-400 font-bold flex items-center gap-1 group-hover:translate-x-0.5 transition-transform shrink-0">
-                    <span>Ficha</span>
-                    <ArrowRight className="w-3 h-3" />
-                  </span>
-                </div>
-              </div>
-            ))}
+                  <div className="pt-2 border-t border-zinc-800 flex items-center justify-between text-[10px] font-mono">
+                    <span className="text-slate-500 truncate max-w-[65%]">{fig.status}</span>
+                    <span className="text-rose-400 font-bold shrink-0">Ver historial ↗</span>
+                  </div>
+                </a>
+              );
+            })}
           </div>
         </div>
 
@@ -633,7 +757,7 @@ export const UpcomingLeakCountdownBanner: React.FC<UpcomingLeakCountdownBannerPr
             <div className="p-6 space-y-4">
               <div className="flex flex-col sm:flex-row items-center sm:items-start gap-5">
                 <div className="w-32 h-40 sm:w-36 sm:h-44 rounded-2xl overflow-hidden bg-black shrink-0 border-2 border-rose-500/60 shadow-[0_0_20px_rgba(244,63,94,0.3)]">
-                  <img
+                  <img loading="lazy" decoding="async"
                     src={zoomedFigure.imageUrl}
                     alt={zoomedFigure.name}
                     className="w-full h-full object-cover filter contrast-105"

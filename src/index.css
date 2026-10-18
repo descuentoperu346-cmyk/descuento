@@ -4,7 +4,11 @@
   html,
   body {
     font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
-    background-color: #050b08;
+    background-color: #07090a;
+    background-image:
+      radial-gradient(60rem 28rem at 88% -6%, rgba(0, 255, 136, 0.07), transparent 65%),
+      radial-gradient(46rem 30rem at -8% 38%, rgba(244, 63, 94, 0.055), transparent 65%);
+    background-repeat: no-repeat;
     color: #e2e8f0;
     overflow-x: hidden;
     -webkit-tap-highlight-color: transparent;
@@ -128,58 +132,49 @@
     transform: translate3d(calc(var(--orbit-rx)), 0px, 0px) scale(1);
     z-index: 25;
     opacity: 1;
-    filter: drop-shadow(0 0 16px rgba(0, 255, 136, 0.65));
   }
   12.5% {
     transform: translate3d(calc(var(--orbit-rx) * 0.707), calc(var(--orbit-ry) * 0.707), calc(var(--orbit-rz) * 0.707)) scale(1.03);
     z-index: 32;
     opacity: 1;
-    filter: drop-shadow(0 0 20px rgba(0, 255, 136, 0.75));
   }
   25% {
     /* Frontmost center (bottom, in front of medallion) */
     transform: translate3d(0px, calc(var(--orbit-ry)), calc(var(--orbit-rz))) scale(1.06);
     z-index: 35;
     opacity: 1;
-    filter: drop-shadow(0 0 24px rgba(0, 255, 136, 0.9));
   }
   37.5% {
     transform: translate3d(calc(var(--orbit-rx) * -0.707), calc(var(--orbit-ry) * 0.707), calc(var(--orbit-rz) * 0.707)) scale(1.03);
     z-index: 32;
     opacity: 1;
-    filter: drop-shadow(0 0 20px rgba(0, 255, 136, 0.75));
   }
   50% {
     /* Left flank */
     transform: translate3d(calc(var(--orbit-rx) * -1), 0px, 0px) scale(1);
     z-index: 25;
     opacity: 1;
-    filter: drop-shadow(0 0 16px rgba(0, 255, 136, 0.65));
   }
   62.5% {
     transform: translate3d(calc(var(--orbit-rx) * -0.707), calc(var(--orbit-ry) * -0.707), calc(var(--orbit-rz) * -0.707)) scale(0.93);
     z-index: 10;
     opacity: 0.85;
-    filter: drop-shadow(0 0 10px rgba(0, 255, 136, 0.35));
   }
   75% {
     /* Backmost center (top, passes behind medallion) */
     transform: translate3d(0px, calc(var(--orbit-ry) * -1), calc(var(--orbit-rz) * -1)) scale(0.9);
     z-index: 10;
     opacity: 0.8;
-    filter: drop-shadow(0 0 8px rgba(0, 255, 136, 0.25));
   }
   87.5% {
     transform: translate3d(calc(var(--orbit-rx) * 0.707), calc(var(--orbit-ry) * -0.707), calc(var(--orbit-rz) * -0.707)) scale(0.93);
     z-index: 10;
     opacity: 0.85;
-    filter: drop-shadow(0 0 10px rgba(0, 255, 136, 0.35));
   }
   100% {
     transform: translate3d(calc(var(--orbit-rx)), 0px, 0px) scale(1);
     z-index: 25;
     opacity: 1;
-    filter: drop-shadow(0 0 16px rgba(0, 255, 136, 0.65));
   }
 }
 
@@ -196,7 +191,6 @@
   25% {
     transform: translate3d(0px, calc(var(--orbit-ry) * 1.15), calc(var(--orbit-rz) * 1.15)) rotateX(68deg) rotateZ(90deg) scale(1.1);
     opacity: 1;
-    filter: drop-shadow(0 0 15px #00ff88);
   }
   50% {
     transform: translate3d(calc(var(--orbit-rx) * -1.1), 0px, 0px) rotateX(68deg) rotateZ(180deg) scale(1);
@@ -251,12 +245,10 @@
   0%, 100% {
     opacity: 0.65;
     transform: scale(1);
-    filter: drop-shadow(0 0 15px rgba(0, 255, 136, 0.35));
   }
   50% {
     opacity: 0.95;
     transform: scale(1.03);
-    filter: drop-shadow(0 0 30px rgba(0, 255, 136, 0.7));
   }
 }
 
@@ -278,7 +270,7 @@
 }
 
 .neon-glow-green {
-  text-shadow: 0 0 15px rgba(0, 255, 136, 0.8), 0 0 30px rgba(0, 255, 136, 0.4);
+  text-shadow: 0 0 14px rgba(0, 255, 136, 0.45);
 }
 
 @keyframes float3DCard {
@@ -292,4 +284,135 @@
 
 .animate-float-card {
   animation: float3DCard 3.6s ease-in-out infinite;
+}
+
+/* Menos ruido visual: los puntos "en vivo" ya no parpadean sin fin. */
+.animate-ping {
+  animation: none;
+}
+
+/* Respeta la preferencia del sistema: sin animaciones continuas. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-play-state: paused !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+/* Fondo tipo expediente: cuadrícula tenue, estática (sin imágenes ni animación). */
+.bg-grid {
+  background-image:
+    linear-gradient(to right, rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.035) 1px, transparent 1px);
+  background-size: 44px 44px;
+}
+/* Carrusel continuo de métodos de pago: solo transform (ligero). */
+.marquee {
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
+  mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
+}
+.marquee-track {
+  display: flex;
+  width: max-content;
+  padding-left: 0.75rem;
+  animation: marqueeScroll 45s linear infinite;
+  will-change: transform;
+}
+.marquee:hover .marquee-track,
+.marquee:focus-within .marquee-track {
+  animation-play-state: paused;
+}
+@keyframes marqueeScroll {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .marquee {
+    overflow-x: auto;
+    -webkit-mask-image: none;
+    mask-image: none;
+  }
+}
+/* Asesores: entrada del perfil y barra de avance automático */
+@keyframes advisorEnter {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.advisor-enter { animation: advisorEnter 0.35s ease-out both; }
+@keyframes advisorProgress {
+  from { width: 0; }
+  to { width: 100%; }
+}
+.advisor-progress { animation: advisorProgress linear forwards; }
+/* Pulso de energía del núcleo del átomo */
+@keyframes nucleusPulse {
+  0% { transform: scale(0.55); opacity: 0.55; }
+  100% { transform: scale(1.9); opacity: 0; }
+}
+.animate-nucleus-pulse {
+  animation: nucleusPulse 4s ease-out infinite;
+}
+/* ---------- Identidad visual: expediente / HUD ---------- */
+.section-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.5rem;
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #00ff88;
+}
+.section-eyebrow::after {
+  content: '';
+  height: 1px;
+  flex: 1;
+  background: linear-gradient(to right, rgba(0, 255, 136, 0.45), transparent);
+}
+
+.text-gradient {
+  background: linear-gradient(90deg, #00ff88, #22d3ee);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Tarjeta con marcas de esquina y borde que se enciende al pasar el cursor */
+.hud-card {
+  position: relative;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  transition: transform 0.25s ease, border-color 0.25s ease;
+}
+.hud-card::before,
+.hud-card::after {
+  content: '';
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  border: 0 solid rgba(0, 255, 136, 0.55);
+  pointer-events: none;
+  transition: border-color 0.25s ease;
+}
+.hud-card::before {
+  top: -1px;
+  left: -1px;
+  border-top-width: 2px;
+  border-left-width: 2px;
+  border-top-left-radius: 10px;
+}
+.hud-card::after {
+  right: -1px;
+  bottom: -1px;
+  border-bottom-width: 2px;
+  border-right-width: 2px;
+  border-bottom-right-radius: 10px;
+}
+.hud-card:hover {
+  transform: translateY(-3px);
+  border-color: rgba(0, 255, 136, 0.35);
 }

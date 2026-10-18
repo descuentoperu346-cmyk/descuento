@@ -19,7 +19,7 @@ export const Navbar: React.FC<NavbarProps> = ({
   onOpenAdmin
 }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false);
-  const { days, hours, minutes, seconds } = useLeakCountdown();
+  const { days, hours, minutes, seconds, isExpired } = useLeakCountdown();
 
   const handleNavClick = (tabId: string) => {
     onTabChange(tabId);
@@ -28,7 +28,7 @@ export const Navbar: React.FC<NavbarProps> = ({
   };
 
   return (
-    <header className="sticky top-0 z-50 w-full backdrop-blur-xl bg-[#050b08]/95 border-b border-emerald-950/70">
+    <header className="sticky top-0 z-50 w-full backdrop-blur-xl bg-[#07090a]/95 border-b border-zinc-900/70">
       {/* Top Breaking Leak Countdown Ticker Bar */}
       <div
         onClick={() => handleNavClick('leaks')}
@@ -42,7 +42,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             </span>
             <span className="text-[10px] sm:text-xs font-mono font-bold text-rose-300 uppercase tracking-wider shrink-0 flex items-center gap-1">
               <ShieldAlert className="w-3.5 h-3.5 text-rose-400 inline" />
-              <span>PRÓXIMO LEAK #02:</span>
+              <span>{isExpired ? 'LEAK #02 DISPONIBLE:' : 'PRÓXIMO LEAK #02:'}</span>
             </span>
             <span className="text-[11px] sm:text-xs font-bold text-white tracking-tight truncate hidden sm:inline">
               NUEVO CASO DE CORRUPCIÓN LIBERADO DEL CONGRESO - PAGOS A AMÉRICA TV
@@ -50,7 +50,7 @@ export const Navbar: React.FC<NavbarProps> = ({
           </div>
 
           <div className="flex items-center gap-2.5 shrink-0">
-            <div className="flex items-center gap-1 font-mono text-[11px] font-black text-rose-300">
+            {isExpired ? (<span className="font-mono text-[11px] font-black text-rose-100 px-2 py-0.5 rounded bg-rose-900 border border-rose-400">LIBERADO</span>) : (<div className="flex items-center gap-1 font-mono text-[11px] font-black text-rose-300">
               <span className="text-slate-400 text-[9px] uppercase font-bold mr-0.5 hidden md:inline">LIBERACIÓN EN:</span>
               <span className="px-1.5 py-0.5 rounded bg-black/80 border border-rose-500/40 text-white shadow-sm">{days}d</span>
               <span>:</span>
@@ -59,7 +59,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               <span className="px-1.5 py-0.5 rounded bg-black/80 border border-rose-500/40 text-white shadow-sm">{String(minutes).padStart(2, '0')}m</span>
               <span>:</span>
               <span className="px-1.5 py-0.5 rounded bg-rose-900 border border-rose-400 text-rose-100 shadow-sm animate-pulse">{String(seconds).padStart(2, '0')}s</span>
-            </div>
+            </div>)}
 
             <span className="text-[10px] font-mono font-bold text-rose-300 hover:text-white bg-rose-900/40 px-2 py-0.5 rounded border border-rose-500/40 hidden lg:inline-flex items-center gap-1">
               Ver Dossier & 9 Implicados →
@@ -79,9 +79,9 @@ export const Navbar: React.FC<NavbarProps> = ({
           className="flex items-center gap-2.5 sm:gap-3 shrink-0 group focus-visible:outline-none"
         >
           {/* Logo Circular Emblem */}
-          <div className="w-9 h-9 sm:w-11 sm:h-11 rounded-full overflow-hidden shrink-0 border border-emerald-400/50 shadow-[0_0_15px_rgba(0,255,136,0.35)] group-hover:shadow-[0_0_22px_rgba(0,255,136,0.6)] transition-all">
+          <div className="w-9 h-9 sm:w-11 sm:h-11 rounded-full overflow-hidden shrink-0 border border-emerald-400/50 transition-all">
             <img
-              src="/imagenes/hero-circle.png"
+              src="/imagenes/hero-circle.webp"
               alt="Descuentos Perú"
               className="w-full h-full object-cover filter contrast-110"
               loading="eager"
@@ -110,7 +110,7 @@ export const Navbar: React.FC<NavbarProps> = ({
           >
             Inicio
             {activeTab === 'inicio' && (
-              <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#00ff88] shadow-[0_0_8px_#00ff88]" />
+              <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#00ff88]" />
             )}
           </button>
 
@@ -141,7 +141,7 @@ export const Navbar: React.FC<NavbarProps> = ({
           >
             Nosotros
             {activeTab === 'nosotros' && (
-              <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#00ff88] shadow-[0_0_8px_#00ff88]" />
+              <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#00ff88]" />
             )}
           </button>
 
@@ -154,7 +154,7 @@ export const Navbar: React.FC<NavbarProps> = ({
           >
             Contacto
             {activeTab === 'contacto' && (
-              <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#00ff88] shadow-[0_0_8px_#00ff88]" />
+              <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#00ff88]" />
             )}
           </button>
         </nav>
@@ -166,7 +166,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             href={TELEGRAM_URL}
             target="_blank"
             rel="noopener noreferrer"
-            className="hidden sm:inline-flex items-center gap-2 px-5 py-2 rounded-full text-sm font-semibold text-[#00ff88] bg-[#06180f] border border-emerald-500/50 shadow-[0_0_15px_rgba(0,255,136,0.15)] hover:bg-[#0a2717] hover:border-emerald-400 hover:text-white hover:shadow-[0_0_20px_rgba(0,255,136,0.4)] transition-all whitespace-nowrap cursor-pointer"
+            className="hidden sm:inline-flex items-center gap-2 px-5 py-2 rounded-full text-sm font-semibold text-[#00ff88] bg-[#111111] border border-emerald-500/50 hover:bg-[#1c1c1c] hover:border-emerald-400 hover:text-white transition-all whitespace-nowrap cursor-pointer"
           >
             <Send className="w-3.5 h-3.5 fill-[#00ff88] text-[#00ff88] -rotate-12" />
             <span>Telegram</span>
@@ -186,14 +186,14 @@ export const Navbar: React.FC<NavbarProps> = ({
 
       {/* Mobile Drawer Menu */}
       {mobileMenuOpen && (
-        <div className="md:hidden border-t border-emerald-950 bg-[#06120b] px-4 pt-3 pb-6 space-y-2 max-h-[calc(100vh-4.5rem)] overflow-y-auto shadow-2xl animate-in slide-in-from-top-2 duration-200">
+        <div className="md:hidden border-t border-zinc-900 bg-[#0d0d0d] px-4 pt-3 pb-6 space-y-2 max-h-[calc(100vh-4.5rem)] overflow-y-auto shadow-2xl animate-in slide-in-from-top-2 duration-200">
           <button
             type="button"
             onClick={() => handleNavClick('inicio')}
             className={`block w-full text-left px-3.5 py-2.5 text-base rounded-xl transition-all ${
               activeTab === 'inicio'
-                ? 'bg-emerald-950/80 text-[#00ff88] font-bold border border-emerald-500/40'
-                : 'text-slate-200 hover:bg-emerald-950/40 font-medium'
+                ? 'bg-zinc-900/80 text-[#00ff88] font-bold border border-zinc-700'
+                : 'text-slate-200 hover:bg-zinc-900/40 font-medium'
             }`}
           >
             Inicio
@@ -216,8 +216,8 @@ export const Navbar: React.FC<NavbarProps> = ({
             onClick={() => handleNavClick('nosotros')}
             className={`block w-full text-left px-3.5 py-2.5 text-base rounded-xl transition-all ${
               activeTab === 'nosotros'
-                ? 'bg-emerald-950/80 text-[#00ff88] font-bold border border-emerald-500/40'
-                : 'text-slate-200 hover:bg-emerald-950/40 font-medium'
+                ? 'bg-zinc-900/80 text-[#00ff88] font-bold border border-zinc-700'
+                : 'text-slate-200 hover:bg-zinc-900/40 font-medium'
             }`}
           >
             Nosotros
@@ -227,20 +227,20 @@ export const Navbar: React.FC<NavbarProps> = ({
             onClick={() => handleNavClick('contacto')}
             className={`block w-full text-left px-3.5 py-2.5 text-base rounded-xl transition-all ${
               activeTab === 'contacto'
-                ? 'bg-emerald-950/80 text-[#00ff88] font-bold border border-emerald-500/40'
-                : 'text-slate-200 hover:bg-emerald-950/40 font-medium'
+                ? 'bg-zinc-900/80 text-[#00ff88] font-bold border border-zinc-700'
+                : 'text-slate-200 hover:bg-zinc-900/40 font-medium'
             }`}
           >
             Contacto
           </button>
 
-          <div className="pt-2 border-t border-emerald-950/80">
+          <div className="pt-2 border-t border-zinc-900/80">
 
             <a
               href={TELEGRAM_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center justify-center gap-2 w-full py-2.5 rounded-full font-semibold text-[#00ff88] bg-[#071d12] border border-emerald-500/40"
+              className="flex items-center justify-center gap-2 w-full py-2.5 rounded-full font-semibold text-[#00ff88] bg-[#151515] border border-zinc-700"
             >
               <Send className="w-4 h-4 fill-[#00ff88] text-[#00ff88] -rotate-12" />
               <span>Abrir Canal Telegram</span>

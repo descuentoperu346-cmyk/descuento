@@ -130,7 +130,7 @@ export const PRODUCT_PRESETS = [
     badge: 'MÁS VENDIDO',
     description: 'Cuentas y perfiles 100% estables con garantía total de 30 días y PIN privado.',
     subItemLabel: 'Perfiles privados & Cuentas completas',
-    customImageUrl: '/imagenes/card-netflix.jpg',
+    customImageUrl: '/imagenes/card-netflix.webp',
     deliveryTime: 'Entrega en 3 a 5 minutos',
     planName: 'Perfil Privado con PIN (1 Mes)',
     planPrice: 'S/ 12.00',
@@ -147,7 +147,7 @@ export const PRODUCT_PRESETS = [
     badge: 'AUDIO HIFI',
     description: 'Música ilimitada sin anuncios a tu propio correo o cuenta nueva con descargas.',
     subItemLabel: 'A tu cuenta propia o nueva',
-    customImageUrl: '/imagenes/card-spotify.jpg',
+    customImageUrl: '/imagenes/card-spotify.webp',
     deliveryTime: 'Entrega en 5 minutos',
     planName: 'Renovación a tu Cuenta (1 Mes)',
     planPrice: 'S/ 8.00',
@@ -164,7 +164,7 @@ export const PRODUCT_PRESETS = [
     badge: 'ESTRENOS & ESPN',
     description: 'Estrenos exclusivos de Disney, Marvel, Star Wars y partidos en vivo por ESPN.',
     subItemLabel: 'ESPN en vivo & IMAX Enhanced',
-    customImageUrl: '/imagenes/card-disney.jpg',
+    customImageUrl: '/imagenes/card-disney.webp',
     deliveryTime: 'Entrega en 5 a 10 minutos',
     planName: 'Perfil Privado (1 Mes)',
     planPrice: 'S/ 10.00',
@@ -383,7 +383,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
     description: 'Cuentas y perfiles 100% estables con garantía total de 30 días y PIN privado.',
     subItemLabel: 'Perfiles privados & Cuentas completas',
     buttonLabel: 'Ver planes →',
-    customImageUrl: '/imagenes/card-netflix.jpg',
+    customImageUrl: '/imagenes/card-netflix.webp',
     overview: 'Acceso completo al catálogo de películas y series en resolución 4K HDR y sonido envolvente.',
     deliveryTime: 'Entrega en 3 a 5 minutos',
     supportNote: 'Garantía y reposición inmediata durante todo el periodo contratado.',
@@ -803,10 +803,10 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
   // Presets gallery for quick image assignment
   const presets = [
     { label: 'Leaks & Cyber', url: '/imagenes/card-leaks.jpg' },
-    { label: 'Netflix 4K UHD', url: '/imagenes/card-netflix.jpg' },
-    { label: 'Spotify HiFi', url: '/imagenes/card-spotify.jpg' },
+    { label: 'Netflix 4K UHD', url: '/imagenes/card-netflix.webp' },
+    { label: 'Spotify HiFi', url: '/imagenes/card-spotify.webp' },
     { label: 'ChatGPT Plus', url: '/imagenes/card-chatgpt.jpg' },
-    { label: 'Disney+ & ESPN', url: '/imagenes/card-disney.jpg' },
+    { label: 'Disney+ & ESPN', url: '/imagenes/card-disney.webp' },
     { label: 'Canva Pro Anual', url: '/imagenes/card-canva.jpg' },
     { label: 'Windows 11 OEM', url: '/imagenes/card-windows.jpg' },
     { label: 'Ciber OSINT', url: '/imagenes/card-investigacion.png' },
@@ -904,7 +904,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
   // ==========================================
   if (!isAuthenticated) {
     return (
-      <div className="min-h-screen bg-[#020704] text-slate-100 flex flex-col items-center justify-center p-4 selection:bg-[#00ff88] selection:text-black font-sans relative overflow-hidden">
+      <div className="min-h-screen bg-[#050505] text-slate-100 flex flex-col items-center justify-center p-4 selection:bg-[#00ff88] selection:text-black font-sans relative overflow-hidden">
         {/* Subtle Cyber Grid Background */}
         <div
           className="absolute inset-0 opacity-15 pointer-events-none"
@@ -919,10 +919,10 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
         <div className="absolute top-1/4 w-[500px] h-[500px] bg-emerald-500/10 rounded-full blur-3xl pointer-events-none" />
         <div className="absolute bottom-1/4 w-[400px] h-[400px] bg-[#00ff88]/5 rounded-full blur-3xl pointer-events-none" />
 
-        <div className="relative w-full max-w-lg p-6 sm:p-10 rounded-3xl bg-gradient-to-b from-[#05160d]/95 via-[#031109]/95 to-[#020a05]/95 border-2 border-emerald-500/40 shadow-[0_0_60px_rgba(0,255,136,0.25)] text-center backdrop-blur-2xl">
+        <div className="relative w-full max-w-lg p-6 sm:p-10 rounded-3xl bg-gradient-to-b from-[#101010]/95 via-[#0c0c0c]/95 to-[#070707]/95 border-2 border-zinc-700 text-center backdrop-blur-2xl">
           {/* Header Monogram Seal */}
-          <div className="relative w-20 h-20 mx-auto rounded-3xl overflow-hidden border-2 border-[#00ff88] p-2 bg-black/80 shadow-[0_0_30px_rgba(0,255,136,0.5)] mb-4">
-            <img
+          <div className="relative w-20 h-20 mx-auto rounded-3xl overflow-hidden border-2 border-[#00ff88] p-2 bg-black/80 mb-4">
+            <img loading="lazy" decoding="async"
               src="/imagenes/monograma.png"
               alt="Descuentos Perú"
               className="w-full h-full object-contain"
@@ -930,7 +930,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
             <span className="absolute bottom-1 right-1 w-3 h-3 rounded-full bg-[#00ff88] border-2 border-black animate-pulse" />
           </div>
 
-          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-emerald-950/80 border border-emerald-500/40 text-[10px] font-mono text-[#00ff88] tracking-widest uppercase mb-2">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-zinc-900/80 border border-zinc-700 text-[10px] font-mono text-[#00ff88] tracking-widest uppercase mb-2">
             <Shield className="w-3.5 h-3.5 text-[#00ff88]" />
             <span>PANEL DE CONTROL // ACCESO EXCLUSIVO</span>
           </div>
@@ -962,12 +962,12 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                     }}
                     className={`p-2.5 rounded-2xl border text-xs transition-all flex items-center gap-2.5 cursor-pointer text-left ${
                       isSelected
-                        ? 'bg-gradient-to-r from-emerald-950 to-emerald-900/90 border-[#00ff88] text-white shadow-[0_0_18px_rgba(0,255,136,0.35)] scale-102 font-bold'
-                        : 'bg-[#030d07] border-emerald-900/60 text-slate-400 hover:text-white hover:border-emerald-700'
+                        ? 'bg-gradient-to-r from-zinc-900 to-zinc-800/90 border-[#00ff88] text-white scale-102 font-bold'
+                        : 'bg-[#090909] border-zinc-800/60 text-slate-400 hover:text-white hover:border-emerald-700'
                     }`}
                   >
                     <div className="relative w-8 h-8 rounded-full overflow-hidden border border-emerald-400 shrink-0 bg-black">
-                      <img src={v.avatar} alt={v.name} className="w-full h-full object-cover" />
+                      <img loading="lazy" decoding="async" src={v.avatar} alt={v.name} className="w-full h-full object-cover" />
                       {isSelected && (
                         <span className="absolute bottom-0 right-0 w-2 h-2 rounded-full bg-[#00ff88] border border-black animate-ping" />
                       )}
@@ -999,7 +999,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                   onChange={(e) => setLoginPin(e.target.value)}
                   placeholder="PIN DE SEGURIDAD (admin123 o 1234)"
                   autoFocus
-                  className="w-full pl-4 pr-11 py-3 rounded-2xl bg-[#020b05] border border-emerald-500/60 focus:border-[#00ff88] text-white text-center text-lg font-mono tracking-widest placeholder:tracking-normal placeholder:text-xs placeholder:text-slate-500 outline-none transition-all shadow-[inset_0_2px_8px_rgba(0,0,0,0.8)]"
+                  className="w-full pl-4 pr-11 py-3 rounded-2xl bg-[#070707] border border-emerald-500/60 focus:border-[#00ff88] text-white text-center text-lg font-mono tracking-widest placeholder:tracking-normal placeholder:text-xs placeholder:text-slate-500 outline-none transition-all shadow-[inset_0_2px_8px_rgba(0,0,0,0.8)]"
                 />
                 <button
                   type="button"
@@ -1021,7 +1021,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
 
             <button
               type="submit"
-              className="w-full py-3.5 rounded-2xl font-black text-slate-950 bg-[#00ff88] hover:bg-[#00e676] shadow-[0_0_25px_rgba(0,255,136,0.4)] active:scale-95 transition-all cursor-pointer flex items-center justify-center gap-2 text-sm font-mono tracking-wide uppercase"
+              className="w-full py-3.5 rounded-2xl font-black text-slate-950 bg-[#00ff88] hover:bg-[#00e676] active:scale-95 transition-all cursor-pointer flex items-center justify-center gap-2 text-sm font-mono tracking-wide uppercase"
             >
               <Unlock className="w-4 h-4 stroke-[3]" />
               <span>INGRESAR AL PANEL OPERATIVO</span>
@@ -1029,7 +1029,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
           </form>
 
           {/* Bottom Hints and Return Link */}
-          <div className="mt-6 pt-4 border-t border-emerald-950 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs font-mono">
+          <div className="mt-6 pt-4 border-t border-zinc-900 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs font-mono">
             <span className="text-slate-400 text-[10px]">
               Credenciales: Admin <strong className="text-[#00ff88]">admin123</strong> | Vendedores <strong className="text-[#00ff88]">1234</strong>
             </span>
@@ -1051,18 +1051,18 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
   // VIEW: FULL STANDALONE WEB APPLICATION (High-Tech SOC & Telemetry)
   // ==========================================
   return (
-    <div className="min-h-screen bg-[#020905] text-slate-100 flex flex-col font-sans selection:bg-[#00ff88] selection:text-black">
+    <div className="min-h-screen bg-[#060606] text-slate-100 flex flex-col font-sans selection:bg-[#00ff88] selection:text-black">
       
       {/* Toast Alert */}
       {toastMessage && (
-        <div className="fixed top-5 right-5 z-50 flex items-center gap-2 px-4 py-2.5 rounded-xl bg-black/90 border border-[#00ff88] text-white text-xs font-bold shadow-[0_0_30px_rgba(0,255,136,0.4)] backdrop-blur-xl animate-fade-in font-mono">
+        <div className="fixed top-5 right-5 z-50 flex items-center gap-2 px-4 py-2.5 rounded-xl bg-black/90 border border-[#00ff88] text-white text-xs font-bold backdrop-blur-xl animate-fade-in font-mono">
           <CheckCircle2 className="w-4 h-4 text-[#00ff88]" />
           <span>{toastMessage}</span>
         </div>
       )}
 
       {/* Cyber System Diagnostic Bar (Top Ticker) */}
-      <div className="bg-[#010603] border-b border-emerald-950 px-4 py-1.5 flex flex-wrap items-center justify-between gap-3 text-[10px] font-mono text-slate-400">
+      <div className="bg-[#040404] border-b border-zinc-900 px-4 py-1.5 flex flex-wrap items-center justify-between gap-3 text-[10px] font-mono text-slate-400">
         <div className="flex items-center gap-4 flex-wrap">
           <div className="flex items-center gap-1.5 text-emerald-400">
             <span className="w-2 h-2 rounded-full bg-[#00ff88] animate-ping" />
@@ -1086,11 +1086,11 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
         </div>
 
         <div className="flex items-center gap-3">
-          <div className="flex items-center gap-1 text-[#00ff88] bg-emerald-950/60 px-2 py-0.5 rounded border border-emerald-800/40">
+          <div className="flex items-center gap-1 text-[#00ff88] bg-zinc-900/60 px-2 py-0.5 rounded border border-zinc-700/40">
             <Clock className="w-3 h-3" />
             <span className="font-bold">{currentTime || '21:20:00'} (GMT-5)</span>
           </div>
-          <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded bg-emerald-500/20 text-[#00ff88] font-bold border border-emerald-500/30">
+          <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded bg-emerald-500/20 text-[#00ff88] font-bold border border-zinc-700">
             <span className="w-2 h-2 rounded-full bg-[#00ff88] animate-pulse" />
             <span>{telemetry.activeVisitorsNow} VISITANTES ACTIVOS</span>
           </span>
@@ -1098,9 +1098,9 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
       </div>
 
       {/* Standalone Application Header Bar */}
-      <header className="h-16 bg-[#040f07]/95 border-b border-emerald-900/60 px-4 sm:px-6 flex items-center justify-between gap-4 sticky top-0 z-40 backdrop-blur-md">
+      <header className="h-16 bg-[#0a0a0a]/95 border-b border-zinc-800/60 px-4 sm:px-6 flex items-center justify-between gap-4 sticky top-0 z-40 backdrop-blur-md">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-[#020b05] border-2 border-[#00ff88] flex items-center justify-center shadow-[0_0_20px_rgba(0,255,136,0.4)]">
+          <div className="w-10 h-10 rounded-xl bg-[#070707] border-2 border-[#00ff88] flex items-center justify-center">
             <Radio className="w-5 h-5 text-[#00ff88] animate-pulse" />
           </div>
           <div>
@@ -1121,11 +1121,11 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
         {/* Right Actions: User Switcher & Return to Store */}
         <div className="flex items-center gap-2 sm:gap-3">
           {/* User selector dropdown */}
-          <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#06170e] border border-emerald-900/80 text-xs">
+          <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#111111] border border-zinc-800/80 text-xs">
             {currentUser.avatar && (currentUser.avatar.startsWith('/') || currentUser.avatar.startsWith('http') || currentUser.avatar.includes('.')) ? (
-              <img src={currentUser.avatar} alt={currentUser.name} className="w-6 h-6 rounded-full object-cover border border-emerald-500/50 shrink-0" />
+              <img loading="lazy" decoding="async" src={currentUser.avatar} alt={currentUser.name} className="w-6 h-6 rounded-full object-cover border border-emerald-500/50 shrink-0" />
             ) : (
-              <div className="w-6 h-6 rounded-full bg-emerald-950 flex items-center justify-center border border-emerald-500/50 shrink-0">
+              <div className="w-6 h-6 rounded-full bg-zinc-900 flex items-center justify-center border border-emerald-500/50 shrink-0">
                 <User className="w-3.5 h-3.5 text-[#00ff88]" />
               </div>
             )}
@@ -1136,11 +1136,11 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
             <select
               value={currentUserId}
               onChange={(e) => handleSwitchUser(e.target.value)}
-              className="bg-transparent text-[#00ff88] text-xs font-bold font-mono outline-none cursor-pointer border-l border-emerald-900/60 pl-2 ml-1"
+              className="bg-transparent text-[#00ff88] text-xs font-bold font-mono outline-none cursor-pointer border-l border-zinc-800/60 pl-2 ml-1"
               title="Cambiar de usuario"
             >
               {vendors.map((v) => (
-                <option key={v.id} value={v.id} className="bg-[#05140c] text-white">
+                <option key={v.id} value={v.id} className="bg-[#0e0e0e] text-white">
                   {v.name} ({v.role === 'admin' ? 'Admin' : 'Vendedor'})
                 </option>
               ))}
@@ -1151,7 +1151,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
           <button
             type="button"
             onClick={onBackToStore}
-            className="inline-flex items-center gap-1.5 px-3 sm:px-4 py-2 rounded-xl text-xs font-bold text-slate-950 bg-[#00ff88] hover:bg-[#00e676] shadow-[0_0_15px_rgba(0,255,136,0.3)] transition-all cursor-pointer whitespace-nowrap font-mono"
+            className="inline-flex items-center gap-1.5 px-3 sm:px-4 py-2 rounded-xl text-xs font-bold text-slate-950 bg-[#00ff88] hover:bg-[#00e676] transition-all cursor-pointer whitespace-nowrap font-mono"
             title="Abrir la tienda para clientes"
           >
             <ShoppingBag className="w-3.5 h-3.5 stroke-[2.5]" />
@@ -1174,9 +1174,9 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
       <div className="flex-1 flex flex-col md:flex-row overflow-hidden">
         
         {/* SIDEBAR NAVIGATION */}
-        <aside className="w-full md:w-64 bg-[#030d07] border-b md:border-b-0 md:border-r border-emerald-950 p-3 sm:p-4 shrink-0 flex flex-row md:flex-col justify-between overflow-x-auto gap-1">
+        <aside className="w-full md:w-64 bg-[#090909] border-b md:border-b-0 md:border-r border-zinc-900 p-3 sm:p-4 shrink-0 flex flex-row md:flex-col justify-between overflow-x-auto gap-1">
           <div className="flex md:flex-col gap-1 w-full">
-            <div className="pb-3 mb-2 border-b border-emerald-950 hidden md:block">
+            <div className="pb-3 mb-2 border-b border-zinc-900 hidden md:block">
               <span className="text-[10px] font-bold uppercase tracking-widest text-slate-400 font-mono">
                 MÓDULOS DE GESTIÓN
               </span>
@@ -1191,8 +1191,8 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
               }}
               className={`flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer whitespace-nowrap font-mono ${
                 currentNav === 'telemetria'
-                  ? 'bg-[#00ff88] text-slate-950 shadow-[0_0_18px_rgba(0,255,136,0.4)]'
-                  : 'text-slate-300 hover:bg-[#07190e] hover:text-white'
+                  ? 'bg-[#00ff88] text-slate-950'
+                  : 'text-slate-300 hover:bg-[#121212] hover:text-white'
               }`}
             >
               <Activity className="w-4 h-4" />
@@ -1208,8 +1208,8 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
               }}
               className={`flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer whitespace-nowrap font-mono ${
                 currentNav === 'productos'
-                  ? 'bg-[#00ff88] text-slate-950 shadow-[0_0_18px_rgba(0,255,136,0.4)]'
-                  : 'text-slate-300 hover:bg-[#07190e] hover:text-white'
+                  ? 'bg-[#00ff88] text-slate-950'
+                  : 'text-slate-300 hover:bg-[#121212] hover:text-white'
               }`}
             >
               <Package className="w-4 h-4" />
@@ -1225,8 +1225,8 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
               }}
               className={`flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer whitespace-nowrap font-mono ${
                 currentNav === 'subir-producto'
-                  ? 'bg-[#00ff88] text-slate-950 shadow-[0_0_18px_rgba(0,255,136,0.4)]'
-                  : 'text-slate-300 hover:bg-[#07190e] hover:text-white'
+                  ? 'bg-[#00ff88] text-slate-950'
+                  : 'text-slate-300 hover:bg-[#121212] hover:text-white'
               }`}
             >
               <Plus className="w-4 h-4 stroke-[2.5]" />
@@ -1259,8 +1259,8 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
               }}
               className={`flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer whitespace-nowrap font-mono ${
                 currentNav === 'pagos'
-                  ? 'bg-[#00ff88] text-slate-950 shadow-[0_0_18px_rgba(0,255,136,0.4)]'
-                  : 'text-slate-300 hover:bg-[#07190e] hover:text-white'
+                  ? 'bg-[#00ff88] text-slate-950'
+                  : 'text-slate-300 hover:bg-[#121212] hover:text-white'
               }`}
             >
               <CreditCard className="w-4 h-4" />
@@ -1276,8 +1276,8 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
               }}
               className={`flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer whitespace-nowrap font-mono ${
                 currentNav === 'perfil'
-                  ? 'bg-[#00ff88] text-slate-950 shadow-[0_0_18px_rgba(0,255,136,0.4)]'
-                  : 'text-slate-300 hover:bg-[#07190e] hover:text-white'
+                  ? 'bg-[#00ff88] text-slate-950'
+                  : 'text-slate-300 hover:bg-[#121212] hover:text-white'
               }`}
             >
               <UserCheck className="w-4 h-4" />
@@ -1287,7 +1287,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
             {/* SUPER ADMIN ONLY OPTIONS */}
             {isSuperAdmin && (
               <>
-                <div className="pt-4 pb-2 border-t border-emerald-950 hidden md:block">
+                <div className="pt-4 pb-2 border-t border-zinc-900 hidden md:block">
                   <span className="text-[10px] font-bold uppercase tracking-widest text-[#00ff88] font-mono">
                     CONTROL MAESTRO
                   </span>
@@ -1302,8 +1302,8 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                   }}
                   className={`flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer whitespace-nowrap font-mono ${
                     currentNav === 'gestion-vendedores'
-                      ? 'bg-[#00ff88] text-slate-950 shadow-[0_0_18px_rgba(0,255,136,0.4)]'
-                      : 'text-slate-300 hover:bg-[#07190e] hover:text-white'
+                      ? 'bg-[#00ff88] text-slate-950'
+                      : 'text-slate-300 hover:bg-[#121212] hover:text-white'
                   }`}
                 >
                   <Users className="w-4 h-4" />
@@ -1319,8 +1319,8 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                   }}
                   className={`flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer whitespace-nowrap font-mono ${
                     currentNav === 'respaldos'
-                      ? 'bg-[#00ff88] text-slate-950 shadow-[0_0_18px_rgba(0,255,136,0.4)]'
-                      : 'text-slate-300 hover:bg-[#07190e] hover:text-white'
+                      ? 'bg-[#00ff88] text-slate-950'
+                      : 'text-slate-300 hover:bg-[#121212] hover:text-white'
                   }`}
                 >
                   <Database className="w-4 h-4" />
@@ -1332,7 +1332,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
         </aside>
 
         {/* MAIN APPLICATION VIEW AREA */}
-        <main className="flex-1 bg-[#020b05] overflow-y-auto p-4 sm:p-6 lg:p-8">
+        <main className="flex-1 bg-[#070707] overflow-y-auto p-4 sm:p-6 lg:p-8">
           
           {/* =======================================================
               TAB 1: TELEMETRÍA, TRÁFICO EN VIVO & CLICS (User Requested)
@@ -1341,14 +1341,14 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
             <div className="space-y-6 max-w-7xl mx-auto">
               
               {/* Top Banner: Telemetry Hero & Active Radar */}
-              <div className="p-6 sm:p-8 rounded-3xl bg-gradient-to-r from-[#05180d] via-[#041209] to-[#020b05] border border-emerald-500/40 shadow-[0_0_40px_rgba(0,255,136,0.15)] relative overflow-hidden">
+              <div className="p-6 sm:p-8 rounded-3xl bg-gradient-to-r from-[#111111] via-[#0c0c0c] to-[#070707] border border-zinc-700 relative overflow-hidden">
                 <div className="absolute right-0 top-0 bottom-0 w-80 opacity-20 pointer-events-none hidden lg:block">
                   <div className="w-full h-full border-r-2 border-emerald-400 rounded-full animate-ping" />
                 </div>
 
                 <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 relative z-10">
                   <div>
-                    <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-950/80 border border-emerald-500/40 text-[10px] font-mono text-[#00ff88] tracking-widest uppercase mb-2">
+                    <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-zinc-900/80 border border-zinc-700 text-[10px] font-mono text-[#00ff88] tracking-widest uppercase mb-2">
                       <Radio className="w-3.5 h-3.5 animate-pulse text-[#00ff88]" />
                       <span>TELEMETRÍA EN TIEMPO REAL // SESIÓN: {currentUser.name.toUpperCase()}</span>
                     </div>
@@ -1364,7 +1364,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                     <button
                       type="button"
                       onClick={handleSimulateClick}
-                      className="px-4 py-2.5 rounded-xl bg-[#00ff88] hover:bg-[#00e676] text-slate-950 font-bold text-xs shadow-[0_0_20px_rgba(0,255,136,0.35)] transition-all cursor-pointer flex items-center gap-2 font-mono"
+                      className="px-4 py-2.5 rounded-xl bg-[#00ff88] hover:bg-[#00e676] text-slate-950 font-bold text-xs transition-all cursor-pointer flex items-center gap-2 font-mono"
                     >
                       <Zap className="w-4 h-4 stroke-[3]" />
                       <span>Simular Clic en Mi Link</span>
@@ -1372,7 +1372,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                     <button
                       type="button"
                       onClick={() => setIsLiveStreamPaused(!isLiveStreamPaused)}
-                      className="px-4 py-2.5 rounded-xl bg-[#06170e] hover:bg-emerald-950 border border-emerald-500/40 text-[#00ff88] font-bold text-xs transition-all cursor-pointer flex items-center gap-2 font-mono"
+                      className="px-4 py-2.5 rounded-xl bg-[#111111] hover:bg-zinc-900 border border-zinc-700 text-[#00ff88] font-bold text-xs transition-all cursor-pointer flex items-center gap-2 font-mono"
                     >
                       {isLiveStreamPaused ? <Play className="w-4 h-4" /> : <Pause className="w-4 h-4" />}
                       <span>{isLiveStreamPaused ? 'Reanudar Stream' : 'Pausar Stream'}</span>
@@ -1384,7 +1384,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
               {/* 4 Informatics KPI Gauges */}
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                 {/* Active Visitors Now */}
-                <div className="p-5 rounded-2xl bg-[#041209] border border-emerald-500/30 relative overflow-hidden shadow-lg">
+                <div className="p-5 rounded-2xl bg-[#0c0c0c] border border-zinc-700 relative overflow-hidden shadow-lg">
                   <div className="flex items-center justify-between text-slate-400 text-xs font-mono mb-2">
                     <span>USUARIOS EN VIVO</span>
                     <span className="w-2.5 h-2.5 rounded-full bg-[#00ff88] animate-ping" />
@@ -1395,14 +1395,14 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                     </strong>
                     <span className="text-xs font-bold text-[#00ff88] font-mono">online</span>
                   </div>
-                  <div className="mt-2.5 pt-2 border-t border-emerald-950/80 text-[11px] text-slate-400 flex items-center justify-between">
+                  <div className="mt-2.5 pt-2 border-t border-zinc-900/80 text-[11px] text-slate-400 flex items-center justify-between">
                     <span>Sesiones en Perú</span>
                     <span className="text-emerald-400 font-mono font-bold">98% móvil</span>
                   </div>
                 </div>
 
                 {/* Total Visits Today */}
-                <div className="p-5 rounded-2xl bg-[#041209] border border-emerald-500/30 relative overflow-hidden shadow-lg">
+                <div className="p-5 rounded-2xl bg-[#0c0c0c] border border-zinc-700 relative overflow-hidden shadow-lg">
                   <div className="flex items-center justify-between text-slate-400 text-xs font-mono mb-2">
                     <span>VISITAS HOY</span>
                     <Globe2 className="w-4 h-4 text-emerald-400" />
@@ -1413,14 +1413,14 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                     </strong>
                     <span className="text-xs font-bold text-emerald-400 font-mono">+14.2%</span>
                   </div>
-                  <div className="mt-2.5 pt-2 border-t border-emerald-950/80 text-[11px] text-slate-400 flex items-center justify-between">
+                  <div className="mt-2.5 pt-2 border-t border-zinc-900/80 text-[11px] text-slate-400 flex items-center justify-between">
                     <span>Semana: {telemetry.totalVisitsWeek.toLocaleString()}</span>
                     <span className="text-slate-300 font-mono">{telemetry.totalUniqueIps.toLocaleString()} IPs</span>
                   </div>
                 </div>
 
                 {/* Total Clicks on Links Today */}
-                <div className="p-5 rounded-2xl bg-[#041209] border border-emerald-500/30 relative overflow-hidden shadow-lg">
+                <div className="p-5 rounded-2xl bg-[#0c0c0c] border border-zinc-700 relative overflow-hidden shadow-lg">
                   <div className="flex items-center justify-between text-slate-400 text-xs font-mono mb-2">
                     <span>CLICS A ENLACES HOY</span>
                     <MousePointerClick className="w-4 h-4 text-[#00ff88]" />
@@ -1431,14 +1431,14 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                     </strong>
                     <span className="text-xs font-bold text-emerald-400 font-mono">contacto</span>
                   </div>
-                  <div className="mt-2.5 pt-2 border-t border-emerald-950/80 text-[11px] text-slate-400 flex items-center justify-between">
+                  <div className="mt-2.5 pt-2 border-t border-zinc-900/80 text-[11px] text-slate-400 flex items-center justify-between">
                     <span>Total histórico:</span>
                     <span className="text-[#00ff88] font-mono font-bold">{telemetry.totalClicksAllTime.toLocaleString()} clics</span>
                   </div>
                 </div>
 
                 {/* CTR Conversion Rate */}
-                <div className="p-5 rounded-2xl bg-[#041209] border border-emerald-500/30 relative overflow-hidden shadow-lg">
+                <div className="p-5 rounded-2xl bg-[#0c0c0c] border border-zinc-700 relative overflow-hidden shadow-lg">
                   <div className="flex items-center justify-between text-slate-400 text-xs font-mono mb-2">
                     <span>CONVERSIÓN (CTR)</span>
                     <TrendingUp className="w-4 h-4 text-[#00ff88]" />
@@ -1449,7 +1449,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                     </strong>
                     <span className="text-xs font-bold text-emerald-400 font-mono">visita → clic</span>
                   </div>
-                  <div className="mt-2.5 pt-2 border-t border-emerald-950/80 text-[11px] text-slate-400 flex items-center justify-between">
+                  <div className="mt-2.5 pt-2 border-t border-zinc-900/80 text-[11px] text-slate-400 flex items-center justify-between">
                     <span>Rendimiento:</span>
                     <span className="text-[#00ff88] font-mono font-bold">ALTO (Excelente)</span>
                   </div>
@@ -1457,7 +1457,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
               </div>
 
               {/* Vendor Clicks Performance Table ("Cuanta gente entra y da clic a mi link") */}
-              <div className="p-6 rounded-3xl bg-[#030e06] border border-emerald-900/60 shadow-xl space-y-4">
+              <div className="p-6 rounded-3xl bg-[#0a0a0a] border border-zinc-800/60 shadow-xl space-y-4">
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                   <div>
                     <span className="text-[10px] font-bold uppercase tracking-widest text-[#00ff88] font-mono">
@@ -1468,7 +1468,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                     </h3>
                   </div>
 
-                  <div className="text-xs font-mono text-slate-400 bg-[#020804] px-3 py-1.5 rounded-xl border border-emerald-950">
+                  <div className="text-xs font-mono text-slate-400 bg-[#060606] px-3 py-1.5 rounded-xl border border-zinc-900">
                     Tu ID activo: <span className="text-[#00ff88] font-bold">{currentUser.name}</span>
                   </div>
                 </div>
@@ -1489,16 +1489,16 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                         key={v.id}
                         className={`p-5 rounded-2xl border transition-all ${
                           isCurrent
-                            ? 'bg-[#05190e] border-[#00ff88] shadow-[0_0_25px_rgba(0,255,136,0.2)]'
-                            : 'bg-[#030d06] border-emerald-950'
+                            ? 'bg-[#111111] border-[#00ff88]'
+                            : 'bg-[#090909] border-zinc-900'
                         }`}
                       >
                         <div className="flex items-center justify-between mb-3">
                           <div className="flex items-center gap-2">
                             {v.avatar && (v.avatar.startsWith('/') || v.avatar.startsWith('http') || v.avatar.includes('.')) ? (
-                              <img src={v.avatar} alt={v.name} className="w-8 h-8 rounded-full object-cover border border-emerald-500/50 shrink-0" />
+                              <img loading="lazy" decoding="async" src={v.avatar} alt={v.name} className="w-8 h-8 rounded-full object-cover border border-emerald-500/50 shrink-0" />
                             ) : (
-                              <div className="w-8 h-8 rounded-full bg-emerald-950 flex items-center justify-center border border-emerald-500/50 shrink-0">
+                              <div className="w-8 h-8 rounded-full bg-zinc-900 flex items-center justify-center border border-emerald-500/50 shrink-0">
                                 <User className="w-4 h-4 text-[#00ff88]" />
                               </div>
                             )}
@@ -1517,7 +1517,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                         </div>
 
                         {/* Clicks breakdown */}
-                        <div className="space-y-2 pt-2 border-t border-emerald-950">
+                        <div className="space-y-2 pt-2 border-t border-zinc-900">
                           <div className="flex items-center justify-between text-xs">
                             <span className="text-slate-400 flex items-center gap-1.5">
                               <ExternalLink className="w-3.5 h-3.5 text-[#00ff88]" />
@@ -1534,7 +1534,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                             <span className="font-bold text-white font-mono">{stats.whatsappClicks}</span>
                           </div>
 
-                          <div className="flex items-center justify-between text-xs pt-1.5 border-t border-emerald-900/40">
+                          <div className="flex items-center justify-between text-xs pt-1.5 border-t border-zinc-800/40">
                             <span className="text-slate-300 font-bold">Total Contactos Hoy:</span>
                             <span className="font-black text-base text-[#00ff88] font-mono">
                               {stats.totalClicks} clics
@@ -1552,7 +1552,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                           href={v.telegramUrl}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="mt-3.5 w-full py-2 rounded-xl bg-[#020804] hover:bg-emerald-950 border border-emerald-800/50 text-[#00ff88] text-xs font-bold font-mono flex items-center justify-center gap-1.5 transition-all"
+                          className="mt-3.5 w-full py-2 rounded-xl bg-[#060606] hover:bg-zinc-900 border border-zinc-700/50 text-[#00ff88] text-xs font-bold font-mono flex items-center justify-center gap-1.5 transition-all"
                         >
                           <ExternalLink className="w-3 h-3" />
                           <span>Probar Enlace Telegram</span>
@@ -1566,7 +1566,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
               {/* Weekly Traffic Bar Chart + Devices/Geos Row */}
               <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
                 {/* 7-Day Traffic Interactive Visual Bar Chart */}
-                <div className="lg:col-span-7 p-6 rounded-3xl bg-[#030e06] border border-emerald-900/60 shadow-xl space-y-4">
+                <div className="lg:col-span-7 p-6 rounded-3xl bg-[#0a0a0a] border border-zinc-800/60 shadow-xl space-y-4">
                   <div className="flex items-center justify-between">
                     <div>
                       <span className="text-[10px] font-bold uppercase tracking-widest text-[#00ff88] font-mono">
@@ -1576,14 +1576,14 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                         Tráfico y Clics de los Últimos 7 Días
                       </h3>
                     </div>
-                    <span className="text-xs font-mono text-emerald-400 bg-emerald-950/60 px-2.5 py-1 rounded-lg border border-emerald-800/40">
+                    <span className="text-xs font-mono text-emerald-400 bg-zinc-900/60 px-2.5 py-1 rounded-lg border border-zinc-700/40">
                       Promedio: 1,450 vis/día
                     </span>
                   </div>
 
                   {/* SVG / HTML Bar Chart */}
                   <div className="pt-6 pb-2">
-                    <div className="h-48 flex items-end justify-between gap-3 px-2 border-b border-emerald-950">
+                    <div className="h-48 flex items-end justify-between gap-3 px-2 border-b border-zinc-900">
                       {telemetry.weeklyTraffic.map((dayStat, idx) => {
                         const maxVisits = 2000;
                         const heightPct = Math.round((dayStat.visits / maxVisits) * 100);
@@ -1598,13 +1598,13 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                             </div>
 
                             {/* Bar Visual */}
-                            <div className="w-full max-w-[36px] bg-[#020b05] rounded-t-lg overflow-hidden flex flex-col justify-end h-40 border border-emerald-900/40">
+                            <div className="w-full max-w-[36px] bg-[#070707] rounded-t-lg overflow-hidden flex flex-col justify-end h-40 border border-zinc-800/40">
                               <div
                                 style={{ height: `${heightPct}%` }}
                                 className={`w-full rounded-t-md transition-all duration-500 ${
                                   isToday
-                                    ? 'bg-gradient-to-t from-[#00b050] to-[#00ff88] shadow-[0_0_15px_rgba(0,255,136,0.6)]'
-                                    : 'bg-gradient-to-t from-emerald-950 to-emerald-700/80 hover:bg-emerald-500'
+                                    ? 'bg-gradient-to-t from-[#00b050] to-[#00ff88]'
+                                    : 'bg-gradient-to-t from-zinc-900 to-emerald-700/80 hover:bg-emerald-500'
                                 }`}
                               />
                             </div>
@@ -1629,14 +1629,14 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                       <span>Día Actual (Hoy)</span>
                     </div>
                     <div className="flex items-center gap-2">
-                      <span className="w-3 h-3 rounded bg-emerald-800" />
+                      <span className="w-3 h-3 rounded bg-zinc-700" />
                       <span>Días Anteriores</span>
                     </div>
                   </div>
                 </div>
 
                 {/* Device & Geographic Breakdown */}
-                <div className="lg:col-span-5 p-6 rounded-3xl bg-[#030e06] border border-emerald-900/60 shadow-xl space-y-5">
+                <div className="lg:col-span-5 p-6 rounded-3xl bg-[#0a0a0a] border border-zinc-800/60 shadow-xl space-y-5">
                   <div>
                     <span className="text-[10px] font-bold uppercase tracking-widest text-[#00ff88] font-mono">
                       SEGMENTACIÓN
@@ -1656,7 +1656,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                         </span>
                         <span className="font-bold text-[#00ff88]">{telemetry.deviceBreakdown.mobile}%</span>
                       </div>
-                      <div className="w-full h-2 rounded-full bg-[#020b05] overflow-hidden">
+                      <div className="w-full h-2 rounded-full bg-[#070707] overflow-hidden">
                         <div
                           className="h-full bg-[#00ff88] rounded-full"
                           style={{ width: `${telemetry.deviceBreakdown.mobile}%` }}
@@ -1672,7 +1672,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                         </span>
                         <span className="font-bold text-white">{telemetry.deviceBreakdown.desktop}%</span>
                       </div>
-                      <div className="w-full h-2 rounded-full bg-[#020b05] overflow-hidden">
+                      <div className="w-full h-2 rounded-full bg-[#070707] overflow-hidden">
                         <div
                           className="h-full bg-emerald-500 rounded-full"
                           style={{ width: `${telemetry.deviceBreakdown.desktop}%` }}
@@ -1682,7 +1682,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                   </div>
 
                   {/* Top Geographic Locations in Peru */}
-                  <div className="pt-3 border-t border-emerald-950 space-y-2">
+                  <div className="pt-3 border-t border-zinc-900 space-y-2">
                     <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 font-mono block">
                       TOP CIUDADES CONECTADAS:
                     </span>
@@ -1700,16 +1700,16 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
               </div>
 
               {/* Cyber Terminal Log: Live Event Stream ("Consola Informática") */}
-              <div className="p-6 rounded-3xl bg-[#010804] border-2 border-emerald-500/50 shadow-[0_0_40px_rgba(0,255,136,0.2)] space-y-4">
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-emerald-950 pb-4">
+              <div className="p-6 rounded-3xl bg-[#050505] border-2 border-emerald-500/50 space-y-4">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-zinc-900 pb-4">
                   <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-lg bg-emerald-950 border border-[#00ff88] flex items-center justify-center">
+                    <div className="w-8 h-8 rounded-lg bg-zinc-900 border border-[#00ff88] flex items-center justify-center">
                       <Terminal className="w-4 h-4 text-[#00ff88]" />
                     </div>
                     <div>
                       <h3 className="text-base font-black text-white font-mono flex items-center gap-2">
                         <span>CONSOLA DE EVENTOS EN VIVO (SOC STREAM)</span>
-                        <span className="text-[10px] px-2 py-0.5 rounded bg-emerald-500/20 text-[#00ff88] border border-emerald-500/40">
+                        <span className="text-[10px] px-2 py-0.5 rounded bg-emerald-500/20 text-[#00ff88] border border-zinc-700">
                           {isLiveStreamPaused ? 'PAUSADO' : 'RECIBIENDO'}
                         </span>
                       </h3>
@@ -1727,7 +1727,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                       className={`px-2.5 py-1 rounded text-[11px] font-mono font-bold transition-all ${
                         telemetryFilter === 'all'
                           ? 'bg-[#00ff88] text-slate-950'
-                          : 'bg-[#041209] text-slate-400 hover:text-white'
+                          : 'bg-[#0c0c0c] text-slate-400 hover:text-white'
                       }`}
                     >
                       Todos ({telemetry.recentEvents.length})
@@ -1738,7 +1738,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                       className={`px-2.5 py-1 rounded text-[11px] font-mono font-bold transition-all ${
                         telemetryFilter === 'clicks'
                           ? 'bg-[#00ff88] text-slate-950'
-                          : 'bg-[#041209] text-slate-400 hover:text-white'
+                          : 'bg-[#0c0c0c] text-slate-400 hover:text-white'
                       }`}
                     >
                       Clics Links
@@ -1749,7 +1749,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                       className={`px-2.5 py-1 rounded text-[11px] font-mono font-bold transition-all ${
                         telemetryFilter === 'leaks'
                           ? 'bg-rose-500 text-white'
-                          : 'bg-[#041209] text-slate-400 hover:text-white'
+                          : 'bg-[#0c0c0c] text-slate-400 hover:text-white'
                       }`}
                     >
                       Leaks & Breaches
@@ -1765,7 +1765,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                 </div>
 
                 {/* Log Stream Terminal Screen */}
-                <div className="bg-[#000502] rounded-2xl p-4 border border-emerald-950 font-mono text-xs max-h-80 overflow-y-auto space-y-2 select-text">
+                <div className="bg-[#030303] rounded-2xl p-4 border border-zinc-900 font-mono text-xs max-h-80 overflow-y-auto space-y-2 select-text">
                   {filteredEvents.length > 0 ? (
                     filteredEvents.map((evt) => {
                       const isClick = evt.type === 'click_telegram' || evt.type === 'click_whatsapp';
@@ -1778,8 +1778,8 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                             isLeak
                               ? 'bg-rose-950/20 border-rose-900/50 text-rose-300'
                               : isClick
-                              ? 'bg-emerald-950/30 border-emerald-500/40 text-emerald-200'
-                              : 'bg-[#020b05] border-emerald-950 text-slate-300'
+                              ? 'bg-zinc-900/30 border-zinc-700 text-emerald-200'
+                              : 'bg-[#070707] border-zinc-900 text-slate-300'
                           }`}
                         >
                           <span className="text-[10px] text-slate-500 shrink-0 font-mono pt-0.5">
@@ -1818,7 +1818,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
               </div>
 
               {/* Leaderboard Table of Products (Views & Clicks) */}
-              <div className="p-6 rounded-3xl bg-[#030e06] border border-emerald-900/60 shadow-xl space-y-4">
+              <div className="p-6 rounded-3xl bg-[#0a0a0a] border border-zinc-800/60 shadow-xl space-y-4">
                 <div className="flex items-center justify-between">
                   <div>
                     <span className="text-[10px] font-bold uppercase tracking-widest text-[#00ff88] font-mono">
@@ -1833,7 +1833,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                 <div className="overflow-x-auto">
                   <table className="w-full text-left text-xs font-mono">
                     <thead>
-                      <tr className="border-b border-emerald-950 text-slate-400 text-[11px]">
+                      <tr className="border-b border-zinc-900 text-slate-400 text-[11px]">
                         <th className="py-2.5 px-3">PRODUCTO</th>
                         <th className="py-2.5 px-3">CATEGORÍA</th>
                         <th className="py-2.5 px-3">VENDEDOR ASIGNADO</th>
@@ -1842,15 +1842,15 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                         <th className="py-2.5 px-3 text-right">CTR</th>
                       </tr>
                     </thead>
-                    <tbody className="divide-y divide-emerald-950/60">
+                    <tbody className="divide-y divide-zinc-900/60">
                       {telemetry.productsStats.map((prod) => (
-                        <tr key={prod.productId} className="hover:bg-[#05170d]/60 transition-colors">
+                        <tr key={prod.productId} className="hover:bg-[#101010]/60 transition-colors">
                           <td className="py-3 px-3 font-bold text-white flex items-center gap-2">
                             {prod.category === 'leaks' && <AlertTriangle className="w-3.5 h-3.5 text-rose-400" />}
                             <span>{prod.title}</span>
                           </td>
                           <td className="py-3 px-3">
-                            <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-[#020b05] text-emerald-400 border border-emerald-900/60">
+                            <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-[#070707] text-emerald-400 border border-zinc-800/60">
                               {prod.category.toUpperCase()}
                             </span>
                           </td>
@@ -1904,7 +1904,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                   value={productSearchQuery}
                   onChange={(e) => setProductSearchQuery(e.target.value)}
                   placeholder="Buscar en tus productos por nombre o categoría..."
-                  className="w-full px-4 py-3 rounded-2xl bg-[#05140b] border border-emerald-900/70 text-slate-200 text-sm placeholder:text-slate-500 focus:outline-none focus:border-[#00ff88] transition-all"
+                  className="w-full px-4 py-3 rounded-2xl bg-[#0e0e0e] border border-zinc-800/70 text-slate-200 text-sm placeholder:text-slate-500 focus:outline-none focus:border-[#00ff88] transition-all"
                 />
               </div>
 
@@ -1927,19 +1927,19 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                         className={`p-5 rounded-2xl border transition-all flex flex-col justify-between ${
                           isLeaks
                             ? 'bg-[#0a0505] border-rose-500/40 shadow-[0_0_20px_rgba(239,68,68,0.15)]'
-                            : 'bg-[#041209] border-emerald-900/60 shadow-lg'
+                            : 'bg-[#0c0c0c] border-zinc-800/60 shadow-lg'
                         }`}
                       >
                         <div className="space-y-3">
                           {/* Image Thumbnail */}
                           <div className="w-full h-36 rounded-xl overflow-hidden bg-black relative">
-                            <img
+                            <img loading="lazy" decoding="async"
                               src={service.customImageUrl || '/imagenes/card-leaks.jpg'}
                               alt={service.title}
                               className="w-full h-full object-cover"
                             />
                             {service.badge && (
-                              <span className="absolute top-2 left-2 px-2 py-0.5 rounded text-[9px] font-bold bg-black/85 text-[#00ff88] border border-emerald-500/40">
+                              <span className="absolute top-2 left-2 px-2 py-0.5 rounded text-[9px] font-bold bg-black/85 text-[#00ff88] border border-zinc-700">
                                 {service.badge}
                               </span>
                             )}
@@ -1966,7 +1966,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                             </p>
                           </div>
 
-                          <div className="pt-2 border-t border-emerald-950/80 flex items-center justify-between">
+                          <div className="pt-2 border-t border-zinc-900/80 flex items-center justify-between">
                             <div>
                               <span className="text-[10px] text-slate-400 block font-mono">Desde</span>
                               <strong className="text-lg font-black text-[#00ff88] font-mono">{price}</strong>
@@ -1978,7 +1978,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                         </div>
 
                         {/* Card Actions */}
-                        <div className="pt-4 mt-3 border-t border-emerald-950/80 flex items-center justify-between gap-2">
+                        <div className="pt-4 mt-3 border-t border-zinc-900/80 flex items-center justify-between gap-2">
                           <button
                             type="button"
                             onClick={() =>
@@ -1986,7 +1986,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                             }
                             className={`px-3 py-1.5 rounded-lg text-xs font-mono font-bold transition-all cursor-pointer ${
                               service.active !== false
-                                ? 'bg-emerald-950 text-emerald-400 hover:bg-emerald-900'
+                                ? 'bg-zinc-900 text-emerald-400 hover:bg-zinc-800'
                                 : 'bg-slate-800 text-slate-400 hover:bg-slate-700'
                             }`}
                           >
@@ -2017,7 +2017,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                                 });
                                 setCurrentNav('subir-producto');
                               }}
-                              className="p-2 rounded-lg bg-emerald-950/60 hover:bg-[#00ff88] text-slate-300 hover:text-slate-950 transition-all cursor-pointer"
+                              className="p-2 rounded-lg bg-zinc-900/60 hover:bg-[#00ff88] text-slate-300 hover:text-slate-950 transition-all cursor-pointer"
                               title="Editar producto"
                             >
                               <Edit3 className="w-3.5 h-3.5" />
@@ -2060,7 +2060,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
               </div>
 
               {/* Instant Presets Bar */}
-              <div className="p-4 rounded-2xl bg-[#030e06] border border-emerald-900/60 space-y-2">
+              <div className="p-4 rounded-2xl bg-[#0a0a0a] border border-zinc-800/60 space-y-2">
                 <span className="text-xs font-bold text-slate-300 uppercase tracking-wider block font-mono">
                   Plantillas Rápidas con Artwork 8K:
                 </span>
@@ -2073,7 +2073,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                       className={`px-3 py-1.5 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer border ${
                         preset.id === 'leaks'
                           ? 'bg-rose-950/40 border-rose-500/50 text-rose-300 hover:bg-rose-900/60'
-                          : 'bg-[#020904] border-emerald-800/60 text-slate-300 hover:text-white hover:border-[#00ff88]'
+                          : 'bg-[#060606] border-zinc-700/60 text-slate-300 hover:text-white hover:border-[#00ff88]'
                       }`}
                     >
                       <span>{preset.label}</span>
@@ -2087,8 +2087,8 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                 
                 {/* Left Column: Form */}
                 <form onSubmit={handleCreateProduct} className="lg:col-span-7 space-y-4">
-                  <div className="p-6 rounded-3xl bg-[#030e06] border border-emerald-900/60 space-y-4">
-                    <h3 className="text-sm font-bold text-white uppercase tracking-wider font-mono border-b border-emerald-950 pb-2">
+                  <div className="p-6 rounded-3xl bg-[#0a0a0a] border border-zinc-800/60 space-y-4">
+                    <h3 className="text-sm font-bold text-white uppercase tracking-wider font-mono border-b border-zinc-900 pb-2">
                       1. Información Principal
                     </h3>
 
@@ -2099,7 +2099,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                         value={newProductDraft.title}
                         onChange={(e) => setNewProductDraft({ ...newProductDraft, title: e.target.value })}
                         required
-                        className="w-full px-4 py-2.5 rounded-xl bg-[#020904] border border-emerald-900/80 text-white text-sm focus:border-[#00ff88] outline-none"
+                        className="w-full px-4 py-2.5 rounded-xl bg-[#060606] border border-zinc-800/80 text-white text-sm focus:border-[#00ff88] outline-none"
                       />
                     </div>
 
@@ -2115,7 +2115,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                               categoryLabel: e.target.value === 'leaks' ? 'LEAKS & CYBER INTEL' : e.target.value.toUpperCase()
                             })
                           }
-                          className="w-full px-4 py-2.5 rounded-xl bg-[#020904] border border-emerald-900/80 text-white text-sm focus:border-[#00ff88] outline-none font-mono"
+                          className="w-full px-4 py-2.5 rounded-xl bg-[#060606] border border-zinc-800/80 text-white text-sm focus:border-[#00ff88] outline-none font-mono"
                         >
                           <option value="leaks">Leaks & Filtraciones</option>
                           <option value="streaming">Streaming 4K</option>
@@ -2131,7 +2131,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                           value={newProductDraft.badge}
                           onChange={(e) => setNewProductDraft({ ...newProductDraft, badge: e.target.value })}
                           placeholder="MÁS VENDIDO, LEAKS, etc."
-                          className="w-full px-4 py-2.5 rounded-xl bg-[#020904] border border-emerald-900/80 text-white text-sm focus:border-[#00ff88] outline-none font-mono"
+                          className="w-full px-4 py-2.5 rounded-xl bg-[#060606] border border-zinc-800/80 text-white text-sm focus:border-[#00ff88] outline-none font-mono"
                         />
                       </div>
                     </div>
@@ -2142,14 +2142,14 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                         rows={2}
                         value={newProductDraft.description}
                         onChange={(e) => setNewProductDraft({ ...newProductDraft, description: e.target.value })}
-                        className="w-full px-4 py-2.5 rounded-xl bg-[#020904] border border-emerald-900/80 text-white text-sm focus:border-[#00ff88] outline-none"
+                        className="w-full px-4 py-2.5 rounded-xl bg-[#060606] border border-zinc-800/80 text-white text-sm focus:border-[#00ff88] outline-none"
                       />
                     </div>
                   </div>
 
                   {/* Pricing and Plans */}
-                  <div className="p-6 rounded-3xl bg-[#030e06] border border-emerald-900/60 space-y-4">
-                    <h3 className="text-sm font-bold text-white uppercase tracking-wider font-mono border-b border-emerald-950 pb-2">
+                  <div className="p-6 rounded-3xl bg-[#0a0a0a] border border-zinc-800/60 space-y-4">
+                    <h3 className="text-sm font-bold text-white uppercase tracking-wider font-mono border-b border-zinc-900 pb-2">
                       2. Precios en Soles & Entrega
                     </h3>
 
@@ -2161,7 +2161,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                           value={newProductDraft.planPrice}
                           onChange={(e) => setNewProductDraft({ ...newProductDraft, planPrice: e.target.value })}
                           placeholder="S/ 15.00"
-                          className="w-full px-4 py-2.5 rounded-xl bg-[#020904] border border-emerald-900/80 text-[#00ff88] font-mono font-bold text-sm focus:border-[#00ff88] outline-none"
+                          className="w-full px-4 py-2.5 rounded-xl bg-[#060606] border border-zinc-800/80 text-[#00ff88] font-mono font-bold text-sm focus:border-[#00ff88] outline-none"
                         />
                       </div>
 
@@ -2172,7 +2172,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                           value={newProductDraft.planPeriod}
                           onChange={(e) => setNewProductDraft({ ...newProductDraft, planPeriod: e.target.value })}
                           placeholder="mes, por consulta, año"
-                          className="w-full px-4 py-2.5 rounded-xl bg-[#020904] border border-emerald-900/80 text-white text-sm focus:border-[#00ff88] outline-none font-mono"
+                          className="w-full px-4 py-2.5 rounded-xl bg-[#060606] border border-zinc-800/80 text-white text-sm focus:border-[#00ff88] outline-none font-mono"
                         />
                       </div>
 
@@ -2183,7 +2183,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                           value={newProductDraft.deliveryTime}
                           onChange={(e) => setNewProductDraft({ ...newProductDraft, deliveryTime: e.target.value })}
                           placeholder="5 min, 15 min"
-                          className="w-full px-4 py-2.5 rounded-xl bg-[#020904] border border-emerald-900/80 text-white text-sm focus:border-[#00ff88] outline-none font-mono"
+                          className="w-full px-4 py-2.5 rounded-xl bg-[#060606] border border-zinc-800/80 text-white text-sm focus:border-[#00ff88] outline-none font-mono"
                         />
                       </div>
                     </div>
@@ -2194,14 +2194,14 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                         type="text"
                         value={newProductDraft.planPerks}
                         onChange={(e) => setNewProductDraft({ ...newProductDraft, planPerks: e.target.value })}
-                        className="w-full px-4 py-2.5 rounded-xl bg-[#020904] border border-emerald-900/80 text-white text-sm focus:border-[#00ff88] outline-none"
+                        className="w-full px-4 py-2.5 rounded-xl bg-[#060606] border border-zinc-800/80 text-white text-sm focus:border-[#00ff88] outline-none"
                       />
                     </div>
                   </div>
 
                   {/* Artwork Image Selection */}
-                  <div className="p-6 rounded-3xl bg-[#030e06] border border-emerald-900/60 space-y-4">
-                    <h3 className="text-sm font-bold text-white uppercase tracking-wider font-mono border-b border-emerald-950 pb-2">
+                  <div className="p-6 rounded-3xl bg-[#0a0a0a] border border-zinc-800/60 space-y-4">
+                    <h3 className="text-sm font-bold text-white uppercase tracking-wider font-mono border-b border-zinc-900 pb-2">
                       3. Imagen del Producto
                     </h3>
 
@@ -2216,7 +2216,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                       <button
                         type="button"
                         onClick={() => imageInputRef.current?.click()}
-                        className="px-4 py-2.5 rounded-xl bg-[#020904] hover:bg-emerald-950 border border-emerald-700 text-white text-xs font-bold font-mono flex items-center gap-2 cursor-pointer"
+                        className="px-4 py-2.5 rounded-xl bg-[#060606] hover:bg-zinc-900 border border-emerald-700 text-white text-xs font-bold font-mono flex items-center gap-2 cursor-pointer"
                       >
                         <Upload className="w-4 h-4 text-[#00ff88]" />
                         <span>Subir Imagen Local</span>
@@ -2234,11 +2234,11 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                           onClick={() => setNewProductDraft({ ...newProductDraft, customImageUrl: p.url })}
                           className={`p-1 rounded-xl border text-[10px] font-mono transition-all overflow-hidden ${
                             newProductDraft.customImageUrl === p.url
-                              ? 'border-[#00ff88] bg-emerald-950'
-                              : 'border-emerald-950 bg-[#020804] text-slate-400'
+                              ? 'border-[#00ff88] bg-zinc-900'
+                              : 'border-zinc-900 bg-[#060606] text-slate-400'
                           }`}
                         >
-                          <img src={p.url} alt={p.label} className="w-full h-12 object-cover rounded-lg mb-1" />
+                          <img loading="lazy" decoding="async" src={p.url} alt={p.label} className="w-full h-12 object-cover rounded-lg mb-1" />
                           <span className="block truncate">{p.label}</span>
                         </button>
                       ))}
@@ -2248,7 +2248,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                   <div className="pt-2">
                     <button
                       type="submit"
-                      className="w-full py-3.5 rounded-2xl font-bold text-slate-950 bg-[#00ff88] hover:bg-[#00e676] shadow-[0_0_25px_rgba(0,255,136,0.4)] transition-all cursor-pointer text-sm font-mono tracking-wide"
+                      className="w-full py-3.5 rounded-2xl font-bold text-slate-950 bg-[#00ff88] hover:bg-[#00e676] transition-all cursor-pointer text-sm font-mono tracking-wide"
                     >
                       {editingServiceId ? 'Guardar Cambios del Producto' : 'Publicar Producto en la Tienda'}
                     </button>
@@ -2266,19 +2266,19 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                   </div>
 
                   {/* Rendered Preview Card */}
-                  <div className="group relative bg-[#06140c] border border-emerald-500/50 rounded-3xl overflow-hidden shadow-[0_0_40px_rgba(0,255,136,0.2)] flex flex-col justify-between">
+                  <div className="group relative bg-[#0f0f0f] border border-emerald-500/50 rounded-3xl overflow-hidden flex flex-col justify-between">
                     <div className="w-full h-52 relative overflow-hidden bg-black">
-                      <img
+                      <img loading="lazy" decoding="async"
                         src={newProductDraft.customImageUrl || '/imagenes/card-leaks.jpg'}
                         alt={newProductDraft.title}
                         className="w-full h-full object-cover"
                       />
                       {newProductDraft.badge && (
-                        <div className="absolute top-3 left-3 z-20 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider bg-black/85 text-[#00ff88] border border-emerald-500/40">
+                        <div className="absolute top-3 left-3 z-20 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider bg-black/85 text-[#00ff88] border border-zinc-700">
                           {newProductDraft.badge}
                         </div>
                       )}
-                      <div className="absolute top-3 right-3 z-20 px-2.5 py-1 rounded-full text-[10px] font-bold bg-[#040e07]/90 text-emerald-300 border border-emerald-900/60 flex items-center gap-1 font-mono">
+                      <div className="absolute top-3 right-3 z-20 px-2.5 py-1 rounded-full text-[10px] font-bold bg-[#0a0a0a]/90 text-emerald-300 border border-zinc-800/60 flex items-center gap-1 font-mono">
                         <span className="w-1.5 h-1.5 rounded-full bg-[#00ff88] animate-pulse" />
                         <span>En Stock</span>
                       </div>
@@ -2296,7 +2296,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                           {newProductDraft.description}
                         </p>
 
-                        <div className="mt-3.5 pt-3 border-t border-emerald-950 flex items-center justify-between">
+                        <div className="mt-3.5 pt-3 border-t border-zinc-900 flex items-center justify-between">
                           <div>
                             <span className="text-[10px] text-slate-400 uppercase font-mono block">Desde</span>
                             <strong className="text-2xl font-black text-[#00ff88] font-mono">
@@ -2304,11 +2304,11 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                             </strong>
                           </div>
 
-                          <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#030d07] border border-emerald-900/70">
+                          <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#090909] border border-zinc-800/70">
                             {currentUser.avatar && (currentUser.avatar.startsWith('/') || currentUser.avatar.startsWith('http') || currentUser.avatar.includes('.')) ? (
-                              <img src={currentUser.avatar} alt={currentUser.name} className="w-4 h-4 rounded-full object-cover shrink-0" />
+                              <img loading="lazy" decoding="async" src={currentUser.avatar} alt={currentUser.name} className="w-4 h-4 rounded-full object-cover shrink-0" />
                             ) : (
-                              <div className="w-5 h-5 rounded-full bg-emerald-950 flex items-center justify-center border border-emerald-500/50 shrink-0">
+                              <div className="w-5 h-5 rounded-full bg-zinc-900 flex items-center justify-center border border-emerald-500/50 shrink-0">
                                 <User className="w-3 h-3 text-[#00ff88]" />
                               </div>
                             )}
@@ -2317,7 +2317,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                         </div>
                       </div>
 
-                      <div className="pt-3 border-t border-emerald-950 flex items-center justify-between">
+                      <div className="pt-3 border-t border-zinc-900 flex items-center justify-between">
                         <span className="text-[11px] text-slate-400 font-mono">
                           <span className="inline-flex items-center gap-1"><Zap className="w-3 h-3 text-[#00ff88]" /> {newProductDraft.deliveryTime}</span>
                         </span>
@@ -2349,7 +2349,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                 </p>
               </div>
 
-              <div className="p-6 sm:p-8 rounded-3xl bg-[#030e06] border border-emerald-900/60 shadow-xl space-y-6">
+              <div className="p-6 sm:p-8 rounded-3xl bg-[#0a0a0a] border border-zinc-800/60 shadow-xl space-y-6">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                   <div>
                     <label className="block text-xs font-mono text-slate-300 mb-1">Número Yape:</label>
@@ -2357,7 +2357,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                       type="text"
                       defaultValue={currentUser.paymentConfig?.yapePhone || '999 888 777'}
                       onBlur={(e) => handleUpdatePaymentConfig({ yapePhone: e.target.value })}
-                      className="w-full px-4 py-2.5 rounded-xl bg-[#020904] border border-emerald-900/80 text-white font-mono text-sm focus:border-[#00ff88] outline-none"
+                      className="w-full px-4 py-2.5 rounded-xl bg-[#060606] border border-zinc-800/80 text-white font-mono text-sm focus:border-[#00ff88] outline-none"
                     />
                   </div>
 
@@ -2367,7 +2367,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                       type="text"
                       defaultValue={currentUser.paymentConfig?.plinPhone || '999 888 777'}
                       onBlur={(e) => handleUpdatePaymentConfig({ plinPhone: e.target.value })}
-                      className="w-full px-4 py-2.5 rounded-xl bg-[#020904] border border-emerald-900/80 text-white font-mono text-sm focus:border-[#00ff88] outline-none"
+                      className="w-full px-4 py-2.5 rounded-xl bg-[#060606] border border-zinc-800/80 text-white font-mono text-sm focus:border-[#00ff88] outline-none"
                     />
                   </div>
 
@@ -2377,7 +2377,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                       type="text"
                       defaultValue={currentUser.paymentConfig?.bcpAccount || '193-98765432-0-12'}
                       onBlur={(e) => handleUpdatePaymentConfig({ bcpAccount: e.target.value })}
-                      className="w-full px-4 py-2.5 rounded-xl bg-[#020904] border border-emerald-900/80 text-white font-mono text-sm focus:border-[#00ff88] outline-none"
+                      className="w-full px-4 py-2.5 rounded-xl bg-[#060606] border border-zinc-800/80 text-white font-mono text-sm focus:border-[#00ff88] outline-none"
                     />
                   </div>
 
@@ -2387,25 +2387,25 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                       type="text"
                       defaultValue={currentUser.paymentConfig?.interbankAccount || '200-3001234567'}
                       onBlur={(e) => handleUpdatePaymentConfig({ interbankAccount: e.target.value })}
-                      className="w-full px-4 py-2.5 rounded-xl bg-[#020904] border border-emerald-900/80 text-white font-mono text-sm focus:border-[#00ff88] outline-none"
+                      className="w-full px-4 py-2.5 rounded-xl bg-[#060606] border border-zinc-800/80 text-white font-mono text-sm focus:border-[#00ff88] outline-none"
                     />
                   </div>
                 </div>
 
                 {/* QR Code Upload */}
-                <div className="pt-4 border-t border-emerald-950 space-y-3">
+                <div className="pt-4 border-t border-zinc-900 space-y-3">
                   <span className="text-xs font-bold text-slate-300 uppercase tracking-wider block font-mono">
                     Código QR Personal (Yape / Plin):
                   </span>
                   <div className="flex items-center gap-4">
                     {currentUser.paymentConfig?.qrImageUrl ? (
-                      <img
+                      <img loading="lazy" decoding="async"
                         src={currentUser.paymentConfig.qrImageUrl}
                         alt="QR Personal"
-                        className="w-24 h-24 object-contain rounded-xl border border-emerald-500/40 bg-white p-1"
+                        className="w-24 h-24 object-contain rounded-xl border border-zinc-700 bg-white p-1"
                       />
                     ) : (
-                      <div className="w-24 h-24 rounded-xl border-2 border-dashed border-emerald-900 flex items-center justify-center text-slate-500">
+                      <div className="w-24 h-24 rounded-xl border-2 border-dashed border-zinc-800 flex items-center justify-center text-slate-500">
                         <QrCode className="w-8 h-8" />
                       </div>
                     )}
@@ -2420,7 +2420,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                       <button
                         type="button"
                         onClick={() => vendorQrInputRef.current?.click()}
-                        className="px-4 py-2 rounded-xl bg-[#020904] hover:bg-emerald-950 border border-emerald-700 text-white text-xs font-mono font-bold flex items-center gap-2 cursor-pointer"
+                        className="px-4 py-2 rounded-xl bg-[#060606] hover:bg-zinc-900 border border-emerald-700 text-white text-xs font-mono font-bold flex items-center gap-2 cursor-pointer"
                       >
                         <Upload className="w-4 h-4 text-[#00ff88]" />
                         <span>Subir Imagen de Mi QR</span>
@@ -2462,14 +2462,14 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                 </p>
               </div>
 
-              <div className="p-6 sm:p-8 rounded-3xl bg-[#030e06] border border-emerald-900/60 shadow-xl space-y-5">
+              <div className="p-6 sm:p-8 rounded-3xl bg-[#0a0a0a] border border-zinc-800/60 shadow-xl space-y-5">
                 <div>
                   <label className="block text-xs font-mono text-slate-300 mb-1">Nombre Público:</label>
                   <input
                     type="text"
                     defaultValue={currentUser.name}
                     onBlur={(e) => handleUpdateCurrentVendor({ name: e.target.value })}
-                    className="w-full px-4 py-2.5 rounded-xl bg-[#020904] border border-emerald-900/80 text-white text-sm focus:border-[#00ff88] outline-none"
+                    className="w-full px-4 py-2.5 rounded-xl bg-[#060606] border border-zinc-800/80 text-white text-sm focus:border-[#00ff88] outline-none"
                   />
                 </div>
 
@@ -2480,7 +2480,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                       type="text"
                       defaultValue={currentUser.username}
                       onBlur={(e) => handleUpdateCurrentVendor({ username: e.target.value.replace('@', '') })}
-                      className="w-full px-4 py-2.5 rounded-xl bg-[#020904] border border-emerald-900/80 text-[#00ff88] font-mono text-sm focus:border-[#00ff88] outline-none"
+                      className="w-full px-4 py-2.5 rounded-xl bg-[#060606] border border-zinc-800/80 text-[#00ff88] font-mono text-sm focus:border-[#00ff88] outline-none"
                     />
                   </div>
 
@@ -2490,7 +2490,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                       type="text"
                       defaultValue={currentUser.telegramUrl}
                       onBlur={(e) => handleUpdateCurrentVendor({ telegramUrl: e.target.value })}
-                      className="w-full px-4 py-2.5 rounded-xl bg-[#020904] border border-emerald-900/80 text-white font-mono text-xs focus:border-[#00ff88] outline-none"
+                      className="w-full px-4 py-2.5 rounded-xl bg-[#060606] border border-zinc-800/80 text-white font-mono text-xs focus:border-[#00ff88] outline-none"
                     />
                   </div>
                 </div>
@@ -2502,7 +2502,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                       type="text"
                       defaultValue={currentUser.whatsapp || '+51 999 888 777'}
                       onBlur={(e) => handleUpdateCurrentVendor({ whatsapp: e.target.value })}
-                      className="w-full px-4 py-2.5 rounded-xl bg-[#020904] border border-emerald-900/80 text-white font-mono text-sm focus:border-[#00ff88] outline-none"
+                      className="w-full px-4 py-2.5 rounded-xl bg-[#060606] border border-zinc-800/80 text-white font-mono text-sm focus:border-[#00ff88] outline-none"
                     />
                   </div>
 
@@ -2512,7 +2512,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                       type="password"
                       defaultValue={currentUser.pin || '1234'}
                       onBlur={(e) => handleUpdateCurrentVendor({ pin: e.target.value })}
-                      className="w-full px-4 py-2.5 rounded-xl bg-[#020904] border border-emerald-900/80 text-[#00ff88] font-mono text-sm focus:border-[#00ff88] outline-none tracking-widest"
+                      className="w-full px-4 py-2.5 rounded-xl bg-[#060606] border border-zinc-800/80 text-[#00ff88] font-mono text-sm focus:border-[#00ff88] outline-none tracking-widest"
                     />
                   </div>
                 </div>
@@ -2849,7 +2849,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                                 ? 'bg-rose-500/20 text-rose-400 border border-rose-500/50'
                                 : art.severity === 'alto'
                                 ? 'bg-amber-500/20 text-amber-300 border border-amber-500/40'
-                                : 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/40'
+                                : 'bg-emerald-500/20 text-emerald-400 border border-zinc-700'
                             }`}
                           >
                             {art.severity.toUpperCase()}
@@ -2938,14 +2938,14 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                 {vendors.map((vendor) => (
                   <div
                     key={vendor.id}
-                    className="p-6 rounded-3xl bg-[#030e06] border border-emerald-900/60 shadow-xl space-y-4"
+                    className="p-6 rounded-3xl bg-[#0a0a0a] border border-zinc-800/60 shadow-xl space-y-4"
                   >
-                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-emerald-950 pb-3">
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-zinc-900 pb-3">
                       <div className="flex items-center gap-3">
                         {vendor.avatar && (vendor.avatar.startsWith('/') || vendor.avatar.startsWith('http') || vendor.avatar.includes('.')) ? (
-                          <img src={vendor.avatar} alt={vendor.name} className="w-10 h-10 rounded-full object-cover border border-emerald-500/50 shrink-0" />
+                          <img loading="lazy" decoding="async" src={vendor.avatar} alt={vendor.name} className="w-10 h-10 rounded-full object-cover border border-emerald-500/50 shrink-0" />
                         ) : (
-                          <div className="w-8 h-8 rounded-full bg-emerald-950 flex items-center justify-center border border-emerald-500/50 shrink-0">
+                          <div className="w-8 h-8 rounded-full bg-zinc-900 flex items-center justify-center border border-emerald-500/50 shrink-0">
                             <User className="w-4 h-4 text-[#00ff88]" />
                           </div>
                         )}
@@ -2970,7 +2970,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                           }}
                           className={`px-3 py-1 rounded-lg text-xs font-mono font-bold ${
                             vendor.active
-                              ? 'bg-emerald-950 text-emerald-400 border border-emerald-800'
+                              ? 'bg-zinc-900 text-emerald-400 border border-zinc-700'
                               : 'bg-rose-950 text-rose-300 border border-rose-800'
                           }`}
                         >
@@ -3004,8 +3004,8 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                               }}
                               className={`p-2.5 rounded-xl border text-xs font-mono text-left flex items-center justify-between cursor-pointer transition-all ${
                                 isAllowed
-                                  ? 'bg-emerald-950/70 border-[#00ff88] text-white shadow-sm'
-                                  : 'bg-[#020804] border-emerald-950 text-slate-500 hover:text-slate-300'
+                                  ? 'bg-zinc-900/70 border-[#00ff88] text-white shadow-sm'
+                                  : 'bg-[#060606] border-zinc-900 text-slate-500 hover:text-slate-300'
                               }`}
                             >
                               <span className="truncate pr-2">{svc.title}</span>
@@ -3043,7 +3043,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
               </div>
 
               {/* Supabase Cloud Sync Card */}
-              <div className="p-6 sm:p-8 rounded-3xl bg-[#030e06] border border-emerald-900/60 shadow-xl space-y-4">
+              <div className="p-6 sm:p-8 rounded-3xl bg-[#0a0a0a] border border-zinc-800/60 shadow-xl space-y-4">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
                     <Database className="w-8 h-8 text-[#00ff88]" />
@@ -3064,7 +3064,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                 </div>
 
                 {supabaseSyncResult && (
-                  <div className="p-3.5 rounded-xl bg-[#020804] border border-emerald-900 font-mono text-xs text-slate-300">
+                  <div className="p-3.5 rounded-xl bg-[#060606] border border-zinc-800 font-mono text-xs text-slate-300">
                     {supabaseSyncResult}
                   </div>
                 )}
@@ -3073,7 +3073,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                   <button
                     type="button"
                     onClick={handleCopySupabaseSql}
-                    className="px-3.5 py-2 rounded-xl bg-[#020804] hover:bg-emerald-950 border border-emerald-800 text-[#00ff88] text-xs font-mono font-bold flex items-center gap-1.5 cursor-pointer"
+                    className="px-3.5 py-2 rounded-xl bg-[#060606] hover:bg-zinc-900 border border-zinc-700 text-[#00ff88] text-xs font-mono font-bold flex items-center gap-1.5 cursor-pointer"
                   >
                     <Copy className="w-3.5 h-3.5" />
                     <span>Copiar Script SQL Supabase</span>
@@ -3088,14 +3088,14 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                 </div>
 
                 {showSqlSchema && (
-                  <pre className="p-4 rounded-xl bg-black border border-emerald-950 text-[11px] font-mono text-emerald-300 overflow-x-auto max-h-48 select-all">
+                  <pre className="p-4 rounded-xl bg-black border border-zinc-900 text-[11px] font-mono text-emerald-300 overflow-x-auto max-h-48 select-all">
                     {SUPABASE_SQL_SCHEMA}
                   </pre>
                 )}
               </div>
 
               {/* JSON Backup & Restore Card */}
-              <div className="p-6 sm:p-8 rounded-3xl bg-[#030e06] border border-emerald-900/60 shadow-xl space-y-4">
+              <div className="p-6 sm:p-8 rounded-3xl bg-[#0a0a0a] border border-zinc-800/60 shadow-xl space-y-4">
                 <h3 className="text-base font-black text-white font-mono">Copia de Seguridad Completa (JSON)</h3>
                 <p className="text-xs text-slate-400 font-mono">
                   Exporta e importa productos, telemetría de clics, cuentas de cobro y configuración de vendedores en un único archivo JSON seguro.
@@ -3105,7 +3105,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                   <button
                     type="button"
                     onClick={handleExportBackup}
-                    className="px-4 py-2.5 rounded-xl bg-[#020904] hover:bg-emerald-950 border border-emerald-700 text-white font-bold text-xs font-mono flex items-center gap-2 cursor-pointer"
+                    className="px-4 py-2.5 rounded-xl bg-[#060606] hover:bg-zinc-900 border border-emerald-700 text-white font-bold text-xs font-mono flex items-center gap-2 cursor-pointer"
                   >
                     <Download className="w-4 h-4 text-[#00ff88]" />
                     <span>Descargar Backup JSON</span>
@@ -3121,7 +3121,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                   <button
                     type="button"
                     onClick={() => backupInputRef.current?.click()}
-                    className="px-4 py-2.5 rounded-xl bg-[#020904] hover:bg-emerald-950 border border-emerald-700 text-white font-bold text-xs font-mono flex items-center gap-2 cursor-pointer"
+                    className="px-4 py-2.5 rounded-xl bg-[#060606] hover:bg-zinc-900 border border-emerald-700 text-white font-bold text-xs font-mono flex items-center gap-2 cursor-pointer"
                   >
                     <FileUp className="w-4 h-4 text-[#00ff88]" />
                     <span>Restaurar desde JSON</span>
@@ -3136,3 +3136,4 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
     </div>
   );
 };
+

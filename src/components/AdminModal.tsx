@@ -297,8 +297,8 @@ export const AdminModal: React.FC<AdminModalProps> = ({
     { label: 'Streaming 4K', url: '/imagenes/card-streaming.png' },
     { label: 'Ciber OSINT', url: '/imagenes/card-investigacion.png' },
     { label: 'Lab RAT & RedTeam', url: '/imagenes/card-educacion.png' },
-    { label: 'Cyber Wide Neon', url: '/imagenes/hero-bg-wide.jpg' },
-    { label: 'Atom Core', url: '/imagenes/hero-circle.png' }
+    { label: 'Cyber Wide Neon', url: '/imagenes/hero-bg-wide.webp' },
+    { label: 'Atom Core', url: '/imagenes/hero-circle.webp' }
   ];
 
   // ==========================================
@@ -543,12 +543,12 @@ export const AdminModal: React.FC<AdminModalProps> = ({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 bg-black/85 backdrop-blur-md animate-fade-in">
-      <div className="relative w-full max-w-5xl h-[94vh] flex flex-col bg-[#051109] border border-emerald-500/40 rounded-2xl sm:rounded-3xl shadow-[0_0_60px_rgba(0,255,136,0.25)] overflow-hidden">
+      <div className="relative w-full max-w-5xl h-[94vh] flex flex-col bg-[#0c0c0c] border border-zinc-700 rounded-2xl sm:rounded-3xl overflow-hidden">
         
         {/* Top Header Bar */}
-        <div className="flex items-center justify-between px-5 py-3.5 bg-[#07190e] border-b border-emerald-900/60 shrink-0">
+        <div className="flex items-center justify-between px-5 py-3.5 bg-[#121212] border-b border-zinc-800/60 shrink-0">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-[#00ff88] to-emerald-600 flex items-center justify-center shadow-[0_0_15px_rgba(0,255,136,0.4)]">
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-[#00ff88] to-emerald-600 flex items-center justify-center">
               <Shield className="w-5 h-5 text-slate-950 stroke-[2.5]" />
             </div>
             <div>
@@ -556,7 +556,7 @@ export const AdminModal: React.FC<AdminModalProps> = ({
                 <h3 className="text-base sm:text-lg font-black text-white tracking-wide">
                   Panel de Control Maestro
                 </h3>
-                <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-emerald-500/20 text-[#00ff88] border border-emerald-500/40">
+                <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-emerald-500/20 text-[#00ff88] border border-zinc-700">
                   Descuentos Perú v2.5
                 </span>
               </div>
@@ -582,7 +582,7 @@ export const AdminModal: React.FC<AdminModalProps> = ({
             <button
               type="button"
               onClick={onClose}
-              className="p-2 text-slate-400 hover:text-white hover:bg-emerald-950/60 rounded-xl transition-all cursor-pointer"
+              className="p-2 text-slate-400 hover:text-white hover:bg-zinc-900/60 rounded-xl transition-all cursor-pointer"
               aria-label="Cerrar panel"
             >
               <X className="w-5 h-5" />
@@ -592,7 +592,7 @@ export const AdminModal: React.FC<AdminModalProps> = ({
 
         {/* Floating Toast Notification */}
         {toastMessage && (
-          <div className="absolute top-16 right-6 z-50 flex items-center gap-2 px-4 py-2.5 rounded-xl bg-emerald-900/95 border border-[#00ff88] text-white text-xs font-bold shadow-2xl animate-fade-in">
+          <div className="absolute top-16 right-6 z-50 flex items-center gap-2 px-4 py-2.5 rounded-xl bg-zinc-800/95 border border-[#00ff88] text-white text-xs font-bold shadow-2xl animate-fade-in">
             <CheckCircle2 className="w-4 h-4 text-[#00ff88]" />
             <span>{toastMessage}</span>
           </div>
@@ -603,8 +603,8 @@ export const AdminModal: React.FC<AdminModalProps> = ({
           /* ==========================================
              LOGIN SCREEN (PIN PROTECTION)
              ========================================== */
-          <div className="flex-1 p-8 sm:p-12 flex flex-col items-center justify-center text-center overflow-y-auto bg-radial from-emerald-950/30 to-[#040e07]">
-            <div className="w-16 h-16 rounded-2xl bg-emerald-950/80 border border-emerald-500/50 flex items-center justify-center mb-5 shadow-[0_0_30px_rgba(0,255,136,0.3)]">
+          <div className="flex-1 p-8 sm:p-12 flex flex-col items-center justify-center text-center overflow-y-auto bg-radial from-zinc-900/30 to-[#0a0a0a]">
+            <div className="w-16 h-16 rounded-2xl bg-zinc-900/80 border border-emerald-500/50 flex items-center justify-center mb-5">
               <Lock className="w-8 h-8 text-[#00ff88]" />
             </div>
             <h4 className="text-2xl font-black text-white mb-2 tracking-tight">
@@ -622,7 +622,7 @@ export const AdminModal: React.FC<AdminModalProps> = ({
                   onChange={(e) => setPinInput(e.target.value)}
                   placeholder="PIN de acceso (ej: admin123)"
                   autoFocus
-                  className="w-full px-4 py-3 rounded-xl bg-[#06170e] border border-emerald-800 focus:border-[#00ff88] text-white text-center text-lg tracking-widest placeholder:tracking-normal placeholder:text-sm placeholder:text-slate-500 outline-none shadow-inner transition-all"
+                  className="w-full px-4 py-3 rounded-xl bg-[#111111] border border-zinc-700 focus:border-[#00ff88] text-white text-center text-lg tracking-widest placeholder:tracking-normal placeholder:text-sm placeholder:text-slate-500 outline-none shadow-inner transition-all"
                 />
                 {pinError && (
                   <p className="text-xs text-rose-400 mt-2 font-medium flex items-center justify-center gap-1">
@@ -634,7 +634,7 @@ export const AdminModal: React.FC<AdminModalProps> = ({
 
               <button
                 type="submit"
-                className="w-full py-3 rounded-xl font-bold text-slate-950 bg-[#00ff88] hover:bg-[#00e676] shadow-[0_0_20px_rgba(0,255,136,0.4)] active:scale-95 transition-all cursor-pointer flex items-center justify-center gap-2"
+                className="w-full py-3 rounded-xl font-bold text-slate-950 bg-[#00ff88] hover:bg-[#00e676] active:scale-95 transition-all cursor-pointer flex items-center justify-center gap-2"
               >
                 <Unlock className="w-4 h-4 stroke-[2.5]" />
                 <span>Desbloquear Panel</span>
@@ -651,8 +651,8 @@ export const AdminModal: React.FC<AdminModalProps> = ({
              ========================================== */
           <div className="flex-1 flex flex-col overflow-hidden">
             {/* KPI Live Stats Strip */}
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 px-5 py-2.5 bg-[#030c06] border-b border-emerald-950/80 text-xs shrink-0">
-              <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[#06150c] border border-emerald-950">
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 px-5 py-2.5 bg-[#080808] border-b border-zinc-900/80 text-xs shrink-0">
+              <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[#0f0f0f] border border-zinc-900">
                 <Layers className="w-4 h-4 text-[#00ff88]" />
                 <div>
                   <span className="text-[10px] text-slate-400 block">Productos</span>
@@ -660,7 +660,7 @@ export const AdminModal: React.FC<AdminModalProps> = ({
                 </div>
               </div>
 
-              <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[#06150c] border border-emerald-950">
+              <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[#0f0f0f] border border-zinc-900">
                 <Users className="w-4 h-4 text-emerald-400" />
                 <div>
                   <span className="text-[10px] text-slate-400 block">Vendedores</span>
@@ -668,7 +668,7 @@ export const AdminModal: React.FC<AdminModalProps> = ({
                 </div>
               </div>
 
-              <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[#06150c] border border-emerald-950">
+              <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[#0f0f0f] border border-zinc-900">
                 <CreditCard className="w-4 h-4 text-emerald-400" />
                 <div>
                   <span className="text-[10px] text-slate-400 block">Métodos de Pago</span>
@@ -676,7 +676,7 @@ export const AdminModal: React.FC<AdminModalProps> = ({
                 </div>
               </div>
 
-              <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[#06150c] border border-emerald-950">
+              <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[#0f0f0f] border border-zinc-900">
                 <Shield className="w-4 h-4 text-[#00ff88]" />
                 <div>
                   <span className="text-[10px] text-slate-400 block">Modo Maestro</span>
@@ -686,14 +686,14 @@ export const AdminModal: React.FC<AdminModalProps> = ({
             </div>
 
             {/* Navigation Tabs Bar */}
-            <div className="flex items-center justify-between px-5 bg-[#040f07] border-b border-emerald-950/80 shrink-0 overflow-x-auto">
+            <div className="flex items-center justify-between px-5 bg-[#0a0a0a] border-b border-zinc-900/80 shrink-0 overflow-x-auto">
               <div className="flex items-center gap-1 sm:gap-2">
                 <button
                   type="button"
                   onClick={() => setActiveTab('productos')}
                   className={`flex items-center gap-2 px-4 py-3 text-xs sm:text-sm font-bold border-b-2 transition-all cursor-pointer whitespace-nowrap ${
                     activeTab === 'productos'
-                      ? 'border-[#00ff88] text-[#00ff88] bg-emerald-950/20'
+                      ? 'border-[#00ff88] text-[#00ff88] bg-zinc-900/20'
                       : 'border-transparent text-slate-400 hover:text-white'
                   }`}
                 >
@@ -706,7 +706,7 @@ export const AdminModal: React.FC<AdminModalProps> = ({
                   onClick={() => setActiveTab('vendedores')}
                   className={`flex items-center gap-2 px-4 py-3 text-xs sm:text-sm font-bold border-b-2 transition-all cursor-pointer whitespace-nowrap ${
                     activeTab === 'vendedores'
-                      ? 'border-[#00ff88] text-[#00ff88] bg-emerald-950/20'
+                      ? 'border-[#00ff88] text-[#00ff88] bg-zinc-900/20'
                       : 'border-transparent text-slate-400 hover:text-white'
                   }`}
                 >
@@ -719,7 +719,7 @@ export const AdminModal: React.FC<AdminModalProps> = ({
                   onClick={() => setActiveTab('pagos')}
                   className={`flex items-center gap-2 px-4 py-3 text-xs sm:text-sm font-bold border-b-2 transition-all cursor-pointer whitespace-nowrap ${
                     activeTab === 'pagos'
-                      ? 'border-[#00ff88] text-[#00ff88] bg-emerald-950/20'
+                      ? 'border-[#00ff88] text-[#00ff88] bg-zinc-900/20'
                       : 'border-transparent text-slate-400 hover:text-white'
                   }`}
                 >
@@ -732,7 +732,7 @@ export const AdminModal: React.FC<AdminModalProps> = ({
                   onClick={() => setActiveTab('seguridad')}
                   className={`flex items-center gap-2 px-4 py-3 text-xs sm:text-sm font-bold border-b-2 transition-all cursor-pointer whitespace-nowrap ${
                     activeTab === 'seguridad'
-                      ? 'border-[#00ff88] text-[#00ff88] bg-emerald-950/20'
+                      ? 'border-[#00ff88] text-[#00ff88] bg-zinc-900/20'
                       : 'border-transparent text-slate-400 hover:text-white'
                   }`}
                 >
@@ -746,8 +746,8 @@ export const AdminModal: React.FC<AdminModalProps> = ({
             {activeTab === 'productos' && (
               <div className="flex-1 grid grid-cols-1 md:grid-cols-12 overflow-hidden">
                 {/* Left: Product List & Search */}
-                <div className="md:col-span-4 border-r border-emerald-950/80 bg-[#040e07] p-3 sm:p-4 overflow-y-auto flex flex-col gap-2.5">
-                  <div className="flex items-center justify-between gap-2 pb-2 border-b border-emerald-950">
+                <div className="md:col-span-4 border-r border-zinc-900/80 bg-[#0a0a0a] p-3 sm:p-4 overflow-y-auto flex flex-col gap-2.5">
+                  <div className="flex items-center justify-between gap-2 pb-2 border-b border-zinc-900">
                     <span className="text-xs font-bold text-slate-300 uppercase tracking-wider">
                       Catálogo
                     </span>
@@ -767,7 +767,7 @@ export const AdminModal: React.FC<AdminModalProps> = ({
                     value={productSearch}
                     onChange={(e) => setProductSearch(e.target.value)}
                     placeholder="Filtrar por nombre..."
-                    className="w-full px-3 py-2 rounded-xl bg-[#06170e] border border-emerald-900/60 text-white text-xs placeholder-slate-500 focus:border-[#00ff88] outline-none"
+                    className="w-full px-3 py-2 rounded-xl bg-[#111111] border border-zinc-800/60 text-white text-xs placeholder-slate-500 focus:border-[#00ff88] outline-none"
                   />
 
                   {/* Product Items */}
@@ -788,12 +788,12 @@ export const AdminModal: React.FC<AdminModalProps> = ({
                           onClick={() => setSelectedServiceId(service.id)}
                           className={`p-2.5 rounded-xl border transition-all cursor-pointer flex items-center gap-3 ${
                             isSelected
-                              ? 'bg-emerald-950/60 border-[#00ff88] shadow-[0_0_15px_rgba(0,255,136,0.15)]'
-                              : 'bg-[#06170e]/70 border-emerald-900/40 hover:border-emerald-700/60 hover:bg-[#081e13]'
+                              ? 'bg-zinc-900/60 border-[#00ff88]'
+                              : 'bg-[#111111]/70 border-zinc-800/40 hover:border-emerald-700/60 hover:bg-[#161616]'
                           }`}
                         >
-                          <div className="w-12 h-12 rounded-lg overflow-hidden bg-black shrink-0 border border-emerald-900/50">
-                            <img
+                          <div className="w-12 h-12 rounded-lg overflow-hidden bg-black shrink-0 border border-zinc-800/50">
+                            <img loading="lazy" decoding="async"
                               src={displayImg}
                               alt=""
                               className="w-full h-full object-cover"
@@ -829,11 +829,11 @@ export const AdminModal: React.FC<AdminModalProps> = ({
                 </div>
 
                 {/* Right: Rich Product Deep Editor */}
-                <div className="md:col-span-8 p-4 sm:p-6 overflow-y-auto bg-[#05130b] flex flex-col gap-6">
+                <div className="md:col-span-8 p-4 sm:p-6 overflow-y-auto bg-[#0e0e0e] flex flex-col gap-6">
                   {currentService ? (
                     <div className="space-y-6">
                       {/* Top Bar for Selected Product */}
-                      <div className="flex flex-wrap items-center justify-between gap-3 pb-4 border-b border-emerald-900/60">
+                      <div className="flex flex-wrap items-center justify-between gap-3 pb-4 border-b border-zinc-800/60">
                         <div>
                           <span className="text-[10px] font-bold uppercase tracking-widest text-emerald-400">
                             Editando Producto ID: {currentService.id}
@@ -853,7 +853,7 @@ export const AdminModal: React.FC<AdminModalProps> = ({
                             }
                             className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
                               currentService.active !== false
-                                ? 'bg-emerald-500/20 text-[#00ff88] border border-emerald-500/40 hover:bg-emerald-500/30'
+                                ? 'bg-emerald-500/20 text-[#00ff88] border border-zinc-700 hover:bg-emerald-500/30'
                                 : 'bg-slate-800 text-slate-400 border border-slate-700 hover:text-white'
                             }`}
                           >
@@ -872,7 +872,7 @@ export const AdminModal: React.FC<AdminModalProps> = ({
                       </div>
 
                       {/* SECTION A: IMAGEN DEL PRODUCTO (MULTIMEDIA) */}
-                      <div className="p-4 rounded-2xl bg-[#030c06] border border-emerald-900/60 space-y-4">
+                      <div className="p-4 rounded-2xl bg-[#080808] border border-zinc-800/60 space-y-4">
                         <div className="flex items-center justify-between">
                           <h5 className="text-xs font-bold text-white uppercase tracking-wider flex items-center gap-2">
                             <ImageIcon className="w-4 h-4 text-[#00ff88]" />
@@ -885,8 +885,8 @@ export const AdminModal: React.FC<AdminModalProps> = ({
 
                         {/* Live Image Preview & Actions */}
                         <div className="grid grid-cols-1 sm:grid-cols-12 gap-4 items-center">
-                          <div className="sm:col-span-5 h-44 rounded-xl overflow-hidden bg-black border border-emerald-500/40 relative shadow-lg group">
-                            <img
+                          <div className="sm:col-span-5 h-44 rounded-xl overflow-hidden bg-black border border-zinc-700 relative shadow-lg group">
+                            <img loading="lazy" decoding="async"
                               src={
                                 currentService.customImageUrl ||
                                 (currentService.category === 'streaming'
@@ -920,7 +920,7 @@ export const AdminModal: React.FC<AdminModalProps> = ({
                               <button
                                 type="button"
                                 onClick={() => productImageInputRef.current?.click()}
-                                className="w-full py-2.5 px-4 rounded-xl bg-emerald-950/80 hover:bg-emerald-900 border border-emerald-500/40 text-xs font-bold text-[#00ff88] transition-all cursor-pointer flex items-center justify-center gap-2 shadow"
+                                className="w-full py-2.5 px-4 rounded-xl bg-zinc-900/80 hover:bg-zinc-800 border border-zinc-700 text-xs font-bold text-[#00ff88] transition-all cursor-pointer flex items-center justify-center gap-2 shadow"
                               >
                                 <Upload className="w-4 h-4" />
                                 <span>Seleccionar archivo (JPG, PNG, WebP)</span>
@@ -938,7 +938,7 @@ export const AdminModal: React.FC<AdminModalProps> = ({
                                   handleUpdateCurrentService({ customImageUrl: e.target.value })
                                 }
                                 placeholder="https://ejemplo.com/imagen.jpg o /imagenes/..."
-                                className="w-full px-3 py-2 rounded-xl bg-[#06170e] border border-emerald-800 text-white text-xs focus:border-[#00ff88] outline-none"
+                                className="w-full px-3 py-2 rounded-xl bg-[#111111] border border-zinc-700 text-white text-xs focus:border-[#00ff88] outline-none"
                               />
                             </div>
 
@@ -955,7 +955,7 @@ export const AdminModal: React.FC<AdminModalProps> = ({
                                     onClick={() =>
                                       handleUpdateCurrentService({ customImageUrl: preset.url })
                                     }
-                                    className="px-2 py-1 rounded-lg bg-[#07190e] hover:bg-emerald-950 text-[10px] font-medium text-slate-300 border border-emerald-900/60 hover:border-emerald-500/40 transition-all cursor-pointer"
+                                    className="px-2 py-1 rounded-lg bg-[#121212] hover:bg-zinc-900 text-[10px] font-medium text-slate-300 border border-zinc-800/60 hover:border-emerald-500/40 transition-all cursor-pointer"
                                   >
                                     {preset.label}
                                   </button>
@@ -967,7 +967,7 @@ export const AdminModal: React.FC<AdminModalProps> = ({
                       </div>
 
                       {/* SECTION B: TEXTOS BÁSICOS DEL PRODUCTO */}
-                      <div className="p-4 rounded-2xl bg-[#030c06] border border-emerald-900/60 space-y-4">
+                      <div className="p-4 rounded-2xl bg-[#080808] border border-zinc-800/60 space-y-4">
                         <h5 className="text-xs font-bold text-white uppercase tracking-wider flex items-center gap-2">
                           <Edit3 className="w-4 h-4 text-[#00ff88]" />
                           <span>Textos del Producto y Catálogo</span>
@@ -984,7 +984,7 @@ export const AdminModal: React.FC<AdminModalProps> = ({
                               onChange={(e) =>
                                 handleUpdateCurrentService({ title: e.target.value })
                               }
-                              className="w-full px-3 py-2 rounded-xl bg-[#06170e] border border-emerald-800 text-white text-xs focus:border-[#00ff88] outline-none font-semibold"
+                              className="w-full px-3 py-2 rounded-xl bg-[#111111] border border-zinc-700 text-white text-xs focus:border-[#00ff88] outline-none font-semibold"
                             />
                           </div>
 
@@ -1000,7 +1000,7 @@ export const AdminModal: React.FC<AdminModalProps> = ({
                                   visualType: e.target.value as any
                                 })
                               }
-                              className="w-full px-3 py-2 rounded-xl bg-[#06170e] border border-emerald-800 text-white text-xs focus:border-[#00ff88] outline-none cursor-pointer"
+                              className="w-full px-3 py-2 rounded-xl bg-[#111111] border border-zinc-700 text-white text-xs focus:border-[#00ff88] outline-none cursor-pointer"
                             >
                               <option value="streaming">Streaming</option>
                               <option value="investigacion">Investigación digital</option>
@@ -1021,7 +1021,7 @@ export const AdminModal: React.FC<AdminModalProps> = ({
                                 handleUpdateCurrentService({ categoryLabel: e.target.value })
                               }
                               placeholder="Ej: ENTRETENIMIENTO"
-                              className="w-full px-3 py-2 rounded-xl bg-[#06170e] border border-emerald-800 text-white text-xs focus:border-[#00ff88] outline-none"
+                              className="w-full px-3 py-2 rounded-xl bg-[#111111] border border-zinc-700 text-white text-xs focus:border-[#00ff88] outline-none"
                             />
                           </div>
 
@@ -1036,7 +1036,7 @@ export const AdminModal: React.FC<AdminModalProps> = ({
                                 handleUpdateCurrentService({ subItemLabel: e.target.value })
                               }
                               placeholder="Ej: Consultar disponibilidad"
-                              className="w-full px-3 py-2 rounded-xl bg-[#06170e] border border-emerald-800 text-white text-xs focus:border-[#00ff88] outline-none"
+                              className="w-full px-3 py-2 rounded-xl bg-[#111111] border border-zinc-700 text-white text-xs focus:border-[#00ff88] outline-none"
                             />
                           </div>
 
@@ -1051,7 +1051,7 @@ export const AdminModal: React.FC<AdminModalProps> = ({
                                 handleUpdateCurrentService({ buttonLabel: e.target.value })
                               }
                               placeholder="Ej: Ver opciones →"
-                              className="w-full px-3 py-2 rounded-xl bg-[#06170e] border border-emerald-800 text-white text-xs focus:border-[#00ff88] outline-none"
+                              className="w-full px-3 py-2 rounded-xl bg-[#111111] border border-zinc-700 text-white text-xs focus:border-[#00ff88] outline-none"
                             />
                           </div>
                         </div>
@@ -1066,13 +1066,13 @@ export const AdminModal: React.FC<AdminModalProps> = ({
                             onChange={(e) =>
                               handleUpdateCurrentService({ description: e.target.value })
                             }
-                            className="w-full px-3 py-2 rounded-xl bg-[#06170e] border border-emerald-800 text-white text-xs focus:border-[#00ff88] outline-none leading-relaxed"
+                            className="w-full px-3 py-2 rounded-xl bg-[#111111] border border-zinc-700 text-white text-xs focus:border-[#00ff88] outline-none leading-relaxed"
                           />
                         </div>
                       </div>
 
                       {/* SECTION C: DETALLES, GARANTÍAS Y TIEMPOS */}
-                      <div className="p-4 rounded-2xl bg-[#030c06] border border-emerald-900/60 space-y-4">
+                      <div className="p-4 rounded-2xl bg-[#080808] border border-zinc-800/60 space-y-4">
                         <h5 className="text-xs font-bold text-white uppercase tracking-wider flex items-center gap-2">
                           <Sparkles className="w-4 h-4 text-[#00ff88]" />
                           <span>Detalles y Garantías (Ventana Modal de Compra)</span>
@@ -1088,7 +1088,7 @@ export const AdminModal: React.FC<AdminModalProps> = ({
                             onChange={(e) =>
                               handleUpdateCurrentServiceDetails({ overview: e.target.value })
                             }
-                            className="w-full px-3 py-2 rounded-xl bg-[#06170e] border border-emerald-800 text-white text-xs focus:border-[#00ff88] outline-none leading-relaxed"
+                            className="w-full px-3 py-2 rounded-xl bg-[#111111] border border-zinc-700 text-white text-xs focus:border-[#00ff88] outline-none leading-relaxed"
                           />
                         </div>
 
@@ -1104,7 +1104,7 @@ export const AdminModal: React.FC<AdminModalProps> = ({
                                 handleUpdateCurrentServiceDetails({ deliveryTime: e.target.value })
                               }
                               placeholder="Ej: Entrega en 3 a 10 minutos"
-                              className="w-full px-3 py-2 rounded-xl bg-[#06170e] border border-emerald-800 text-white text-xs focus:border-[#00ff88] outline-none"
+                              className="w-full px-3 py-2 rounded-xl bg-[#111111] border border-zinc-700 text-white text-xs focus:border-[#00ff88] outline-none"
                             />
                           </div>
 
@@ -1119,7 +1119,7 @@ export const AdminModal: React.FC<AdminModalProps> = ({
                                 handleUpdateCurrentServiceDetails({ supportNote: e.target.value })
                               }
                               placeholder="Ej: Garantía 24/7 con reemplazo inmediato"
-                              className="w-full px-3 py-2 rounded-xl bg-[#06170e] border border-emerald-800 text-white text-xs focus:border-[#00ff88] outline-none"
+                              className="w-full px-3 py-2 rounded-xl bg-[#111111] border border-zinc-700 text-white text-xs focus:border-[#00ff88] outline-none"
                             />
                           </div>
                         </div>
@@ -1133,7 +1133,7 @@ export const AdminModal: React.FC<AdminModalProps> = ({
                             {currentService.details.features?.map((feat, idx) => (
                               <div
                                 key={idx}
-                                className="flex items-center justify-between gap-2 p-2 rounded-lg bg-[#06170e] border border-emerald-950 text-xs text-slate-200"
+                                className="flex items-center justify-between gap-2 p-2 rounded-lg bg-[#111111] border border-zinc-900 text-xs text-slate-200"
                               >
                                 <span className="flex items-center gap-2">
                                   <Check className="w-3.5 h-3.5 text-[#00ff88]" />
@@ -1157,7 +1157,7 @@ export const AdminModal: React.FC<AdminModalProps> = ({
                               value={newFeatureText}
                               onChange={(e) => setNewFeatureText(e.target.value)}
                               placeholder="Añadir nueva ventaja (ej: Renovación limpia sin caídas)..."
-                              className="flex-1 px-3 py-2 rounded-xl bg-[#06170e] border border-emerald-800 text-white text-xs focus:border-[#00ff88] outline-none"
+                              className="flex-1 px-3 py-2 rounded-xl bg-[#111111] border border-zinc-700 text-white text-xs focus:border-[#00ff88] outline-none"
                               onKeyDown={(e) => {
                                 if (e.key === 'Enter') {
                                   e.preventDefault();
@@ -1168,7 +1168,7 @@ export const AdminModal: React.FC<AdminModalProps> = ({
                             <button
                               type="button"
                               onClick={handleAddFeature}
-                              className="px-3.5 py-2 rounded-xl bg-emerald-950 hover:bg-emerald-900 border border-emerald-500/40 text-[#00ff88] text-xs font-bold cursor-pointer transition-all"
+                              className="px-3.5 py-2 rounded-xl bg-zinc-900 hover:bg-zinc-800 border border-zinc-700 text-[#00ff88] text-xs font-bold cursor-pointer transition-all"
                             >
                               Añadir
                             </button>
@@ -1177,7 +1177,7 @@ export const AdminModal: React.FC<AdminModalProps> = ({
                       </div>
 
                       {/* SECTION D: PLANES Y PRECIOS */}
-                      <div className="p-4 rounded-2xl bg-[#030c06] border border-emerald-900/60 space-y-4">
+                      <div className="p-4 rounded-2xl bg-[#080808] border border-zinc-800/60 space-y-4">
                         <div className="flex items-center justify-between">
                           <h5 className="text-xs font-bold text-white uppercase tracking-wider flex items-center gap-2">
                             <DollarSign className="w-4 h-4 text-[#00ff88]" />
@@ -1198,7 +1198,7 @@ export const AdminModal: React.FC<AdminModalProps> = ({
                           {currentService.details.plans?.map((plan, idx) => (
                             <div
                               key={idx}
-                              className="p-3 rounded-xl bg-[#06170e] border border-emerald-950 flex items-center justify-between gap-3 text-xs"
+                              className="p-3 rounded-xl bg-[#111111] border border-zinc-900 flex items-center justify-between gap-3 text-xs"
                             >
                               <div>
                                 <div className="flex items-center gap-2">
@@ -1210,7 +1210,7 @@ export const AdminModal: React.FC<AdminModalProps> = ({
                                   {plan.perks?.map((p, pIdx) => (
                                     <span
                                       key={pIdx}
-                                      className="text-[9px] px-1.5 py-0.5 rounded bg-emerald-950 text-emerald-300 border border-emerald-900/50"
+                                      className="text-[9px] px-1.5 py-0.5 rounded bg-zinc-900 text-emerald-300 border border-zinc-800/50"
                                     >
                                       {p}
                                     </span>
@@ -1232,7 +1232,7 @@ export const AdminModal: React.FC<AdminModalProps> = ({
 
                         {/* Add Plan Form */}
                         {showAddPlan && (
-                          <div className="p-3 rounded-xl bg-[#05180f] border border-emerald-500/40 space-y-3">
+                          <div className="p-3 rounded-xl bg-[#111111] border border-zinc-700 space-y-3">
                             <h6 className="text-xs font-bold text-white">Nuevo Plan de Precios</h6>
                             <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
                               <input
@@ -1242,7 +1242,7 @@ export const AdminModal: React.FC<AdminModalProps> = ({
                                 onChange={(e) =>
                                   setNewPlanForm({ ...newPlanForm, name: e.target.value })
                                 }
-                                className="px-3 py-2 rounded-xl bg-[#030c06] border border-emerald-800 text-white text-xs outline-none"
+                                className="px-3 py-2 rounded-xl bg-[#080808] border border-zinc-700 text-white text-xs outline-none"
                               />
                               <input
                                 type="text"
@@ -1251,7 +1251,7 @@ export const AdminModal: React.FC<AdminModalProps> = ({
                                 onChange={(e) =>
                                   setNewPlanForm({ ...newPlanForm, price: e.target.value })
                                 }
-                                className="px-3 py-2 rounded-xl bg-[#030c06] border border-emerald-800 text-white text-xs outline-none"
+                                className="px-3 py-2 rounded-xl bg-[#080808] border border-zinc-700 text-white text-xs outline-none"
                               />
                               <input
                                 type="text"
@@ -1260,7 +1260,7 @@ export const AdminModal: React.FC<AdminModalProps> = ({
                                 onChange={(e) =>
                                   setNewPlanForm({ ...newPlanForm, period: e.target.value })
                                 }
-                                className="px-3 py-2 rounded-xl bg-[#030c06] border border-emerald-800 text-white text-xs outline-none"
+                                className="px-3 py-2 rounded-xl bg-[#080808] border border-zinc-700 text-white text-xs outline-none"
                               />
                             </div>
                             <input
@@ -1270,7 +1270,7 @@ export const AdminModal: React.FC<AdminModalProps> = ({
                               onChange={(e) =>
                                 setNewPlanForm({ ...newPlanForm, perks: e.target.value })
                               }
-                              className="w-full px-3 py-2 rounded-xl bg-[#030c06] border border-emerald-800 text-white text-xs outline-none"
+                              className="w-full px-3 py-2 rounded-xl bg-[#080808] border border-zinc-700 text-white text-xs outline-none"
                             />
                             <div className="flex gap-2 justify-end">
                               <button
@@ -1293,7 +1293,7 @@ export const AdminModal: React.FC<AdminModalProps> = ({
                       </div>
 
                       {/* SECTION E: VENDEDORES AUTORIZADOS PARA ESTE PRODUCTO */}
-                      <div className="p-4 rounded-2xl bg-[#030c06] border border-emerald-900/60 space-y-3">
+                      <div className="p-4 rounded-2xl bg-[#080808] border border-zinc-800/60 space-y-3">
                         <h5 className="text-xs font-bold text-white uppercase tracking-wider flex items-center gap-2">
                           <Users className="w-4 h-4 text-[#00ff88]" />
                           <span>Vendedores autorizados para este producto:</span>
@@ -1312,8 +1312,8 @@ export const AdminModal: React.FC<AdminModalProps> = ({
                                 onClick={() => handleToggleVendorService(vendor.id, currentService.id)}
                                 className={`px-3 py-2 rounded-xl border text-xs font-bold transition-all cursor-pointer flex items-center gap-2 ${
                                   isAuthorized
-                                    ? 'bg-emerald-950 border-[#00ff88] text-[#00ff88] shadow-[0_0_12px_rgba(0,255,136,0.2)]'
-                                    : 'bg-[#06170e] border-emerald-950 text-slate-500 hover:text-slate-300'
+                                    ? 'bg-zinc-900 border-[#00ff88] text-[#00ff88]'
+                                    : 'bg-[#111111] border-zinc-900 text-slate-500 hover:text-slate-300'
                                 }`}
                               >
                                 <span className={`w-3.5 h-3.5 rounded flex items-center justify-center text-[10px] font-black ${isAuthorized ? 'bg-[#00ff88] text-black' : 'border border-slate-600'}`}>
@@ -1336,8 +1336,8 @@ export const AdminModal: React.FC<AdminModalProps> = ({
             {activeTab === 'vendedores' && (
               <div className="flex-1 grid grid-cols-1 md:grid-cols-12 overflow-hidden">
                 {/* Left: Lista de Vendedores */}
-                <div className="md:col-span-4 border-r border-emerald-950/80 bg-[#040e07] p-3 sm:p-4 overflow-y-auto flex flex-col gap-2.5">
-                  <div className="flex items-center justify-between gap-2 pb-2 border-b border-emerald-950">
+                <div className="md:col-span-4 border-r border-zinc-900/80 bg-[#0a0a0a] p-3 sm:p-4 overflow-y-auto flex flex-col gap-2.5">
+                  <div className="flex items-center justify-between gap-2 pb-2 border-b border-zinc-900">
                     <span className="text-xs font-bold text-slate-300 uppercase tracking-wider">
                       Vendedores ({vendors.length})
                     </span>
@@ -1359,8 +1359,8 @@ export const AdminModal: React.FC<AdminModalProps> = ({
                         onClick={() => setSelectedVendorId(vendor.id)}
                         className={`p-3 rounded-xl border transition-all cursor-pointer flex flex-col gap-1.5 ${
                           isSelected
-                            ? 'bg-emerald-950/60 border-[#00ff88] shadow-[0_0_15px_rgba(0,255,136,0.15)]'
-                            : 'bg-[#06170e]/70 border-emerald-900/40 hover:border-emerald-700/60 hover:bg-[#081e13]'
+                            ? 'bg-zinc-900/60 border-[#00ff88]'
+                            : 'bg-[#111111]/70 border-zinc-800/40 hover:border-emerald-700/60 hover:bg-[#161616]'
                         }`}
                       >
                         <div className="flex items-center justify-between">
@@ -1370,7 +1370,7 @@ export const AdminModal: React.FC<AdminModalProps> = ({
                           <span
                             className={`text-[9px] font-bold px-2 py-0.5 rounded-full ${
                               vendor.active
-                                ? 'bg-emerald-500/20 text-[#00ff88] border border-emerald-500/40'
+                                ? 'bg-emerald-500/20 text-[#00ff88] border border-zinc-700'
                                 : 'bg-slate-800 text-slate-400'
                             }`}
                           >
@@ -1390,11 +1390,11 @@ export const AdminModal: React.FC<AdminModalProps> = ({
                 </div>
 
                 {/* Right: Vendor Permissions & Details */}
-                <div className="md:col-span-8 p-4 sm:p-6 overflow-y-auto bg-[#05130b] flex flex-col gap-6">
+                <div className="md:col-span-8 p-4 sm:p-6 overflow-y-auto bg-[#0e0e0e] flex flex-col gap-6">
                   {currentVendor ? (
                     <div className="space-y-6">
                       {/* Vendor Header */}
-                      <div className="flex items-start justify-between gap-4 pb-4 border-b border-emerald-900/60">
+                      <div className="flex items-start justify-between gap-4 pb-4 border-b border-zinc-800/60">
                         <div>
                           <div className="flex items-center gap-2">
                             <h4 className="text-xl font-black text-white">{currentVendor.name}</h4>
@@ -1403,7 +1403,7 @@ export const AdminModal: React.FC<AdminModalProps> = ({
                               onClick={() => handleUpdateVendor(currentVendor.id, 'active', !currentVendor.active)}
                               className={`text-[10px] font-bold px-2.5 py-1 rounded-full cursor-pointer transition-all ${
                                 currentVendor.active
-                                  ? 'bg-emerald-500/20 text-[#00ff88] border border-emerald-500/40'
+                                  ? 'bg-emerald-500/20 text-[#00ff88] border border-zinc-700'
                                   : 'bg-rose-950 text-rose-400 border border-rose-800'
                               }`}
                             >
@@ -1461,8 +1461,8 @@ export const AdminModal: React.FC<AdminModalProps> = ({
                                 key={service.id}
                                 className={`p-3 rounded-xl border transition-all flex items-center justify-between gap-3 ${
                                   isAuthorized
-                                    ? 'bg-emerald-950/40 border-emerald-500/50'
-                                    : 'bg-[#030c06] border-emerald-950/80 opacity-60'
+                                    ? 'bg-zinc-900/40 border-emerald-500/50'
+                                    : 'bg-[#080808] border-zinc-900/80 opacity-60'
                                 }`}
                               >
                                 <div className="flex items-center gap-3">
@@ -1471,7 +1471,7 @@ export const AdminModal: React.FC<AdminModalProps> = ({
                                     onClick={() => handleToggleVendorService(currentVendor.id, service.id)}
                                     className={`w-6 h-6 rounded-lg border flex items-center justify-center transition-all cursor-pointer ${
                                       isAuthorized
-                                        ? 'bg-[#00ff88] border-[#00ff88] text-slate-950 shadow-[0_0_8px_#00ff88]'
+                                        ? 'bg-[#00ff88] border-[#00ff88] text-slate-950'
                                         : 'bg-transparent border-slate-600 text-transparent'
                                     }`}
                                   >
@@ -1513,7 +1513,7 @@ export const AdminModal: React.FC<AdminModalProps> = ({
                       </div>
 
                       {/* DATOS DE CONTACTO Y MÉTODOS DE PAGO DEL VENDEDOR */}
-                      <div className="p-4 rounded-2xl bg-[#030c06] border border-emerald-900/60 space-y-3">
+                      <div className="p-4 rounded-2xl bg-[#080808] border border-zinc-800/60 space-y-3">
                         <h5 className="text-xs font-bold text-white uppercase tracking-wider">
                           Canal de Atención & Métodos de Pago
                         </h5>
@@ -1527,7 +1527,7 @@ export const AdminModal: React.FC<AdminModalProps> = ({
                               type="text"
                               value={currentVendor.name}
                               onChange={(e) => handleUpdateVendor(currentVendor.id, 'name', e.target.value)}
-                              className="w-full px-3 py-2 rounded-xl bg-[#06170e] border border-emerald-800 text-white text-xs outline-none"
+                              className="w-full px-3 py-2 rounded-xl bg-[#111111] border border-zinc-700 text-white text-xs outline-none"
                             />
                           </div>
 
@@ -1543,7 +1543,7 @@ export const AdminModal: React.FC<AdminModalProps> = ({
                                 handleUpdateVendor(currentVendor.id, 'username', clean);
                                 handleUpdateVendor(currentVendor.id, 'telegramUrl', `https://t.me/${clean}`);
                               }}
-                              className="w-full px-3 py-2 rounded-xl bg-[#06170e] border border-emerald-800 text-white text-xs font-mono outline-none"
+                              className="w-full px-3 py-2 rounded-xl bg-[#111111] border border-zinc-700 text-white text-xs font-mono outline-none"
                             />
                           </div>
                         </div>
@@ -1563,7 +1563,7 @@ export const AdminModal: React.FC<AdminModalProps> = ({
                               )
                             }
                             placeholder="Yape, Plin, BCP, Interbank, BBVA..."
-                            className="w-full px-3 py-2 rounded-xl bg-[#06170e] border border-emerald-800 text-white text-xs outline-none"
+                            className="w-full px-3 py-2 rounded-xl bg-[#111111] border border-zinc-700 text-white text-xs outline-none"
                           />
                         </div>
                       </div>
@@ -1575,8 +1575,8 @@ export const AdminModal: React.FC<AdminModalProps> = ({
 
             {/* TAB CONTENT 3: MÉTODOS DE PAGO */}
             {activeTab === 'pagos' && (
-              <div className="flex-1 p-4 sm:p-6 overflow-y-auto bg-[#05130b] space-y-5">
-                <div className="flex items-center justify-between pb-3 border-b border-emerald-900/60">
+              <div className="flex-1 p-4 sm:p-6 overflow-y-auto bg-[#0e0e0e] space-y-5">
+                <div className="flex items-center justify-between pb-3 border-b border-zinc-800/60">
                   <div>
                     <h4 className="text-base font-bold text-white flex items-center gap-2">
                       <CreditCard className="w-4 h-4 text-[#00ff88]" />
@@ -1604,13 +1604,13 @@ export const AdminModal: React.FC<AdminModalProps> = ({
                       key={method.id}
                       className={`p-4 rounded-2xl border transition-all flex flex-col justify-between gap-3 ${
                         method.active
-                          ? 'bg-[#030c06] border-emerald-900/70 shadow-[0_0_15px_rgba(0,255,136,0.08)]'
-                          : 'bg-[#020704] border-slate-900 opacity-60'
+                          ? 'bg-[#080808] border-zinc-800/70'
+                          : 'bg-[#050505] border-slate-900 opacity-60'
                       }`}
                     >
                       <div>
                         {/* Header of Payment Card */}
-                        <div className="flex items-center justify-between pb-2 border-b border-emerald-950">
+                        <div className="flex items-center justify-between pb-2 border-b border-zinc-900">
                           <div className="flex items-center gap-2.5">
                             <PaymentBrandLogo methodId={method.id} methodName={method.name} size={24} />
                             <span className="text-sm font-extrabold text-white">{method.name}</span>
@@ -1622,7 +1622,7 @@ export const AdminModal: React.FC<AdminModalProps> = ({
                               onClick={() => handleTogglePaymentMethod(method.id)}
                               className={`text-[10px] font-bold px-2 py-0.5 rounded-full cursor-pointer transition-all ${
                                 method.active
-                                  ? 'bg-emerald-500/20 text-[#00ff88] border border-emerald-500/40'
+                                  ? 'bg-emerald-500/20 text-[#00ff88] border border-zinc-700'
                                   : 'bg-slate-800 text-slate-400'
                               }`}
                             >
@@ -1652,7 +1652,7 @@ export const AdminModal: React.FC<AdminModalProps> = ({
                               type="text"
                               value={method.beneficiaryName}
                               onChange={(e) => handleUpdatePaymentField(method.id, 'beneficiaryName', e.target.value)}
-                              className="w-full px-2.5 py-1.5 rounded-lg bg-[#06170e] border border-emerald-900 text-white text-xs outline-none"
+                              className="w-full px-2.5 py-1.5 rounded-lg bg-[#111111] border border-zinc-800 text-white text-xs outline-none"
                             />
                           </div>
 
@@ -1665,7 +1665,7 @@ export const AdminModal: React.FC<AdminModalProps> = ({
                                 type="text"
                                 value={method.phoneNumber}
                                 onChange={(e) => handleUpdatePaymentField(method.id, 'phoneNumber', e.target.value)}
-                                className="w-full px-2.5 py-1.5 rounded-lg bg-[#06170e] border border-emerald-900 text-white text-xs font-mono outline-none"
+                                className="w-full px-2.5 py-1.5 rounded-lg bg-[#111111] border border-zinc-800 text-white text-xs font-mono outline-none"
                               />
                             </div>
                           )}
@@ -1679,7 +1679,7 @@ export const AdminModal: React.FC<AdminModalProps> = ({
                                 type="text"
                                 value={method.accountNumber}
                                 onChange={(e) => handleUpdatePaymentField(method.id, 'accountNumber', e.target.value)}
-                                className="w-full px-2.5 py-1.5 rounded-lg bg-[#06170e] border border-emerald-900 text-white text-xs font-mono outline-none"
+                                className="w-full px-2.5 py-1.5 rounded-lg bg-[#111111] border border-zinc-800 text-white text-xs font-mono outline-none"
                               />
                             </div>
                           )}
@@ -1693,7 +1693,7 @@ export const AdminModal: React.FC<AdminModalProps> = ({
                                 type="text"
                                 value={method.cciNumber}
                                 onChange={(e) => handleUpdatePaymentField(method.id, 'cciNumber', e.target.value)}
-                                className="w-full px-2.5 py-1.5 rounded-lg bg-[#06170e] border border-emerald-900 text-white text-xs font-mono outline-none"
+                                className="w-full px-2.5 py-1.5 rounded-lg bg-[#111111] border border-zinc-800 text-white text-xs font-mono outline-none"
                               />
                             </div>
                           )}
@@ -1707,7 +1707,7 @@ export const AdminModal: React.FC<AdminModalProps> = ({
                                 type="text"
                                 value={method.cryptoNetwork}
                                 onChange={(e) => handleUpdatePaymentField(method.id, 'cryptoNetwork', e.target.value)}
-                                className="w-full px-2.5 py-1.5 rounded-lg bg-[#06170e] border border-emerald-900 text-white text-xs outline-none"
+                                className="w-full px-2.5 py-1.5 rounded-lg bg-[#111111] border border-zinc-800 text-white text-xs outline-none"
                               />
                             </div>
                           )}
@@ -1720,15 +1720,15 @@ export const AdminModal: React.FC<AdminModalProps> = ({
                               type="text"
                               value={method.instructions || ''}
                               onChange={(e) => handleUpdatePaymentField(method.id, 'instructions', e.target.value)}
-                              className="w-full px-2.5 py-1.5 rounded-lg bg-[#06170e] border border-emerald-900 text-white text-xs outline-none"
+                              className="w-full px-2.5 py-1.5 rounded-lg bg-[#111111] border border-zinc-800 text-white text-xs outline-none"
                             />
                           </div>
 
                           {/* QR Upload Feature */}
-                          <div className="pt-2 border-t border-emerald-950 flex items-center justify-between gap-2">
+                          <div className="pt-2 border-t border-zinc-900 flex items-center justify-between gap-2">
                             <div className="flex items-center gap-2">
                               {method.qrImageUrl ? (
-                                <img src={method.qrImageUrl} alt="QR" className="w-9 h-9 rounded bg-white object-contain p-0.5" />
+                                <img loading="lazy" decoding="async" src={method.qrImageUrl} alt="QR" className="w-9 h-9 rounded bg-white object-contain p-0.5" />
                               ) : (
                                 <QrCode className="w-5 h-5 text-slate-500" />
                               )}
@@ -1758,8 +1758,8 @@ export const AdminModal: React.FC<AdminModalProps> = ({
 
             {/* TAB CONTENT 4: SEGURIDAD, RESPALDOS & AJUSTES */}
             {activeTab === 'seguridad' && (
-              <div className="flex-1 p-5 sm:p-8 overflow-y-auto bg-[#05130b] space-y-6">
-                <div className="border-b border-emerald-900/60 pb-3">
+              <div className="flex-1 p-5 sm:p-8 overflow-y-auto bg-[#0e0e0e] space-y-6">
+                <div className="border-b border-zinc-800/60 pb-3">
                   <h4 className="text-base font-bold text-white">
                     Seguridad, Respaldos & Mantenimiento
                   </h4>
@@ -1770,7 +1770,7 @@ export const AdminModal: React.FC<AdminModalProps> = ({
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                   {/* Backup Card */}
-                  <div className="p-5 rounded-2xl bg-[#030c06] border border-emerald-900/60 space-y-4">
+                  <div className="p-5 rounded-2xl bg-[#080808] border border-zinc-800/60 space-y-4">
                     <h5 className="text-xs font-bold text-white uppercase tracking-wider flex items-center gap-2">
                       <Download className="w-4 h-4 text-[#00ff88]" />
                       <span>Copias de Seguridad (Exportar / Importar)</span>
@@ -1800,7 +1800,7 @@ export const AdminModal: React.FC<AdminModalProps> = ({
                       <button
                         type="button"
                         onClick={() => backupFileInputRef.current?.click()}
-                        className="flex-1 py-2.5 px-4 rounded-xl bg-emerald-950/80 hover:bg-emerald-900 border border-emerald-500/40 text-[#00ff88] font-bold text-xs transition-all cursor-pointer flex items-center justify-center gap-2"
+                        className="flex-1 py-2.5 px-4 rounded-xl bg-zinc-900/80 hover:bg-zinc-800 border border-zinc-700 text-[#00ff88] font-bold text-xs transition-all cursor-pointer flex items-center justify-center gap-2"
                       >
                         <FileUp className="w-4 h-4" />
                         <span>Restaurar Copia</span>
@@ -1809,7 +1809,7 @@ export const AdminModal: React.FC<AdminModalProps> = ({
                   </div>
 
                   {/* PIN Change Card */}
-                  <div className="p-5 rounded-2xl bg-[#030c06] border border-emerald-900/60 space-y-4">
+                  <div className="p-5 rounded-2xl bg-[#080808] border border-zinc-800/60 space-y-4">
                     <h5 className="text-xs font-bold text-white uppercase tracking-wider flex items-center gap-2">
                       <Lock className="w-4 h-4 text-[#00ff88]" />
                       <span>Cambiar PIN de Administrador</span>
@@ -1825,20 +1825,20 @@ export const AdminModal: React.FC<AdminModalProps> = ({
                           value={newPin}
                           onChange={(e) => setNewPin(e.target.value)}
                           placeholder="Nuevo PIN"
-                          className="px-3 py-2 rounded-xl bg-[#06170e] border border-emerald-800 text-white text-xs outline-none"
+                          className="px-3 py-2 rounded-xl bg-[#111111] border border-zinc-700 text-white text-xs outline-none"
                         />
                         <input
                           type="password"
                           value={confirmPin}
                           onChange={(e) => setConfirmPin(e.target.value)}
                           placeholder="Confirmar PIN"
-                          className="px-3 py-2 rounded-xl bg-[#06170e] border border-emerald-800 text-white text-xs outline-none"
+                          className="px-3 py-2 rounded-xl bg-[#111111] border border-zinc-700 text-white text-xs outline-none"
                         />
                       </div>
 
                       <button
                         type="submit"
-                        className="w-full py-2.5 rounded-xl bg-emerald-950 hover:bg-emerald-900 border border-emerald-500/40 text-[#00ff88] font-bold text-xs cursor-pointer transition-all"
+                        className="w-full py-2.5 rounded-xl bg-zinc-900 hover:bg-zinc-800 border border-zinc-700 text-[#00ff88] font-bold text-xs cursor-pointer transition-all"
                       >
                         Actualizar PIN de Seguridad
                       </button>
@@ -1866,7 +1866,7 @@ export const AdminModal: React.FC<AdminModalProps> = ({
             )}
 
             {/* Bottom Footer Actions */}
-            <div className="px-5 py-3 bg-[#040e07] border-t border-emerald-950/80 flex items-center justify-between shrink-0">
+            <div className="px-5 py-3 bg-[#0a0a0a] border-t border-zinc-900/80 flex items-center justify-between shrink-0">
               <span className="text-[11px] text-slate-400">
                 Todos los cambios se guardan automáticamente en vivo en el navegador.
               </span>
@@ -1877,7 +1877,7 @@ export const AdminModal: React.FC<AdminModalProps> = ({
                   showToast('¡Configuración guardada!');
                   onClose();
                 }}
-                className="px-6 py-2 rounded-xl font-bold text-slate-950 bg-[#00ff88] hover:bg-[#00e676] text-xs shadow-[0_0_15px_rgba(0,255,136,0.3)] cursor-pointer transition-all flex items-center gap-1.5"
+                className="px-6 py-2 rounded-xl font-bold text-slate-950 bg-[#00ff88] hover:bg-[#00e676] text-xs cursor-pointer transition-all flex items-center gap-1.5"
               >
                 <Check className="w-4 h-4 stroke-[2.5]" />
                 <span>Listo / Cerrar Panel</span>
@@ -1889,3 +1889,4 @@ export const AdminModal: React.FC<AdminModalProps> = ({
     </div>
   );
 };
+

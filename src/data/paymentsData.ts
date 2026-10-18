@@ -73,6 +73,60 @@ export const INITIAL_PAYMENT_METHODS: PaymentMethodItem[] = [
     accountNumber: '0011-0123-0200123456',
     cciNumber: '011-123-000200123456-12',
     instructions: 'Depósito o transferencia BBVA sin comisiones nacionales.'
+  },
+  {
+    id: 'lemon',
+    name: 'Lemon Cash',
+    type: 'wallet',
+    icon: 'wallet',
+    logoUrl: '/imagenes/iconos-pago/lemon-app.jpg',
+    active: true,
+    beneficiaryName: 'Descuentos Perú'
+  },
+  {
+    id: 'panda',
+    name: 'Panda',
+    type: 'wallet',
+    icon: 'wallet',
+    logoUrl: '/imagenes/iconos-pago/panda-app.jpg',
+    active: true,
+    beneficiaryName: 'Descuentos Perú'
+  },
+  {
+    id: 'pagoefectivo',
+    name: 'PagoEfectivo',
+    type: 'other',
+    icon: 'other',
+    logoUrl: '/imagenes/iconos-pago/pagoefectivo-app.jpg',
+    active: true,
+    beneficiaryName: 'Descuentos Perú'
+  },
+  {
+    id: 'moni',
+    name: 'Moni',
+    type: 'wallet',
+    icon: 'wallet',
+    logoUrl: '/imagenes/iconos-pago/moni-app.jpg',
+    active: true,
+    beneficiaryName: 'Descuentos Perú'
+  },
+  {
+    id: 'cajaarequipa',
+    name: 'Caja Arequipa',
+    type: 'bank',
+    icon: 'bank',
+    logoUrl: '/imagenes/iconos-pago/cajaarequipa-app.jpg',
+    active: true,
+    beneficiaryName: 'Descuentos Perú'
+  },
+  {
+    id: 'sip',
+    name: 'SIP',
+    type: 'wallet',
+    icon: 'wallet',
+    logoUrl: '/imagenes/iconos-pago/sip-app.jpg',
+    active: true,
+    beneficiaryName: 'Descuentos Perú'
   }
 ];
 

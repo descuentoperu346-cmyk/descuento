@@ -453,7 +453,7 @@ export const PaymentBrandLogo: React.FC<{
     return (
       <div className="flex items-center -space-x-2">
         <BinanceLogo size={size} className={className} />
-        <UsdtLogo size={Number(size) * 0.85} className="border-2 border-[#030d07]" />
+        <UsdtLogo size={Number(size) * 0.85} className="border-2 border-[#090909]" />
       </div>
     );
   }

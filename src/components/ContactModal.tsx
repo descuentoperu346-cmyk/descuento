@@ -33,10 +33,10 @@ export const ContactModal: React.FC<ContactModalProps> = ({ isOpen, onClose }) =
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 overflow-y-auto bg-black/80 backdrop-blur-md animate-in fade-in duration-200">
-      <div className="relative w-full max-w-lg bg-[#07170f] border border-emerald-500/40 rounded-2xl shadow-[0_0_50px_rgba(0,230,118,0.25)] overflow-hidden text-slate-100 my-8">
-        <div className="p-6 border-b border-emerald-950 flex items-center justify-between bg-gradient-to-r from-[#082215] to-[#06170e]">
+      <div className="relative w-full max-w-lg bg-[#111111] border border-zinc-700 rounded-2xl shadow-[0_0_50px_rgba(0,230,118,0.25)] overflow-hidden text-slate-100 my-8">
+        <div className="p-6 border-b border-zinc-900 flex items-center justify-between bg-gradient-to-r from-[#181818] to-[#111111]">
           <div className="flex items-center gap-3">
-            <img
+            <img loading="lazy" decoding="async"
               src="/imagenes/telegram-icon.png"
               alt="Telegram"
               className="w-11 h-11 object-contain filter drop-shadow-[0_0_12px_rgba(0,255,136,0.6)]"
@@ -53,7 +53,7 @@ export const ContactModal: React.FC<ContactModalProps> = ({ isOpen, onClose }) =
           <button
             type="button"
             onClick={onClose}
-            className="p-2 text-slate-400 hover:text-white rounded-xl hover:bg-emerald-950"
+            className="p-2 text-slate-400 hover:text-white rounded-xl hover:bg-zinc-900"
             aria-label="Cerrar"
           >
             <X className="w-5 h-5" />
@@ -88,7 +88,7 @@ export const ContactModal: React.FC<ContactModalProps> = ({ isOpen, onClose }) =
               <select
                 value={topic}
                 onChange={(e) => setTopic(e.target.value)}
-                className="w-full px-3.5 py-2.5 rounded-xl bg-[#05140c] border border-emerald-900 text-slate-200 text-sm focus:outline-none focus:border-emerald-400"
+                className="w-full px-3.5 py-2.5 rounded-xl bg-[#0e0e0e] border border-zinc-800 text-slate-200 text-sm focus:outline-none focus:border-emerald-400"
               >
                 <option value="leaks">Auditoría de Leaks & Filtraciones de Datos</option>
                 <option value="streaming">Servicios de Streaming (Netflix, Max, Spotify, etc.)</option>
@@ -108,7 +108,7 @@ export const ContactModal: React.FC<ContactModalProps> = ({ isOpen, onClose }) =
                 value={userHandle}
                 onChange={(e) => setUserHandle(e.target.value)}
                 placeholder="@tu_usuario o +51 9XX XXX XXX"
-                className="w-full px-3.5 py-2.5 rounded-xl bg-[#05140c] border border-emerald-900 text-slate-200 text-sm focus:outline-none focus:border-emerald-400 placeholder-slate-500"
+                className="w-full px-3.5 py-2.5 rounded-xl bg-[#0e0e0e] border border-zinc-800 text-slate-200 text-sm focus:outline-none focus:border-emerald-400 placeholder-slate-500"
               />
             </div>
 
@@ -121,7 +121,7 @@ export const ContactModal: React.FC<ContactModalProps> = ({ isOpen, onClose }) =
                 value={message}
                 onChange={(e) => setMessage(e.target.value)}
                 placeholder="Hola, me gustaría saber si tienen stock de..."
-                className="w-full px-3.5 py-2.5 rounded-xl bg-[#05140c] border border-emerald-900 text-slate-200 text-sm focus:outline-none focus:border-emerald-400 placeholder-slate-500"
+                className="w-full px-3.5 py-2.5 rounded-xl bg-[#0e0e0e] border border-zinc-800 text-slate-200 text-sm focus:outline-none focus:border-emerald-400 placeholder-slate-500"
               />
             </div>
 
@@ -131,7 +131,7 @@ export const ContactModal: React.FC<ContactModalProps> = ({ isOpen, onClose }) =
               </span>
               <button
                 type="submit"
-                className="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl text-xs sm:text-sm font-bold text-slate-950 bg-[#00ff88] hover:bg-[#00e676] shadow-[0_0_20px_rgba(0,255,136,0.3)] cursor-pointer"
+                className="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl text-xs sm:text-sm font-bold text-slate-950 bg-[#00ff88] hover:bg-[#00e676] cursor-pointer"
               >
                 <Send className="w-4 h-4 fill-slate-950" />
                 <span>Enviar a Telegram</span>
@@ -143,3 +143,4 @@ export const ContactModal: React.FC<ContactModalProps> = ({ isOpen, onClose }) =
     </div>
   );
 };
+

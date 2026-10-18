@@ -1,6 +1,7 @@
 import { Router, Response } from 'express';
 import { AuthenticatedRequest, requireAuth } from '../session';
 import { serverSupabase } from '../supabase';
+import { getCached, setCached, setCacheHeaders } from '../cache';
 
 export const vendorsRouter = Router();
 
@@ -12,6 +13,15 @@ export const vendorsRouter = Router();
 vendorsRouter.get('/', async (req: AuthenticatedRequest, res: Response): Promise<void> => {
   try {
     const isAdmin = req.sessionUser && req.sessionUser.role === 'admin';
+
+    setCacheHeaders(res, !isAdmin);
+    if (!isAdmin) {
+      const cached = getCached<unknown>('vendors:public');
+      if (cached) {
+        res.json(cached);
+        return;
+      }
+    }
 
     const { data, error } = await serverSupabase.from('vendors').select('*');
 
@@ -54,11 +64,9 @@ vendorsRouter.get('/', async (req: AuthenticatedRequest, res: Response): Promise
       return publicData;
     });
 
-    res.json({
-      success: true,
-      source: 'supabase',
-      vendors: formatted
-    });
+    const body = { success: true, source: 'supabase', vendors: formatted };
+    if (!isAdmin) setCached('vendors:public', body);
+    res.json(body);
   } catch (err: any) {
     res.status(500).json({
       success: false,

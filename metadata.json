@@ -1,6 +1,0 @@
-{
-  "name": "Descuentos Perú - Tu Mundo Digital",
-  "description": "Plataforma de servicios digitales, entretenimiento streaming, investigación digital y laboratorios educativos.",
-  "requestFramePermissions": [],
-  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
-}

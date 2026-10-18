@@ -1,15 +1,9 @@
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useMemo, useEffect, lazy, Suspense } from 'react';
 import { Navbar } from './components/Navbar';
 import { Hero } from './components/Hero';
 import { ServiceCard } from './components/ServiceCard';
 import { TelegramBanner } from './components/TelegramBanner';
 import { Footer } from './components/Footer';
-import { ServiceDetailModal } from './components/ServiceDetailModal';
-import { AdminPortal } from './pages/AdminPortal';
-import { ServicesPage } from './pages/ServicesPage';
-import { AboutPage } from './pages/AboutPage';
-import { ContactPage } from './pages/ContactPage';
-import { LeaksTab } from './components/LeaksTab';
 import { LeaksBanner } from './components/LeaksBanner';
 import { PaymentMethodsBanner } from './components/PaymentMethodsBanner';
 import { FloatingVendorsDock } from './components/FloatingVendorsDock';
@@ -55,13 +49,43 @@ import {
   Send
 } from 'lucide-react';
 
+// Carga bajo demanda: el visitante de la portada no descarga el panel admin, leaks, etc.
+const ServiceDetailModal = lazy(() => import('./components/ServiceDetailModal').then((m) => ({ default: m.ServiceDetailModal })));
+const AdminPortal = lazy(() => import('./pages/AdminPortal').then((m) => ({ default: m.AdminPortal })));
+const ServicesPage = lazy(() => import('./pages/ServicesPage').then((m) => ({ default: m.ServicesPage })));
+const AboutPage = lazy(() => import('./pages/AboutPage').then((m) => ({ default: m.AboutPage })));
+const FigureProfilePage = lazy(() => import('./pages/FigureProfilePage').then((m) => ({ default: m.FigureProfilePage })));
+const VendorCatalogPage = lazy(() => import('./pages/VendorCatalogPage').then((m) => ({ default: m.VendorCatalogPage })));
+const ContactPage = lazy(() => import('./pages/ContactPage').then((m) => ({ default: m.ContactPage })));
+const LeaksTab = lazy(() => import('./components/LeaksTab').then((m) => ({ default: m.LeaksTab })));
+
+// Catálogo por vendedor: #/tienda/<username>. Se evalúa antes que el resto de rutas.
+const readVendorSlug = (): string | null => {
+  if (typeof window === 'undefined') return null;
+  const m = window.location.hash.match(/^#\/tienda\/([^/?#]+)/i);
+  return m ? decodeURIComponent(m[1]) : null;
+};
+
+// Ficha de una figura del expediente: #/leaks/figura/<id> (página propia, sin modal).
+const readFigureId = (): string | null => {
+  if (typeof window === 'undefined') return null;
+  const m = window.location.hash.match(/^#\/leaks\/figura\/([^/?#]+)/i);
+  return m ? decodeURIComponent(m[1]) : null;
+};
+
+const PageFallback =() => <div className="min-h-[60vh]" aria-busy="true" />;
+
 export default function App() {
   // Navigation tabs: 'inicio' | 'servicios' | 'leaks' | 'nosotros' | 'contacto'
+  const [vendorSlug, setVendorSlug] = useState<string | null>(readVendorSlug);
+  const [figureId, setFigureId] = useState<string | null>(readFigureId);
   const [activeNavTab, setActiveNavTab] = useState<string>(() => {
+    if (readVendorSlug()) return 'tienda';
+    if (readFigureId()) return 'figura';
     if (typeof window !== 'undefined') {
       const hash = window.location.hash.toLowerCase();
       if (hash.includes('leaks') || hash.includes('filtrac')) return 'leaks';
-      if (hash.includes('servicios') || hash.includes('catalogo')) return 'inicio';
+      if (hash.includes('servicios') || hash.includes('catalogo')) return 'servicios';
       if (hash.includes('nosotros') || hash.includes('about')) return 'nosotros';
       if (hash.includes('contacto') || hash.includes('contact')) return 'contacto';
     }
@@ -156,9 +180,12 @@ export default function App() {
 
   // Product detail modal state (only for plan selection and purchase coordination)
   const [selectedService, setSelectedService] = useState<ServiceItem | null>(null);
+  const [modalMounted, setModalMounted] = useState(false);
+  useEffect(() => { if (selectedService) setModalMounted(true); }, [selectedService]);
 
   // Dedicated view routing: 'store' (Tienda Pública) or 'portal' (Web Completa de Vendedores & Admin)
   const [currentView, setCurrentView] = useState<'store' | 'portal'>(() => {
+    if (readVendorSlug() || readFigureId()) return 'store';
     if (typeof window !== 'undefined') {
       const hash = window.location.hash.toLowerCase();
       if (hash.includes('portal') || hash.includes('admin') || hash.includes('vendedor')) {
@@ -171,6 +198,22 @@ export default function App() {
   // Sync state with browser hash navigation (#/portal, #/servicios, #/leaks, #/nosotros, #/contacto)
   useEffect(() => {
     const handleHashChange = () => {
+      const fig = readFigureId();
+      setFigureId(fig);
+      if (fig) {
+        setVendorSlug(null);
+        setCurrentView('store');
+        setActiveNavTab('figura');
+        window.scrollTo({ top: 0 });
+        return;
+      }
+      const slug = readVendorSlug();
+      setVendorSlug(slug);
+      if (slug) {
+        setCurrentView('store');
+        setActiveNavTab('tienda');
+        return;
+      }
       const hash = window.location.hash.toLowerCase();
       if (hash.includes('portal') || hash.includes('admin') || hash.includes('vendedor')) {
         setCurrentView('portal');
@@ -179,7 +222,7 @@ export default function App() {
         if (hash.includes('leaks') || hash.includes('filtrac')) {
           setActiveNavTab('leaks');
         } else if (hash.includes('servicios') || hash.includes('catalogo')) {
-          setActiveNavTab('inicio');
+          setActiveNavTab('servicios');
         } else if (hash.includes('nosotros') || hash.includes('about')) {
           setActiveNavTab('nosotros');
         } else if (hash.includes('contacto') || hash.includes('contact')) {
@@ -230,6 +273,7 @@ export default function App() {
   // If user is in portal mode, render the complete standalone web app (no overlays, no modal over store)
   if (currentView === 'portal') {
     return (
+      <Suspense fallback={<PageFallback />}>
       <AdminPortal
         onBackToStore={navigateToStore}
         vendors={vendors}
@@ -241,20 +285,22 @@ export default function App() {
         leakArticles={leakArticles}
         onUpdateLeakArticles={handleUpdateLeakArticles}
       />
+      </Suspense>
     );
   }
 
   return (
-    <div className="min-h-screen bg-[#050b08] text-slate-100 flex flex-col font-sans selection:bg-emerald-500 selection:text-black">
+    <div className="min-h-screen text-slate-100 flex flex-col font-sans selection:bg-emerald-500 selection:text-black">
       {/* Top Navbar with Real Multi-Page Navigation */}
       <Navbar
-        activeTab={activeNavTab}
+        activeTab={activeNavTab === 'figura' ? 'leaks' : activeNavTab}
         onTabChange={handleTabChange}
         onOpenAdmin={navigateToPortal}
       />
 
       {/* Main Content Layout - Separate Views for Maximum Contrast and Flow */}
       <main className="flex-1">
+        <Suspense fallback={<PageFallback />}>
         {/* ======================= PAGE: SERVICIOS ======================= */}
         {activeNavTab === 'servicios' && (
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-10 pb-16">
@@ -269,6 +315,32 @@ export default function App() {
               }}
               paymentMethods={paymentMethods}
               onNavigateToContact={() => handleTabChange('contacto')}
+            />
+          </div>
+        )}
+
+        {/* ======================= PAGE: FICHA DE UNA FIGURA ======================= */}
+        {activeNavTab === 'figura' && figureId && (
+          <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-10 pb-20">
+            <FigureProfilePage figureId={figureId} />
+          </div>
+        )}
+
+        {/* ======================= PAGE: CATÁLOGO POR VENDEDOR ======================= */}
+        {activeNavTab === 'tienda' && vendorSlug && (
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-10 pb-16">
+            <VendorCatalogPage
+              slug={vendorSlug}
+              services={services}
+              vendors={vendors}
+              customImages={customImages}
+              onImageUpload={handleImageUpload}
+              onOpenDetails={(s) => {
+                recordProductViewEvent(s.id, s.title);
+                setSelectedService(s);
+              }}
+              paymentMethods={paymentMethods}
+              onBackToCatalog={() => handleTabChange('servicios')}
             />
           </div>
         )}
@@ -318,24 +390,24 @@ export default function App() {
 
             {/* Quick Section Jump Cards */}
             <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-1 pb-6 sm:pt-2 sm:pb-8">
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+              <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
                 {/* Card 1: Servicios */}
                 <div
                   onClick={() => handleTabChange('servicios')}
-                  className="group p-4 sm:p-5 rounded-2xl bg-gradient-to-b from-[#081a10] to-[#040e08] border border-emerald-900/60 hover:border-emerald-400/80 transition-all cursor-pointer shadow-lg hover:shadow-[0_0_25px_rgba(0,255,136,0.2)]"
+                  className="group hud-card p-4 sm:p-5 rounded-xl bg-gradient-to-b from-zinc-900 to-zinc-950 border border-zinc-800 hover:border-zinc-600 transition-all cursor-pointer hover:bg-zinc-900"
                 >
                   <div className="flex items-center justify-between mb-3">
-                    <span className="p-2.5 rounded-xl bg-emerald-950/80 text-[#00ff88] border border-emerald-500/30">
+                    <span className="p-2.5 rounded-lg bg-zinc-800 text-zinc-200 border border-zinc-700">
                       <Layers className="w-5 h-5" />
                     </span>
-                    <span className="text-[10px] font-mono font-bold text-emerald-400 bg-emerald-950/60 px-2 py-0.5 rounded-full">
+                    <span className="text-[10px] font-mono font-bold text-emerald-400 bg-zinc-900/60 px-2 py-0.5 rounded-full">
                       {services.filter((s) => s.active !== false).length} ACTIVOS
                     </span>
                   </div>
                   <h3 className="text-base font-bold text-white group-hover:text-[#00ff88] transition-colors">
                     Catálogo de Servicios
                   </h3>
-                  <p className="text-xs text-slate-400 mt-1 line-clamp-2">
+                  <p className="hidden sm:block text-xs text-slate-400 mt-1 line-clamp-2">
                     Streaming 4K, cuentas premium, licencias de software y bases OSINT verificadas.
                   </p>
                   <div className="mt-3 flex items-center gap-1 text-xs font-bold text-[#00ff88]">
@@ -347,7 +419,7 @@ export default function App() {
                 {/* Card 2: Leaks & Filtraciones */}
                 <div
                   onClick={() => handleTabChange('leaks')}
-                  className="group p-4 sm:p-5 rounded-2xl bg-gradient-to-b from-[#1c0808] to-[#0a0303] border border-rose-900/60 hover:border-rose-500/80 transition-all cursor-pointer shadow-lg hover:shadow-[0_0_25px_rgba(244,63,94,0.2)]"
+                  className="group hud-card p-4 sm:p-5 rounded-xl bg-gradient-to-b from-[#1c0808] to-[#0a0303] border border-rose-900/60 hover:border-rose-500/80 transition-all cursor-pointer hover:bg-[#240a0a]"
                 >
                   <div className="flex items-center justify-between mb-3">
                     <span className="p-2.5 rounded-xl bg-rose-950/80 text-rose-400 border border-rose-500/30">
@@ -361,7 +433,7 @@ export default function App() {
                   <h3 className="text-base font-bold text-white group-hover:text-rose-400 transition-colors">
                     Leaks & Filtraciones
                   </h3>
-                  <p className="text-xs text-slate-400 mt-1 line-clamp-2">
+                  <p className="hidden sm:block text-xs text-slate-400 mt-1 line-clamp-2">
                     Auditorías sobre brechas de datos, bases filtradas y reportes de seguridad en Perú.
                   </p>
                   <div className="mt-3 flex items-center gap-1 text-xs font-bold text-rose-400">
@@ -373,20 +445,20 @@ export default function App() {
                 {/* Card 3: Quiénes Somos */}
                 <div
                   onClick={() => handleTabChange('nosotros')}
-                  className="group p-4 sm:p-5 rounded-2xl bg-gradient-to-b from-[#081a10] to-[#040e08] border border-emerald-900/60 hover:border-emerald-400/80 transition-all cursor-pointer shadow-lg hover:shadow-[0_0_25px_rgba(0,255,136,0.2)]"
+                  className="group hud-card p-4 sm:p-5 rounded-xl bg-gradient-to-b from-zinc-900 to-zinc-950 border border-zinc-800 hover:border-zinc-600 transition-all cursor-pointer hover:bg-zinc-900"
                 >
                   <div className="flex items-center justify-between mb-3">
-                    <span className="p-2.5 rounded-xl bg-emerald-950/80 text-[#00ff88] border border-emerald-500/30">
+                    <span className="p-2.5 rounded-lg bg-zinc-800 text-zinc-200 border border-zinc-700">
                       <Users className="w-5 h-5" />
                     </span>
-                    <span className="text-[10px] font-mono font-bold text-emerald-400 bg-emerald-950/60 px-2 py-0.5 rounded-full">
+                    <span className="text-[10px] font-mono font-bold text-emerald-400 bg-zinc-900/60 px-2 py-0.5 rounded-full">
                       GARANTÍA 100%
                     </span>
                   </div>
                   <h3 className="text-base font-bold text-white group-hover:text-[#00ff88] transition-colors">
                     Quiénes Somos
                   </h3>
-                  <p className="text-xs text-slate-400 mt-1 line-clamp-2">
+                  <p className="hidden sm:block text-xs text-slate-400 mt-1 line-clamp-2">
                     Conoce nuestra trayectoria, garantías de reposición y protocolos de seguridad.
                   </p>
                   <div className="mt-3 flex items-center gap-1 text-xs font-bold text-[#00ff88]">
@@ -398,21 +470,21 @@ export default function App() {
                 {/* Card 4: Contacto & Asesores */}
                 <div
                   onClick={() => handleTabChange('contacto')}
-                  className="group p-4 sm:p-5 rounded-2xl bg-gradient-to-b from-[#081a10] to-[#040e08] border border-emerald-900/60 hover:border-emerald-400/80 transition-all cursor-pointer shadow-lg hover:shadow-[0_0_25px_rgba(0,255,136,0.2)]"
+                  className="group hud-card p-4 sm:p-5 rounded-xl bg-gradient-to-b from-zinc-900 to-zinc-950 border border-zinc-800 hover:border-zinc-600 transition-all cursor-pointer hover:bg-zinc-900"
                 >
                   <div className="flex items-center justify-between mb-3">
-                    <span className="p-2.5 rounded-xl bg-emerald-950/80 text-[#00ff88] border border-emerald-500/30">
+                    <span className="p-2.5 rounded-lg bg-zinc-800 text-zinc-200 border border-zinc-700">
                       <Send className="w-5 h-5 -rotate-12" />
                     </span>
-                    <span className="text-[10px] font-mono font-bold text-[#00ff88] bg-emerald-950/60 px-2 py-0.5 rounded-full flex items-center gap-1">
-                      <span className="w-1.5 h-1.5 rounded-full bg-[#00ff88] animate-ping" />
+                    <span className="text-[10px] font-mono font-bold text-[#00ff88] bg-zinc-900/60 px-2 py-0.5 rounded-full flex items-center gap-1">
+                      <span className="w-1.5 h-1.5 rounded-full bg-[#00ff88]" />
                       EN LÍNEA
                     </span>
                   </div>
                   <h3 className="text-base font-bold text-white group-hover:text-[#00ff88] transition-colors">
                     Contacto & Soporte
                   </h3>
-                  <p className="text-xs text-slate-400 mt-1 line-clamp-2">
+                  <p className="hidden sm:block text-xs text-slate-400 mt-1 line-clamp-2">
                     Atención personalizada por Telegram con respuesta garantizada en menos de 5 min.
                   </p>
                   <div className="mt-3 flex items-center gap-1 text-xs font-bold text-[#00ff88]">
@@ -423,11 +495,32 @@ export default function App() {
               </div>
             </section>
 
+            {/* Cómo funciona */}
+            <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
+              <p className="section-eyebrow">01 / Cómo funciona</p>
+              <h2 className="text-2xl sm:text-3xl font-black text-white tracking-tight mb-6">
+                De la elección a la activación, <span className="text-gradient">en tres pasos</span>
+              </h2>
+              <ol className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                {[
+                  { n: '01', t: 'Elige', d: 'Explora el catálogo y escoge el servicio y el plan que necesitas.' },
+                  { n: '02', t: 'Paga', d: 'Yape o tu banco preferido; envías el comprobante a tu vendedor.' },
+                  { n: '03', t: 'Recibe', d: 'Activación por Telegram en minutos, con garantía de reposición.' }
+                ].map((s) => (
+                  <li key={s.n} className="hud-card relative rounded-xl p-5 sm:p-6">
+                    <span className="font-mono text-4xl sm:text-5xl font-black text-zinc-800 select-none">{s.n}</span>
+                    <h3 className="mt-2 text-lg font-black text-white">{s.t}</h3>
+                    <p className="mt-1 text-sm text-zinc-400 leading-relaxed">{s.d}</p>
+                  </li>
+                ))}
+              </ol>
+            </section>
             {/* Featured Services Showcase */}
             <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
               <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-6">
                 <div>
-                  <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-950/70 border border-emerald-500/40 text-[11px] font-bold text-[#00ff88] mb-2">
+                  <p className="section-eyebrow">02 / Más solicitados</p>
+                  <div className="hidden">
                     <Flame className="w-3.5 h-3.5 text-amber-400" />
                     <span>MÁS SOLICITADOS ESTA SEMANA</span>
                   </div>
@@ -442,7 +535,7 @@ export default function App() {
                 <button
                   type="button"
                   onClick={() => handleTabChange('servicios')}
-                  className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold text-slate-950 bg-[#00ff88] hover:bg-[#00e676] shadow-[0_0_15px_rgba(0,255,136,0.35)] transition-all cursor-pointer whitespace-nowrap self-start sm:self-auto"
+                  className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold text-slate-950 bg-[#00ff88] hover:bg-[#00e676] transition-all cursor-pointer whitespace-nowrap self-start sm:self-auto"
                 >
                   <span>Ver Catálogo Completo</span>
                   <ArrowRight className="w-3.5 h-3.5" />
@@ -465,49 +558,7 @@ export default function App() {
                 ))}
               </div>
 
-              {/* Interactive Kusi AI Catalog Callout Banner */}
-              <div
-                onClick={() => handleTabChange('servicios')}
-                className="mt-8 relative rounded-3xl overflow-hidden border border-emerald-500/35 shadow-[0_0_35px_rgba(0,255,136,0.12)] p-4 sm:p-7 bg-gradient-to-r from-[#03130a]/95 via-[#062414]/95 to-[#020e06]/95 cursor-pointer group transition-all duration-300 hover:scale-[1.008] hover:border-[#00ff88]"
-              >
-                {/* Cyber Corner Brackets */}
-                <div className="absolute top-3 left-3 w-3 h-3 border-t-2 border-l-2 border-[#00ff88]/60 pointer-events-none group-hover:border-[#00ff88] transition-colors" />
-                <div className="absolute top-3 right-3 w-3 h-3 border-t-2 border-r-2 border-[#00ff88]/60 pointer-events-none group-hover:border-[#00ff88] transition-colors" />
-                <div className="absolute bottom-3 left-3 w-3 h-3 border-b-2 border-l-2 border-[#00ff88]/60 pointer-events-none group-hover:border-[#00ff88] transition-colors" />
-                <div className="absolute bottom-3 right-3 w-3 h-3 border-b-2 border-r-2 border-[#00ff88]/60 pointer-events-none group-hover:border-[#00ff88] transition-colors" />
-
-                <div className="relative z-10 flex flex-col md:flex-row items-stretch md:items-center justify-between gap-5">
-                  <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3.5 sm:gap-4 text-left">
-                    <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl overflow-hidden bg-emerald-950/80 border border-emerald-400/60 shadow-[0_0_15px_rgba(0,255,136,0.3)] shrink-0 flex items-center justify-center">
-                      <img
-                        src="/imagenes/llama-about.png"
-                        alt="Kusi AI"
-                        className="w-full h-full object-contain filter drop-shadow animate-float-card"
-                      />
-                    </div>
-                    <div>
-                      <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-950 border border-emerald-500/40 text-[10px] font-mono text-[#00ff88] uppercase tracking-wider mb-1">
-                        <span className="w-1.5 h-1.5 rounded-full bg-[#00ff88] animate-ping" />
-                        <span>Kusi AI · Monitoreo en Tiempo Real</span>
-                      </div>
-                      <h4 className="text-base sm:text-lg font-black text-white group-hover:text-[#00ff88] transition-colors">
-                        ¿Buscas Spotify, ChatGPT Plus, licencias originales o bases OSINT?
-                      </h4>
-                      <p className="text-xs text-slate-300 mt-0.5">
-                        Explora más de {services.length} cuentas y servicios verificados con reposición 100% garantizada.
-                      </p>
-                    </div>
-                  </div>
-
-                  <button
-                    type="button"
-                    className="w-full md:w-auto px-6 py-3 rounded-xl text-xs font-black text-slate-950 bg-[#00ff88] hover:bg-[#00e676] shadow-[0_0_20px_rgba(0,255,136,0.5)] cursor-pointer whitespace-nowrap shrink-0 transition-transform group-hover:scale-105 text-center"
-                  >
-                    Abrir Catálogo de Servicios →
-                  </button>
-                </div>
-              </div>
-            </section>
+              </section>
 
             {/* Leaks & Threat Intel Spotlight Banner */}
             <LeaksBanner onExploreLeaks={() => handleTabChange('leaks')} />
@@ -528,25 +579,29 @@ export default function App() {
 
           </>
         )}
+        </Suspense>
       </main>
 
       {/* Footer with Global Multi-Page Navigation */}
       <Footer
         onOpenAdmin={navigateToPortal}
         onNavigateTab={handleTabChange}
-        activeTab={activeNavTab}
+        activeTab={activeNavTab === 'figura' ? 'leaks' : activeNavTab}
       />
 
       {/* Interactive Detail Modal with Vendor and Payment Selection */}
-      <ServiceDetailModal
+      {modalMounted && (<Suspense fallback={null}><ServiceDetailModal
         service={selectedService}
         onClose={() => setSelectedService(null)}
         vendors={vendors}
         paymentMethods={paymentMethods}
-      />
+      /></Suspense>)}
 
       {/* Global Floating Creators Dock */}
       <FloatingVendorsDock />
     </div>
   );
 }
+
+
+

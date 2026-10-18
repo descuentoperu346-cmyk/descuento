@@ -108,25 +108,25 @@ export const ServiceDetailModal: React.FC<ServiceDetailModalProps> = ({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-6 overflow-y-auto bg-black/85 backdrop-blur-md animate-in fade-in duration-200">
-      <div className="relative w-full max-w-2xl bg-[#06140c] border border-emerald-500/40 rounded-2xl sm:rounded-3xl shadow-[0_0_60px_rgba(0,255,136,0.25)] overflow-hidden text-slate-100 my-2 sm:my-6">
+      <div className="relative w-full max-w-2xl bg-[#0f0f0f] border border-zinc-700 rounded-2xl sm:rounded-3xl overflow-hidden text-slate-100 my-2 sm:my-6">
         
         {/* Modal Banner Image */}
         <div className="relative h-48 sm:h-56 w-full overflow-hidden bg-slate-950">
-          <img
+          <img loading="lazy" decoding="async"
             src={banner}
             alt={service.title}
             className="w-full h-full object-cover object-center filter brightness-95"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#06140c] via-[#06140c]/40 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#0f0f0f] via-[#0f0f0f]/40 to-transparent" />
 
           {/* Floating Badges */}
           <div className="absolute top-3.5 left-4 flex items-center gap-2">
             {service.badge && (
-              <span className="px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider bg-black/85 text-[#00ff88] border border-emerald-500/40 shadow backdrop-blur-md">
+              <span className="px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider bg-black/85 text-[#00ff88] border border-zinc-700 shadow backdrop-blur-md">
                 {service.badge}
               </span>
             )}
-            <span className="px-2.5 py-1 rounded-full text-[10px] font-bold bg-[#040e07]/90 text-emerald-300 border border-emerald-900/60 shadow backdrop-blur-sm flex items-center gap-1">
+            <span className="px-2.5 py-1 rounded-full text-[10px] font-bold bg-[#0a0a0a]/90 text-emerald-300 border border-zinc-800/60 shadow backdrop-blur-sm flex items-center gap-1">
               <span className="w-1.5 h-1.5 rounded-full bg-[#00ff88]" />
               <span>En Stock</span>
             </span>
@@ -135,7 +135,7 @@ export const ServiceDetailModal: React.FC<ServiceDetailModalProps> = ({
           <button
             type="button"
             onClick={onClose}
-            className="absolute top-3.5 right-3.5 z-20 p-2.5 rounded-xl text-white bg-black/70 hover:bg-black border border-emerald-500/30 transition-all cursor-pointer shadow-lg"
+            className="absolute top-3.5 right-3.5 z-20 p-2.5 rounded-xl text-white bg-black/70 hover:bg-black border border-zinc-700 transition-all cursor-pointer shadow-lg"
             aria-label="Cerrar modal"
           >
             <X className="w-5 h-5" />
@@ -143,7 +143,7 @@ export const ServiceDetailModal: React.FC<ServiceDetailModalProps> = ({
         </div>
 
         {/* Modal Header */}
-        <div className="px-5 sm:px-7 pt-2 pb-4 border-b border-emerald-950/80 bg-[#06140c]">
+        <div className="px-5 sm:px-7 pt-2 pb-4 border-b border-zinc-900/80 bg-[#0f0f0f]">
           <span className="text-[11px] font-black tracking-[0.2em] text-[#00ff88] uppercase block">
             {service.categoryLabel}
           </span>
@@ -176,7 +176,7 @@ export const ServiceDetailModal: React.FC<ServiceDetailModalProps> = ({
                 {service.details.features.map((feat, idx) => (
                   <div
                     key={idx}
-                    className="flex items-start gap-2.5 text-xs text-slate-200 bg-[#040e07] p-3 rounded-xl border border-emerald-950/80 shadow-sm"
+                    className="flex items-start gap-2.5 text-xs text-slate-200 bg-[#0a0a0a] p-3 rounded-xl border border-zinc-900/80 shadow-sm"
                   >
                     <CheckCircle className="w-4 h-4 text-[#00ff88] shrink-0 mt-0.5" />
                     <span>{feat}</span>
@@ -205,8 +205,8 @@ export const ServiceDetailModal: React.FC<ServiceDetailModalProps> = ({
                       onClick={() => setSelectedPlanIndex(idx)}
                       className={`p-4 rounded-2xl border transition-all cursor-pointer flex flex-col sm:flex-row sm:items-center justify-between gap-3 ${
                         isSelected
-                          ? 'bg-[#092b1b] border-[#00ff88] shadow-[0_0_20px_rgba(0,255,136,0.25)]'
-                          : 'bg-[#040e07] border-emerald-950 hover:border-emerald-800'
+                          ? 'bg-[#1e1e1e] border-[#00ff88]'
+                          : 'bg-[#0a0a0a] border-zinc-900 hover:border-zinc-700'
                       }`}
                     >
                       <div>
@@ -222,7 +222,7 @@ export const ServiceDetailModal: React.FC<ServiceDetailModalProps> = ({
                           </div>
                           <span className="text-sm font-black text-white">{plan.name}</span>
                           {plan.popular && (
-                            <span className="text-[9px] font-black px-2 py-0.5 rounded-full bg-emerald-500/20 text-[#00ff88] border border-emerald-500/30">
+                            <span className="text-[9px] font-black px-2 py-0.5 rounded-full bg-emerald-500/20 text-[#00ff88] border border-zinc-700">
                               RECOMENDADO
                             </span>
                           )}
@@ -232,7 +232,7 @@ export const ServiceDetailModal: React.FC<ServiceDetailModalProps> = ({
                             {plan.perks.map((p, pIdx) => (
                               <span
                                 key={pIdx}
-                                className="text-[10px] text-emerald-300 bg-emerald-950/70 px-2.5 py-0.5 rounded-md border border-emerald-900/50 font-medium"
+                                className="text-[10px] text-emerald-300 bg-zinc-900/70 px-2.5 py-0.5 rounded-md border border-zinc-800/50 font-medium"
                               >
                                 {p}
                               </span>
@@ -269,20 +269,20 @@ export const ServiceDetailModal: React.FC<ServiceDetailModalProps> = ({
                       onClick={() => setSelectedVendorId(vendor.id)}
                       className={`p-3.5 rounded-2xl border transition-all cursor-pointer flex flex-col justify-between gap-2 ${
                         isSelected
-                          ? 'bg-[#092b1b] border-[#00ff88] shadow-[0_0_15px_rgba(0,255,136,0.2)]'
-                          : 'bg-[#040e07] border-emerald-950 hover:border-emerald-800'
+                          ? 'bg-[#1e1e1e] border-[#00ff88]'
+                          : 'bg-[#0a0a0a] border-zinc-900 hover:border-zinc-700'
                       }`}
                     >
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-2">
                           {vendor.avatar && (vendor.avatar.startsWith('/') || vendor.avatar.startsWith('http') || vendor.avatar.includes('.')) ? (
-                            <img
+                            <img loading="lazy" decoding="async"
                               src={vendor.avatar}
                               alt={vendor.name}
                               className="w-7 h-7 rounded-full object-cover shrink-0 border border-emerald-500/50 shadow-sm"
                             />
                           ) : (
-                            <div className="w-7 h-7 rounded-full bg-emerald-950 flex items-center justify-center border border-emerald-500/50 shrink-0">
+                            <div className="w-7 h-7 rounded-full bg-zinc-900 flex items-center justify-center border border-emerald-500/50 shrink-0">
                               <User className="w-4 h-4 text-[#00ff88]" />
                             </div>
                           )}
@@ -308,12 +308,12 @@ export const ServiceDetailModal: React.FC<ServiceDetailModalProps> = ({
 
                       {/* Vendor's accepted payments */}
                       {vendor.paymentMethods && vendor.paymentMethods.length > 0 && (
-                        <div className="text-[10px] text-slate-400 pt-2 border-t border-emerald-950 flex items-center gap-1.5 flex-wrap">
+                        <div className="text-[10px] text-slate-400 pt-2 border-t border-zinc-900 flex items-center gap-1.5 flex-wrap">
                           <span className="text-slate-400 font-medium">Acepta:</span>
                           {vendor.paymentMethods.map((pm) => (
                             <span
                               key={pm}
-                              className="inline-flex items-center gap-1 px-2 py-0.5 rounded-lg bg-[#020b06] border border-emerald-900/60 shadow-xs"
+                              className="inline-flex items-center gap-1 px-2 py-0.5 rounded-lg bg-[#080808] border border-zinc-800/60 shadow-xs"
                             >
                               <PaymentBrandLogo methodName={pm} size={14} />
                               <span className="font-bold text-white text-[10px]">{pm}</span>
@@ -328,7 +328,7 @@ export const ServiceDetailModal: React.FC<ServiceDetailModalProps> = ({
 
               {/* Vendor payment details snippet */}
               {chosenVendor?.paymentConfig && (
-                <div className="p-3.5 rounded-2xl bg-[#030d07] border border-emerald-900/60 text-xs space-y-2">
+                <div className="p-3.5 rounded-2xl bg-[#090909] border border-zinc-800/60 text-xs space-y-2">
                   <div className="flex items-center justify-between flex-wrap gap-2">
                     <span className="text-[10px] font-bold uppercase tracking-wider text-emerald-400 flex items-center gap-1">
                       <CreditCard className="w-3 h-3" /> Datos de pago de {chosenVendor.name}
@@ -359,19 +359,19 @@ export const ServiceDetailModal: React.FC<ServiceDetailModalProps> = ({
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-[11px]">
                     {chosenVendor.paymentConfig.yapePhone && (
-                      <div className="bg-[#05140c] p-2 rounded-lg border border-emerald-950">
+                      <div className="bg-[#0e0e0e] p-2 rounded-lg border border-zinc-900">
                         <span className="text-slate-400 block text-[9px] uppercase">Yape / Plin</span>
                         <strong className="text-white font-mono">{chosenVendor.paymentConfig.yapePhone}</strong>
                       </div>
                     )}
                     {chosenVendor.paymentConfig.bcpAccount && (
-                      <div className="bg-[#05140c] p-2 rounded-lg border border-emerald-950">
+                      <div className="bg-[#0e0e0e] p-2 rounded-lg border border-zinc-900">
                         <span className="text-slate-400 block text-[9px] uppercase">Cuenta BCP</span>
                         <strong className="text-white font-mono">{chosenVendor.paymentConfig.bcpAccount}</strong>
                       </div>
                     )}
                     {chosenVendor.paymentConfig.interbankAccount && (
-                      <div className="bg-[#05140c] p-2 rounded-lg border border-emerald-950 sm:col-span-2">
+                      <div className="bg-[#0e0e0e] p-2 rounded-lg border border-zinc-900 sm:col-span-2">
                         <span className="text-slate-400 block text-[9px] uppercase">Cuenta Interbank</span>
                         <strong className="text-white font-mono">{chosenVendor.paymentConfig.interbankAccount}</strong>
                       </div>
@@ -389,7 +389,7 @@ export const ServiceDetailModal: React.FC<ServiceDetailModalProps> = ({
           )}
 
           {/* Delivery & Support notes */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs bg-[#040e07] p-3.5 rounded-2xl border border-emerald-950/80">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs bg-[#0a0a0a] p-3.5 rounded-2xl border border-zinc-900/80">
             <div className="flex items-center gap-2 text-slate-300">
               <Clock className="w-4 h-4 text-emerald-400 shrink-0" />
               <span>
@@ -406,7 +406,7 @@ export const ServiceDetailModal: React.FC<ServiceDetailModalProps> = ({
         </div>
 
         {/* Modal Footer CTA */}
-        <div className="p-4 sm:p-6 border-t border-emerald-950/80 bg-[#040f07] flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div className="p-4 sm:p-6 border-t border-zinc-900/80 bg-[#0a0a0a] flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="text-xs text-slate-400 text-center sm:text-left">
             <span>Atención directa con: </span>
             <strong className="text-emerald-400">
@@ -419,7 +419,7 @@ export const ServiceDetailModal: React.FC<ServiceDetailModalProps> = ({
               <button
                 type="button"
                 onClick={handleOrderWhatsApp}
-                className="w-full sm:w-auto inline-flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-2xl text-xs sm:text-sm font-bold text-white bg-[#0e3b20] hover:bg-[#13522d] border border-emerald-500/40 transition-all cursor-pointer whitespace-nowrap"
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-2xl text-xs sm:text-sm font-bold text-white bg-[#292929] hover:bg-[#13522d] border border-zinc-700 transition-all cursor-pointer whitespace-nowrap"
                 title="Escribir por WhatsApp a Tin9o (+51 919 192 244)"
               >
                 <MessageCircle className="w-4 h-4 text-[#00ff88]" />
@@ -430,9 +430,9 @@ export const ServiceDetailModal: React.FC<ServiceDetailModalProps> = ({
             <button
               type="button"
               onClick={handleOrderTelegram}
-              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-2.5 rounded-2xl text-xs sm:text-sm font-black text-slate-950 bg-[#00ff88] hover:bg-[#00e676] shadow-[0_0_25px_rgba(0,255,136,0.4)] active:scale-95 transition-all cursor-pointer whitespace-nowrap"
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-2.5 rounded-2xl text-xs sm:text-sm font-black text-slate-950 bg-[#00ff88] hover:bg-[#00e676] active:scale-95 transition-all cursor-pointer whitespace-nowrap"
             >
-              <img
+              <img loading="lazy" decoding="async"
                 src="/imagenes/telegram-icon.png"
                 alt=""
                 className="w-4 h-4 rounded-full object-contain shrink-0"
@@ -451,13 +451,13 @@ export const ServiceDetailModal: React.FC<ServiceDetailModalProps> = ({
         >
           <div
             onClick={(e) => e.stopPropagation()}
-            className="p-6 rounded-3xl bg-[#06140c] border border-emerald-500/50 max-w-sm text-center shadow-2xl space-y-4"
+            className="p-6 rounded-3xl bg-[#0f0f0f] border border-emerald-500/50 max-w-sm text-center shadow-2xl space-y-4"
           >
             <h4 className="text-sm font-bold text-white">
               Código QR de Pago ({chosenVendor.name})
             </h4>
             <div className="w-64 h-64 mx-auto rounded-2xl bg-white p-2 overflow-hidden shadow">
-              <img
+              <img loading="lazy" decoding="async"
                 src={chosenVendor.paymentConfig.qrImageUrl}
                 alt="QR Code"
                 className="w-full h-full object-contain"
@@ -479,3 +479,4 @@ export const ServiceDetailModal: React.FC<ServiceDetailModalProps> = ({
     </div>
   );
 };
+

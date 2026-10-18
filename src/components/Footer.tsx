@@ -8,14 +8,14 @@ interface FooterProps {
 
 export const Footer: React.FC<FooterProps> = ({ onOpenAdmin, onNavigateTab, activeTab }) => {
   return (
-    <footer className="py-10 border-t border-emerald-950/70 bg-[#030805] text-slate-400 select-none">
+    <footer className="py-10 border-t border-zinc-900/70 bg-[#060606] text-slate-400 select-none">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
-        <div className="flex flex-col md:flex-row items-center justify-between gap-6 pb-6 border-b border-emerald-950/40">
+        <div className="flex flex-col md:flex-row items-center justify-between gap-6 pb-6 border-b border-zinc-900/40">
           {/* Brand lockup */}
           <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-full overflow-hidden border border-emerald-500/40 shadow-[0_0_10px_rgba(0,255,136,0.3)]">
-              <img
-                src="/imagenes/hero-circle.png"
+            <div className="w-8 h-8 rounded-full overflow-hidden border border-zinc-700">
+              <img loading="lazy" decoding="async"
+                src="/imagenes/hero-circle.webp"
                 alt="Descuentos Perú"
                 className="w-full h-full object-cover"
               />
@@ -92,4 +92,5 @@ export const Footer: React.FC<FooterProps> = ({ onOpenAdmin, onNavigateTab, acti
     </footer>
   );
 };
+
 

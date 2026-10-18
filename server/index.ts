@@ -7,7 +7,18 @@ const PORT = config.port || 3000;
 const staticDir = path.resolve(process.cwd(), 'dist');
 
 // Servir archivos estáticos del build del frontend
-app.use(express.static(staticDir));
+// Los archivos de /assets llevan hash en el nombre: caché larga e inmutable.
+// Imágenes: una semana; index.html siempre se revalida.
+app.use(
+  express.static(staticDir, {
+    setHeaders: (res, filePath) => {
+      const p = filePath.replace(/\\/g, '/');
+      if (p.includes('/assets/')) res.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
+      else if (p.includes('/imagenes/')) res.setHeader('Cache-Control', 'public, max-age=604800, stale-while-revalidate=86400');
+      else res.setHeader('Cache-Control', 'no-cache');
+    }
+  })
+);
 
 // Fallback SPA para rutas cliente (como /#/servicios, etc.)
 app.get('*', (req, res, next) => {

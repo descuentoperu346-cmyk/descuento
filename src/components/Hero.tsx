@@ -16,15 +16,15 @@ export const Hero: React.FC<HeroProps> = ({
   onNavigateToLeaks
 }) => {
   return (
-    <section className="relative pt-2 pb-3 sm:pt-3 sm:pb-4 md:py-4 lg:py-5 overflow-hidden">
+    <section className="relative pt-2 pb-3 sm:pt-3 sm:pb-4 md:py-4 lg:py-5 overflow-hidden bg-grid">
       {/* Full-Screen Panoramic Cybernetic Background Banner */}
       <div
         className="absolute inset-0 w-full h-full bg-cover bg-center opacity-40 pointer-events-none mix-blend-screen"
-        style={{ backgroundImage: "url('/imagenes/hero-bg-wide.jpg')" }}
+        style={{ backgroundImage: "url('/imagenes/hero-bg-wide.webp')" }}
       />
       {/* Seamless Ambient Gradient Overlay to prevent any hard edges */}
-      <div className="absolute inset-0 bg-gradient-to-b from-[#050b08]/40 via-transparent to-[#050b08] pointer-events-none" />
-      <div className="absolute inset-0 bg-gradient-to-r from-[#050b08]/75 via-transparent to-[#050b08]/50 pointer-events-none" />
+      <div className="absolute inset-0 bg-gradient-to-b from-[#07090a]/40 via-transparent to-[#07090a] pointer-events-none" />
+      <div className="absolute inset-0 bg-gradient-to-r from-[#07090a]/75 via-transparent to-[#07090a]/50 pointer-events-none" />
       {/* Subtle green ambient lighting */}
       <div className="absolute top-1/4 right-1/4 w-[350px] h-[350px] bg-emerald-500/12 rounded-full blur-3xl pointer-events-none" />
 
@@ -69,7 +69,7 @@ export const Hero: React.FC<HeroProps> = ({
               <button
                 type="button"
                 onClick={onExploreClick}
-                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-4 sm:px-5 py-2 sm:py-2.5 rounded-full font-bold text-xs sm:text-sm text-slate-950 bg-[#00ff88] hover:bg-[#00e676] shadow-[0_0_18px_rgba(0,255,136,0.35)] hover:shadow-[0_0_26px_rgba(0,255,136,0.55)] active:scale-[0.98] transition-all cursor-pointer whitespace-nowrap"
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-4 sm:px-5 py-2 sm:py-2.5 rounded-full font-bold text-xs sm:text-sm text-slate-950 bg-[#00ff88] hover:bg-[#00e676] active:scale-[0.98] transition-all cursor-pointer whitespace-nowrap"
               >
                 <span>Explorar servicios</span>
                 <ArrowRight className="w-3.5 h-3.5 stroke-[2.5]" />
@@ -79,7 +79,7 @@ export const Hero: React.FC<HeroProps> = ({
               <button
                 type="button"
                 onClick={onTelegramConsult}
-                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-4 sm:px-5 py-2 sm:py-2.5 rounded-full font-semibold text-xs sm:text-sm text-white bg-[#07170f]/90 hover:bg-[#0d2a1b] border border-emerald-900/80 hover:border-emerald-500/80 active:scale-[0.98] transition-all cursor-pointer whitespace-nowrap"
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-4 sm:px-5 py-2 sm:py-2.5 rounded-full font-semibold text-xs sm:text-sm text-white bg-[#111111]/90 hover:bg-[#1f1f1f] border border-zinc-800/80 hover:border-emerald-500/80 active:scale-[0.98] transition-all cursor-pointer whitespace-nowrap"
               >
                 <Send className="w-3.5 h-3.5 text-[#00ff88] fill-[#00ff88] -rotate-12" />
                 <span>Consultar Telegram</span>

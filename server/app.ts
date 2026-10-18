@@ -4,6 +4,7 @@ import { authRouter } from './routes/auth';
 import { productsRouter } from './routes/products';
 import { vendorsRouter } from './routes/vendors';
 import { syncRouter } from './routes/sync';
+import { invalidateOnWrite } from './cache';
 
 export const app = express();
 
@@ -13,6 +14,9 @@ app.use(express.urlencoded({ extended: true, limit: '15mb' }));
 
 // Middleware de sesión opaca
 app.use(sessionMiddleware as express.RequestHandler);
+
+// Invalida la caché pública del catálogo tras cualquier escritura
+app.use('/api', invalidateOnWrite);
 
 // Endpoint de salud del servidor (sin exponer datos de infraestructura)
 app.get('/api/health', (_req: Request, res: Response) => {

@@ -32,12 +32,12 @@ export const ContactPage: React.FC<ContactPageProps> = ({ vendors }) => {
     <div className="space-y-12 sm:space-y-16 animate-in fade-in duration-300">
       
       {/* Top Header Hero: Canales de Atención & Soporte */}
-      <section className="relative rounded-2xl p-5 sm:p-7 md:p-8 bg-gradient-to-r from-[#02140b] via-[#031d10] to-[#010e07] border border-emerald-500/30 shadow-[0_0_25px_rgba(0,255,136,0.08)] overflow-hidden">
+      <section className="relative rounded-2xl p-5 sm:p-7 md:p-8 bg-gradient-to-r from-[#0d0d0d] via-[#131313] to-[#090909] border border-zinc-700 overflow-hidden">
         <div className="absolute top-0 right-1/4 w-80 h-32 bg-[#00ff88]/5 rounded-full blur-3xl pointer-events-none" />
 
         <div className="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-6">
           <div className="space-y-3 max-w-2xl">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-950/80 border border-emerald-500/40 text-[11px] font-mono text-[#00ff88]">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-zinc-900/80 border border-zinc-700 text-[11px] font-mono text-[#00ff88]">
               <Radio className="w-3.5 h-3.5 text-[#00ff88] animate-pulse" />
               <span className="font-semibold uppercase tracking-wider">Canales Oficiales Verificados · Perú</span>
             </div>
@@ -51,15 +51,15 @@ export const ContactPage: React.FC<ContactPageProps> = ({ vendors }) => {
             </p>
 
             <div className="flex flex-wrap items-center gap-2.5 pt-1 text-xs font-mono text-emerald-300">
-              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-black/60 border border-emerald-500/20">
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-black/60 border border-zinc-700">
                 <span className="w-2 h-2 rounded-full bg-[#00ff88] animate-ping" />
                 Respuesta media: &lt; 5 min
               </span>
-              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-black/60 border border-emerald-500/20">
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-black/60 border border-zinc-700">
                 <ShieldCheck className="w-3.5 h-3.5 text-[#00ff88]" />
                 Garantía 100% activa
               </span>
-              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-black/60 border border-emerald-500/20">
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-black/60 border border-zinc-700">
                 <CheckCircle2 className="w-3.5 h-3.5 text-[#00ff88]" />
                 Yape / Plin / Bancos
               </span>
@@ -71,7 +71,7 @@ export const ContactPage: React.FC<ContactPageProps> = ({ vendors }) => {
               href={TELEGRAM_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className="px-5 py-3 rounded-xl font-mono text-xs font-bold bg-[#00ff88] text-slate-950 shadow-[0_0_20px_rgba(0,255,136,0.35)] hover:bg-[#00e676] transition-all flex items-center justify-center gap-2 active:scale-95 text-center"
+              className="px-5 py-3 rounded-xl font-mono text-xs font-bold bg-[#00ff88] text-slate-950 hover:bg-[#00e676] transition-all flex items-center justify-center gap-2 active:scale-95 text-center"
             >
               <Send className="w-4 h-4 text-slate-950" />
               <span>Canal Matriz Telegram</span>
@@ -85,7 +85,7 @@ export const ContactPage: React.FC<ContactPageProps> = ({ vendors }) => {
 
       {/* Directory of Official Advisors */}
       <section className="space-y-6">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-emerald-950 pb-4">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-zinc-900 pb-4">
           <div>
             <span className="text-xs font-mono font-bold uppercase tracking-widest text-[#00ff88]">
               DIRECTORIO DE ASESORES & CREADORES
@@ -108,14 +108,14 @@ export const ContactPage: React.FC<ContactPageProps> = ({ vendors }) => {
           return (
             <div className="space-y-6">
               {/* Featured Central Group Card */}
-              <div className="p-4 sm:p-7 md:p-8 rounded-3xl bg-gradient-to-r from-[#04190e] via-[#062616] to-[#021008] border-2 border-[#00ff88]/60 shadow-[0_0_30px_rgba(0,255,136,0.2)] flex flex-col md:flex-row md:items-center justify-between gap-6 relative overflow-hidden">
+              <div className="p-4 sm:p-7 md:p-8 rounded-3xl bg-gradient-to-r from-[#111111] via-[#1a1a1a] to-[#0b0b0b] border-2 border-[#00ff88]/60 flex flex-col md:flex-row md:items-center justify-between gap-6 relative overflow-hidden">
                 <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-5">
-                  <div className="relative w-14 h-14 sm:w-20 sm:h-20 rounded-2xl overflow-hidden border-2 border-[#00ff88] p-1.5 bg-black shadow-[0_0_20px_rgba(0,255,136,0.5)] shrink-0">
-                    <img src="/imagenes/monograma.png" alt={central.name} className="w-full h-full object-contain" />
+                  <div className="relative w-14 h-14 sm:w-20 sm:h-20 rounded-2xl overflow-hidden border-2 border-[#00ff88] p-1.5 bg-black shrink-0">
+                    <img loading="lazy" decoding="async" src="/imagenes/monograma.png" alt={central.name} className="w-full h-full object-contain" />
                     <span className="absolute bottom-1 right-1 w-3 h-3 rounded-full bg-[#00ff88] border-2 border-black animate-ping" />
                   </div>
                   <div>
-                    <span className="px-2.5 py-0.5 rounded text-[10px] font-mono font-bold bg-emerald-950 border border-emerald-500/50 text-[#00ff88] uppercase">
+                    <span className="px-2.5 py-0.5 rounded text-[10px] font-mono font-bold bg-zinc-900 border border-emerald-500/50 text-[#00ff88] uppercase">
                       GRUPO & CANAL PRINCIPAL
                     </span>
                     <h3 className="text-lg sm:text-2xl font-black text-white mt-1">{central.name}</h3>
@@ -133,7 +133,7 @@ export const ContactPage: React.FC<ContactPageProps> = ({ vendors }) => {
                     onClick={() => {
                       recordVendorClickEvent(central.id, central.name, 'telegram', 'Contacto Principal');
                     }}
-                    className="w-full sm:w-auto px-5 sm:px-6 py-3 rounded-2xl font-black text-xs sm:text-sm text-slate-950 bg-[#00ff88] hover:bg-[#00e676] shadow-[0_0_20px_rgba(0,255,136,0.35)] flex items-center justify-center gap-2 transition-all font-mono uppercase active:scale-95 text-center"
+                    className="w-full sm:w-auto px-5 sm:px-6 py-3 rounded-2xl font-black text-xs sm:text-sm text-slate-950 bg-[#00ff88] hover:bg-[#00e676] flex items-center justify-center gap-2 transition-all font-mono uppercase active:scale-95 text-center"
                   >
                     <Send className="w-4 h-4 fill-slate-950" />
                     <span>Unirse al Canal (@{central.username})</span>
@@ -150,12 +150,12 @@ export const ContactPage: React.FC<ContactPageProps> = ({ vendors }) => {
                   return (
                     <div
                       key={vendor.id}
-                      className="p-5 sm:p-6 rounded-3xl bg-[#041209] border border-emerald-900/70 hover:border-emerald-500/60 transition-all shadow-xl flex flex-col justify-between space-y-4 group"
+                      className="p-5 sm:p-6 rounded-3xl bg-[#0c0c0c] border border-zinc-800/70 hover:border-emerald-500/60 transition-all shadow-xl flex flex-col justify-between space-y-4 group"
                     >
                       <div className="space-y-3.5">
                         <div className="flex items-center gap-3">
                           <div className="relative w-12 h-12 rounded-2xl overflow-hidden border-2 border-emerald-500/60 shadow-md shrink-0 bg-black">
-                            <img
+                            <img loading="lazy" decoding="async"
                               src={vendor.avatar}
                               alt={vendor.name}
                               className="w-full h-full object-cover group-hover:scale-105 transition-transform"
@@ -182,7 +182,7 @@ export const ContactPage: React.FC<ContactPageProps> = ({ vendors }) => {
                         </p>
                       </div>
 
-                      <div className="space-y-2 pt-3 border-t border-emerald-950">
+                      <div className="space-y-2 pt-3 border-t border-zinc-900">
                         <a
                           href={`https://t.me/${vendor.username}`}
                           target="_blank"
@@ -201,7 +201,7 @@ export const ContactPage: React.FC<ContactPageProps> = ({ vendors }) => {
                             href={vendor.catalogUrl}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="w-full py-2 rounded-xl font-bold text-xs text-emerald-300 bg-[#06170d] hover:bg-emerald-950/80 border border-emerald-500/50 hover:border-[#00ff88] flex items-center justify-center gap-1.5 transition-all cursor-pointer font-mono"
+                            className="w-full py-2 rounded-xl font-bold text-xs text-emerald-300 bg-[#101010] hover:bg-zinc-900/80 border border-emerald-500/50 hover:border-[#00ff88] flex items-center justify-center gap-1.5 transition-all cursor-pointer font-mono"
                           >
                             <ExternalLink className="w-3.5 h-3.5 text-[#00ff88]" />
                             <span>Catálogo de Ventas</span>
@@ -218,7 +218,7 @@ export const ContactPage: React.FC<ContactPageProps> = ({ vendors }) => {
                             onClick={() => {
                               recordVendorClickEvent(vendor.id, vendor.name, 'whatsapp', 'Directorio de Asesores');
                             }}
-                            className="w-full py-2 rounded-xl font-bold text-xs text-slate-200 bg-[#06170d] hover:bg-emerald-950/80 border border-emerald-500/50 hover:border-[#00ff88] flex items-center justify-center gap-2 transition-all cursor-pointer font-mono"
+                            className="w-full py-2 rounded-xl font-bold text-xs text-slate-200 bg-[#101010] hover:bg-zinc-900/80 border border-emerald-500/50 hover:border-[#00ff88] flex items-center justify-center gap-2 transition-all cursor-pointer font-mono"
                           >
                             <Phone className="w-3.5 h-3.5 text-[#00ff88]" />
                             <span>WhatsApp (+51 919 192 244)</span>
@@ -235,9 +235,9 @@ export const ContactPage: React.FC<ContactPageProps> = ({ vendors }) => {
       </section>
 
       {/* Aviso de Seguridad Antifraude & Canales Verificados (Compact Trust Strip) */}
-      <section className="p-4 sm:p-5 rounded-2xl bg-gradient-to-r from-[#03150a] via-[#020e06] to-[#03150a] border border-emerald-500/30 shadow-[0_0_20px_rgba(0,255,136,0.06)] flex flex-col md:flex-row items-center justify-between gap-4">
+      <section className="p-4 sm:p-5 rounded-2xl bg-gradient-to-r from-[#0e0e0e] via-[#090909] to-[#0e0e0e] border border-zinc-700 flex flex-col md:flex-row items-center justify-between gap-4">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-black/60 border border-emerald-500/40 flex items-center justify-center shrink-0 text-[#00ff88]">
+          <div className="w-10 h-10 rounded-xl bg-black/60 border border-zinc-700 flex items-center justify-center shrink-0 text-[#00ff88]">
             <ShieldCheck className="w-5 h-5" />
           </div>
           <div>
@@ -258,7 +258,7 @@ export const ContactPage: React.FC<ContactPageProps> = ({ vendors }) => {
           <button
             type="button"
             onClick={handleCopyUsername}
-            className="px-3.5 py-2 rounded-xl text-xs font-mono font-bold bg-[#04190d] text-emerald-300 border border-emerald-500/40 hover:border-[#00ff88] hover:text-white transition-all flex items-center gap-1.5 cursor-pointer active:scale-95"
+            className="px-3.5 py-2 rounded-xl text-xs font-mono font-bold bg-[#111111] text-emerald-300 border border-zinc-700 hover:border-[#00ff88] hover:text-white transition-all flex items-center gap-1.5 cursor-pointer active:scale-95"
           >
             {copiedHandle ? (
               <>
@@ -277,7 +277,7 @@ export const ContactPage: React.FC<ContactPageProps> = ({ vendors }) => {
             href={TELEGRAM_URL}
             target="_blank"
             rel="noopener noreferrer"
-            className="px-4 py-2 rounded-xl text-xs font-mono font-bold bg-[#00ff88] text-slate-950 shadow-[0_0_15px_rgba(0,255,136,0.3)] hover:bg-[#00e676] transition-all flex items-center gap-1.5 active:scale-95"
+            className="px-4 py-2 rounded-xl text-xs font-mono font-bold bg-[#00ff88] text-slate-950 hover:bg-[#00e676] transition-all flex items-center gap-1.5 active:scale-95"
           >
             <Send className="w-3.5 h-3.5 fill-slate-950" />
             <span>Canal Telegram</span>
@@ -288,3 +288,4 @@ export const ContactPage: React.FC<ContactPageProps> = ({ vendors }) => {
     </div>
   );
 };
+

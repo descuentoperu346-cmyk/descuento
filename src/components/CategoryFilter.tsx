@@ -33,7 +33,7 @@ export const CategoryFilter: React.FC<CategoryFilterProps> = ({
   return (
     <div id="catalogo-servicios" className="pt-2 pb-6 space-y-4">
       {/* Cyber Command Filter Deck */}
-      <div className="p-4 sm:p-5 rounded-3xl bg-gradient-to-r from-[#03130a]/95 via-[#052112]/95 to-[#020e06]/95 border-2 border-emerald-500/40 shadow-[0_0_35px_rgba(0,255,136,0.12)] backdrop-blur-xl relative overflow-hidden space-y-4">
+      <div className="p-4 sm:p-5 rounded-3xl bg-gradient-to-r from-[#0d0d0d]/95 via-[#161616]/95 to-[#090909]/95 border-2 border-zinc-700 backdrop-blur-xl relative overflow-hidden space-y-4">
         {/* Cyber Tech Corner Brackets */}
         <div className="absolute top-2.5 left-2.5 w-3 h-3 border-t-2 border-l-2 border-[#00ff88]/60 pointer-events-none" />
         <div className="absolute top-2.5 right-2.5 w-3 h-3 border-t-2 border-r-2 border-[#00ff88]/60 pointer-events-none" />
@@ -57,8 +57,8 @@ export const CategoryFilter: React.FC<CategoryFilterProps> = ({
                   onClick={() => onSelectCategory(cat.id)}
                   className={`group px-3 sm:px-3.5 py-2 rounded-xl text-xs font-bold transition-all whitespace-nowrap cursor-pointer flex items-center gap-1.5 relative select-none ${
                     isActive
-                      ? 'bg-[#00ff88] text-slate-950 shadow-[0_0_20px_rgba(0,255,136,0.45)] font-black scale-102'
-                      : 'bg-[#020b05] text-slate-300 hover:text-white hover:bg-[#071e11] border border-emerald-900/80 hover:border-emerald-500/60'
+                      ? 'bg-[#00ff88] text-slate-950 font-black scale-102'
+                      : 'bg-[#070707] text-slate-300 hover:text-white hover:bg-[#151515] border border-zinc-800/80 hover:border-emerald-500/60'
                   }`}
                 >
                   <IconComp className={`w-3.5 h-3.5 ${isActive ? 'text-slate-950' : 'text-[#00ff88] group-hover:scale-110'} transition-transform shrink-0`} />
@@ -68,7 +68,7 @@ export const CategoryFilter: React.FC<CategoryFilterProps> = ({
                       className={`text-[10px] px-1.5 py-0.2 rounded-full font-mono font-bold leading-none ${
                         isActive
                           ? 'bg-black/25 text-slate-950'
-                          : 'bg-emerald-950 text-emerald-400 border border-emerald-800/60'
+                          : 'bg-zinc-900 text-emerald-400 border border-zinc-700/60'
                       }`}
                     >
                       {count}
@@ -89,7 +89,7 @@ export const CategoryFilter: React.FC<CategoryFilterProps> = ({
               value={searchQuery}
               onChange={(e) => onSearchChange(e.target.value)}
               placeholder="Buscar servicio (ej. Netflix, OSINT)..."
-              className="w-full pl-9 pr-9 py-2 rounded-xl bg-[#020b05] border border-emerald-500/40 text-slate-100 text-xs placeholder-slate-500 focus:outline-none focus:border-[#00ff88] focus:ring-2 focus:ring-[#00ff88]/30 transition-all font-sans shadow-inner"
+              className="w-full pl-9 pr-9 py-2 rounded-xl bg-[#070707] border border-zinc-700 text-slate-100 text-xs placeholder-slate-500 focus:outline-none focus:border-[#00ff88] focus:ring-2 focus:ring-[#00ff88]/30 transition-all font-sans shadow-inner"
             />
             {searchQuery && (
               <button
@@ -106,7 +106,7 @@ export const CategoryFilter: React.FC<CategoryFilterProps> = ({
 
         {/* Bottom Command Bar: Creator / Vendor Filters with Photos */}
         {vendors.length > 0 && onSelectVendorId && (
-          <div className="pt-3 border-t border-emerald-500/25 flex flex-col sm:flex-row sm:items-center gap-2.5 relative z-10">
+          <div className="pt-3 border-t border-zinc-700 flex flex-col sm:flex-row sm:items-center gap-2.5 relative z-10">
             <span className="text-[11px] font-mono font-bold text-slate-400 flex items-center gap-1.5 shrink-0 uppercase tracking-wider">
               <Users className="w-3.5 h-3.5 text-[#00ff88]" />
               <span>Filtrar por Creador:</span>
@@ -119,8 +119,8 @@ export const CategoryFilter: React.FC<CategoryFilterProps> = ({
                 onClick={() => onSelectVendorId('todos')}
                 className={`px-3 py-1.5 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer select-none ${
                   selectedVendorId === 'todos'
-                    ? 'bg-[#00ff88] text-slate-950 shadow-[0_0_15px_rgba(0,255,136,0.35)]'
-                    : 'bg-[#020b05] text-slate-400 hover:text-white border border-emerald-950 hover:border-emerald-700'
+                    ? 'bg-[#00ff88] text-slate-950'
+                    : 'bg-[#070707] text-slate-400 hover:text-white border border-zinc-900 hover:border-emerald-700'
                 }`}
               >
                 Todos los creadores
@@ -138,12 +138,12 @@ export const CategoryFilter: React.FC<CategoryFilterProps> = ({
                       onClick={() => onSelectVendorId(v.id)}
                       className={`flex items-center gap-1.5 px-2.5 py-1.2 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer select-none ${
                         isSelected
-                          ? 'bg-gradient-to-r from-emerald-950 to-emerald-900 border-2 border-[#00ff88] text-white shadow-[0_0_15px_rgba(0,255,136,0.4)] scale-102'
-                          : 'bg-[#020b05] text-slate-300 hover:text-white border border-emerald-950 hover:border-emerald-600'
+                          ? 'bg-gradient-to-r from-zinc-900 to-zinc-800 border-2 border-[#00ff88] text-white scale-102'
+                          : 'bg-[#070707] text-slate-300 hover:text-white border border-zinc-900 hover:border-emerald-600'
                       }`}
                     >
                       <div className="w-4 h-4 rounded-full overflow-hidden shrink-0 border border-emerald-400">
-                        <img
+                        <img loading="lazy" decoding="async"
                           src={v.avatar}
                           alt={v.name}
                           className="w-full h-full object-cover"
@@ -161,3 +161,4 @@ export const CategoryFilter: React.FC<CategoryFilterProps> = ({
     </div>
   );
 };
+

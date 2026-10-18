@@ -137,7 +137,7 @@ export const INITIAL_VENDORS: Vendor[] = [
     username: 'Tin9o',
     telegramUrl: 'https://t.me/Tin9o',
     whatsapp: '+51 919 192 244',
-    avatar: '/imagenes/perfiles/tino.gif',
+    avatar: '/imagenes/perfiles/tino.webp',
     pin: '1234',
     active: true,
     rating: 4.9,

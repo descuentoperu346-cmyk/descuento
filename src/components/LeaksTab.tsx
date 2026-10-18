@@ -264,14 +264,14 @@ export const LeaksTab: React.FC<LeaksTabProps> = ({ articles, onOpenContact }) =
   }, [articles, heroArticle, latestArticles]);
 
   const getAuthorAvatar = (handle?: string) => {
-    if (!handle) return '/imagenes/perfiles/tino.gif';
+    if (!handle) return '/imagenes/perfiles/tino.webp';
     const h = handle.toLowerCase();
     if (h.includes('whisky')) return '/imagenes/perfiles/whisky.jpg';
     if (h.includes('abby')) return '/imagenes/perfiles/abby.jpg';
     if (h.includes('nano')) return '/imagenes/perfiles/nanovip.jpg';
-    if (h.includes('tin9o') || h.includes('tino')) return '/imagenes/perfiles/tino.gif';
+    if (h.includes('tin9o') || h.includes('tino')) return '/imagenes/perfiles/tino.webp';
     if (h.includes('descuentosper') || h.includes('central') || h.includes('admin')) return '/imagenes/monograma.png';
-    return '/imagenes/perfiles/tino.gif';
+    return '/imagenes/perfiles/tino.webp';
   };
 
   const handleOpenTelegram = (art?: LeakArticle) => {
@@ -305,7 +305,7 @@ export const LeaksTab: React.FC<LeaksTabProps> = ({ articles, onOpenContact }) =
       return 'border border-rose-500/80 bg-rose-950/80 text-rose-300 shadow-[0_0_15px_rgba(244,63,94,0.4)]';
     }
     if (upper.includes('ANÁLISIS')) {
-      return 'border border-emerald-400/60 bg-emerald-950/80 text-[#00ff88] shadow-[0_0_12px_rgba(0,255,136,0.35)]';
+      return 'border border-emerald-400/60 bg-zinc-900/80 text-[#00ff88]';
     }
     if (upper.includes('GUÍA') || upper.includes('GUÍAS')) {
       return 'border border-cyan-400/60 bg-cyan-950/80 text-cyan-300 shadow-[0_0_12px_rgba(6,182,212,0.35)]';
@@ -317,9 +317,9 @@ export const LeaksTab: React.FC<LeaksTabProps> = ({ articles, onOpenContact }) =
       return 'border border-amber-500/60 bg-amber-950/80 text-amber-300 shadow-[0_0_12px_rgba(245,158,11,0.35)]';
     }
     if (upper.includes('CIBERSEGURIDAD')) {
-      return 'border border-emerald-500/60 bg-emerald-950/80 text-emerald-300 shadow-[0_0_12px_rgba(0,255,136,0.3)]';
+      return 'border border-emerald-500/60 bg-zinc-900/80 text-emerald-300';
     }
-    return 'border border-emerald-900/80 bg-[#06170d] text-emerald-300';
+    return 'border border-zinc-800/80 bg-[#101010] text-emerald-300';
   };
 
   const handleSelectArticle = (art: LeakArticle) => {
@@ -356,11 +356,11 @@ export const LeaksTab: React.FC<LeaksTabProps> = ({ articles, onOpenContact }) =
       <article className="w-full max-w-[1560px] mx-auto space-y-8 animate-in fade-in slide-in-from-bottom-2 duration-300 pb-24">
         
         {/* Sticky Tactical Navigation Bar */}
-        <div className="flex items-center justify-between gap-4 pt-2 pb-4 border-b border-emerald-950/80 sticky top-16 z-30 bg-[#050b08]/95 backdrop-blur-md">
+        <div className="flex items-center justify-between gap-4 pt-2 pb-4 border-b border-zinc-900/80 sticky top-16 z-30 bg-[#07090a]/95 backdrop-blur-md">
           <button
             type="button"
             onClick={handleBackToNews}
-            className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full text-xs font-mono font-bold text-[#00ff88] bg-[#051a0f] hover:bg-[#092b1a] border border-emerald-500/50 hover:border-[#00ff88] shadow-[0_0_15px_rgba(0,255,136,0.2)] transition-all cursor-pointer group"
+            className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full text-xs font-mono font-bold text-[#00ff88] bg-[#121212] hover:bg-[#1e1e1e] border border-emerald-500/50 hover:border-[#00ff88] transition-all cursor-pointer group"
           >
             <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
             <span>Volver a la Revista & Leaks</span>
@@ -368,7 +368,7 @@ export const LeaksTab: React.FC<LeaksTabProps> = ({ articles, onOpenContact }) =
 
           <div className="flex items-center gap-2">
             {activeArticle.dossierCode && (
-              <span className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-mono text-emerald-400 bg-black/80 border border-emerald-500/40">
+              <span className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-mono text-emerald-400 bg-black/80 border border-zinc-700">
                 <FileSearch className="w-3 h-3 text-[#00ff88]" />
                 <span>{activeArticle.dossierCode}</span>
               </span>
@@ -376,7 +376,7 @@ export const LeaksTab: React.FC<LeaksTabProps> = ({ articles, onOpenContact }) =
             <button
               type="button"
               onClick={() => handleCopyArticleLink(activeArticle)}
-              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-mono text-slate-300 hover:text-white bg-[#06180e] border border-emerald-900 hover:border-emerald-500/60 transition-all cursor-pointer shadow-sm"
+              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-mono text-slate-300 hover:text-white bg-[#111111] border border-zinc-800 hover:border-emerald-500/60 transition-all cursor-pointer shadow-sm"
               title="Copiar enlace del reporte"
             >
               {copiedLink ? (
@@ -397,10 +397,10 @@ export const LeaksTab: React.FC<LeaksTabProps> = ({ articles, onOpenContact }) =
         {/* ======================================================== */}
         {/* EDITORIAL DOSSIER COVER & TITLE BANNER */}
         {/* ======================================================== */}
-        <div className="rounded-3xl overflow-hidden border border-emerald-500/40 bg-[#030d07] shadow-[0_0_50px_rgba(0,255,136,0.18)] relative">
+        <div className="rounded-3xl overflow-hidden border border-zinc-700 bg-[#090909] relative">
           
           {/* Top Military Classification Bar */}
-          <div className="bg-gradient-to-r from-red-950 via-[#180808] to-[#041209] px-6 py-2.5 border-b border-red-500/40 flex flex-wrap items-center justify-between gap-3 text-[11px] font-mono font-bold tracking-wider">
+          <div className="bg-gradient-to-r from-red-950 via-[#180808] to-[#0c0c0c] px-6 py-2.5 border-b border-red-500/40 flex flex-wrap items-center justify-between gap-3 text-[11px] font-mono font-bold tracking-wider">
             <div className="flex items-center gap-2 text-red-300">
               <ShieldAlert className="w-4 h-4 text-red-400 shrink-0" />
               <span>EXPEDIENTE FILTRADO // INTELIGENCIA FORENSE & POLICIAL</span>
@@ -415,7 +415,7 @@ export const LeaksTab: React.FC<LeaksTabProps> = ({ articles, onOpenContact }) =
           {/* Hero Cover Frame */}
           <div className="relative h-72 sm:h-96 md:h-[460px] w-full overflow-hidden bg-black group cursor-pointer"
                onClick={() => setZoomedImage({ url: activeArticle.imageUrl, title: activeArticle.title, caption: activeArticle.summary, tag: 'PORTADA PRINCIPAL' })}>
-            <img
+            <img loading="lazy" decoding="async"
               src={activeArticle.imageUrl}
               alt={activeArticle.title}
               className="w-full h-full object-cover group-hover:scale-103 transition-transform duration-700"
@@ -425,7 +425,7 @@ export const LeaksTab: React.FC<LeaksTabProps> = ({ articles, onOpenContact }) =
                 target.src = '/imagenes/leak-doc-analysis.jpg';
               }}
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-[#020b05] via-[#020b05]/60 to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-t from-[#070707] via-[#070707]/60 to-transparent" />
 
             {/* Tactical Badges */}
             <div className="absolute top-5 left-5 z-10 flex flex-wrap items-center gap-2">
@@ -446,7 +446,7 @@ export const LeaksTab: React.FC<LeaksTabProps> = ({ articles, onOpenContact }) =
           </div>
 
           {/* Title & Editorial Lead */}
-          <div className="p-6 sm:p-9 md:p-12 space-y-6 relative z-10 bg-[#020b05]">
+          <div className="p-6 sm:p-9 md:p-12 space-y-6 relative z-10 bg-[#070707]">
             <div className="space-y-4">
               <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-[44px] font-black text-white leading-tight tracking-tight">
                 {activeArticle.title}
@@ -461,17 +461,17 @@ export const LeaksTab: React.FC<LeaksTabProps> = ({ articles, onOpenContact }) =
 
             {/* Legal / Archival Disclaimer Notice */}
             {activeArticle.classificationNotice && (
-              <div className="p-4 rounded-2xl bg-[#081f12] border border-emerald-500/40 text-emerald-300 text-xs sm:text-sm font-mono leading-relaxed flex items-start gap-3 shadow-inner">
+              <div className="p-4 rounded-2xl bg-[#161616] border border-zinc-700 text-emerald-300 text-xs sm:text-sm font-mono leading-relaxed flex items-start gap-3 shadow-inner">
                 <ShieldCheck className="w-4 h-4 text-[#00ff88] shrink-0 mt-0.5" />
                 <span>{activeArticle.classificationNotice}</span>
               </div>
             )}
 
             {/* Author Profile Bar */}
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-4 border-t border-emerald-950">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-4 border-t border-zinc-900">
               <div className="flex items-center gap-3.5">
-                <div className="relative w-12 h-12 rounded-2xl overflow-hidden border-2 border-emerald-400 p-0.5 bg-black shadow-[0_0_15px_rgba(0,255,136,0.3)] shrink-0">
-                  <img
+                <div className="relative w-12 h-12 rounded-2xl overflow-hidden border-2 border-emerald-400 p-0.5 bg-black shrink-0">
+                  <img loading="lazy" decoding="async"
                     src={getAuthorAvatar(activeArticle.authorTelegram)}
                     alt={activeArticle.author}
                     className="w-full h-full object-cover"
@@ -486,7 +486,7 @@ export const LeaksTab: React.FC<LeaksTabProps> = ({ articles, onOpenContact }) =
                 <div>
                   <div className="flex items-center gap-2">
                     <span className="font-bold text-white text-sm">{activeArticle.author}</span>
-                    <span className="px-2 py-0.5 rounded bg-emerald-950 border border-emerald-500/40 text-[9px] font-mono text-[#00ff88] uppercase font-bold">
+                    <span className="px-2 py-0.5 rounded bg-zinc-900 border border-zinc-700 text-[9px] font-mono text-[#00ff88] uppercase font-bold">
                       UNIDAD DE INVESTIGACIÓN
                     </span>
                   </div>
@@ -500,7 +500,7 @@ export const LeaksTab: React.FC<LeaksTabProps> = ({ articles, onOpenContact }) =
               <button
                 type="button"
                 onClick={() => handleOpenTelegram(activeArticle)}
-                className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-full font-bold text-xs text-slate-950 bg-[#00ff88] hover:bg-[#00e676] shadow-[0_0_20px_rgba(0,255,136,0.35)] transition-all cursor-pointer font-mono whitespace-nowrap active:scale-95"
+                className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-full font-bold text-xs text-slate-950 bg-[#00ff88] hover:bg-[#00e676] transition-all cursor-pointer font-mono whitespace-nowrap active:scale-95"
               >
                 <Send className="w-3.5 h-3.5 fill-slate-950 -rotate-12" />
                 <span>Consultar con la Redacción OSINT</span>
@@ -510,7 +510,7 @@ export const LeaksTab: React.FC<LeaksTabProps> = ({ articles, onOpenContact }) =
         </div>
 
         {/* Lead Executive Summary */}
-        <div className="p-6 sm:p-8 rounded-3xl bg-gradient-to-r from-[#031c10] via-[#052917] to-[#02140a] border border-emerald-500/50 text-emerald-100 text-sm sm:text-base font-medium leading-relaxed shadow-xl relative overflow-hidden">
+        <div className="p-6 sm:p-8 rounded-3xl bg-gradient-to-r from-[#131313] via-[#1c1c1c] to-[#0d0d0d] border border-emerald-500/50 text-emerald-100 text-sm sm:text-base font-medium leading-relaxed shadow-xl relative overflow-hidden">
           <div className="absolute top-0 right-0 w-72 h-full bg-emerald-500/10 blur-3xl pointer-events-none" />
           <div className="relative z-10 flex items-start gap-4">
             <div className="w-10 h-10 rounded-2xl bg-black/60 border border-emerald-400/60 flex items-center justify-center text-[#00ff88] shrink-0 mt-1 shadow-md">
@@ -531,7 +531,7 @@ export const LeaksTab: React.FC<LeaksTabProps> = ({ articles, onOpenContact }) =
         {/* DOSSIER COMMAND BAR: INTERACTIVE HUB & SECTION SELECTOR */}
         {/* ======================================================== */}
         {isChinaPoloReport && (
-          <div className="sticky top-16 sm:top-20 z-20 p-2 sm:p-2.5 rounded-2xl bg-[#041208]/95 backdrop-blur-xl border border-emerald-500/40 shadow-[0_10px_35px_rgba(0,0,0,0.8)]">
+          <div className="sticky top-16 sm:top-20 z-20 p-2 sm:p-2.5 rounded-2xl bg-[#0c0c0c]/95 backdrop-blur-xl border border-zinc-700 shadow-[0_10px_35px_rgba(0,0,0,0.8)]">
             <div className="flex items-center justify-between gap-2 sm:gap-3">
               <div className="flex-1 min-w-0 flex items-center gap-1.5 overflow-x-auto scrollbar-none py-0.5">
                 <button
@@ -539,8 +539,8 @@ export const LeaksTab: React.FC<LeaksTabProps> = ({ articles, onOpenContact }) =
                   onClick={() => setActiveDossierSection('evidencias')}
                   className={`px-3.5 sm:px-4 py-2 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer flex items-center gap-2 whitespace-nowrap ${
                     activeDossierSection === 'evidencias'
-                      ? 'bg-[#00ff88] text-black shadow-[0_0_20px_rgba(0,255,136,0.4)]'
-                      : 'bg-[#06190f] text-slate-300 hover:text-white border border-emerald-900/80 hover:bg-[#0c2f1c]'
+                      ? 'bg-[#00ff88] text-black'
+                      : 'bg-[#121212] text-slate-300 hover:text-white border border-zinc-800/80 hover:bg-[#222222]'
                   }`}
                 >
                   <Film className="w-3.5 h-3.5" />
@@ -553,7 +553,7 @@ export const LeaksTab: React.FC<LeaksTabProps> = ({ articles, onOpenContact }) =
                   className={`px-3.5 sm:px-4 py-2 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer flex items-center gap-2 whitespace-nowrap ${
                     activeDossierSection === 'balistica'
                       ? 'bg-rose-500 text-white shadow-[0_0_20px_rgba(244,63,94,0.4)]'
-                      : 'bg-[#06190f] text-slate-300 hover:text-white border border-emerald-900/80 hover:bg-[#0c2f1c]'
+                      : 'bg-[#121212] text-slate-300 hover:text-white border border-zinc-800/80 hover:bg-[#222222]'
                   }`}
                 >
                   <Crosshair className="w-3.5 h-3.5" />
@@ -565,8 +565,8 @@ export const LeaksTab: React.FC<LeaksTabProps> = ({ articles, onOpenContact }) =
                   onClick={() => setActiveDossierSection('red-criminal')}
                   className={`px-3.5 sm:px-4 py-2 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer flex items-center gap-2 whitespace-nowrap ${
                     activeDossierSection === 'red-criminal'
-                      ? 'bg-[#00ff88] text-black shadow-[0_0_20px_rgba(0,255,136,0.4)]'
-                      : 'bg-[#06190f] text-slate-300 hover:text-white border border-emerald-900/80 hover:bg-[#0c2f1c]'
+                      ? 'bg-[#00ff88] text-black'
+                      : 'bg-[#121212] text-slate-300 hover:text-white border border-zinc-800/80 hover:bg-[#222222]'
                   }`}
                 >
                   <Users className="w-3.5 h-3.5" />
@@ -578,8 +578,8 @@ export const LeaksTab: React.FC<LeaksTabProps> = ({ articles, onOpenContact }) =
                   onClick={() => setActiveDossierSection('cronica')}
                   className={`px-3.5 sm:px-4 py-2 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer flex items-center gap-2 whitespace-nowrap ${
                     activeDossierSection === 'cronica'
-                      ? 'bg-[#00ff88] text-black shadow-[0_0_20px_rgba(0,255,136,0.4)]'
-                      : 'bg-[#06190f] text-slate-300 hover:text-white border border-emerald-900/80 hover:bg-[#0c2f1c]'
+                      ? 'bg-[#00ff88] text-black'
+                      : 'bg-[#121212] text-slate-300 hover:text-white border border-zinc-800/80 hover:bg-[#222222]'
                   }`}
                 >
                   <FileText className="w-3.5 h-3.5" />
@@ -591,8 +591,8 @@ export const LeaksTab: React.FC<LeaksTabProps> = ({ articles, onOpenContact }) =
                   onClick={() => setActiveDossierSection('preguntas')}
                   className={`px-3.5 sm:px-4 py-2 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer flex items-center gap-2 whitespace-nowrap ${
                     activeDossierSection === 'preguntas'
-                      ? 'bg-[#00ff88] text-black shadow-[0_0_20px_rgba(0,255,136,0.4)]'
-                      : 'bg-[#06190f] text-slate-300 hover:text-white border border-emerald-900/80 hover:bg-[#0c2f1c]'
+                      ? 'bg-[#00ff88] text-black'
+                      : 'bg-[#121212] text-slate-300 hover:text-white border border-zinc-800/80 hover:bg-[#222222]'
                   }`}
                 >
                   <HelpCircle className="w-3.5 h-3.5" />
@@ -607,7 +607,7 @@ export const LeaksTab: React.FC<LeaksTabProps> = ({ articles, onOpenContact }) =
                 className={`px-3 py-1.5 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer flex items-center gap-1.5 shrink-0 border ${
                   activeDossierSection === 'completo'
                     ? 'bg-amber-400 text-black border-amber-300 shadow-[0_0_15px_rgba(251,191,36,0.4)]'
-                    : 'bg-[#020b05] text-slate-300 hover:text-white border-emerald-900 hover:border-emerald-500/60'
+                    : 'bg-[#070707] text-slate-300 hover:text-white border-zinc-800 hover:border-emerald-500/60'
                 }`}
                 title="Alternar entre vista modular dinámica y vista continua"
               >
@@ -625,7 +625,7 @@ export const LeaksTab: React.FC<LeaksTabProps> = ({ articles, onOpenContact }) =
         {/* ======================================================== */}
         {isChinaPoloReport && (activeDossierSection === 'evidencias' || activeDossierSection === 'completo') && (
           <section className="space-y-6 pt-2 animate-in fade-in duration-300">
-            <div className="border-b border-emerald-500/30 pb-3 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+            <div className="border-b border-zinc-700 pb-3 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
               <div>
                 <span className="text-[10px] font-mono font-bold text-[#00ff88] uppercase tracking-widest block mb-0.5">
                   EVIDENCIA AUDIOVISUAL // REGISTROS FORENSES EN VIDEO
@@ -635,7 +635,7 @@ export const LeaksTab: React.FC<LeaksTabProps> = ({ articles, onOpenContact }) =
                   <span>Los Videos Forenses: El Ataque en Directo y el Desenlace Final</span>
                 </h2>
               </div>
-              <span className="text-xs font-mono text-emerald-400 bg-[#051a0f] px-3 py-1 rounded-full border border-emerald-500/40 self-start sm:self-auto">
+              <span className="text-xs font-mono text-emerald-400 bg-[#121212] px-3 py-1 rounded-full border border-zinc-700 self-start sm:self-auto">
                 2 Grabaciones Oficiales
               </span>
             </div>
@@ -644,8 +644,8 @@ export const LeaksTab: React.FC<LeaksTabProps> = ({ articles, onOpenContact }) =
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               
               {/* Video 1: El Momento del Atentado en Vivo (Actualizado 14.2 MB) */}
-              <div className="rounded-3xl bg-black border-2 border-emerald-500/50 overflow-hidden shadow-[0_0_35px_rgba(0,255,136,0.18)] flex flex-col justify-between">
-                <div className="bg-[#04160d] px-5 py-3 border-b border-emerald-500/30 flex items-center justify-between gap-2 text-xs font-mono">
+              <div className="rounded-3xl bg-black border-2 border-emerald-500/50 overflow-hidden flex flex-col justify-between">
+                <div className="bg-[#0f0f0f] px-5 py-3 border-b border-zinc-700 flex items-center justify-between gap-2 text-xs font-mono">
                   <div className="flex items-center gap-2 text-[#00ff88]">
                     <span className="relative flex h-2.5 w-2.5">
                       <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-500 opacity-75"></span>
@@ -669,7 +669,7 @@ export const LeaksTab: React.FC<LeaksTabProps> = ({ articles, onOpenContact }) =
                   </video>
                 </div>
 
-                <div className="p-4 bg-[#020b05] border-t border-emerald-950/80 space-y-1.5 flex-1">
+                <div className="p-4 bg-[#070707] border-t border-zinc-900/80 space-y-1.5 flex-1">
                   <div className="flex items-center gap-1.5 text-xs font-mono text-emerald-400 font-bold">
                     <Play className="w-3.5 h-3.5 fill-emerald-400" />
                     <span>Transmisión en directo durante la entrevista</span>
@@ -726,7 +726,7 @@ export const LeaksTab: React.FC<LeaksTabProps> = ({ articles, onOpenContact }) =
         {/* ======================================================== */}
         {isChinaPoloReport && (activeDossierSection === 'evidencias' || activeDossierSection === 'completo') && (
           <section className="space-y-6 pt-2 animate-in fade-in duration-300">
-            <div className="border-b border-emerald-500/30 pb-3 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+            <div className="border-b border-zinc-700 pb-3 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
               <div>
                 <span className="text-[10px] font-mono font-bold text-[#00ff88] uppercase tracking-widest block mb-0.5">
                   TRAZABILIDAD BANCARIA // INTEROPERABILIDAD YAPE Y PLIN
@@ -736,7 +736,7 @@ export const LeaksTab: React.FC<LeaksTabProps> = ({ articles, onOpenContact }) =
                   <span>La Ruta del Dinero: Los 3 Vouchers Incautados a Ronald Toro</span>
                 </h3>
               </div>
-              <span className="text-[11px] font-mono text-emerald-400 bg-black/80 px-3 py-1 rounded-full border border-emerald-500/40 self-start sm:self-auto">
+              <span className="text-[11px] font-mono text-emerald-400 bg-black/80 px-3 py-1 rounded-full border border-zinc-700 self-start sm:self-auto">
                 3 Giros Bancarios Judiciales
               </span>
             </div>
@@ -746,10 +746,10 @@ export const LeaksTab: React.FC<LeaksTabProps> = ({ articles, onOpenContact }) =
               {PAYMENT_VOUCHERS.map((v) => (
                 <div
                   key={v.id}
-                  className="rounded-3xl bg-[#031309] border border-emerald-500/40 overflow-hidden flex flex-col justify-between shadow-xl hover:border-emerald-400 transition-all group"
+                  className="rounded-3xl bg-[#0d0d0d] border border-zinc-700 overflow-hidden flex flex-col justify-between shadow-xl hover:border-emerald-400 transition-all group"
                 >
                   {/* Voucher Header */}
-                  <div className="p-4 bg-[#020b05] border-b border-emerald-950 flex items-center justify-between text-xs font-mono">
+                  <div className="p-4 bg-[#070707] border-b border-zinc-900 flex items-center justify-between text-xs font-mono">
                     <span className="font-bold text-[#00ff88]">{v.code}</span>
                     <span className="text-lg font-black text-white">{v.amount}</span>
                   </div>
@@ -759,7 +759,7 @@ export const LeaksTab: React.FC<LeaksTabProps> = ({ articles, onOpenContact }) =
                     className="relative aspect-[3/4] w-full overflow-hidden bg-black flex items-center justify-center cursor-pointer"
                     onClick={() => setZoomedImage({ url: v.imageUrl, title: v.title, caption: v.notes, tag: v.code })}
                   >
-                    <img
+                    <img loading="lazy" decoding="async"
                       src={v.imageUrl}
                       alt={v.title}
                       className="w-full h-full object-contain p-2 group-hover:scale-104 transition-transform duration-300"
@@ -782,7 +782,7 @@ export const LeaksTab: React.FC<LeaksTabProps> = ({ articles, onOpenContact }) =
                   </div>
 
                   {/* Voucher Analytical Details */}
-                  <div className="p-4 bg-[#020904] border-t border-emerald-950/80 space-y-2 flex-1 flex flex-col justify-between">
+                  <div className="p-4 bg-[#060606] border-t border-zinc-900/80 space-y-2 flex-1 flex flex-col justify-between">
                     <div className="space-y-1">
                       <h4 className="text-xs font-bold text-white leading-snug">
                         {v.title}
@@ -792,7 +792,7 @@ export const LeaksTab: React.FC<LeaksTabProps> = ({ articles, onOpenContact }) =
                       </p>
                     </div>
 
-                    <div className="pt-2 border-t border-emerald-950 text-[10px] font-mono text-emerald-400 flex items-center justify-between">
+                    <div className="pt-2 border-t border-zinc-900 text-[10px] font-mono text-emerald-400 flex items-center justify-between">
                       <span className="truncate">Destino: {v.receiver}</span>
                       <span className="text-[#00ff88] font-bold">PLIN</span>
                     </div>
@@ -802,7 +802,7 @@ export const LeaksTab: React.FC<LeaksTabProps> = ({ articles, onOpenContact }) =
             </div>
 
             {/* Analytical Context on Hotel and 15,000 Soles Bounty */}
-            <div className="p-5 rounded-3xl bg-[#03150b] border border-emerald-500/40 text-xs sm:text-sm text-slate-200 space-y-2 font-mono">
+            <div className="p-5 rounded-3xl bg-[#0e0e0e] border border-zinc-700 text-xs sm:text-sm text-slate-200 space-y-2 font-mono">
               <span className="text-emerald-400 font-bold uppercase block">Descargo Legal de la Defensa y Evidencia Fiscal:</span>
               El abogado de Ronald Toro sostiene que su defendido no conocía al sicario y que se limitó a prestar su cuenta a su media hermana Beángel Toro. Sin embargo, los peritajes de la Fiscalía confirman que los depósitos de S/ 80 corresponden con exactitud a la tarifa de 3 noches en el Hotel La Explanada donde se alojó la banda antes del ataque, sumados a los S/ 1.000 transferidos en horas previas como adelanto operativo.
             </div>
@@ -814,7 +814,7 @@ export const LeaksTab: React.FC<LeaksTabProps> = ({ articles, onOpenContact }) =
         {/* ======================================================== */}
         {isChinaPoloReport && (activeDossierSection === 'evidencias' || activeDossierSection === 'completo') && (
           <section className="space-y-6 pt-4 animate-in fade-in duration-300">
-            <div className="p-5 sm:p-6 rounded-3xl bg-gradient-to-r from-[#041c10] via-[#052918] to-[#02130b] border-2 border-emerald-500/60 shadow-xl flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div className="p-5 sm:p-6 rounded-3xl bg-gradient-to-r from-[#131313] via-[#1c1c1c] to-[#0d0d0d] border-2 border-emerald-500/60 shadow-xl flex flex-col sm:flex-row sm:items-center justify-between gap-3">
               <div className="space-y-1">
                 <span className="text-[10px] font-mono font-bold text-[#00ff88] uppercase tracking-widest block">
                   EXPEDIENTE DE MENSAJERÍA INCAUTADA // POLICÍA NACIONAL DEL PERÚ
@@ -838,21 +838,21 @@ export const LeaksTab: React.FC<LeaksTabProps> = ({ articles, onOpenContact }) =
                 <div
                   key={c.id}
                   onClick={() => setActiveChatTab(idx)}
-                  className={`rounded-2xl bg-[#031309] border transition-all cursor-pointer flex flex-col justify-between overflow-hidden group shadow-lg ${
+                  className={`rounded-2xl bg-[#0d0d0d] border transition-all cursor-pointer flex flex-col justify-between overflow-hidden group shadow-lg ${
                     activeChatTab === idx
-                      ? 'border-[#00ff88] shadow-[0_0_20px_rgba(0,255,136,0.3)] ring-1 ring-[#00ff88]'
-                      : 'border-emerald-500/30 hover:border-emerald-400/80 hover:bg-[#051d0e]'
+                      ? 'border-[#00ff88] ring-1 ring-[#00ff88]'
+                      : 'border-zinc-700 hover:border-emerald-400/80 hover:bg-[#141414]'
                   }`}
                 >
                   {/* Card Top Badge */}
-                  <div className="p-2.5 bg-[#020b05] border-b border-emerald-950 flex items-center justify-between text-[10px] font-mono">
+                  <div className="p-2.5 bg-[#070707] border-b border-zinc-900 flex items-center justify-between text-[10px] font-mono">
                     <span className="font-bold text-[#00ff88]">{c.stepNumber}</span>
                     <span className="text-slate-400 text-[9px] uppercase tracking-wider">{c.sender}</span>
                   </div>
 
                   {/* Screenshot Preview with Zoom button */}
                   <div className="relative aspect-[3/5] w-full bg-black overflow-hidden flex items-center justify-center">
-                    <img
+                    <img loading="lazy" decoding="async"
                       src={c.imageUrl}
                       alt={c.title}
                       className="w-full h-full object-contain p-1.5 group-hover:scale-103 transition-transform duration-300"
@@ -884,7 +884,7 @@ export const LeaksTab: React.FC<LeaksTabProps> = ({ articles, onOpenContact }) =
                   </div>
 
                   {/* Card Excerpt */}
-                  <div className="p-3 bg-[#020904] border-t border-emerald-950/80 space-y-1.5 flex-1 flex flex-col justify-between">
+                  <div className="p-3 bg-[#060606] border-t border-zinc-900/80 space-y-1.5 flex-1 flex flex-col justify-between">
                     <div>
                       <h4 className="text-xs font-bold text-white leading-snug line-clamp-2">
                         {c.title}
@@ -893,7 +893,7 @@ export const LeaksTab: React.FC<LeaksTabProps> = ({ articles, onOpenContact }) =
                         "{c.excerpt}"
                       </p>
                     </div>
-                    <div className="pt-2 border-t border-emerald-950 flex items-center justify-between text-[10px] font-mono text-emerald-400">
+                    <div className="pt-2 border-t border-zinc-900 flex items-center justify-between text-[10px] font-mono text-emerald-400">
                       <span>{activeChatTab === idx ? 'Cotejo Activo' : 'Clic para cotejo'}</span>
                       <ArrowRight className="w-3 h-3" />
                     </div>
@@ -904,10 +904,10 @@ export const LeaksTab: React.FC<LeaksTabProps> = ({ articles, onOpenContact }) =
 
             {/* Detailed Forensic Comparison Console */}
             {CHAT_EVIDENCES[activeChatTab] && (
-              <div className="rounded-3xl bg-[#041209] border border-emerald-500/40 overflow-hidden shadow-2xl mt-4">
+              <div className="rounded-3xl bg-[#0c0c0c] border border-zinc-700 overflow-hidden shadow-2xl mt-4">
                 
                 {/* Selector Bar for quick switching */}
-                <div className="flex items-center gap-2 p-3 bg-[#020b05] border-b border-emerald-950 overflow-x-auto scrollbar-none">
+                <div className="flex items-center gap-2 p-3 bg-[#070707] border-b border-zinc-900 overflow-x-auto scrollbar-none">
                   <span className="text-[11px] font-mono text-slate-400 px-2 font-bold uppercase">
                     Cotejo Seleccionado:
                   </span>
@@ -918,8 +918,8 @@ export const LeaksTab: React.FC<LeaksTabProps> = ({ articles, onOpenContact }) =
                       onClick={() => setActiveChatTab(idx)}
                       className={`px-3.5 py-1.5 rounded-xl text-xs font-mono font-bold transition-all whitespace-nowrap cursor-pointer ${
                         activeChatTab === idx
-                          ? 'bg-[#00ff88] text-black shadow-[0_0_15px_rgba(0,255,136,0.4)]'
-                          : 'bg-[#07190f] text-slate-300 hover:text-white border border-emerald-900/80 hover:bg-[#0c2f1c]'
+                          ? 'bg-[#00ff88] text-black'
+                          : 'bg-[#121212] text-slate-300 hover:text-white border border-zinc-800/80 hover:bg-[#222222]'
                       }`}
                     >
                       <span>{c.stepNumber}</span>
@@ -941,7 +941,7 @@ export const LeaksTab: React.FC<LeaksTabProps> = ({ articles, onOpenContact }) =
                         tag: CHAT_EVIDENCES[activeChatTab].stepNumber
                       })}
                     >
-                      <img
+                      <img loading="lazy" decoding="async"
                         src={CHAT_EVIDENCES[activeChatTab].imageUrl}
                         alt={CHAT_EVIDENCES[activeChatTab].title}
                         className="w-full h-auto object-contain group-hover:scale-102 transition-transform duration-300"
@@ -975,7 +975,7 @@ export const LeaksTab: React.FC<LeaksTabProps> = ({ articles, onOpenContact }) =
                     </div>
 
                     {/* Chat Bubble Reconstruction */}
-                    <div className="space-y-2.5 p-4 rounded-2xl bg-black/80 border border-emerald-950/80 max-h-96 overflow-y-auto">
+                    <div className="space-y-2.5 p-4 rounded-2xl bg-black/80 border border-zinc-900/80 max-h-96 overflow-y-auto">
                       {CHAT_EVIDENCES[activeChatTab].dialogue.map((d, dIdx) => (
                         <div
                           key={dIdx}
@@ -1006,7 +1006,7 @@ export const LeaksTab: React.FC<LeaksTabProps> = ({ articles, onOpenContact }) =
                     </div>
 
                     {/* Forensic Analysis Note */}
-                    <div className="p-4 rounded-2xl bg-[#06180f] border-l-4 border-[#00ff88] text-xs sm:text-sm text-slate-300 font-sans leading-relaxed">
+                    <div className="p-4 rounded-2xl bg-[#111111] border-l-4 border-[#00ff88] text-xs sm:text-sm text-slate-300 font-sans leading-relaxed">
                       <span className="text-[#00ff88] font-mono font-bold block mb-1">
                         Relevancia Criminalística:
                       </span>
@@ -1019,7 +1019,7 @@ export const LeaksTab: React.FC<LeaksTabProps> = ({ articles, onOpenContact }) =
 
             {/* Complementary pressures from Morocho and Andrea */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
-              <div className="p-5 rounded-3xl bg-[#05170d] border border-emerald-500/35 space-y-2 shadow-lg">
+              <div className="p-5 rounded-3xl bg-[#101010] border border-zinc-700 space-y-2 shadow-lg">
                 <div className="flex items-center gap-2 text-rose-400 text-xs font-mono font-bold">
                   <AlertCircle className="w-4 h-4 text-rose-500" />
                   <span>Presión de "Ricardo Morocho" (Posible ejecutor alternativo):</span>
@@ -1032,7 +1032,7 @@ export const LeaksTab: React.FC<LeaksTabProps> = ({ articles, onOpenContact }) =
                 </p>
               </div>
 
-              <div className="p-5 rounded-3xl bg-[#05170d] border border-emerald-500/35 space-y-2 shadow-lg">
+              <div className="p-5 rounded-3xl bg-[#101010] border border-zinc-700 space-y-2 shadow-lg">
                 <div className="flex items-center gap-2 text-amber-400 text-xs font-mono font-bold">
                   <DollarSign className="w-4 h-4 text-amber-400" />
                   <span>Comunicaciones de Andrea Gonzáles (Pareja de Obispo):</span>
@@ -1053,8 +1053,8 @@ export const LeaksTab: React.FC<LeaksTabProps> = ({ articles, onOpenContact }) =
         {/* ======================================================== */}
         {activeArticle.ballisticsCases && activeArticle.ballisticsCases.length > 0 && (!isChinaPoloReport || activeDossierSection === 'balistica' || activeDossierSection === 'completo') && (
           <section className="space-y-4 pt-2 animate-in fade-in duration-300">
-            <div className="p-5 sm:p-8 rounded-3xl bg-[#031308] border border-emerald-500/40 space-y-5 shadow-xl">
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-emerald-950 pb-3">
+            <div className="p-5 sm:p-8 rounded-3xl bg-[#0d0d0d] border border-zinc-700 space-y-5 shadow-xl">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-zinc-900 pb-3">
                 <div className="space-y-0.5">
                   <span className="text-[10px] font-mono font-bold text-rose-400 uppercase tracking-widest block">
                     CAPÍTULO 04 // PERITAJE BALÍSTICO DIRINCRI · REPORTE AMÉRICA NOTICIAS
@@ -1064,25 +1064,25 @@ export const LeaksTab: React.FC<LeaksTabProps> = ({ articles, onOpenContact }) =
                     <span>La Glock 9mm: Un Arma Vinculada a Seis Atentados de Sangre</span>
                   </h3>
                 </div>
-                <span className="text-[11px] font-mono text-emerald-400 bg-black/80 px-3 py-1 rounded-full border border-emerald-500/40 self-start sm:self-auto">
+                <span className="text-[11px] font-mono text-emerald-400 bg-black/80 px-3 py-1 rounded-full border border-zinc-700 self-start sm:self-auto">
                   Robada en Villa El Salvador (2023)
                 </span>
               </div>
 
               {/* Responsive Layout: Desktop Table (min-w-700px with smooth scroll) */}
-              <div className="hidden md:block overflow-x-auto rounded-2xl border border-emerald-900/80 bg-black/80">
+              <div className="hidden md:block overflow-x-auto rounded-2xl border border-zinc-800/80 bg-black/80">
                 <table className="w-full min-w-[700px] text-left text-xs sm:text-sm font-sans">
                   <thead>
-                    <tr className="border-b border-emerald-900/80 bg-[#061a0f] text-emerald-300 font-mono text-[11px] uppercase tracking-wider">
+                    <tr className="border-b border-zinc-800/80 bg-[#121212] text-emerald-300 font-mono text-[11px] uppercase tracking-wider">
                       <th className="py-3 px-4 w-32">Fecha</th>
                       <th className="py-3 px-4 w-44">Lugar / Distrito</th>
                       <th className="py-3 px-4">Hecho Vinculado según la Pericia Policial</th>
                       <th className="py-3 px-4 text-right w-36">Resultado Balístico</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-emerald-950/60 font-sans">
+                  <tbody className="divide-y divide-zinc-900/60 font-sans">
                     {activeArticle.ballisticsCases.map((bc, idx) => (
-                      <tr key={idx} className="hover:bg-[#072414]/50 transition-colors">
+                      <tr key={idx} className="hover:bg-[#191919]/50 transition-colors">
                         <td className="py-3.5 px-4 font-mono text-emerald-400 whitespace-nowrap font-bold">
                           {bc.date}
                         </td>
@@ -1112,9 +1112,9 @@ export const LeaksTab: React.FC<LeaksTabProps> = ({ articles, onOpenContact }) =
                 {activeArticle.ballisticsCases.map((bc, idx) => (
                   <div
                     key={idx}
-                    className="p-4 rounded-2xl bg-black/90 border border-emerald-900/80 space-y-2.5 shadow-md hover:border-emerald-500/50 transition-colors"
+                    className="p-4 rounded-2xl bg-black/90 border border-zinc-800/80 space-y-2.5 shadow-md hover:border-emerald-500/50 transition-colors"
                   >
-                    <div className="flex items-center justify-between gap-2 border-b border-emerald-950/80 pb-2">
+                    <div className="flex items-center justify-between gap-2 border-b border-zinc-900/80 pb-2">
                       <div className="flex items-center gap-1.5">
                         <Calendar className="w-3.5 h-3.5 text-emerald-400" />
                         <span className="font-mono text-xs font-bold text-emerald-300">{bc.date}</span>
@@ -1136,7 +1136,7 @@ export const LeaksTab: React.FC<LeaksTabProps> = ({ articles, onOpenContact }) =
                 ))}
               </div>
 
-              <div className="p-4 rounded-xl bg-black/60 border border-emerald-900/60 text-xs text-slate-400 leading-relaxed font-mono">
+              <div className="p-4 rounded-xl bg-black/60 border border-zinc-800/60 text-xs text-slate-400 leading-relaxed font-mono">
                 <span className="text-amber-400 font-bold block mb-1">Precisión Jurídica Obligatoria:</span>
                 La conexión determinada por la DIRINCRI es de naturaleza balística: identifica que el cañón y percutor de la misma pistola Glock 9mm fueron empleados en los seis sucesos. Ello no demuestra que todos los crímenes tuvieran el mismo autor intelectual ni que el efectivo policial al que le sustrajeron el arma en 2023 mantenga vínculo con la banda criminal.
               </div>
@@ -1149,7 +1149,7 @@ export const LeaksTab: React.FC<LeaksTabProps> = ({ articles, onOpenContact }) =
         {/* ======================================================== */}
         {isChinaPoloReport && (activeDossierSection === 'cronica' || activeDossierSection === 'completo') && (
           <section className="space-y-4 pt-2 animate-in fade-in duration-300">
-            <div className="border-b border-emerald-500/30 pb-3">
+            <div className="border-b border-zinc-700 pb-3">
               <span className="text-[10px] font-mono font-bold text-[#00ff88] uppercase tracking-widest block mb-1">
                 CAPÍTULO 05 // SEGURIDAD ESTATAL Y CONTROVERSIAS DE PROTECCIÓN
               </span>
@@ -1166,7 +1166,7 @@ export const LeaksTab: React.FC<LeaksTabProps> = ({ articles, onOpenContact }) =
               <p>
                 Asimismo, trascendió que el 10 de septiembre el general PNP Víctor Revoredo le advirtió de amenazas en curso procedentes de internos de tres establecimientos penitenciarios del país. Sobre las medidas de protección conviven versiones encontradas: mientras el comando policial sostuvo que Polo contó con custodia en Chimbote hasta la noche previa, la subprefecta de Huaylas, Sheila Herrera Pablo, afirmó que la organización política no había solicitado garantías para la actividad proselitista de Caraz.
               </p>
-              <div className="p-4 rounded-2xl bg-[#06180f] border-l-4 border-emerald-400 text-slate-100 text-sm font-sans">
+              <div className="p-4 rounded-2xl bg-[#111111] border-l-4 border-emerald-400 text-slate-100 text-sm font-sans">
                 La Defensoría del Pueblo exigió esclarecer con urgencia qué autoridades conocían el nivel real de amenaza, qué órdenes se cursaron y por qué se interrumpió el resguardo efectivo durante los desplazamientos de campaña de la candidata. El posterior relevo del general Revoredo desató suspicacias que el ministro del Interior, César Astudillo, desmintió asegurando que obedecía a rotaciones preparadas con anterioridad.
               </div>
             </div>
@@ -1178,7 +1178,7 @@ export const LeaksTab: React.FC<LeaksTabProps> = ({ articles, onOpenContact }) =
         {/* ======================================================== */}
         {isChinaPoloReport && (activeDossierSection === 'cronica' || activeDossierSection === 'completo') && (
           <section className="space-y-4 pt-2 animate-in fade-in duration-300">
-            <div className="border-b border-emerald-500/30 pb-3">
+            <div className="border-b border-zinc-700 pb-3">
               <span className="text-[10px] font-mono font-bold text-[#00ff88] uppercase tracking-widest block mb-1">
                 CAPÍTULO 06 // INVESTIGACIONES PERIODÍSTICAS Y MÓVILES
               </span>
@@ -1207,7 +1207,7 @@ export const LeaksTab: React.FC<LeaksTabProps> = ({ articles, onOpenContact }) =
         {/* ======================================================== */}
         {isChinaPoloReport && (activeDossierSection === 'cronica' || activeDossierSection === 'completo') && (
           <section className="space-y-4 pt-2 animate-in fade-in duration-300">
-            <div className="border-b border-emerald-500/30 pb-3">
+            <div className="border-b border-zinc-700 pb-3">
               <span className="text-[10px] font-mono font-bold text-[#00ff88] uppercase tracking-widest block mb-1">
                 CAPÍTULO 07 // CONFUSIONES MEDIÁTICAS Y ESCLARECIMIENTOS
               </span>
@@ -1225,11 +1225,11 @@ export const LeaksTab: React.FC<LeaksTabProps> = ({ articles, onOpenContact }) =
                 Adrián José Solís Ruiz ("José"), quien viajaba en la unidad y sobrevivió, fugó del centro hospitalario pero fue finalmente capturado el 9 de octubre en Calabozo, estado de Guárico. Aunque inicialmente se solicitó su extradición, las autoridades venezolanas informaron que no será extraditado y que prestará declaraciones vía asistencia judicial internacional.
               </p>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
-                <div className="p-4 rounded-2xl bg-[#041208] border border-emerald-900/60 text-xs sm:text-sm text-slate-300 space-y-1">
+                <div className="p-4 rounded-2xl bg-[#0c0c0c] border border-zinc-800/60 text-xs sm:text-sm text-slate-300 space-y-1">
                   <span className="text-emerald-400 font-bold block font-mono">Olimpia Pachas Osorio (72 años):</span>
                   Víctima civil inocente que resultó herida de gravedad durante la balacera en Caraz y falleció días después en el hospital de Huaraz. No mantenía ningún vínculo con el móvil criminal.
                 </div>
-                <div className="p-4 rounded-2xl bg-[#041208] border border-emerald-900/60 text-xs sm:text-sm text-slate-300 space-y-1">
+                <div className="p-4 rounded-2xl bg-[#0c0c0c] border border-zinc-800/60 text-xs sm:text-sm text-slate-300 space-y-1">
                   <span className="text-emerald-400 font-bold block font-mono">Edwin Iván Cotrina Quijano ("Cojo Giordano"):</span>
                   Mencionado por Polo por una advertencia previa sobre amenazas, pero su asesinato ocurrió en marzo de 2025; no forma parte de una supuesta purga posterior a los hechos de Caraz.
                 </div>
@@ -1243,8 +1243,8 @@ export const LeaksTab: React.FC<LeaksTabProps> = ({ articles, onOpenContact }) =
         {/* ======================================================== */}
         {activeArticle.suspects && activeArticle.suspects.length > 0 && (!isChinaPoloReport || activeDossierSection === 'red-criminal' || activeDossierSection === 'completo') && (
           <section className="space-y-4 pt-2 animate-in fade-in duration-300">
-            <div className="p-6 sm:p-8 rounded-3xl bg-[#020e06] border border-emerald-500/40 space-y-5 shadow-xl">
-              <div className="border-b border-emerald-950 pb-3">
+            <div className="p-6 sm:p-8 rounded-3xl bg-[#090909] border border-zinc-700 space-y-5 shadow-xl">
+              <div className="border-b border-zinc-900 pb-3">
                 <span className="text-[10px] font-mono font-bold text-emerald-400 uppercase tracking-widest block mb-0.5">
                   REGISTRO PROCESAL // FUENTES JUDICIALES
                 </span>
@@ -1256,7 +1256,7 @@ export const LeaksTab: React.FC<LeaksTabProps> = ({ articles, onOpenContact }) =
 
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {activeArticle.suspects.map((s, idx) => {
-                  let badgeStyle = 'bg-emerald-950 text-emerald-300 border-emerald-800';
+                  let badgeStyle = 'bg-zinc-900 text-emerald-300 border-zinc-700';
                   if (s.statusType === 'detenido') badgeStyle = 'bg-amber-950/80 text-amber-300 border-amber-700/80';
                   if (s.statusType === 'capturado') badgeStyle = 'bg-cyan-950/80 text-cyan-300 border-cyan-700/80';
                   if (s.statusType === 'fallecido') badgeStyle = 'bg-zinc-900 text-zinc-400 border-zinc-700';
@@ -1266,7 +1266,7 @@ export const LeaksTab: React.FC<LeaksTabProps> = ({ articles, onOpenContact }) =
                   return (
                     <div
                       key={idx}
-                      className="p-4 rounded-2xl bg-black/75 border border-emerald-900/60 flex flex-col justify-between space-y-3 shadow-md"
+                      className="p-4 rounded-2xl bg-black/75 border border-zinc-800/60 flex flex-col justify-between space-y-3 shadow-md"
                     >
                       <div className="space-y-1.5">
                         <div className="flex items-center justify-between gap-2">
@@ -1287,7 +1287,7 @@ export const LeaksTab: React.FC<LeaksTabProps> = ({ articles, onOpenContact }) =
                         </p>
                       </div>
 
-                      <div className="pt-2 border-t border-emerald-950 text-[11px] font-mono text-slate-400">
+                      <div className="pt-2 border-t border-zinc-900 text-[11px] font-mono text-slate-400">
                         <span className="text-slate-200 font-semibold">Situación:</span> {s.status}
                       </div>
                     </div>
@@ -1303,8 +1303,8 @@ export const LeaksTab: React.FC<LeaksTabProps> = ({ articles, onOpenContact }) =
         {/* ======================================================== */}
         {activeArticle.openQuestions && activeArticle.openQuestions.length > 0 && (!isChinaPoloReport || activeDossierSection === 'preguntas' || activeDossierSection === 'completo') && (
           <section className="space-y-4 pt-2 animate-in fade-in duration-300">
-            <div className="p-6 sm:p-8 rounded-3xl bg-gradient-to-r from-[#03150c] via-[#052415] to-[#021008] border border-emerald-500/50 space-y-4 shadow-xl">
-              <div className="border-b border-emerald-500/30 pb-3">
+            <div className="p-6 sm:p-8 rounded-3xl bg-gradient-to-r from-[#0e0e0e] via-[#181818] to-[#0b0b0b] border border-emerald-500/50 space-y-4 shadow-xl">
+              <div className="border-b border-zinc-700 pb-3">
                 <span className="text-[10px] font-mono font-bold text-[#00ff88] uppercase tracking-widest block mb-0.5">
                   LÍNEAS DE INVESTIGACIÓN PENDIENTES
                 </span>
@@ -1318,9 +1318,9 @@ export const LeaksTab: React.FC<LeaksTabProps> = ({ articles, onOpenContact }) =
                 {activeArticle.openQuestions.map((q, idx) => (
                   <div
                     key={idx}
-                    className="p-3.5 rounded-2xl bg-black/70 border border-emerald-900/80 flex items-start gap-3 hover:border-emerald-400/60 transition-colors"
+                    className="p-3.5 rounded-2xl bg-black/70 border border-zinc-800/80 flex items-start gap-3 hover:border-emerald-400/60 transition-colors"
                   >
-                    <span className="w-6 h-6 rounded-full bg-emerald-950 border border-emerald-500/60 text-[#00ff88] font-mono font-bold text-xs flex items-center justify-center shrink-0 mt-0.5">
+                    <span className="w-6 h-6 rounded-full bg-zinc-900 border border-emerald-500/60 text-[#00ff88] font-mono font-bold text-xs flex items-center justify-center shrink-0 mt-0.5">
                       {idx + 1}
                     </span>
                     <p className="text-xs sm:text-sm text-slate-200 font-medium leading-relaxed font-sans">
@@ -1339,7 +1339,7 @@ export const LeaksTab: React.FC<LeaksTabProps> = ({ articles, onOpenContact }) =
           {activeArticle.tags.map((tag) => (
             <span
               key={tag}
-              className="px-3 py-1 rounded-full text-xs font-mono bg-[#06190f] text-emerald-400 border border-emerald-500/30"
+              className="px-3 py-1 rounded-full text-xs font-mono bg-[#121212] text-emerald-400 border border-zinc-700"
             >
               {tag}
             </span>
@@ -1347,7 +1347,7 @@ export const LeaksTab: React.FC<LeaksTabProps> = ({ articles, onOpenContact }) =
         </div>
 
         {/* Bottom Contact / OSINT Assistance Banner */}
-        <div className="p-6 sm:p-8 rounded-3xl bg-gradient-to-r from-[#03180d] via-[#052917] to-[#02120a] border-2 border-emerald-500/50 shadow-[0_0_35px_rgba(0,255,136,0.2)] flex flex-col md:flex-row items-center justify-between gap-6">
+        <div className="p-6 sm:p-8 rounded-3xl bg-gradient-to-r from-[#101010] via-[#1c1c1c] to-[#0c0c0c] border-2 border-emerald-500/50 flex flex-col md:flex-row items-center justify-between gap-6">
           <div className="space-y-1.5 text-center md:text-left">
             <span className="text-[10px] font-mono font-bold text-[#00ff88] uppercase tracking-wider">
               ASISTENCIA TÉCNICA // INVESTIGACIÓN OSINT
@@ -1363,7 +1363,7 @@ export const LeaksTab: React.FC<LeaksTabProps> = ({ articles, onOpenContact }) =
           <button
             type="button"
             onClick={() => handleOpenTelegram(activeArticle)}
-            className="px-7 py-3.5 rounded-full font-black text-xs sm:text-sm text-slate-950 bg-[#00ff88] hover:bg-[#00e676] shadow-[0_0_25px_rgba(0,255,136,0.4)] transition-all cursor-pointer whitespace-nowrap font-mono uppercase active:scale-95"
+            className="px-7 py-3.5 rounded-full font-black text-xs sm:text-sm text-slate-950 bg-[#00ff88] hover:bg-[#00e676] transition-all cursor-pointer whitespace-nowrap font-mono uppercase active:scale-95"
           >
             Contactar con @{activeArticle.authorTelegram}
           </button>
@@ -1371,7 +1371,7 @@ export const LeaksTab: React.FC<LeaksTabProps> = ({ articles, onOpenContact }) =
 
         {/* Related Articles Showcase */}
         {relatedArticles.length > 0 && (
-          <div className="space-y-4 pt-6 border-t border-emerald-950">
+          <div className="space-y-4 pt-6 border-t border-zinc-900">
             <div className="flex items-center justify-between">
               <h3 className="text-xl font-black text-white tracking-tight">
                 Otras publicaciones de la revista
@@ -1383,11 +1383,11 @@ export const LeaksTab: React.FC<LeaksTabProps> = ({ articles, onOpenContact }) =
                 <div
                   key={rel.id}
                   onClick={() => handleSelectArticle(rel)}
-                  className="p-4 rounded-2xl bg-[#041208] border border-emerald-900/60 hover:border-emerald-400/80 transition-all cursor-pointer flex flex-col justify-between group shadow-md hover:shadow-[0_0_20px_rgba(0,255,136,0.2)]"
+                  className="p-4 rounded-2xl bg-[#0c0c0c] border border-zinc-800/60 hover:border-emerald-400/80 transition-all cursor-pointer flex flex-col justify-between group shadow-md"
                 >
                   <div className="space-y-2.5">
                     <div className="w-full h-32 rounded-xl overflow-hidden bg-black">
-                      <img
+                      <img loading="lazy" decoding="async"
                         src={rel.imageUrl}
                         alt={rel.title}
                         className="w-full h-full object-cover group-hover:scale-105 transition-transform"
@@ -1405,7 +1405,7 @@ export const LeaksTab: React.FC<LeaksTabProps> = ({ articles, onOpenContact }) =
                       {rel.title}
                     </h4>
                   </div>
-                  <div className="pt-3 mt-3 border-t border-emerald-950 flex items-center justify-between text-[11px] font-mono text-slate-400">
+                  <div className="pt-3 mt-3 border-t border-zinc-900 flex items-center justify-between text-[11px] font-mono text-slate-400">
                     <span>{rel.readTime}</span>
                     <span className="text-[#00ff88] font-bold group-hover:translate-x-1 transition-transform flex items-center gap-1">
                       <span>Leer informe</span>
@@ -1423,7 +1423,7 @@ export const LeaksTab: React.FC<LeaksTabProps> = ({ articles, onOpenContact }) =
           <button
             type="button"
             onClick={handleBackToNews}
-            className="inline-flex items-center gap-2 px-6 py-3 rounded-full text-xs sm:text-sm font-mono font-bold text-slate-300 hover:text-white bg-[#06180e] hover:bg-[#0a2a18] border border-emerald-500/40 hover:border-[#00ff88] shadow-lg transition-all cursor-pointer"
+            className="inline-flex items-center gap-2 px-6 py-3 rounded-full text-xs sm:text-sm font-mono font-bold text-slate-300 hover:text-white bg-[#111111] hover:bg-[#1e1e1e] border border-zinc-700 hover:border-[#00ff88] shadow-lg transition-all cursor-pointer"
           >
             <ArrowLeft className="w-4 h-4 text-[#00ff88]" />
             <span>Volver a la Revista & Leaks</span>
@@ -1439,19 +1439,19 @@ export const LeaksTab: React.FC<LeaksTabProps> = ({ articles, onOpenContact }) =
             onClick={() => setZoomedImage(null)}
           >
             <div
-              className="max-w-4xl w-full rounded-3xl bg-[#041209] border border-emerald-500/60 overflow-hidden shadow-2xl relative cursor-default"
+              className="max-w-4xl w-full rounded-3xl bg-[#0c0c0c] border border-emerald-500/60 overflow-hidden shadow-2xl relative cursor-default"
               onClick={(e) => e.stopPropagation()}
             >
               <button
                 type="button"
                 onClick={() => setZoomedImage(null)}
-                className="absolute top-4 right-4 z-20 p-2 rounded-full bg-black/80 hover:bg-emerald-950 text-slate-300 hover:text-white border border-emerald-500/50 cursor-pointer shadow-lg"
+                className="absolute top-4 right-4 z-20 p-2 rounded-full bg-black/80 hover:bg-zinc-900 text-slate-300 hover:text-white border border-emerald-500/50 cursor-pointer shadow-lg"
               >
                 <X className="w-5 h-5" />
               </button>
 
               <div className="max-h-[72vh] bg-black flex items-center justify-center overflow-hidden p-2">
-                <img
+                <img loading="lazy" decoding="async"
                   src={zoomedImage.url}
                   alt={zoomedImage.title}
                   className="w-full h-full object-contain max-h-[70vh]"
@@ -1463,7 +1463,7 @@ export const LeaksTab: React.FC<LeaksTabProps> = ({ articles, onOpenContact }) =
                 />
               </div>
 
-              <div className="p-5 sm:p-6 bg-[#020b05] border-t border-emerald-950 space-y-1.5">
+              <div className="p-5 sm:p-6 bg-[#070707] border-t border-zinc-900 space-y-1.5">
                 {zoomedImage.tag && (
                   <span className="text-[10px] font-mono text-[#00ff88] font-bold block uppercase">
                     {zoomedImage.tag}
@@ -1493,11 +1493,11 @@ export const LeaksTab: React.FC<LeaksTabProps> = ({ articles, onOpenContact }) =
     <div className="space-y-10 animate-in fade-in duration-300">
       
       {/* 1. Header Banner & Title */}
-      <div className="relative rounded-3xl overflow-hidden border border-emerald-500/35 bg-gradient-to-r from-[#03150d] via-[#052917] to-[#021008] p-4 sm:p-7 md:p-10 shadow-[0_0_50px_rgba(0,255,136,0.12)]">
+      <div className="relative rounded-3xl overflow-hidden border border-zinc-700 bg-gradient-to-r from-[#0e0e0e] via-[#1c1c1c] to-[#0b0b0b] p-4 sm:p-7 md:p-10">
         <div className="absolute top-0 right-0 w-96 h-full bg-emerald-500/10 blur-3xl pointer-events-none" />
         
         <div className="relative z-10 max-w-3xl space-y-3">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-[10px] font-mono font-bold tracking-widest text-[#00ff88] bg-black/60 border border-emerald-500/40 shadow-inner">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-[10px] font-mono font-bold tracking-widest text-[#00ff88] bg-black/60 border border-zinc-700 shadow-inner">
             <Radio className="w-3 h-3 text-[#00ff88] animate-pulse" />
             <span>REVISTA DIGITAL // INTELIGENCIA OSINT & FILTRACIONES</span>
           </div>
@@ -1516,7 +1516,7 @@ export const LeaksTab: React.FC<LeaksTabProps> = ({ articles, onOpenContact }) =
       <UpcomingLeakCountdownBanner onNotifyTelegram={onOpenContact} />
 
       {/* 3. Magazine Filter Pill Bar & Search */}
-      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-2 border-b border-emerald-500/20">
+      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-2 border-b border-zinc-700">
         
         {/* Categories Bar */}
         <div className="flex items-center gap-2 overflow-x-auto pb-2 lg:pb-0 scrollbar-none">
@@ -1529,8 +1529,8 @@ export const LeaksTab: React.FC<LeaksTabProps> = ({ articles, onOpenContact }) =
                 onClick={() => setSelectedCategory(cat.id)}
                 className={`relative px-5 py-2.5 rounded-full text-xs font-bold transition-all whitespace-nowrap cursor-pointer select-none ${
                   isActive
-                    ? 'bg-[#00ff88] text-slate-950 shadow-[0_0_25px_rgba(0,255,136,0.45)] scale-102 font-black'
-                    : 'bg-[#07190f]/90 text-slate-300 hover:text-white border border-emerald-500/20 hover:border-emerald-400/60 hover:bg-[#0a2617]'
+                    ? 'bg-[#00ff88] text-slate-950 scale-102 font-black'
+                    : 'bg-[#121212]/90 text-slate-300 hover:text-white border border-zinc-700 hover:border-emerald-400/60 hover:bg-[#1b1b1b]'
                 }`}
               >
                 {cat.label}
@@ -1549,7 +1549,7 @@ export const LeaksTab: React.FC<LeaksTabProps> = ({ articles, onOpenContact }) =
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Buscar por DNI, base, banco, caso..."
-            className="w-full pl-10 pr-9 py-2.5 rounded-full bg-[#06170e]/95 border border-emerald-500/30 text-slate-100 text-xs sm:text-sm placeholder:text-slate-500 focus:outline-none focus:border-emerald-400 focus:shadow-[0_0_20px_rgba(0,255,136,0.25)] transition-all"
+            className="w-full pl-10 pr-9 py-2.5 rounded-full bg-[#111111]/95 border border-zinc-700 text-slate-100 text-xs sm:text-sm placeholder:text-slate-500 focus:outline-none focus:border-emerald-400 focus:shadow-[0_0_20px_rgba(0,255,136,0.25)] transition-all"
           />
           {searchQuery && (
             <button
@@ -1574,9 +1574,9 @@ export const LeaksTab: React.FC<LeaksTabProps> = ({ articles, onOpenContact }) =
             {heroArticle && (
               <div
                 onClick={() => handleSelectArticle(heroArticle)}
-                className="lg:col-span-8 group relative rounded-3xl overflow-hidden border border-emerald-500/35 bg-[#030d07] min-h-[380px] sm:min-h-[500px] flex flex-col justify-end p-4 sm:p-7 md:p-9 cursor-pointer shadow-[0_20px_50px_rgba(0,0,0,0.8),0_0_35px_rgba(0,255,136,0.1)] hover:border-emerald-400/80 transition-all duration-500"
+                className="lg:col-span-8 group relative rounded-3xl overflow-hidden border border-zinc-700 bg-[#090909] min-h-[380px] sm:min-h-[500px] flex flex-col justify-end p-4 sm:p-7 md:p-9 cursor-pointer shadow-[0_20px_50px_rgba(0,0,0,0.8),0_0_35px_rgba(0,255,136,0.1)] hover:border-emerald-400/80 transition-all duration-500"
               >
-                <img
+                <img loading="lazy" decoding="async"
                   src={heroArticle.imageUrl}
                   alt={heroArticle.title}
                   className="absolute inset-0 w-full h-full object-cover group-hover:scale-108 transition-transform duration-700 pointer-events-none"
@@ -1587,11 +1587,11 @@ export const LeaksTab: React.FC<LeaksTabProps> = ({ articles, onOpenContact }) =
                   }}
                 />
 
-                <div className="absolute inset-0 bg-gradient-to-t from-[#020904] via-[#020904]/80 to-transparent pointer-events-none" />
-                <div className="absolute inset-0 bg-gradient-to-r from-[#020904]/85 via-[#020904]/30 to-transparent pointer-events-none" />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#060606] via-[#060606]/80 to-transparent pointer-events-none" />
+                <div className="absolute inset-0 bg-gradient-to-r from-[#060606]/85 via-[#060606]/30 to-transparent pointer-events-none" />
 
                 <div className="absolute top-4 sm:top-6 left-4 sm:left-6 z-10 flex items-center gap-2">
-                  <span className="px-3 py-1 rounded-full text-[10px] font-mono font-black uppercase tracking-widest bg-black/75 text-[#00ff88] border border-emerald-500/50 backdrop-blur-md shadow-[0_0_15px_rgba(0,255,136,0.25)] flex items-center gap-1.5">
+                  <span className="px-3 py-1 rounded-full text-[10px] font-mono font-black uppercase tracking-widest bg-black/75 text-[#00ff88] border border-emerald-500/50 backdrop-blur-md flex items-center gap-1.5">
                     <Zap className="w-3 h-3 text-[#00ff88] animate-pulse" />
                     <span>INVESTIGACIÓN ESPECIAL // LEAK #01</span>
                   </span>
@@ -1612,10 +1612,10 @@ export const LeaksTab: React.FC<LeaksTabProps> = ({ articles, onOpenContact }) =
                     {heroArticle.summary}
                   </p>
 
-                  <div className="pt-3 flex flex-wrap items-center justify-between gap-3 border-t border-emerald-500/20">
+                  <div className="pt-3 flex flex-wrap items-center justify-between gap-3 border-t border-zinc-700">
                     <div className="flex items-center gap-2.5 text-slate-300 font-mono text-xs">
-                      <div className="w-7 h-7 rounded-full bg-emerald-950 border border-emerald-400/60 overflow-hidden flex items-center justify-center shrink-0 shadow-[0_0_10px_rgba(0,255,136,0.3)]">
-                        <img
+                      <div className="w-7 h-7 rounded-full bg-zinc-900 border border-emerald-400/60 overflow-hidden flex items-center justify-center shrink-0">
+                        <img loading="lazy" decoding="async"
                           src={getAuthorAvatar(heroArticle.authorTelegram)}
                           alt={heroArticle.author}
                           className="w-full h-full object-cover"
@@ -1631,7 +1631,7 @@ export const LeaksTab: React.FC<LeaksTabProps> = ({ articles, onOpenContact }) =
                       <span className="text-slate-400">{heroArticle.readTime}</span>
                     </div>
 
-                    <div className="w-full sm:w-auto justify-center px-5 py-2.5 rounded-full bg-gradient-to-r from-[#00ff88] to-[#00d670] text-slate-950 font-black text-xs sm:text-sm font-mono shadow-[0_0_25px_rgba(0,255,136,0.45)] flex items-center gap-1.5 group-hover:scale-105 transition-all">
+                    <div className="w-full sm:w-auto justify-center px-5 py-2.5 rounded-full bg-gradient-to-r from-[#00ff88] to-[#00d670] text-slate-950 font-black text-xs sm:text-sm font-mono flex items-center gap-1.5 group-hover:scale-105 transition-all">
                       <span>Leer informe completo</span>
                       <ArrowUpRight className="w-4 h-4 text-slate-950 stroke-[2.5]" />
                     </div>
@@ -1641,17 +1641,17 @@ export const LeaksTab: React.FC<LeaksTabProps> = ({ articles, onOpenContact }) =
             )}
 
             {/* Right: "Últimas publicaciones" Column */}
-            <div className="lg:col-span-4 rounded-3xl bg-gradient-to-b from-[#092215]/95 via-[#06170e]/95 to-[#020a05] border border-emerald-500/30 p-5 sm:p-6 flex flex-col justify-between shadow-[0_20px_50px_rgba(0,0,0,0.8),inset_0_1px_1px_rgba(255,255,255,0.08),0_0_35px_rgba(0,255,136,0.08)] relative overflow-hidden backdrop-blur-xl">
+            <div className="lg:col-span-4 rounded-3xl bg-gradient-to-b from-[#191919]/95 via-[#111111]/95 to-[#070707] border border-zinc-700 p-5 sm:p-6 flex flex-col justify-between shadow-[0_20px_50px_rgba(0,0,0,0.8),inset_0_1px_1px_rgba(255,255,255,0.08),0_0_35px_rgba(0,255,136,0.08)] relative overflow-hidden backdrop-blur-xl">
               
               <div className="absolute -top-16 -right-16 w-48 h-48 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none" />
               
               <div className="relative z-10">
-                <div className="flex items-center justify-between mb-4 pb-2.5 border-b border-emerald-500/20">
+                <div className="flex items-center justify-between mb-4 pb-2.5 border-b border-zinc-700">
                   <h3 className="text-lg font-black text-white tracking-tight flex items-center gap-2">
                     <span>Últimas publicaciones</span>
                   </h3>
 
-                  <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-black/70 border border-emerald-500/40 text-[10px] font-mono font-bold text-[#00ff88] shadow-[0_0_10px_rgba(0,255,136,0.2)]">
+                  <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-black/70 border border-zinc-700 text-[10px] font-mono font-bold text-[#00ff88]">
                     <span className="relative flex h-2 w-2">
                       <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#00ff88] opacity-75"></span>
                       <span className="relative inline-flex rounded-full h-2 w-2 bg-[#00ff88]"></span>
@@ -1665,12 +1665,12 @@ export const LeaksTab: React.FC<LeaksTabProps> = ({ articles, onOpenContact }) =
                     <div
                       key={art.id}
                       onClick={() => handleSelectArticle(art)}
-                      className="group/item relative p-3 sm:p-3.5 rounded-2xl bg-gradient-to-r from-[#0d2a1b]/70 via-[#081c12]/80 to-[#040f09]/90 border border-emerald-500/20 hover:border-emerald-400/80 hover:bg-gradient-to-r hover:from-[#113824]/90 hover:via-[#0c291b]/90 hover:to-[#06180e] transition-all duration-300 hover:shadow-[0_10px_30px_rgba(0,255,136,0.22)] hover:-translate-y-0.5 cursor-pointer flex items-center gap-3.5 overflow-hidden"
+                      className="group/item relative p-3 sm:p-3.5 rounded-2xl bg-gradient-to-r from-[#1f1f1f]/70 via-[#141414]/80 to-[#0b0b0b]/90 border border-zinc-700 hover:border-emerald-400/80 hover:bg-gradient-to-r hover:from-[#292929]/90 hover:via-[#1e1e1e]/90 hover:to-[#111111] transition-all duration-300 hover:-translate-y-0.5 cursor-pointer flex items-center gap-3.5 overflow-hidden"
                     >
-                      <div className="absolute left-0 top-2 bottom-2 w-1 rounded-r-full bg-[#00ff88] opacity-0 group-hover/item:opacity-100 transition-opacity duration-300 shadow-[0_0_12px_#00ff88]" />
+                      <div className="absolute left-0 top-2 bottom-2 w-1 rounded-r-full bg-[#00ff88] opacity-0 group-hover/item:opacity-100 transition-opacity duration-300" />
 
-                      <div className="w-22 h-18 sm:w-26 sm:h-20 rounded-xl overflow-hidden bg-black shrink-0 relative border border-emerald-500/30 group-hover/item:border-emerald-400/70 transition-colors shadow-md">
-                        <img
+                      <div className="w-22 h-18 sm:w-26 sm:h-20 rounded-xl overflow-hidden bg-black shrink-0 relative border border-zinc-700 group-hover/item:border-emerald-400/70 transition-colors shadow-md">
+                        <img loading="lazy" decoding="async"
                           src={art.imageUrl}
                           alt={art.title}
                           className="w-full h-full object-cover group-hover/item:scale-110 transition-transform duration-500"
@@ -1710,11 +1710,11 @@ export const LeaksTab: React.FC<LeaksTabProps> = ({ articles, onOpenContact }) =
                 </div>
               </div>
 
-              <div className="pt-4 mt-3 border-t border-emerald-500/20 relative z-10">
+              <div className="pt-4 mt-3 border-t border-zinc-700 relative z-10">
                 <button
                   type="button"
                   onClick={() => setSelectedCategory('filtraciones')}
-                  className="w-full py-2.5 px-4 rounded-xl bg-[#081e12] hover:bg-[#0c2f1c] border border-emerald-500/30 hover:border-emerald-400/70 text-xs font-mono font-bold text-[#00ff88] flex items-center justify-between transition-all group/btn shadow-[0_4px_15px_rgba(0,0,0,0.4)] cursor-pointer"
+                  className="w-full py-2.5 px-4 rounded-xl bg-[#161616] hover:bg-[#222222] border border-zinc-700 hover:border-emerald-400/70 text-xs font-mono font-bold text-[#00ff88] flex items-center justify-between transition-all group/btn shadow-[0_4px_15px_rgba(0,0,0,0.4)] cursor-pointer"
                 >
                   <span className="flex items-center gap-1.5">
                     <FileText className="w-3.5 h-3.5 text-[#00ff88]" />
@@ -1742,7 +1742,7 @@ export const LeaksTab: React.FC<LeaksTabProps> = ({ articles, onOpenContact }) =
               <button
                 type="button"
                 onClick={() => setSelectedCategory('ciberseguridad')}
-                className="px-4 py-2 rounded-full bg-[#07190f] hover:bg-[#0b2718] border border-emerald-500/30 text-xs sm:text-sm font-bold text-[#00ff88] hover:text-[#00e676] inline-flex items-center gap-1.5 font-mono transition-all cursor-pointer shadow-sm group"
+                className="px-4 py-2 rounded-full bg-[#121212] hover:bg-[#1c1c1c] border border-zinc-700 text-xs sm:text-sm font-bold text-[#00ff88] hover:text-[#00e676] inline-flex items-center gap-1.5 font-mono transition-all cursor-pointer shadow-sm group"
               >
                 <span>Ver más artículos</span>
                 <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
@@ -1754,12 +1754,12 @@ export const LeaksTab: React.FC<LeaksTabProps> = ({ articles, onOpenContact }) =
                 <div
                   key={art.id}
                   onClick={() => handleSelectArticle(art)}
-                  className="group relative rounded-3xl bg-gradient-to-r from-[#0b2417]/80 via-[#071a10]/85 to-[#030e08]/95 border border-emerald-500/25 p-4 sm:p-4.5 hover:border-emerald-400/80 hover:bg-gradient-to-r hover:from-[#0f3120]/90 hover:via-[#0a2316]/90 hover:to-[#05150d] transition-all duration-300 cursor-pointer flex items-center gap-4 shadow-[0_10px_30px_rgba(0,0,0,0.6)] hover:shadow-[0_12px_35px_rgba(0,255,136,0.22)] hover:-translate-y-0.5 overflow-hidden"
+                  className="group relative rounded-3xl bg-gradient-to-r from-[#1b1b1b]/80 via-[#131313]/85 to-[#0a0a0a]/95 border border-zinc-700 p-4 sm:p-4.5 hover:border-emerald-400/80 hover:bg-gradient-to-r hover:from-[#242424]/90 hover:via-[#1a1a1a]/90 hover:to-[#0f0f0f] transition-all duration-300 cursor-pointer flex items-center gap-4 shadow-[0_10px_30px_rgba(0,0,0,0.6)] hover:-translate-y-0.5 overflow-hidden"
                 >
-                  <div className="absolute left-0 top-3 bottom-3 w-1 rounded-r-full bg-[#00ff88] opacity-0 group-hover:opacity-100 transition-opacity duration-300 shadow-[0_0_12px_#00ff88]" />
+                  <div className="absolute left-0 top-3 bottom-3 w-1 rounded-r-full bg-[#00ff88] opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
 
-                  <div className="w-24 h-20 sm:w-28 sm:h-22 rounded-2xl overflow-hidden bg-black shrink-0 border border-emerald-500/30 group-hover:border-emerald-400/70 relative shadow-md">
-                    <img
+                  <div className="w-24 h-20 sm:w-28 sm:h-22 rounded-2xl overflow-hidden bg-black shrink-0 border border-zinc-700 group-hover:border-emerald-400/70 relative shadow-md">
+                    <img loading="lazy" decoding="async"
                       src={art.imageUrl}
                       alt={art.title}
                       className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
@@ -1798,7 +1798,7 @@ export const LeaksTab: React.FC<LeaksTabProps> = ({ articles, onOpenContact }) =
           </div>
 
           {/* 5. Telegram Callout Banner */}
-          <div className="relative rounded-3xl bg-gradient-to-r from-[#061e12] via-[#04160d] to-[#020b06] border border-emerald-500/40 p-6 sm:p-7 flex flex-col md:flex-row items-center justify-between gap-6 shadow-[0_20px_50px_rgba(0,0,0,0.7),0_0_40px_rgba(0,255,136,0.12)] overflow-hidden">
+          <div className="relative rounded-3xl bg-gradient-to-r from-[#151515] via-[#0f0f0f] to-[#080808] border border-zinc-700 p-6 sm:p-7 flex flex-col md:flex-row items-center justify-between gap-6 shadow-[0_20px_50px_rgba(0,0,0,0.7),0_0_40px_rgba(0,255,136,0.12)] overflow-hidden">
             <div className="absolute top-0 right-1/4 w-80 h-32 bg-emerald-500/15 rounded-full blur-3xl pointer-events-none" />
 
             <div className="space-y-1.5 text-center md:text-left relative z-10">
@@ -1816,7 +1816,7 @@ export const LeaksTab: React.FC<LeaksTabProps> = ({ articles, onOpenContact }) =
             <button
               type="button"
               onClick={() => handleOpenTelegram()}
-              className="px-7 py-3.5 rounded-full font-black text-xs sm:text-sm text-slate-950 bg-gradient-to-r from-[#00ff88] to-[#00d670] hover:from-[#00e676] hover:to-[#00c853] shadow-[0_0_25px_rgba(0,255,136,0.4)] transition-all cursor-pointer whitespace-nowrap font-mono uppercase active:scale-95 relative z-10 shrink-0"
+              className="px-7 py-3.5 rounded-full font-black text-xs sm:text-sm text-slate-950 bg-gradient-to-r from-[#00ff88] to-[#00d670] hover:from-[#00e676] hover:to-[#00c853] transition-all cursor-pointer whitespace-nowrap font-mono uppercase active:scale-95 relative z-10 shrink-0"
             >
               Unirse al Canal de Leaks
             </button>
@@ -1844,11 +1844,11 @@ export const LeaksTab: React.FC<LeaksTabProps> = ({ articles, onOpenContact }) =
               <div
                 key={art.id}
                 onClick={() => handleSelectArticle(art)}
-                className="group rounded-3xl bg-[#041208] border border-emerald-500/25 hover:border-emerald-400/80 p-5 flex flex-col justify-between transition-all duration-300 hover:shadow-[0_10px_30px_rgba(0,255,136,0.2)] hover:-translate-y-1 cursor-pointer overflow-hidden shadow-lg"
+                className="group rounded-3xl bg-[#0c0c0c] border border-zinc-700 hover:border-emerald-400/80 p-5 flex flex-col justify-between transition-all duration-300 hover:-translate-y-1 cursor-pointer overflow-hidden shadow-lg"
               >
                 <div className="space-y-3.5">
-                  <div className="w-full h-44 rounded-2xl overflow-hidden bg-black relative border border-emerald-900/60">
-                    <img
+                  <div className="w-full h-44 rounded-2xl overflow-hidden bg-black relative border border-zinc-800/60">
+                    <img loading="lazy" decoding="async"
                       src={art.imageUrl}
                       alt={art.title}
                       className="w-full h-full object-cover group-hover:scale-108 transition-transform duration-500"
@@ -1873,7 +1873,7 @@ export const LeaksTab: React.FC<LeaksTabProps> = ({ articles, onOpenContact }) =
                   </p>
                 </div>
 
-                <div className="pt-4 mt-4 border-t border-emerald-950 flex items-center justify-between text-xs font-mono text-slate-400">
+                <div className="pt-4 mt-4 border-t border-zinc-900 flex items-center justify-between text-xs font-mono text-slate-400">
                   <span>{art.readTime}</span>
                   <span className="text-[#00ff88] font-bold group-hover:translate-x-1 transition-transform flex items-center gap-1">
                     <span>Leer</span>
@@ -1889,3 +1889,4 @@ export const LeaksTab: React.FC<LeaksTabProps> = ({ articles, onOpenContact }) =
     </div>
   );
 };
+
