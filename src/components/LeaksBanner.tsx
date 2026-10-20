@@ -74,8 +74,8 @@ export const LeaksBanner: React.FC<LeaksBannerProps> = ({ onExploreLeaks, classN
               </div>
 
               <div>
-                <h4 className="text-white font-black tracking-tight leading-snug">Nuevo caso: pagos a América TV</h4>
-                <p className="text-xs text-zinc-500 font-mono mt-1">Silenciamiento de coimas en el Congreso · 9 implicados</p>
+                <h4 className="text-white font-black tracking-tight leading-snug">Expediente Keiko Fujimori</h4>
+                <p className="text-xs text-zinc-500 font-mono mt-1">Caso Cócteles: aportes, documentos y estado judicial · 9 fichas</p>
               </div>
 
               <div className="flex items-center gap-2" role="timer" aria-label="Tiempo restante para la liberación">

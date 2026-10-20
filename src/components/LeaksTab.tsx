@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import {
   Search,
   ArrowUpRight,
@@ -49,6 +49,10 @@ import {
 import { LeakArticle, EvidenceFigure } from '../data/leaksData';
 import { recordVendorClickEvent } from '../data/telemetryData';
 import { UpcomingLeakCountdownBanner } from './UpcomingLeakCountdownBanner';
+import { ArticleBody } from './ArticleBody';
+import { LeaksCover } from './LeaksCover';
+import { MagazineArticle } from './MagazineArticle';
+import { useLeakCountdown } from '../hooks/useLeakCountdown';
 
 interface LeaksTabProps {
   articles: LeakArticle[];
@@ -182,6 +186,18 @@ export const LeaksTab: React.FC<LeaksTabProps> = ({ articles, onOpenContact }) =
   const [selectedCategory, setSelectedCategory] = useState<string>('todo');
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [activeArticle, setActiveArticle] = useState<LeakArticle | null>(null);
+
+  const [showPeople, setShowPeople] = useState(false);
+  const { isExpired: leakExpired } = useLeakCountdown();
+  const leak2 = articles.find((a) => a.leakNumber === 2);
+
+  // Enlaces compartidos (#/leaks?id=...) abren el artículo directamente
+  useEffect(() => {
+    const m = window.location.hash.match(/[?&]id=([^&]+)/);
+    if (!m) return;
+    const found = articles.find((a) => a.id === decodeURIComponent(m[1]));
+    if (found) setActiveArticle(found);
+  }, [articles]);
   const [copiedLink, setCopiedLink] = useState(false);
 
   // Lightbox zoom modal state
@@ -352,6 +368,21 @@ export const LeaksTab: React.FC<LeaksTabProps> = ({ articles, onOpenContact }) =
       .filter((a) => a.id !== activeArticle.id)
       .slice(0, 3);
 
+    if (activeArticle.fullBody) {
+      return (
+        <MagazineArticle
+          article={activeArticle}
+          related={relatedArticles}
+          copied={copiedLink}
+          authorAvatar={getAuthorAvatar(activeArticle.authorTelegram)}
+          onBack={handleBackToNews}
+          onShare={() => handleCopyArticleLink(activeArticle)}
+          onAsk={() => handleOpenTelegram(activeArticle)}
+          onSelect={handleSelectArticle}
+        />
+      );
+    }
+
     return (
       <article className="w-full max-w-[1560px] mx-auto space-y-8 animate-in fade-in slide-in-from-bottom-2 duration-300 pb-24">
         
@@ -406,7 +437,7 @@ export const LeaksTab: React.FC<LeaksTabProps> = ({ articles, onOpenContact }) =
               <span>EXPEDIENTE FILTRADO // INTELIGENCIA FORENSE & POLICIAL</span>
             </div>
             <div className="flex items-center gap-3 text-slate-300">
-              <span>ESTADO: CASO EN CURSO</span>
+              <span>{activeArticle.fullBody ? 'ESTADO: CASO ARCHIVADO · SIN CONDENA' : 'ESTADO: CASO EN CURSO'}</span>
               <span className="text-emerald-500">·</span>
               <span className="text-emerald-300">{activeArticle.date}</span>
             </div>
@@ -526,6 +557,13 @@ export const LeaksTab: React.FC<LeaksTabProps> = ({ articles, onOpenContact }) =
             </div>
           </div>
         </div>
+
+        {/* Cuerpo completo del expediente (solo artículos que lo piden) */}
+        {activeArticle.fullBody && activeArticle.content.length > 0 && (
+          <section className="p-5 sm:p-9 rounded-3xl bg-[#0c0c0c] border border-zinc-800 space-y-4">
+            <ArticleBody blocks={activeArticle.content} stats={activeArticle.keyStats} />
+          </section>
+        )}
 
         {/* ======================================================== */}
         {/* DOSSIER COMMAND BAR: INTERACTIVE HUB & SECTION SELECTOR */}
@@ -1492,28 +1530,27 @@ export const LeaksTab: React.FC<LeaksTabProps> = ({ articles, onOpenContact }) =
   return (
     <div className="space-y-10 animate-in fade-in duration-300">
       
-      {/* 1. Header Banner & Title */}
-      <div className="relative rounded-3xl overflow-hidden border border-zinc-700 bg-gradient-to-r from-[#0e0e0e] via-[#1c1c1c] to-[#0b0b0b] p-4 sm:p-7 md:p-10">
-        <div className="absolute top-0 right-0 w-96 h-full bg-emerald-500/10 blur-3xl pointer-events-none" />
-        
-        <div className="relative z-10 max-w-3xl space-y-3">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-[10px] font-mono font-bold tracking-widest text-[#00ff88] bg-black/60 border border-zinc-700 shadow-inner">
-            <Radio className="w-3 h-3 text-[#00ff88] animate-pulse" />
-            <span>REVISTA DIGITAL // INTELIGENCIA OSINT & FILTRACIONES</span>
-          </div>
+      {/* 1. Portada: el gancho del leak destacado */}
+      <LeaksCover
+        article={leak2}
+        isExpired={leakExpired}
+        onRead={() => {
+          if (leak2) handleSelectArticle(leak2);
+        }}
+        onTogglePeople={() => setShowPeople((v) => !v)}
+        peopleOpen={showPeople}
+      />
 
-          <h1 className="text-2xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight leading-tight">
-            Filtraciones, Brechas & Ciberseguridad Perú
-          </h1>
-
-          <p className="text-xs sm:text-base text-slate-300 leading-relaxed">
-            Reportajes especiales de investigación, auditorías forenses a bases de datos expuestas, expedientes clasificados y guías de protección digital para usuarios y empresas en el Perú.
-          </p>
-        </div>
-      </div>
-
-      {/* 2. BREAKING COUNTDOWN ANNOUNCEMENT: CASO CORRUPCIÓN CONGRESO - AMÉRICA TV */}
-      <UpcomingLeakCountdownBanner onNotifyTelegram={onOpenContact} />
+      {showPeople && (
+        <UpcomingLeakCountdownBanner
+          forceExpanded
+          onClose={() => setShowPeople(false)}
+          onNotifyTelegram={onOpenContact}
+          onReadExpediente={() => {
+            if (leak2) handleSelectArticle(leak2);
+          }}
+        />
+      )}
 
       {/* 3. Magazine Filter Pill Bar & Search */}
       <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-2 border-b border-zinc-700">

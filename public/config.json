@@ -1,0 +1,7 @@
+{
+  "env": "staging",
+  "supabaseUrl": "https://mgoufbntqyksunablrzb.supabase.co",
+  "supabaseAnonKey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1nb3VmYm50cXlrc3VuYWJscnpiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODk4NTM3ODMsImV4cCI6MTk1MDEyNTc4M30.bP7ZTbYpwIH4P7W4n8db86PSlYETdEkMgliGyHJm_yo",
+  "apiBase": "/api",
+  "telemetryUrl": "/api/security/canary-tripwire"
+}

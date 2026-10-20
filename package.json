@@ -9,6 +9,8 @@
     "preview": "vite preview",
     "server": "tsx server/index.ts",
     "start": "tsx server/index.ts",
+    "admin:hash": "tsx scripts/hash-admin-pin.ts",
+    "leaks:seed": "tsx scripts/generate-leaks-seed.ts",
     "clean": "rm -rf dist server.js",
     "lint": "tsc --noEmit"
   },

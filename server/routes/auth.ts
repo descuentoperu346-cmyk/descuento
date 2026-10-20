@@ -9,12 +9,11 @@ import {
   COOKIE_NAME
 } from '../session';
 import { serverSupabase } from '../supabase';
+import { config } from '../config';
+import { verifyPin } from '../passwords';
+import { clearLoginFailures, lockedForSeconds, registerLoginFailure } from '../loginLimiter';
 
 export const authRouter = Router();
-
-// Credenciales base del administrador central
-const ADMIN_USERNAME = 'admin';
-const ADMIN_PIN = 'admin2026';
 
 /**
  * POST /api/auth/login
@@ -32,11 +31,24 @@ authRouter.post('/login', async (req: AuthenticatedRequest, res: Response): Prom
       return;
     }
 
-    const cleanUsername = String(username).trim().toLowerCase();
-    const cleanPin = String(pin).trim();
+    const cleanUsername = String(username).trim().toLowerCase().slice(0, 64);
+    const cleanPin = String(pin).trim().slice(0, 128);
+    const ip = req.ip || 'unknown';
 
-    // 1. Verificación de Administrador Central
-    if (cleanUsername === ADMIN_USERNAME && cleanPin === ADMIN_PIN) {
+    // Límite de intentos: tras varios fallos se bloquea temporalmente
+    const waitSeconds = lockedForSeconds(ip, cleanUsername);
+    if (waitSeconds > 0) {
+      res.setHeader('Retry-After', String(waitSeconds));
+      res.status(429).json({
+        success: false,
+        error: `Demasiados intentos fallidos. Vuelve a intentarlo en ${Math.ceil(waitSeconds / 60)} min.`
+      });
+      return;
+    }
+
+    // 1. Verificación de Administrador Central (el PIN solo existe como hash en el entorno)
+    if (config.adminPinHash && cleanUsername === config.adminUsername && verifyPin(cleanPin, config.adminPinHash)) {
+      clearLoginFailures(ip, cleanUsername);
       const session = createSession({
         userId: 'admin-master',
         name: 'Administrador Central (SOC)',
@@ -70,6 +82,7 @@ authRouter.post('/login', async (req: AuthenticatedRequest, res: Response): Prom
 
       if (!error && vendor) {
         if (String(vendor.pin).trim() === cleanPin && vendor.active !== false) {
+          clearLoginFailures(ip, cleanUsername);
           const session = createSession({
             userId: vendor.id,
             name: vendor.name,
@@ -99,14 +112,15 @@ authRouter.post('/login', async (req: AuthenticatedRequest, res: Response): Prom
       // Si la tabla no está creada aún en Supabase, continúa con validación de fallback local
     }
 
-    // 3. Fallback de vendedores iniciales si Supabase está offline o no inicializado
-    const FALLBACK_VENDORS = [
-      { id: 'vendedor-central', name: 'Descuentos Perú Central', username: 'central', pin: '1234', role: 'admin' as const },
+    // 3. Accesos de demostración (PIN 1234): desactivados por defecto y nunca en producción.
+    //    Se activan solo en desarrollo con ALLOW_DEMO_LOGINS=true, y ninguno tiene rol de administrador.
+    const FALLBACK_VENDORS = (config.allowDemoLogins ? [
+      { id: 'vendedor-central', name: 'Descuentos Perú Central', username: 'central', pin: '1234', role: 'vendor' as const },
       { id: 'vendedor-whisky', name: 'Whisky Perú', username: 'whiskyper', pin: '1234', role: 'vendor' as const },
       { id: 'vendedor-abby', name: 'Abbys Perú', username: 'abbysperu', pin: '1234', role: 'vendor' as const },
       { id: 'vendedor-nano', name: 'El Nano VIP', username: 'elnanovip', pin: '1234', role: 'vendor' as const },
       { id: 'vendedor-tino', name: 'Tin9o', username: 'tin9o', pin: '1234', role: 'vendor' as const }
-    ];
+    ] : []);
 
     const matchedLocal = FALLBACK_VENDORS.find(
       (v) => v.username.toLowerCase() === cleanUsername && v.pin === cleanPin
@@ -137,6 +151,7 @@ authRouter.post('/login', async (req: AuthenticatedRequest, res: Response): Prom
     }
 
     // Credenciales incorrectas
+    registerLoginFailure(ip, cleanUsername);
     res.status(401).json({
       success: false,
       error: 'Usuario o PIN incorrectos. Verifica tus credenciales.'

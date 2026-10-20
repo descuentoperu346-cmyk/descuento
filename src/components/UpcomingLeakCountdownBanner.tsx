@@ -21,7 +21,9 @@ import {
   Search,
   Zap,
   Building2,
-  History
+  History,
+  ChevronDown,
+  ChevronUp
 } from 'lucide-react';
 
 export interface PoliticalFigureEntry {
@@ -157,12 +159,20 @@ const FIGURE_TONE: Record<'red' | 'amber' | 'green' | 'zinc', string> = {
 interface UpcomingLeakCountdownBannerProps {
   onNotifyTelegram?: () => void;
   onExploreDetails?: () => void;
+  /** Abre el artículo completo del Leak #02 */
+  onReadExpediente?: () => void;
+  /** Muestra siempre la vista completa (sin franja plegada) */
+  forceExpanded?: boolean;
+  onClose?: () => void;
   className?: string;
 }
 
 export const UpcomingLeakCountdownBanner: React.FC<UpcomingLeakCountdownBannerProps> = ({
   onNotifyTelegram,
   onExploreDetails,
+  onReadExpediente,
+  forceExpanded,
+  onClose,
   className = ''
 }) => {
   // Live dynamic countdown timer: 1 dia, 13 horas y 20 minutos
@@ -172,6 +182,7 @@ export const UpcomingLeakCountdownBanner: React.FC<UpcomingLeakCountdownBannerPr
   const [activeCategory, setActiveCategory] = useState<'todos' | 'ejecutivo' | 'congreso' | 'historico'>('todos');
   const [zoomedFigure, setZoomedFigure] = useState<PoliticalFigureEntry | null>(null);
   const [showTechnicalDetails, setShowTechnicalDetails] = useState(false);
+  const [expanded, setExpanded] = useState(!!forceExpanded);
 
   const handleCopyLink = () => {
     if (typeof window !== 'undefined') {
@@ -195,6 +206,73 @@ export const UpcomingLeakCountdownBanner: React.FC<UpcomingLeakCountdownBannerPr
     (f) => activeCategory === 'todos' || f.category === activeCategory
   );
 
+  if (!expanded) {
+    const units = [
+      { v: String(days).padStart(2, '0'), l: 'd' },
+      { v: String(hours).padStart(2, '0'), l: 'h' },
+      { v: String(minutes).padStart(2, '0'), l: 'm' },
+      { v: String(seconds).padStart(2, '0'), l: 's' }
+    ];
+    return (
+      <section
+        id="proximo-leak-congreso"
+        aria-label="Leak #02: Expediente Keiko Fujimori"
+        className={`relative overflow-hidden rounded-2xl border border-rose-500/40 bg-gradient-to-r from-[#1a0409] to-[#0a0204] p-4 sm:p-5 ${className}`}
+      >
+        <div className="pointer-events-none absolute -right-20 -top-24 h-56 w-56 rounded-full bg-rose-600/15 blur-3xl" />
+        <div className="relative flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+          <div className="min-w-0 space-y-1.5">
+            <div className="flex flex-wrap items-center gap-2 font-mono text-[10px] font-bold uppercase tracking-widest">
+              <span className="inline-flex items-center gap-1.5 rounded-full border border-rose-500/50 bg-rose-500/10 px-2.5 py-0.5 text-rose-300">
+                <span className="h-1.5 w-1.5 rounded-full bg-rose-500 animate-pulse" />
+                {isExpired ? 'Leak #02 · Liberado' : 'Leak #02 · Próxima liberación'}
+              </span>
+              <span className="text-zinc-400">Caso archivado · sin condena</span>
+            </div>
+            <h2 className="text-xl sm:text-2xl font-black tracking-tight text-white">Expediente Keiko Fujimori</h2>
+            <p className="max-w-2xl text-xs sm:text-sm text-slate-300 leading-relaxed">
+              Caso Cócteles: aportes ocultos, falsos aportantes y presión sobre testigos, según documentos judiciales y de la SMV.
+            </p>
+          </div>
+
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-center lg:shrink-0">
+            {!isExpired && (
+              <div role="timer" aria-label="Tiempo restante para la liberación" className="flex items-center gap-1 font-mono text-sm font-black text-white tabular-nums">
+                <Clock className="mr-1 h-4 w-4 text-rose-400" />
+                {units.map((u) => (
+                  <span key={u.l} className="rounded-md border border-rose-500/30 bg-black/60 px-1.5 py-0.5">
+                    {u.v}
+                    <span className="text-[10px] text-zinc-500">{u.l}</span>
+                  </span>
+                ))}
+              </div>
+            )}
+            <div className="flex flex-wrap items-center gap-2">
+              {onReadExpediente && isExpired && (
+                <button
+                  type="button"
+                  onClick={onReadExpediente}
+                  className="inline-flex items-center gap-2 rounded-xl bg-rose-500 px-4 py-2.5 text-xs sm:text-sm font-black text-white transition-colors hover:bg-rose-400 cursor-pointer"
+                >
+                  Leer expediente
+                  <ArrowRight className="h-4 w-4" />
+                </button>
+              )}
+              <button
+                type="button"
+                onClick={() => setExpanded(true)}
+                aria-expanded={false}
+                className="inline-flex items-center gap-2 rounded-xl border border-zinc-600 px-4 py-2.5 text-xs sm:text-sm font-bold text-white transition-colors hover:border-rose-400 cursor-pointer"
+              >
+                Personas de interés (9)
+                <ChevronDown className="h-4 w-4" />
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+    );
+  }
   return (
     <div
       id="proximo-leak-congreso"
@@ -236,16 +314,27 @@ export const UpcomingLeakCountdownBanner: React.FC<UpcomingLeakCountdownBannerPr
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-rose-400 opacity-75" />
             <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-rose-500" />
           </span>
-          <span className="uppercase">DESCLASIFICACIÓN INMINENTE // EXPEDIENTE EXCLUSIVO #02</span>
+          <span className="uppercase">{isExpired ? 'EXPEDIENTE LIBERADO // LEAK #02' : 'DESCLASIFICACIÓN INMINENTE // EXPEDIENTE EXCLUSIVO #02'}</span>
         </div>
 
         <div className="flex items-center gap-3 text-slate-300">
           <span className="text-rose-400 flex items-center gap-1.5">
             <Radio className="w-3.5 h-3.5 text-rose-400 animate-pulse" />
-            <span>ESTADO: VERIFICACIÓN 92%</span>
+            <span>{isExpired ? 'ESTADO: CASO ARCHIVADO · SIN CONDENA' : 'ESTADO: EN REVISIÓN'}</span>
           </span>
           <span className="text-rose-500">·</span>
           <span className="text-rose-200">OCTUBRE 2026</span>
+          <button
+            type="button"
+            onClick={() => {
+              setExpanded(false);
+              onClose?.();
+            }}
+            aria-expanded={true}
+            className="ml-2 inline-flex items-center gap-1 rounded-md border border-rose-500/40 px-2 py-0.5 text-rose-200 hover:text-white cursor-pointer"
+          >
+            Plegar <ChevronUp className="h-3 w-3" />
+          </button>
         </div>
       </div>
 
@@ -259,18 +348,18 @@ export const UpcomingLeakCountdownBanner: React.FC<UpcomingLeakCountdownBannerPr
           <div className="lg:col-span-7 space-y-3.5 text-left">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-rose-950/80 border border-rose-500/50 text-[10px] sm:text-[11px] font-mono font-bold text-rose-300 shadow-[0_0_15px_rgba(244,63,94,0.3)]">
               <ShieldAlert className="w-3.5 h-3.5 text-rose-400" />
-              <span>NUEVO CASO DE CORRUPCIÓN EN EL CONGRESO // PRÓXIMA LIBERACIÓN</span>
+              <span>{isExpired ? 'EXPEDIENTE #02 // LIBERADO' : 'EXPEDIENTE #02 // PRÓXIMA LIBERACIÓN'}</span>
             </div>
 
             <h2 className="text-2xl sm:text-3xl md:text-4xl font-black text-white tracking-tight leading-tight drop-shadow-[0_4px_12px_rgba(0,0,0,0.9)]">
-              NUEVO CASO DE CORRUPCIÓN LIBERADO DEL CONGRESO -{' '}
+              EXPEDIENTE KEIKO FUJIMORI -{' '}
               <span className="text-rose-400 drop-shadow-[0_0_20px_rgba(244,63,94,0.7)]">
-                PAGOS A AMÉRICA TV PARA CALLAR COIMAS EN EL CONGRESO
+                LO QUE DICEN LOS DOCUMENTOS DEL CASO CÓCTELES
               </span>
             </h2>
 
             <p className="text-xs sm:text-sm text-slate-300 leading-relaxed font-normal">
-              Filtración documentaria en fase final de verificación pericial: comprobantes de transferencias bancarias, facturas de pauta clandestina y chats entre operadores parlamentarios y directivos mediáticos para vetar reportajes sobre cobro de coimas en comisiones del Congreso de la República.
+              Aportes ocultos, falsos aportantes y denuncias de presión sobre testigos en las campañas de 2011 y 2016, reconstruidos a partir de resoluciones judiciales, documentos de la Superintendencia del Mercado de Valores y reportajes con fuente. El caso está archivado y no hay condena: separamos lo documentado de lo acusado.
             </p>
 
             {/* Aviso: ficha ampliada de Keiko Fujimori */}
@@ -300,15 +389,15 @@ export const UpcomingLeakCountdownBanner: React.FC<UpcomingLeakCountdownBannerPr
             <div className="pt-1 flex flex-wrap items-center gap-1.5 sm:gap-2 text-[10px] font-mono text-rose-300">
               <span className="px-2.5 py-1 rounded-lg bg-black/70 border border-rose-900/80 flex items-center gap-1.5">
                 <FileSearch className="w-3 h-3 text-rose-400" />
-                <span>Vouchers y facturas simuladas</span>
+                <span>Aportes y falsos aportantes</span>
               </span>
               <span className="px-2.5 py-1 rounded-lg bg-black/70 border border-rose-900/80 flex items-center gap-1.5">
                 <Lock className="w-3 h-3 text-rose-400" />
-                <span>Chats de blindaje mediático</span>
+                <span>Denuncias de presión a testigos</span>
               </span>
               <span className="px-2.5 py-1 rounded-lg bg-black/70 border border-rose-900/80 flex items-center gap-1.5">
                 <Terminal className="w-3 h-3 text-rose-400" />
-                <span>Hash SHA-256 contrastado</span>
+                <span>Caso archivado · sin condena</span>
               </span>
             </div>
           </div>
@@ -322,7 +411,7 @@ export const UpcomingLeakCountdownBanner: React.FC<UpcomingLeakCountdownBannerPr
                 <div className="flex items-center gap-2">
                   <Timer className="w-4 h-4 text-rose-400 animate-pulse" />
                   <span className="text-[11px] font-mono font-bold text-rose-300 uppercase tracking-wider">
-                    LIBERACIÓN PÚBLICA EN:
+                    {isExpired ? 'EXPEDIENTE LIBERADO' : 'LIBERACIÓN PÚBLICA EN:'}
                   </span>
                 </div>
                 <span className="text-[10px] font-mono text-emerald-400 bg-zinc-900/80 px-2 py-0.5 rounded-full border border-zinc-700 font-bold">
@@ -377,24 +466,29 @@ export const UpcomingLeakCountdownBanner: React.FC<UpcomingLeakCountdownBannerPr
               <div className="flex items-center justify-between text-[10px] font-mono text-rose-300 bg-rose-950/40 px-3 py-1.5 rounded-xl border border-rose-900/60">
                 <span className="flex items-center gap-1.5">
                   <Clock className="w-3.5 h-3.5 text-rose-400" />
-                  <span>Cierre: {LEAK_DEADLINE_LABEL}</span>
+                  <span>{isExpired ? 'Liberado' : 'Cierre'}: {LEAK_DEADLINE_LABEL}</span>
                 </span>
 
               </div>
 
-              {/* Live Verification Telemetry Bar */}
-              <div className="space-y-1.5 pt-1">
-                <div className="flex items-center justify-between text-[10px] font-mono">
-                  <span className="text-slate-400">Verificación documental forense:</span>
-                  <span className="text-emerald-400 font-bold">92% completado</span>
+              {isExpired ? (
+                <p className="text-[11px] font-mono text-slate-300 leading-relaxed pt-1">
+                  Lee el expediente completo en &quot;Últimas publicaciones&quot;, más abajo. Una acusación no es una condena.
+                </p>
+              ) : (
+                <div className="space-y-1.5 pt-1">
+                  <div className="flex items-center justify-between text-[10px] font-mono">
+                    <span className="text-slate-400">Preparación del expediente:</span>
+                    <span className="text-emerald-400 font-bold">en curso</span>
+                  </div>
+                  <div className="w-full h-1.5 bg-black rounded-full overflow-hidden border border-rose-950">
+                    <div
+                      className="h-full bg-gradient-to-r from-rose-500 via-amber-400 to-[#00ff88] rounded-full"
+                      style={{ width: '92%' }}
+                    />
+                  </div>
                 </div>
-                <div className="w-full h-1.5 bg-black rounded-full overflow-hidden border border-rose-950">
-                  <div
-                    className="h-full bg-gradient-to-r from-rose-500 via-amber-400 to-[#00ff88] rounded-full"
-                    style={{ width: '92%' }}
-                  />
-                </div>
-              </div>
+              )}
             </div>
           </div>
 
@@ -411,7 +505,7 @@ export const UpcomingLeakCountdownBanner: React.FC<UpcomingLeakCountdownBannerPr
                 <span>EXPEDIENTE CLASIFICADO // RED DE PERSONAS DE INTERÉS (9)</span>
               </div>
               <h3 className="text-xl sm:text-2xl font-black text-white tracking-tight flex items-center gap-2">
-                <span>Implicados e Investigados en el Caso Congreso - América TV</span>
+                <span>Personas de interés del Expediente Keiko Fujimori</span>
               </h3>
             </div>
 

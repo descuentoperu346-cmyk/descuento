@@ -45,7 +45,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               <span>{isExpired ? 'LEAK #02 DISPONIBLE:' : 'PRÓXIMO LEAK #02:'}</span>
             </span>
             <span className="text-[11px] sm:text-xs font-bold text-white tracking-tight truncate hidden sm:inline">
-              NUEVO CASO DE CORRUPCIÓN LIBERADO DEL CONGRESO - PAGOS A AMÉRICA TV
+              EXPEDIENTE KEIKO FUJIMORI - LO QUE DICEN LOS DOCUMENTOS DEL CASO CÓCTELES
             </span>
           </div>
 
@@ -119,17 +119,19 @@ export const Navbar: React.FC<NavbarProps> = ({
           <button
             type="button"
             onClick={() => handleNavClick('leaks')}
-            className={`relative py-1.5 transition-colors whitespace-nowrap shrink-0 cursor-pointer flex items-center gap-1.5 ${
+            aria-current={activeTab === 'leaks' ? 'page' : undefined}
+            className={`group relative flex items-center gap-2 rounded-full border px-4 py-1.5 text-[13px] font-bold whitespace-nowrap shrink-0 cursor-pointer transition-all duration-200 ${
               activeTab === 'leaks'
-                ? 'text-rose-400 font-bold'
-                : 'text-slate-300 hover:text-rose-300'
+                ? 'border-rose-400/70 bg-rose-500/15 text-rose-100 shadow-[0_0_22px_rgba(244,63,94,0.35)]'
+                : 'border-rose-500/30 bg-rose-500/5 text-rose-200 hover:border-rose-400/60 hover:bg-rose-500/12 hover:text-white'
             }`}
           >
-            <span className="w-1.5 h-1.5 rounded-full bg-rose-500 animate-pulse" />
-            <span>Leaks & Filtraciones</span>
-            {activeTab === 'leaks' && (
-              <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-rose-500 shadow-[0_0_8px_#f43f5e]" />
-            )}
+            <span className="relative flex h-2 w-2" aria-hidden="true">
+              <span className="absolute inline-flex h-full w-full rounded-full bg-rose-400 opacity-60 animate-pulse" />
+              <span className="relative inline-flex h-2 w-2 rounded-full bg-rose-500" />
+            </span>
+            <span className="tracking-wide">Leaks & Filtraciones</span>
+            <span className="rounded-md bg-rose-500 px-1.5 py-px font-mono text-[10px] font-black leading-4 text-white">#02</span>
           </button>
 
           <button

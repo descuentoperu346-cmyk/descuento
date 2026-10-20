@@ -83,6 +83,9 @@ import {
   logoutApi,
   checkSessionApi
 } from '../lib/api';
+import type { AuthUser } from '../lib/api';
+import { setAdminHint } from '../lib/adminHint';
+import { PanelLogin } from '../components/PanelLogin';
 import {
   getStoredTelemetry,
   saveStoredTelemetry,
@@ -275,12 +278,10 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
     return localStorage.getItem('dp_active_user_id') || 'vendedor-central';
   });
 
-  // Authentication State
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(() => {
-    return sessionStorage.getItem('dp_portal_auth') === 'true';
-  });
-  const [loginPin, setLoginPin] = useState<string>('');
-  const [loginError, setLoginError] = useState<string>('');
+  // Sesión: la fuente de verdad es la cookie del servidor (se consulta al abrir el panel)
+  const [sessionUser, setSessionUser] = useState<AuthUser | null>(null);
+  const [authChecked, setAuthChecked] = useState<boolean>(false);
+  const isAuthenticated = sessionUser !== null;
 
   // Navigation tabs (Expanded with Vendor Sales Tools)
   const [currentNav, setCurrentNav] = useState<
@@ -297,9 +298,6 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
     | 'gestion-vendedores'
     | 'respaldos'
   >('productos');
-
-  // Login UI state
-  const [showLoginPin, setShowLoginPin] = useState<boolean>(false);
 
   // Guarantee Calculator State
   const [calcClientAlias, setCalcClientAlias] = useState<string>('');
@@ -346,7 +344,8 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
           hour: '2-digit',
           minute: '2-digit',
           second: '2-digit',
-          hour12: false
+          hour12: false,
+          timeZone: 'America/Lima'
         })
       );
     };
@@ -506,7 +505,8 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
   };
 
   const currentUser = vendors.find((v) => v.id === currentUserId) || vendors[0];
-  const isSuperAdmin = currentUser?.role === 'admin' || currentUser?.id === 'vendedor-central';
+  const isSuperAdmin =
+    sessionUser?.role === 'admin' && (currentUser?.role === 'admin' || currentUser?.id === 'vendedor-central');
 
   // Allowed products for this user
   const userAllowedServices = isSuperAdmin
@@ -525,71 +525,70 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
     ctr: 17.8
   };
 
-  // Auto-verify active server session on portal mount
+  // Al abrir el panel se pregunta al servidor si hay una sesión vigente
   useEffect(() => {
+    let cancelled = false;
     checkSessionApi().then((user) => {
+      if (cancelled) return;
       if (user) {
-        setIsAuthenticated(true);
-        sessionStorage.setItem('dp_portal_auth', 'true');
-        if (user.id && user.id !== 'admin-master') {
-          setCurrentUserId(user.id);
-        }
+        setSessionUser(user);
+        setAdminHint(user.role === 'admin');
+        if (user.id && user.id !== 'admin-master') setCurrentUserId(user.id);
+      } else {
+        setAdminHint(false);
       }
+      setAuthChecked(true);
     });
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
-  // Handle Login via backend
-  const handleLogin = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoginError('');
-
-    try {
-      const res = await loginApi(currentUser.username, loginPin);
-      if (res.success && res.user) {
-        setIsAuthenticated(true);
-        sessionStorage.setItem('dp_portal_auth', 'true');
-        setLoginError('');
-        showToast(`¡Conexión establecida! Bienvenido, ${res.user.name}`);
-        return;
-      } else if (res.error) {
-        // Try master admin login
-        if (loginPin === 'admin2026' || loginPin === 'admin123') {
-          const adminRes = await loginApi('admin', loginPin);
-          if (adminRes.success) {
-            setIsAuthenticated(true);
-            sessionStorage.setItem('dp_portal_auth', 'true');
-            setLoginError('');
-            showToast('¡Conexión establecida como Administrador Central!');
-            return;
-          }
-        }
+  // Estado real del servidor, medido con /api/health
+  const [serverStatus, setServerStatus] = useState<{ ok: boolean; ms: number | null }>({ ok: false, ms: null });
+  useEffect(() => {
+    if (!isAuthenticated) return;
+    let stop = false;
+    const ping = async () => {
+      const t0 = performance.now();
+      try {
+        const res = await fetch('/api/health', { cache: 'no-store', headers: { Accept: 'application/json' } });
+        const json = await res.json();
+        if (!stop) setServerStatus({ ok: res.ok && json.status === 'ok', ms: Math.round(performance.now() - t0) });
+      } catch {
+        if (!stop) setServerStatus({ ok: false, ms: null });
       }
-    } catch {
-      // Fallback local check
-    }
+    };
+    ping();
+    const timer = setInterval(ping, 30000);
+    return () => {
+      stop = true;
+      clearInterval(timer);
+    };
+  }, [isAuthenticated]);
 
-    const correctPin = currentUser?.pin || '1234';
-    const masterPin = localStorage.getItem('dp_admin_pin') || 'admin123';
-
-    if (loginPin === correctPin || loginPin === masterPin || loginPin === 'admin' || loginPin === '1234') {
-      setIsAuthenticated(true);
-      sessionStorage.setItem('dp_portal_auth', 'true');
-      setLoginError('');
-      showToast(`¡Conexión establecida! Bienvenido, ${currentUser.name}`);
-    } else {
-      setLoginError(`PIN de seguridad incorrecto para ${currentUser.name}.`);
+  // Inicio de sesión contra el servidor. Devuelve el mensaje de error, o null si entró.
+  const handleLogin = async (username: string, pin: string): Promise<string | null> => {
+    const res = await loginApi(username, pin);
+    if (!res.success || !res.user) {
+      return res.error || 'Usuario o clave incorrectos.';
     }
+    setSessionUser(res.user);
+    setAdminHint(res.user.role === 'admin');
+    if (res.user.id && res.user.id !== 'admin-master') setCurrentUserId(res.user.id);
+    showToast(`¡Conexión establecida! Bienvenido, ${res.user.name}`);
+    return null;
   };
 
   const handleLogout = async () => {
     await logoutApi();
-    setIsAuthenticated(false);
-    sessionStorage.removeItem('dp_portal_auth');
-    setLoginPin('');
+    setAdminHint(false);
+    setSessionUser(null);
   };
 
   // Switch Active User / Vendor
   const handleSwitchUser = (vendorId: string) => {
+    if (sessionUser?.role !== 'admin') return;
     setCurrentUserId(vendorId);
     localStorage.setItem('dp_active_user_id', vendorId);
     setEditingServiceId(null);
@@ -900,151 +899,13 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
   };
 
   // ==========================================
-  // VIEW: AUTHENTICATION LOCK SCREEN (Cyber-Luxury Vendor Portal)
+  // VISTA: ACCESO (usuario + clave contra el servidor)
   // ==========================================
+  if (!authChecked) {
+    return <div className="min-h-screen bg-[#050505]" aria-busy="true" />;
+  }
   if (!isAuthenticated) {
-    return (
-      <div className="min-h-screen bg-[#050505] text-slate-100 flex flex-col items-center justify-center p-4 selection:bg-[#00ff88] selection:text-black font-sans relative overflow-hidden">
-        {/* Subtle Cyber Grid Background */}
-        <div
-          className="absolute inset-0 opacity-15 pointer-events-none"
-          style={{
-            backgroundImage: `radial-gradient(rgba(0, 255, 136, 0.25) 1px, transparent 1px), radial-gradient(rgba(0, 255, 136, 0.1) 1px, transparent 1px)`,
-            backgroundSize: '24px 24px',
-            backgroundPosition: '0 0, 12px 12px'
-          }}
-        />
-
-        {/* Ambient Glows */}
-        <div className="absolute top-1/4 w-[500px] h-[500px] bg-emerald-500/10 rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute bottom-1/4 w-[400px] h-[400px] bg-[#00ff88]/5 rounded-full blur-3xl pointer-events-none" />
-
-        <div className="relative w-full max-w-lg p-6 sm:p-10 rounded-3xl bg-gradient-to-b from-[#101010]/95 via-[#0c0c0c]/95 to-[#070707]/95 border-2 border-zinc-700 text-center backdrop-blur-2xl">
-          {/* Header Monogram Seal */}
-          <div className="relative w-20 h-20 mx-auto rounded-3xl overflow-hidden border-2 border-[#00ff88] p-2 bg-black/80 mb-4">
-            <img loading="lazy" decoding="async"
-              src="/imagenes/monograma.png"
-              alt="Descuentos Perú"
-              className="w-full h-full object-contain"
-            />
-            <span className="absolute bottom-1 right-1 w-3 h-3 rounded-full bg-[#00ff88] border-2 border-black animate-pulse" />
-          </div>
-
-          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-zinc-900/80 border border-zinc-700 text-[10px] font-mono text-[#00ff88] tracking-widest uppercase mb-2">
-            <Shield className="w-3.5 h-3.5 text-[#00ff88]" />
-            <span>PANEL DE CONTROL // ACCESO EXCLUSIVO</span>
-          </div>
-
-          <h1 className="text-2xl sm:text-3xl font-black text-white tracking-tight">
-            Portal de Vendedores & Admin
-          </h1>
-          <p className="text-xs text-slate-300 mt-1 mb-6 font-normal">
-            Gestiona tu catálogo, copia plantillas de atención, revisa precios y coordina ventas con tus clientes.
-          </p>
-
-          {/* User Selector with Avatars */}
-          <div className="mb-6 text-left space-y-2">
-            <label className="block text-[11px] font-mono font-bold text-slate-400 uppercase tracking-wider">
-              1. SELECCIONA TU IDENTIDAD:
-            </label>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-              {vendors.map((v) => {
-                const isSelected = v.id === currentUserId;
-                return (
-                  <button
-                    key={v.id}
-                    type="button"
-                    onClick={() => {
-                      setCurrentUserId(v.id);
-                      localStorage.setItem('dp_active_user_id', v.id);
-                      setLoginPin('');
-                      setLoginError('');
-                    }}
-                    className={`p-2.5 rounded-2xl border text-xs transition-all flex items-center gap-2.5 cursor-pointer text-left ${
-                      isSelected
-                        ? 'bg-gradient-to-r from-zinc-900 to-zinc-800/90 border-[#00ff88] text-white scale-102 font-bold'
-                        : 'bg-[#090909] border-zinc-800/60 text-slate-400 hover:text-white hover:border-emerald-700'
-                    }`}
-                  >
-                    <div className="relative w-8 h-8 rounded-full overflow-hidden border border-emerald-400 shrink-0 bg-black">
-                      <img loading="lazy" decoding="async" src={v.avatar} alt={v.name} className="w-full h-full object-cover" />
-                      {isSelected && (
-                        <span className="absolute bottom-0 right-0 w-2 h-2 rounded-full bg-[#00ff88] border border-black animate-ping" />
-                      )}
-                    </div>
-                    <div className="leading-tight truncate">
-                      <span className="block text-white text-xs truncate">{v.name}</span>
-                      <span className="text-[10px] text-[#00ff88] font-mono">@{v.username}</span>
-                    </div>
-                  </button>
-                );
-              })}
-            </div>
-          </div>
-
-          {/* PIN Input Form */}
-          <form onSubmit={handleLogin} className="space-y-4 text-left">
-            <div>
-              <label className="block text-[11px] font-mono font-bold text-slate-400 uppercase tracking-wider mb-1.5 flex items-center justify-between">
-                <span>2. INGRESA TU PIN DE ACCESO:</span>
-                <span className="text-[10px] text-emerald-400 font-mono">
-                  {currentUser.role === 'admin' ? 'ROL: ADMIN CENTRAL' : 'ROL: CREADOR VERIFICADO'}
-                </span>
-              </label>
-
-              <div className="relative">
-                <input
-                  type={showLoginPin ? 'text' : 'password'}
-                  value={loginPin}
-                  onChange={(e) => setLoginPin(e.target.value)}
-                  placeholder="PIN DE SEGURIDAD (admin123 o 1234)"
-                  autoFocus
-                  className="w-full pl-4 pr-11 py-3 rounded-2xl bg-[#070707] border border-emerald-500/60 focus:border-[#00ff88] text-white text-center text-lg font-mono tracking-widest placeholder:tracking-normal placeholder:text-xs placeholder:text-slate-500 outline-none transition-all shadow-[inset_0_2px_8px_rgba(0,0,0,0.8)]"
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowLoginPin(!showLoginPin)}
-                  className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white cursor-pointer"
-                  title={showLoginPin ? 'Ocultar PIN' : 'Mostrar PIN'}
-                >
-                  {showLoginPin ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-                </button>
-              </div>
-
-              {loginError && (
-                <p className="text-xs text-rose-400 mt-2 font-mono flex items-center gap-1.5">
-                  <AlertCircle className="w-3.5 h-3.5 shrink-0" />
-                  <span>{loginError}</span>
-                </p>
-              )}
-            </div>
-
-            <button
-              type="submit"
-              className="w-full py-3.5 rounded-2xl font-black text-slate-950 bg-[#00ff88] hover:bg-[#00e676] active:scale-95 transition-all cursor-pointer flex items-center justify-center gap-2 text-sm font-mono tracking-wide uppercase"
-            >
-              <Unlock className="w-4 h-4 stroke-[3]" />
-              <span>INGRESAR AL PANEL OPERATIVO</span>
-            </button>
-          </form>
-
-          {/* Bottom Hints and Return Link */}
-          <div className="mt-6 pt-4 border-t border-zinc-900 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs font-mono">
-            <span className="text-slate-400 text-[10px]">
-              Credenciales: Admin <strong className="text-[#00ff88]">admin123</strong> | Vendedores <strong className="text-[#00ff88]">1234</strong>
-            </span>
-            <button
-              type="button"
-              onClick={onBackToStore}
-              className="text-[#00ff88] hover:underline flex items-center gap-1 cursor-pointer font-bold text-xs"
-            >
-              <ArrowLeft className="w-3.5 h-3.5" />
-              <span>Volver a la Tienda Pública</span>
-            </button>
-          </div>
-        </div>
-      </div>
-    );
+    return <PanelLogin onLogin={handleLogin} onBackToStore={onBackToStore} />;
   }
 
   // ==========================================
@@ -1061,39 +922,27 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
         </div>
       )}
 
-      {/* Cyber System Diagnostic Bar (Top Ticker) */}
+      {/* Barra de estado: servidor medido con /api/health, sesión real y hora de Lima */}
       <div className="bg-[#040404] border-b border-zinc-900 px-4 py-1.5 flex flex-wrap items-center justify-between gap-3 text-[10px] font-mono text-slate-400">
         <div className="flex items-center gap-4 flex-wrap">
-          <div className="flex items-center gap-1.5 text-emerald-400">
-            <span className="w-2 h-2 rounded-full bg-[#00ff88] animate-ping" />
-            <span className="font-bold">SOC ESTADO: EN LÍNEA (100%)</span>
+          <div className={`flex items-center gap-1.5 ${serverStatus.ok ? 'text-emerald-400' : 'text-rose-400'}`}>
+            <span className={`w-2 h-2 rounded-full ${serverStatus.ok ? 'bg-[#00ff88]' : 'bg-rose-500'}`} />
+            <span className="font-bold">
+              {serverStatus.ok ? `SERVIDOR: EN LÍNEA · ${serverStatus.ms} ms` : 'SERVIDOR: SIN CONEXIÓN'}
+            </span>
           </div>
           <span className="text-slate-700">|</span>
           <div className="flex items-center gap-1">
-            <Wifi className="w-3 h-3 text-[#00ff88]" />
-            <span>LATENCIA: {telemetry.systemHealth.latencyMs}ms (LIM-PE-01)</span>
-          </div>
-          <span className="text-slate-700 hidden sm:inline">|</span>
-          <div className="hidden sm:flex items-center gap-1">
-            <Cpu className="w-3 h-3 text-[#00ff88]" />
-            <span>CPU: {telemetry.systemHealth.cpuPercent}%</span>
-          </div>
-          <span className="text-slate-700 hidden md:inline">|</span>
-          <div className="hidden md:flex items-center gap-1">
             <Shield className="w-3 h-3 text-emerald-400" />
-            <span>SEGURIDAD: {telemetry.systemHealth.ssl}</span>
+            <span>
+              SESIÓN: @{sessionUser?.username} · {sessionUser?.role === 'admin' ? 'ADMIN' : 'VENDEDOR'}
+            </span>
           </div>
         </div>
 
-        <div className="flex items-center gap-3">
-          <div className="flex items-center gap-1 text-[#00ff88] bg-zinc-900/60 px-2 py-0.5 rounded border border-zinc-700/40">
-            <Clock className="w-3 h-3" />
-            <span className="font-bold">{currentTime || '21:20:00'} (GMT-5)</span>
-          </div>
-          <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded bg-emerald-500/20 text-[#00ff88] font-bold border border-zinc-700">
-            <span className="w-2 h-2 rounded-full bg-[#00ff88] animate-pulse" />
-            <span>{telemetry.activeVisitorsNow} VISITANTES ACTIVOS</span>
-          </span>
+        <div className="flex items-center gap-1 text-[#00ff88] bg-zinc-900/60 px-2 py-0.5 rounded border border-zinc-700/40">
+          <Clock className="w-3 h-3" />
+          <span className="font-bold">{currentTime} (Lima)</span>
         </div>
       </div>
 
@@ -1133,18 +982,20 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
               <span className="font-bold text-white block text-[11px]">{currentUser.name}</span>
               <span className="text-[9px] text-[#00ff88] font-mono">@{currentUser.username}</span>
             </div>
-            <select
-              value={currentUserId}
-              onChange={(e) => handleSwitchUser(e.target.value)}
-              className="bg-transparent text-[#00ff88] text-xs font-bold font-mono outline-none cursor-pointer border-l border-zinc-800/60 pl-2 ml-1"
-              title="Cambiar de usuario"
-            >
-              {vendors.map((v) => (
-                <option key={v.id} value={v.id} className="bg-[#0e0e0e] text-white">
-                  {v.name} ({v.role === 'admin' ? 'Admin' : 'Vendedor'})
-                </option>
-              ))}
-            </select>
+            {sessionUser?.role === 'admin' && (
+              <select
+                value={currentUserId}
+                onChange={(e) => handleSwitchUser(e.target.value)}
+                className="bg-transparent text-[#00ff88] text-xs font-bold font-mono outline-none cursor-pointer border-l border-zinc-800/60 pl-2 ml-1"
+                title="Cambiar de usuario"
+              >
+                {vendors.map((v) => (
+                  <option key={v.id} value={v.id} className="bg-[#0e0e0e] text-white">
+                    {v.name} ({v.role === 'admin' ? 'Admin' : 'Vendedor'})
+                  </option>
+                ))}
+              </select>
+            )}
           </div>
 
           {/* Go to public store button */}
@@ -1339,6 +1190,13 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
               ======================================================= */}
           {currentNav === 'telemetria' && (
             <div className="space-y-6 max-w-7xl mx-auto">
+              <p className="flex items-start gap-2.5 rounded-xl border border-amber-400/40 bg-amber-400/5 p-3.5 text-xs leading-relaxed text-amber-100">
+                <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-amber-300" />
+                <span>
+                  Las cifras de esta pantalla (visitas, clics, regiones y eventos) son datos de ejemplo guardados en este navegador.
+                  Todavía no hay analítica real conectada.
+                </span>
+              </p>
               
               {/* Top Banner: Telemetry Hero & Active Radar */}
               <div className="p-6 sm:p-8 rounded-3xl bg-gradient-to-r from-[#111111] via-[#0c0c0c] to-[#070707] border border-zinc-700 relative overflow-hidden">
@@ -1350,7 +1208,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                   <div>
                     <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-zinc-900/80 border border-zinc-700 text-[10px] font-mono text-[#00ff88] tracking-widest uppercase mb-2">
                       <Radio className="w-3.5 h-3.5 animate-pulse text-[#00ff88]" />
-                      <span>TELEMETRÍA EN TIEMPO REAL // SESIÓN: {currentUser.name.toUpperCase()}</span>
+                      <span>DATOS DE EJEMPLO // SESIÓN: {currentUser.name.toUpperCase()}</span>
                     </div>
                     <h2 className="text-2xl sm:text-3xl font-black text-white tracking-tight">
                       Centro de Monitoreo de Visitas & Clics
@@ -2535,6 +2393,15 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
               ======================================================= */}
           {currentNav === 'leaks-articulos' && (
             <div className="space-y-6 max-w-6xl mx-auto">
+              {import.meta.env.VITE_LEAKS_SUPABASE_URL && (
+                <p className="flex items-start gap-2.5 rounded-xl border border-amber-400/40 bg-amber-400/5 p-3.5 text-xs leading-relaxed text-amber-100">
+                  <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-amber-300" />
+                  <span>
+                    La web lee los leaks desde la base de datos de Supabase. Lo que edites en esta pantalla solo se guarda en este navegador y
+                    NO se publica. Para cambiar un leak, edítalo en Supabase (tabla leaks).
+                  </span>
+                </p>
+              )}
               
               {/* Top Banner */}
               <div className="p-6 sm:p-8 rounded-3xl bg-gradient-to-r from-[#120606] via-[#0d0505] to-[#050202] border border-rose-500/40 shadow-[0_0_40px_rgba(244,63,94,0.15)] relative overflow-hidden">

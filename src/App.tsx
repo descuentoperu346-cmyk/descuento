@@ -27,11 +27,9 @@ import {
   recordVisitEvent,
   recordProductViewEvent
 } from './data/telemetryData';
-import {
-  LeakArticle,
-  getStoredLeakArticles,
-  saveStoredLeakArticles
-} from './data/leaksData';
+import { useLeakArticles } from './hooks/useLeakArticles';
+import { isPanelHash, PANEL_HASH } from './lib/panelRoute';
+import { AdminReturnButton } from './components/AdminReturnButton';
 import {
   fetchProductsApi,
   fetchVendorsApi
@@ -94,14 +92,6 @@ export default function App() {
 
   // Category filter state (used across views)
   const [selectedCategory, setSelectedCategory] = useState<string>('todos');
-
-  // Leaks & Breaches articles state
-  const [leakArticles, setLeakArticles] = useState<LeakArticle[]>(getStoredLeakArticles);
-
-  const handleUpdateLeakArticles = (updatedArticles: LeakArticle[]) => {
-    setLeakArticles(updatedArticles);
-    saveStoredLeakArticles(updatedArticles);
-  };
 
   // Record visitor telemetry once per session
   useEffect(() => {
@@ -186,14 +176,17 @@ export default function App() {
   // Dedicated view routing: 'store' (Tienda Pública) or 'portal' (Web Completa de Vendedores & Admin)
   const [currentView, setCurrentView] = useState<'store' | 'portal'>(() => {
     if (readVendorSlug() || readFigureId()) return 'store';
-    if (typeof window !== 'undefined') {
-      const hash = window.location.hash.toLowerCase();
-      if (hash.includes('portal') || hash.includes('admin') || hash.includes('vendedor')) {
-        return 'portal';
-      }
-    }
+    if (typeof window !== 'undefined' && isPanelHash(window.location.hash)) return 'portal';
     return 'store';
   });
+
+  // Artículos de Leaks: se descargan solo al abrir Leaks o el panel (no pesan en el inicio)
+  const { articles: leakArticles, update: handleUpdateLeakArticles } = useLeakArticles(
+    activeNavTab === 'leaks' || currentView === 'portal'
+  );
+  useEffect(() => {
+    if (activeNavTab === 'leaks') void import('./components/LeaksTab');
+  }, [activeNavTab]);
 
   // Sync state with browser hash navigation (#/portal, #/servicios, #/leaks, #/nosotros, #/contacto)
   useEffect(() => {
@@ -215,7 +208,7 @@ export default function App() {
         return;
       }
       const hash = window.location.hash.toLowerCase();
-      if (hash.includes('portal') || hash.includes('admin') || hash.includes('vendedor')) {
+      if (isPanelHash(window.location.hash)) {
         setCurrentView('portal');
       } else {
         setCurrentView('store');
@@ -248,7 +241,7 @@ export default function App() {
   };
 
   const navigateToPortal = () => {
-    window.location.hash = '#/portal';
+    window.location.hash = PANEL_HASH;
     setCurrentView('portal');
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
@@ -282,7 +275,7 @@ export default function App() {
         onUpdateServices={handleUpdateServices}
         paymentMethods={paymentMethods}
         onUpdatePaymentMethods={handleUpdatePaymentMethods}
-        leakArticles={leakArticles}
+        leakArticles={leakArticles ?? []}
         onUpdateLeakArticles={handleUpdateLeakArticles}
       />
       </Suspense>
@@ -348,10 +341,14 @@ export default function App() {
         {/* ======================= PAGE: LEAKS & FILTRACIONES ======================= */}
         {activeNavTab === 'leaks' && (
           <div className="w-full max-w-[1560px] mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 pb-20">
-            <LeaksTab
-              articles={leakArticles}
-              onOpenContact={() => handleTabChange('contacto')}
-            />
+            {leakArticles ? (
+              <LeaksTab
+                articles={leakArticles}
+                onOpenContact={() => handleTabChange('contacto')}
+              />
+            ) : (
+              <PageFallback />
+            )}
           </div>
         )}
 
@@ -581,6 +578,9 @@ export default function App() {
         )}
         </Suspense>
       </main>
+
+      {/* Botón "Volver al panel": solo lo ve un administrador con sesión activa */}
+      <AdminReturnButton />
 
       {/* Footer with Global Multi-Page Navigation */}
       <Footer

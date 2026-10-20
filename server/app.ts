@@ -5,8 +5,16 @@ import { productsRouter } from './routes/products';
 import { vendorsRouter } from './routes/vendors';
 import { syncRouter } from './routes/sync';
 import { invalidateOnWrite } from './cache';
+import { config } from './config';
+import { decoyHeaders, logDecoyHit } from './decoy';
 
 export const app = express();
+
+// Detrás de un proxy, req.ip debe ser la IP real del visitante (la usa el límite de intentos de acceso)
+if (config.trustProxy > 0) app.set('trust proxy', config.trustProxy);
+
+// Cabeceras de cebo (X-DP-Env / X-DP-Data-Source) visibles al inspeccionar la web
+app.use(decoyHeaders);
 
 // Middleware básico de parsing
 app.use(express.json({ limit: '15mb' }));
@@ -27,8 +35,15 @@ app.get('/api/health', (_req: Request, res: Response) => {
   });
 });
 
+// Tripwire: quien siga la telemetryUrl del config.json de cebo queda registrado. No da acceso a nada.
+app.all('/api/security/canary-tripwire', (req: Request, res: Response) => {
+  logDecoyHit(req, 'canary-tripwire');
+  res.status(401).json({ error: 'invalid_token' });
+});
+
 // Endpoint de simulacion y telemetria del sistema Honeypot (Active Cyber Deception)
 app.get('/api/honeypot-preview', (req: Request, res: Response) => {
+  logDecoyHit(req, 'honeypot-preview');
   const clientIp = req.headers['x-forwarded-for'] || req.socket.remoteAddress || '127.0.0.1';
   const userAgent = req.headers['user-agent'] || 'Desconocido / Raw Socket Probe';
 

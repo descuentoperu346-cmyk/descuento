@@ -61,6 +61,21 @@ export interface LeakArticle {
   leakedChats?: LeakedChatEntry[];
   openQuestions?: string[];
   isUpcoming?: boolean;
+  fullBody?: boolean;
+  keyStats?: { value: string; label: string }[];
+  /** Imagen al comienzo de una sección, indexada por el texto exacto del subtítulo (##) */
+  sectionImages?: Record<string, { src: string; alt: string; caption: string }>;
+  /** Videos del leak: archivos subidos a Supabase Storage (bucket leaks-media) o ubicados en /public */
+  videos?: { src: string; poster?: string; title: string; caption?: string }[];
+  /** Tarjeta de perfil de la barra lateral */
+  sidebar?: {
+    image: string;
+    imageAlt: string;
+    name: string;
+    role: string;
+    facts: { label: string; value: string }[];
+    profileHref?: string;
+  };
 }
 
 export const INITIAL_LEAKS_ARTICLES: LeakArticle[] = [
@@ -291,125 +306,268 @@ export const INITIAL_LEAKS_ARTICLES: LeakArticle[] = [
     ]
   },
 
-  // 2. EXPEDIENTE LEAK #02: CORRUPCIÓN CONGRESO & AMÉRICA TV (PRÓXIMA LIBERACIÓN)
+  // 2. EXPEDIENTE LEAK #02: KEIKO FUJIMORI - CASO CÓCTELES
   {
     id: 'leak-congreso-america-tv',
     leakNumber: 2,
-    title: 'Nuevo caso de corrupción liberado del Congreso: pagos a América TV para callar coimas en el Congreso',
-    subtitle: 'Comprobantes de transferencias bancarias, facturas de pauta clandestina y chats entre operadores parlamentarios y directivos mediáticos para silenciar investigaciones por cobro de coimas en el Congreso de la República.',
-    slug: 'nuevo-caso-corrupcion-congreso-pagos-america-tv-callar-coimas',
+    title: 'Expediente Keiko Fujimori: lo que dicen los documentos del caso Cócteles',
+    subtitle: 'Aportes ocultos, falsos aportantes, una multa de la SMV a Credicorp y denuncias de presión sobre testigos. El caso está archivado y no hay condena: este expediente separa lo documentado de lo acusado y lo acusado de lo rumoreado.',
+    slug: 'expediente-keiko-fujimori-caso-cocteles',
     category: 'filtraciones',
-    categoryLabel: 'PRÓXIMO LEAK #02 // CONGRESO',
+    categoryLabel: 'LEAK #02 // EXPEDIENTE KEIKO FUJIMORI',
     severity: 'critico',
-    date: 'Próxima Liberación (Octubre 2026)',
-    readTime: '15 min de lectura',
+    date: 'Liberación: domingo 18 de octubre de 2026',
+    readTime: '4 min el resumen · 33 min completo',
     author: 'Unidad de Investigación DP',
     authorRole: 'Periodismo Forense & Inteligencia OSINT',
     authorTelegram: 'Tin9o',
-    imageUrl: '/imagenes/leak-congreso-america-tv.jpg',
-    dossierCode: 'DOSSIER-CONG-CORRUPCION-2026-002',
-    classificationNotice: 'EXPEDIENTE EN FASE FINAL DE DESCLASIFICACIÓN PÚBLICA Y COTEJO DE FIRMAS DIGITALES.',
-    summary: 'Filtración documentaria sobre una red de blindaje mediático: legisladores y operadores de comisiones canalizaron fondos públicos y aportes ilícitos hacia emisarios vinculados a América TV con el fin expreso de vetar reportajes sobre cobro de coimas en el Congreso.',
-    affectedScope: 'Congreso de la República, medios de comunicación corporativos y comisiones fiscalizadoras',
-    compromisedData: [
-      'Extractos de transferencias bancarias fraccionadas a operadores de prensa',
-      'Facturas de publicidad institucional simulada para encubrir pagos de sobornos',
-      'Registros de chat de WhatsApp coordinando la censura de coberturas en vivo',
-      'Audios de reuniones reservadas sobre distribución de fondos en comisiones ordinarias',
-      'Nómina de legisladores aportantes del fondo de blindaje mediático',
-      'Registros de visitas a instalaciones televisivas no reportados en agenda oficial'
+    imageUrl: '/imagenes/caso-keiko/keiko-cocteles-dossier.webp',
+    dossierCode: 'DOSSIER-KF-COCTELES-2026-002',
+    classificationNotice: 'Reconstrucción a partir de resoluciones judiciales, documentos de la Superintendencia del Mercado de Valores y reportajes con fuente. Una acusación no es una condena y rige la presunción de inocencia. No se incluyen datos personales de ciudadanos particulares.',
+    summary: 'El caso Cócteles investigó si las campañas presidenciales de Keiko Fujimori de 2011 y 2016 ocultaron el origen de aportes millonarios mediante aportantes ficticios y actividades de recaudación. La Fiscalía atribuyó más de US$17,3 millones. Hubo aportes reconocidos por empresas y denuncias de presión sobre testigos, pero el caso terminó archivado en 2026 por una sentencia del Tribunal Constitucional, sin condena y sin prueba pública de asesinatos ni de coimas por obras.',
+    affectedScope: 'Financiamiento electoral 2011 y 2016, Fuerza Popular, empresas aportantes y Ministerio Público',
+    fullBody: true,
+    keyStats: [
+      { value: 'US$17,3 M', label: 'Atribuidos por la Fiscalía (2010-2018)' },
+      { value: 'US$3,65 M', label: 'Credicorp · 17 retiros en efectivo' },
+      { value: 'S/1,08 M', label: 'Multa de la SMV a Credicorp' },
+      { value: '48', label: 'Implicados en la lista publicada' },
+      { value: '0', label: 'Condenas en este caso' },
+      { value: '16 jun 2026', label: 'Archivo confirmado por la Sala' }
     ],
-    tags: ['#CongresoPeru', '#AmericaTV', '#CoimasCongreso', '#PautaClandestina', '#BlindajeMediatico', '#LeakExclusivo', '#Corrupcion'],
-    featured: true,
-    isUpcoming: true,
-    evidenceFigures: [
-      {
-        id: 'cong-01',
-        figureNumber: 'FIGURA 01: MESA DIRECTIVA',
-        title: 'Operadores de Mesa Directiva y Enlaces de Pauta',
-        caption: 'Coordinación de transferencias y asignación presupuestal de pauta publicitaria clandestina del Congreso.',
-        imageUrl: '/imagenes/caso-congreso/figura-01.jpg',
-        evidenceType: 'Expediente Administrativo',
-        source: 'Unidad de Investigación DP'
+    sectionImages: {
+      'El mecanismo que investigó la Fiscalía': {
+        src: '/imagenes/caso-keiko/keiko-ruta-dinero.webp',
+        alt: 'Tablero de investigación con hilos rojos que unen donantes aparentes, retiros en efectivo y depósitos',
+        caption: 'Cómo la Fiscalía representó el circuito: donantes aparentes, fraccionamiento del efectivo y depósitos en la cuenta de campaña.'
       },
-      {
-        id: 'cong-02',
-        figureNumber: 'FIGURA 02: ÓRGANOS DE CONTROL',
-        title: 'Vínculos con Órganos de Control y Fiscalías',
-        caption: 'Seguimiento a carpetas fiscales y comisiones investigadoras sobre cobro de comisiones y blindaje mediático.',
-        imageUrl: '/imagenes/caso-congreso/figura-02.jpg',
-        evidenceType: 'Registros Fiscales',
-        source: 'Unidad de Investigación DP'
+      'Credicorp: la multa y los 17 retiros': {
+        src: '/imagenes/caso-keiko/keiko-maletines-efectivo.webp',
+        alt: 'Maletín abierto con fajos de dólares sobre una mesa metálica, junto a documentos de transporte de valores',
+        caption: 'Reconstrucción del efectivo en maletines que, según la declaración atribuida a Dionisio Romero, se habría entregado entre 2010 y 2011.'
       },
-      {
-        id: 'cong-03',
-        figureNumber: 'FIGURA 03: ANTECEDENTE HISTÓRICO',
-        title: 'Alberto Fujimori - Control de Líneas Editoriales',
-        caption: 'Precedente histórico de control de coberturas televisivas (Caso Vladivideos / América TV).',
-        imageUrl: '/imagenes/caso-congreso/figura-03.jpg',
-        evidenceType: 'Precedente Judicial',
-        source: 'Archivo Histórico Judicial'
+      'Cócteles, rifas y números que cambian': {
+        src: '/imagenes/caso-keiko/keiko-cocteles-smv.webp',
+        alt: 'Libro de recaudación, tarjetas de cóctel y una resolución sancionadora sobre un escritorio',
+        caption: 'Los tres tipos de documento que se cruzan en este capítulo: el libro de recaudación, las tarjetas de los cócteles y la resolución de la SMV.'
       },
-      {
-        id: 'cong-04',
-        figureNumber: 'FIGURA 04: COMISIONES PARLAMENTARIAS',
-        title: 'Dirección Parlamentaria y Comisiones Ordinarias',
-        caption: 'Gestión de comisiones de fiscalización y distribución de montos encubiertos en publicidad institucional.',
-        imageUrl: '/imagenes/caso-congreso/figura-04.jpg',
-        evidenceType: 'Contratos y Facturas',
-        source: 'Unidad de Investigación DP'
+      'Documentos destruidos y agendas paralelas': {
+        src: '/imagenes/caso-keiko/keiko-allanamiento.webp',
+        alt: 'Fiscales con chaleco revisan cajas con cinta de cadena de custodia en un archivo',
+        caption: 'Escena representativa de una incautación de documentos partidarios con cadena de custodia.'
       },
-      {
-        id: 'cong-05',
-        figureNumber: 'FIGURA 05: EJECUTIVO ANTERIOR',
-        title: 'Martín Vizcarra - Presupuestos de Publicidad Estatal',
-        caption: 'Investigaciones por direccionamiento de gasto publicitario estatal y contrataciones en el Ejecutivo.',
-        imageUrl: '/imagenes/caso-congreso/figura-05.jpg',
-        evidenceType: 'Carpetas Preliminares',
-        source: 'Unidad de Investigación DP'
+      'Presiones a testigos: lo que hay y lo que no': {
+        src: '/imagenes/caso-keiko/keiko-chats-labotica.webp',
+        alt: 'Perito informático analiza chats en una tableta dentro de un laboratorio forense',
+        caption: 'Representación de una extracción forense de chats, como los del grupo La Botica difundidos por IDL-Reporteros en 2018.'
       },
-      {
-        id: 'cong-06',
-        figureNumber: 'FIGURA 06: PODER EJECUTIVO',
-        title: 'Dina Boluarte - Decretos de Urgencia y Pauta Oficial',
-        caption: 'Decretos de urgencia y partidas de imagen institucional vinculadas a pactos con bancadas congresales.',
-        imageUrl: '/imagenes/caso-congreso/figura-06.jpg',
-        evidenceType: 'Partidas Presupuestarias',
-        source: 'Unidad de Investigación DP'
-      },
-      {
-        id: 'cong-07',
-        figureNumber: 'FIGURA 07: EJECUTIVO ANTERIOR',
-        title: 'Pedro Castillo - Gestiones y Licitaciones Regionales',
-        caption: 'Expedientes por irregularidades en comisiones, licitaciones regionales y reclamos por pauta periodística.',
-        imageUrl: '/imagenes/caso-congreso/figura-07.jpg',
-        evidenceType: 'Declaraciones Fiscales',
-        source: 'Unidad de Investigación DP'
-      },
-      {
-        id: 'cong-08',
-        figureNumber: 'FIGURA 08: ANTECEDENTE HISTÓRICO',
-        title: 'Alan García - Pauta Oficial y Coberturas Dominicales',
-        caption: 'Patrones históricos de asignación de publicidad estatal y condicionamiento de reportajes dominicales.',
-        imageUrl: '/imagenes/caso-congreso/figura-08.jpg',
-        evidenceType: 'Precedente Documentado',
-        source: 'Archivo Histórico Judicial'
-      },
-      {
-        id: 'cong-09',
-        figureNumber: 'FIGURA 09: FUERZA POPULAR',
-        title: 'Keiko Fujimori - Coordinación de Bancada Parlamentaria',
-        caption: 'Dirección política de la bancada mayoritaria en comisiones de presupuesto y alianzas de veto mediático.',
-        imageUrl: '/imagenes/caso-congreso/figura-09.jpg',
-        evidenceType: 'Registros de Bancada',
-        source: 'Unidad de Investigación DP'
+      'Por qué se archivó': {
+        src: '/imagenes/caso-keiko/keiko-fallo-judicial.webp',
+        alt: 'Sala del Tribunal Constitucional con una sentencia, un mazo y una balanza sobre el escritorio',
+        caption: 'Representación del desenlace judicial: el Tribunal Constitucional y el archivo del caso.'
       }
+    },
+    sidebar: {
+      image: '/imagenes/caso-keiko/keiko-portrait.webp',
+      imageAlt: 'Retrato de Keiko Fujimori',
+      name: 'Keiko Fujimori',
+      role: 'Presidenta del Perú (2026-2031) · Fuerza Popular',
+      facts: [
+        { label: 'Caso', value: 'Cócteles (2011 y 2016)' },
+        { label: 'Estado', value: 'Archivado, sin condena' },
+        { label: 'Implicados', value: '48 en la lista publicada' },
+        { label: 'Archivo', value: '16 de junio de 2026' }
+      ],
+      profileHref: '#/leaks/figura/cong-fig-09'
+    },    compromisedData: [
+      'Desglose fiscal de 11 hechos económicos: US$17.307.359,72 y S/18.000 (2010-2018)',
+      '17 retiros en efectivo de Credicorp entre noviembre de 2010 y mayo de 2011 por US$3,65 millones',
+      'Multa de la SMV a Credicorp: S/1.080.000 (Fuerza 2011) y S/829.500 (otro partido)',
+      'Peritaje de seis cócteles: S/4.606.218 declarados frente a S/1.432.701 documentados',
+      'Cadena de autorización de Odebrecht descrita por Jorge Barata en 2018',
+      'Archivo definitivo confirmado el 16 de junio de 2026'
+    ],
+    tags: ['#KeikoFujimori', '#CasoCocteles', '#FuerzaPopular', '#FinanciamientoElectoral', '#Odebrecht', '#Credicorp', '#LeakExclusivo'],
+    featured: true,
+    openQuestions: [
+      '¿Quién pagó realmente cada aporte registrado? Falta conciliar retiros bancarios, receptores de efectivo, recibos partidarios y registros de la ONPE.',
+      '¿Por qué los retiros de Credicorp se reparten distinto por año en la resolución de la SMV (US$700.000 en 2010 y US$2.950.000 en 2011) y en sus estados financieros (US$1.700.000 y US$1.950.000)? Ambos suman US$3,65 millones.',
+      '¿Quién compró las tarjetas de los cócteles y por qué cambiaron las cifras entre el primer informe financiero de 2011 y sus rectificaciones?',
+      '¿Qué documentación salió del local partidario y cuál se destruyó? ¿Qué contenían las computadoras de una denuncia de robo de junio de 2011 que se archivó sin probar el hurto?',
+      '¿Quién hizo las amenazas denunciadas por testigos y existió algún pago para cambiar declaraciones? Falta identificar cada entrega, pagador, receptor y fecha.',
+      '¿Algún aporte buscó una contraprestación indebida? Hace falta una decisión, contrato o favor concreto que lo vincule con el dinero.'
     ],
     content: [
-      'La Unidad de Investigación de Descuentos Perú se encuentra finalizando el peritaje y cotejo forense del expediente "Operación Silencio en el Parlamento", una exhaustiva recopilación de registros bancarios, contratos de servicios de comunicación y mensajes interceptados que revelan pagos encubiertos destinados a evitar que salieran a la luz esquemas de cobro de coimas en el Congreso.',
-      'De acuerdo con las evidencias en custodia, diversos legisladores que integraban comisiones de presupuesto y fiscalización habrían acordado derivaciones de dinero hacia operadores de medios de televisión de alcance nacional —con especial énfasis en América TV— para bloquear o suavizar reportajes de investigación sobre adjudicaciones irregulares en gobiernos regionales.',
-      'El esquema operaba mediante contratos de "asesoría en comunicación estratégica" y pauta publicitaria no devengada, triangulados a través de pequeñas agencias creadas con meses de anticipación. De esta forma, el dinero salía formalmente amparado bajo conceptos de imagen institucional mientras en la práctica condicionaba la línea editorial.',
-      'El informe final incluirá los comprobantes íntegros, los números de operación bancaria, las transcripciones forenses y el análisis balístico y digital de los metadatos correspondientes. La desclasificación total se llevará a cabo en la fecha fijada por el cronómetro de la plataforma.'
+      '## Lo esencial',
+      '- Qué se investigó: si las campañas presidenciales de 2011 y 2016 de Keiko Fujimori ocultaron quién entregaba realmente el dinero. El nombre viene de los cócteles de recaudación.',
+      '- Cuánto dinero: la acusación atribuyó más de US$17,3 millones y S/18.000, entre 2010 y 2018. No es dinero público robado ni dinero entregado personalmente a Keiko: incluye aportes, publicidad y operaciones empresariales.',
+      '- Qué se reconoció: Credicorp y el grupo Rassmuss admitieron entregas, y el abogado de Fuerza Popular admitió en juicio la existencia de aportantes simulados. La defensa negó siempre que el dinero tuviera origen delictivo.',
+      '- Cómo terminó: el Tribunal Constitucional dejó sin efecto el proceso en octubre de 2025 y el archivo por lavado de activos y organización criminal se confirmó el 16 de junio de 2026. Fue una decisión jurídica, no una sentencia sobre la prueba. La Sala dejó abierta, con condiciones, la evaluación de algunas imputaciones de falsedad.',
+      '- Lo que no hay: ninguna condena, ninguna prueba pública de asesinatos y ningún soborno por obras acreditado en este caso.',
+      'Este expediente reúne lo que dicen los documentos y los reportajes con fuente. En cada punto se distingue entre lo que consta en un documento, lo que sostuvo la Fiscalía y lo que negaron los acusados. Keiko Fujimori rechazó todas las imputaciones y, tras ganar la segunda vuelta de 2026, ejerce hoy como presidenta del Perú.',
+
+      '## El mecanismo que investigó la Fiscalía',
+      '?? Según la Fiscalía, un empresario entregaba efectivo, el dinero se repartía a nombres prestados y se justificaba con cócteles y rifas. La defensa negó el origen delictivo; en 2024 el abogado del partido admitió que hubo aportantes simulados.',
+      'Según la tesis fiscal, el circuito funcionaba en cinco pasos. Un empresario o intermediario entregaba una suma grande, casi siempre en efectivo. Personas del entorno partidario conseguían nombres de familiares, amigos o conocidos. El dinero se dividía y se registraba como si lo hubiera aportado cada uno, el llamado pitufeo. Otra parte se justificaba como venta de entradas a cócteles, rifas o cenas. Y los informes presentados a la ONPE mostraban una procedencia distinta de la que sostenía la Fiscalía.',
+      'El fiscal José Domingo Pérez, del Equipo Especial Lava Jato, sostenía que dentro del partido habría operado una organización criminal para captar, ocultar e incorporar esos fondos a las campañas. La defensa respondía que se había buscado mantener confidenciales a los donantes y negaba el origen delictivo del dinero.',
+      'En julio de 2024, durante el juicio, el abogado de Fuerza Popular, Christian Salas, admitió la existencia de aportantes simulados y de aportes de empresarios nacionales. La controversia penal era entonces más amplia que demostrar que existieron donaciones ocultas: había que establecer su origen delictivo y la responsabilidad de cada acusado.',
+
+      '## El dinero: los 11 hechos del auto de enjuiciamiento',
+      '?? La acusación desglosó 11 hechos que suman US$17,3 millones y S/18.000. Son montos atribuidos, no una declaración judicial de lavado, y hay otras cifras que se solapan y no deben sumarse.',
+      'El auto de enjuiciamiento usado en el juicio de 2024 desglosa 11 hechos económicos.',
+      '>> Son cantidades atribuidas por la acusación, no una declaración judicial de que todo ese dinero fue lavado.',
+      '- Odebrecht, entrega directa (2011): US$1.000.000.',
+      '- Credicorp, mediante Dionisio Romero (2010-2011): US$3.650.000.',
+      '- Inversiones Piuranas (2016): US$450.000.',
+      '- Grupo Rassmuss, tres períodos (2010-2016): US$7.670.000.',
+      '- Circuito Confiep (2011): US$2.077.500.',
+      '- Vito Rodríguez, del grupo Gloria (2011): US$200.000.',
+      '- Empresarios ligados al Club de la Construcción (2013-2015): US$52.000 y S/18.000.',
+      '- Luis Santiago Calle Quiroz (2011): US$15.000.',
+      '- MVV Bienes Raíces, comisiones por corretaje (2014-2018): US$2.192.859,72.',
+      '- Total (2010-2018): US$17.307.359,72 y S/18.000.',
+      '!! La suma incluye operaciones empresariales y publicidad además de aportes electorales. No equivale a dinero público robado ni a una cantidad entregada personalmente a Keiko Fujimori. Tampoco deben sumarse otras cifras que circulan, como US$800.000, US$480.000 o US$1,2 millones de Odebrecht: se solapan con estas filas. Los US$1,2 millones, por ejemplo, son el US$1 millón directo más US$200.000 que Jorge Barata dijo haber entregado al circuito de Confiep, que ya están dentro de la cifra de Confiep.',
+
+      '## Odebrecht: la cadena que describió Barata',
+      '?? Jorge Barata declaró que se entregó US$1 millón en 2011 y describió la cadena interna de autorización. Dijo no haber dado dinero a Keiko Fujimori ni hablado con ella de esos pagos.',
+      'Jorge Barata, exrepresentante de Odebrecht en Perú, declaró que se entregó US$1 millón para la campaña de 2011, mediante Jaime Yoshiyama y Augusto Bedoya, US$500.000 a cada uno. En su declaración del 28 de febrero de 2018 explicó la cadena interna: él proponía las contribuciones y los montos, pedía autorización a Luiz Antonio Mameri, usaba el sistema de correos cifrados Fox y coordinaba con el Departamento de Operaciones Estructuradas la disponibilidad del efectivo, que llegaba a sus oficinas en Perú, donde hacía las entregas.',
+      'Barata atribuyó a Marcelo Odebrecht la sugerencia de aumentar el aporte inicial. Pero también dijo que no entregó dinero directamente a Keiko Fujimori ni conversó con ella sobre esos pagos, y admitió desconocer qué empresa proporcionó los dólares y cómo distribuyó el partido los recursos. La defensa negó que la campaña hubiera recibido ese dinero, y Jaime Yoshiyama sostuvo que los fondos que él consiguió venían del empresario Juan Rassmuss, ya fallecido.',
+      'Sobre por qué habría aumentado el aporte, Barata relató que inicialmente fueron US$500.000 y que después se amplió, y en los audios publicados por IDL-Reporteros lo vinculó con el apoyo que Odebrecht también había dado a Ollanta Humala y con una conversación con Marcelo Odebrecht. Convoca recogió que Yoshiyama pidió un nuevo aporte ante el temor de una victoria de Humala. Son declaraciones sobre las motivaciones de los participantes, no una contraprestación contractual demostrada.',
+      'Hubo además US$200.000 de Odebrecht canalizados a través de Confiep, en otra operación, para una campaña publicitaria de defensa de la inversión privada en la segunda vuelta; la reunión empresarial de recaudación se hizo el 19 de abril de 2011, después de la primera vuelta. Roque Benavides reconoció esa contribución dentro de una colecta empresarial que, según Confiep, era para publicidad en defensa de la inversión privada. Confiep negó que fuera una transferencia directa a Fuerza Popular.',
+
+      '## Credicorp: la multa y los 17 retiros',
+      '?? Credicorp reconoció US$3,65 millones. La SMV la multó con S/1,08 millones por no revelarlos y documentó 17 retiros en efectivo entre 2010 y 2011. Queda una diferencia por explicar entre años.',
+      'Credicorp reconoció directamente el aporte de US$3,65 millones. El 18 de noviembre de 2019 informó que su presidente, Dionisio Romero Paoletti, había declarado ante la Fiscalía sobre donaciones de 2010 y 2011. Romero justificó el apoyo por su oposición a Ollanta Humala y a la influencia política de Hugo Chávez, y la empresa negó que las contribuciones generaran responsabilidad legal.',
+      'Según lo que la prensa recogió de su declaración, Romero dijo que el dinero se entregó en efectivo y en maletines a Keiko Fujimori y a Jaime Yoshiyama, en seis o siete partes, que recordaba entregas de US$500.000 o US$600.000 sin precisar el importe de cada una, y presentó un documento con 17 retiros de fondos de Credicorp. Hay que distinguir etapas: 17 retiros de origen no significan 17 entregas personales a Fujimori. Su relato prueba que el empresario reconoció el aporte; no prueba por sí solo que el dinero fuera de origen ilícito, que es lo que sostenía la Fiscalía, y Keiko Fujimori rechazó las imputaciones.',
+      'La Fiscalía cuestionaba esos aportes por dos razones: la transparencia electoral, porque el financiamiento no aparecía identificado como tal en los registros de aportantes, y el origen del dinero. Sostuvo que había un posible fraude en la administración de personas jurídicas y citó declaraciones de accionistas, directores y ejecutivos que no habían sido informados de las entregas. Era una tesis fiscal, no una condena contra Romero ni contra Credicorp.',
+      'La Superintendencia del Mercado de Valores (SMV) sí sancionó a Credicorp. Por la Resolución 012-2021-SMV/11, del 5 de marzo de 2021, le impuso 300 UIT (S/1.080.000) por no revelar los aportes en efectivo a Fuerza 2011 y 210 UIT (S/829.500) por no revelar el acuerdo de aportación, mediante subsidiarias, a Peruanos Por el Kambio en 2016. La segunda multa corresponde a otro partido y no debe atribuirse al financiamiento de Keiko Fujimori.',
+      'Credicorp informó ante la SEC de Estados Unidos que pagó la multa el 9 de diciembre de 2021; esa comunicación se presentó el 9 de febrero de 2026. La empresa impugnó la sanción, una sentencia del 26 de noviembre de 2025 confirmó el rechazo de su demanda y la compañía interpuso recurso de casación, que seguía pendiente en sus estados financieros de 2025. Hay sanción y pago reconocido, pero la controversia judicial no está agotada. Es un procedimiento administrativo distinto del penal.',
+      'La resolución de la SMV identifica 17 retiros en efectivo entre el 3 de noviembre de 2010 y el 23 de mayo de 2011, que suman US$3,65 millones, por importes de entre US$100.000 y US$500.000, vinculados a reembolsos de Atlantic Security Bank al BCP. El mayor fue de US$500.000, el 14 de abril de 2011. El regulador consideró que el fraccionamiento y la entrega final en efectivo contribuían al ocultamiento. Según su cronología, algunos directivos conocieron los aportes recién en 2018 y los responsables de auditoría y cumplimiento fueron informados en noviembre de 2019.',
+      'Calendario de los 17 retiros en efectivo según la SMV (fecha del retiro y monto en US$):',
+      '- 3 de noviembre de 2010: 200.000.',
+      '- 13 de diciembre de 2010: 200.000.',
+      '- 29 de diciembre de 2010: 300.000.',
+      '- 12 de enero de 2011: 350.000.',
+      '- 26 de enero de 2011: 100.000.',
+      '- 23 de febrero de 2011: 250.000.',
+      '- 9 de marzo de 2011: 100.000.',
+      '- 14 de marzo de 2011: 200.000.',
+      '- 17 de marzo de 2011: 250.000.',
+      '- 6 de abril de 2011: 200.000.',
+      '- 14 de abril de 2011: 500.000.',
+      '- 29 de abril de 2011: 100.000.',
+      '- 5 de mayo de 2011: 100.000.',
+      '- 10 de mayo de 2011: 100.000.',
+      '- 19 de mayo de 2011: 200.000.',
+      '- 20 de mayo de 2011: 300.000.',
+      '- 23 de mayo de 2011: 200.000.',
+      'Total: US$3.650.000. La resolución distingue estas fechas de las órdenes de retiro y de los reembolsos posteriores entre bancos.',
+      '!! Hay una diferencia por explicar. La tabla de la SMV reparte el total en US$700.000 en 2010 y US$2.950.000 en 2011, mientras los estados financieros de Credicorp de 2025 hablan de US$1.700.000 y US$1.950.000. Los totales coinciden. Con estas fuentes no puede determinarse si describen momentos distintos de las operaciones o si hay un error de reporte. No demuestra un millón desaparecido. Tampoco una transferencia internacional demuestra, por sí sola, lavado: la tabla documenta movimientos bancarios, no un recibo firmado por la destinataria política.',
+
+      '## Rassmuss: la ruta del efectivo',
+      '?? Es la mayor parte del desglose (US$7,67 millones). La Fiscalía cuestionó tres vías para sacar efectivo; una salida bancaria se documenta, pero el destinatario final requiere más pruebas.',
+      'El grupo Rassmuss concentra la mayor parte del desglose fiscal. Según exdirectivos y documentos descritos por La República, la Fiscalía cuestionó tres vías para obtener efectivo de Sudamericana de Fibras: devoluciones de un préstamo de South American Minerals, con contrato de marzo de 2010 por US$12,8 millones; entregas registradas como dividendos; y un préstamo pedido para un supuesto tratamiento médico. Los US$12,8 millones del préstamo no equivalen al aporte atribuido a la campaña.',
+      'Los testimonios situaban a Enrique Gubbins dando instrucciones, a Leandro Mariátegui autorizando retiros y a Daniel Woll gestionando el efectivo, desde Scotiabank, con transporte de la empresa Hermes, hasta la caja fuerte de la compañía. Un reportaje de julio de 2024 habló de 63 entregas en efectivo por US$7,11 millones, con solicitudes de retiro y registros del transporte. Como ejemplo, una solicitud de retiro de US$50.000 del 18 de febrero de 2013, que el declarante vincula con una entrega a Keiko dos días después, fuera de las campañas de 2011 y 2016.',
+      'Los US$7,11 millones del reportaje y los US$7,67 millones del desglose fiscal son reconstrucciones distintas y no deben sustituirse sin conciliarlas. Una salida bancaria y un traslado de efectivo pueden documentarse; el destinatario final y el uso del dinero requieren pruebas adicionales. Juan Rassmuss falleció en marzo de 2016, y no hay documentación que vincule su muerte con un homicidio o con una operación para silenciarlo.',
+
+      '## Rassmuss y Confiep: versiones que no coinciden',
+      '?? Hay al menos tres cifras distintas para el aporte Rassmuss y una colecta de Confiep de US$2,08 millones que su entonces presidente defendió como campaña legal. Ese caso se archivó en 2022.',
+      'El aporte del grupo Rassmuss tiene al menos tres cifras que no deben mezclarse. Un sobrino de Juan Rassmuss declaró en 2019 que su tío aportó US$3.400.000 en 2011 y US$1.465.000 en 2016, en total US$4.865.000, en un acuerdo con Jaime Yoshiyama, y que se reunió unas cuatro o cinco veces con Keiko Fujimori junto con Yoshiyama, dos veces en la casa de este y al menos una en Sudamericana de Fibras. La reconstrucción de la acusación habla de US$3,5 millones (2010-2011), US$440.000 (2012-2014) y US$3,73 millones (2015-2016), y un recuento periodístico llega a casi US$8 millones. Tienen fuentes, períodos y alcances distintos: no conviene sumarlas ni elegir una como la correcta sin comparar los documentos originales.',
+      'Hay un matiz sobre los falsos aportantes. En noviembre de 2018, Jaime Yoshiyama sostuvo que el dinero que repartió su sobrino no era de Odebrecht sino de Juan Rassmuss, que se lo habría entregado en efectivo, en varias partes, por unos US$800.000. La Fiscalía vinculaba parte de ese circuito con Odebrecht; la defensa de Yoshiyama lo atribuía a Rassmuss, y esa discrepancia no la resolvió una sentencia de fondo.',
+      'Sobre Confiep, la investigación fiscal indica que entre el 19 de abril y el 5 de junio de 2011 recolectó US$2.077.500 para una campaña mediática que, según la Fiscalía, benefició la candidatura de Fujimori. Su entonces presidente, Ricardo Briceño, sostuvo que era una campaña legal a favor de la inversión privada y mostró los depósitos. En marzo de 2022 la Fiscalía archivó el caso contra Briceño, a quien se había acusado de desviar unos US$2 millones y por quien Pérez había pedido 22 años. Es un buen ejemplo de que un monto reconocido y una conducta penal son cosas distintas. Una fuente nombra a un expresidente de Confiep como José Briceño y otra como Ricardo Briceño: no pude conciliar esa diferencia ni su situación procesal.',
+      'Vito Rodríguez, del grupo Gloria, declaró que entregó US$200.000 en efectivo, en un maletín, directamente a Keiko Fujimori en una vivienda de La Molina, antes de la primera vuelta de 2011. Dijo que fue un aporte personal y reconoció un aporte similar de US$200.000 a la campaña de Pedro Pablo Kuczynski. Sobre Calle Quiroz, Fujimori informó que devolvió en 2013 los US$15.000 con un cheque de gerencia, mientras Pérez sostiene que la devolución fue posterior a que se conociera su vínculo con actividades ilícitas y que el dinero sí ingresó a la campaña.',
+      '## Lo que reportó el partido y lo que reconocieron los empresarios',
+      '?? Un cálculo periodístico halló una brecha de S/4,7 millones entre lo que el partido reportó a la ONPE en 2011 y lo que reconocieron tres fuentes. No es una pericia oficial.',
+      'Gestión, citando a Cuarto Poder, comparó los registros del partido con las declaraciones de 2019. Para la campaña de 2011, las contribuciones individuales reportadas por el partido a la ONPE sumaban S/14.841.579. Los aportes reconocidos por Romero (US$3,65 millones), Vito Rodríguez (US$200.000) y el sobrino de Rassmuss (unos US$3,4 millones) equivalían a S/19.575.000 al tipo de cambio de 2011, una diferencia de S/4.733.421. Es un cálculo periodístico basado solo en tres fuentes empresariales: ilustra la brecha, pero no es una pericia contable oficial ni una conclusión judicial.',
+      '## Falsos aportantes: cómo habría funcionado',
+      '?? Varios testimonios describen personas que figuraban como aportantes sin serlo. Son particulares sin condena, por eso no se publican sus nombres. Las cifras de 24 y 46 personas no deben sumarse.',
+      'Las fuentes describen situaciones distintas. Algunas personas habrían recibido dinero ajeno y lo depositaron como propio. Otras firmaron recibos sin entregar dinero. Otras aparecían en los registros y negaron haber hecho los depósitos que se les atribuían. Un intermediario conseguía amigos, familiares o trabajadores para figurar como contribuyentes. Y, ya durante la investigación, algunas personas habrían sido inducidas a ratificar como propios aportes cuestionados.',
+      'Jorge Yoshiyama Sasaki, sobrino de Jaime Yoshiyama, declaró que su tío le entregó US$800.000 en efectivo para incorporarlos a la campaña de 2011 mediante aportantes aparentes, y que identificó a 46 personas vinculadas con ese circuito. Reconoció haber pedido a otras personas figurar como aportantes aunque el dinero no fuera suyo. Su colaboración eficaz fue aprobada judicialmente en marzo de 2022 y fue excluido de la acusación principal.',
+      'Atribuyó esos fondos a Odebrecht y afirmó que Keiko Fujimori conocía el aporte. La defensa lo negó y cuestionó los cambios entre sus versiones sobre el origen del dinero. Su afirmación central es además un testimonio indirecto: relata lo que su tío le dijo que Keiko había dicho, no una conversación que haya presenciado. No corresponde convertir ese relato en un audio, un mensaje o una confesión.',
+      '!! Las cifras de 24 y de 46 personas que aparecen en distintos reportajes no deben sumarse: pueden ser niveles o momentos de reconstrucción de una misma red. Tampoco deben sumarse los US$800.000 con los US$480.000 que, según un reportaje de 2021, se habrían canalizado a un tercer grupo, ni con el US$1 millón de Odebrecht. La acusación de 2021 habló de US$1.179.000 repartidos entre 38 aportantes aparentes por parte de Yoshiyama y de US$100.000 entre 16 por parte de Rolando Reátegui. Son mecanismos alegados, no cantidades adicionales a los grandes aportes: sumarlas duplicaría las cifras.',
+      'Un testigo describió también cómo se habría pedido a trabajadores de una empresa que firmaran documentos para aparecer como aportantes sin desembolsar dinero. Según ese testimonio, se buscaban personas solventes que pudieran aparentar capacidad económica, de modo que los aportantes aparentes no fueron solo empleados subordinados: también hubo empresarios y personas del círculo social de los intermediarios.',
+      'Hay casos con cifras publicadas. Un empresario figuraba en los reportes a la ONPE con cinco aportes que, según el reportaje, sumaban S/121.873, mientras el mismo texto afirma un total de S/121.263: una discrepancia de S/610 que solo puede resolverse con los registros originales. Negó haber entregado ese dinero y reconoció haber firmado un recibo por unos US$43.000 sin entregar dinero. Otro declaró que recibió US$50.000 para depositarlos como si fueran propios. Son declaraciones de personas particulares, no sentencias, y por eso no se publican sus nombres.',
+      'Una nota oficial del Ministerio Público de 2022 informó que el Poder Judicial había rechazado todos los pedidos de archivo de la acusación por lavado en esa etapa, incluyendo el de personas sindicadas como falsos aportantes que no reconocían la autoría del falso aporte. Esa decisión procesal no era una sentencia. Hubo reconocimientos, negativas y cambios de versión: no es correcto presentar a todos como confesos.',
+      'Cada documento acredita algo distinto. Un reporte a la ONPE prueba que el partido declaró un nombre y una cantidad, no que esa persona fuera la dueña del dinero. Un voucher prueba una operación, no el origen último de los fondos. Un recibo firmado prueba una declaración con una firma, no que el firmante desembolsó el dinero. Y un peritaje contable señala inconsistencias, no el conocimiento ni la intención de cada acusado.',
+
+      '## Cócteles, rifas y números que cambian',
+      '?? Según un peritaje fiscal citado en prensa, seis cócteles declararon S/4,6 millones y solo S/1,4 millones tenían respaldo. Es una brecha documental, no dinero robado ni lavado demostrado.',
+      'Un reportaje de diciembre de 2018 que citaba un peritaje fiscal informó que seis cócteles declaraban ingresos por S/4.606.218, de los cuales solo S/1.432.701 estaban documentados: una diferencia de S/3.173.517. Se habían presentado relaciones de compradores de los eventos del 16 de febrero y el 29 de marzo de 2016, pero no de todos, y algunas listas consignaban un solo nombre y un apellido. Es una brecha de sustento documental, no dinero robado ni lavado demostrado. Una publicación de 2017 hablaba de cinco eventos por unos S/4,3 millones: son recuentos de momentos distintos.',
+      'OjoPúblico comparó los informes financieros de Fuerza 2011 con las observaciones de la ONPE. El primer informe, presentado el 13 de junio de 2011, no consignaba el cóctel del 30 de mayo. El 16 de junio se rectificó con una recaudación de unos S/1.088.000, y tras rectificaciones posteriores, hasta marzo de 2012, la cifra pasó a S/1.029.527. También hubo observaciones por S/400.000 en depósitos sin identificar y publicidad no declarada. Según el reportaje, la ONPE levantó las observaciones tras aceptar las explicaciones del partido. De nueve eventos examinados entre ambas campañas, solo se entregaron listas de dos.',
+      'La rifa del 15 de diciembre de 2010, conocida como la Fuji-rifa, dejó otras contradicciones. Los anuncios hablaban de unos 200.000 boletos vendidos y S/2 millones recaudados, mientras la declaración ante la ONPE decía 160.631 boletos y S/1.566.938. Según La República, de trece premios solo uno fue recogido, y la camioneta del premio mayor terminó adjudicada al Estado. La Fiscalía usó esas inconsistencias para sostener que la rifa sirvió para justificar dinero de otra procedencia. Esa publicación tiene una inconsistencia de fechas, así que su cronología no debe darse por cerrada sin la resolución original, los talonarios y los informes de la ONPE.',
+      'Un pago concreto ayuda a ver la diferencia entre un hecho y una conclusión. Grupo RPP reconoció que José Chlimper entregó US$210.000 en efectivo el 17 de mayo de 2011 para publicidad electoral, que según el medio se facturó, bancarizó y tributó sin tarifa preferente. Ese reconocimiento no acredita un pago para comprar silencio periodístico.',
+
+      '## MVV Bienes Raíces y otros aportantes',
+      '?? La Fiscalía cuestionó US$2,19 millones en comisiones de la inmobiliaria del entonces esposo de Keiko Fujimori. La defensa dijo que eran operaciones reales. El archivo de junio de 2026 alcanzó a la empresa.',
+      'La Fiscalía cuestionó unos US$2,19 millones en comisiones por servicios de corretaje de MVV Bienes Raíces, la empresa de Mark Vito Villanella, entonces esposo de Keiko Fujimori. Según La República, a partir de documentos presentados a la Fiscalía, eran 19 contratos por US$72,2 millones entre 2015 y 2018, y algunos clientes tenían vínculos con aportantes de campaña. Pero los US$72,2 millones son el valor de operaciones inmobiliarias, no el ingreso personal de nadie ni una cantidad demostrada como lavada. La defensa sostuvo que eran 39 operaciones comerciales reales, con documentos y testigos, y que trabajar con personas próximas a Keiko no constituye lavado. El archivo definitivo de junio de 2026 alcanzó a la empresa y a Mark Vito.',
+      'Sobre Luis Santiago Calle Quirós, que aportó S/41.625 en 2011, el Departamento del Tesoro de Estados Unidos lo sancionó el 29 de octubre de 2013 por vínculos con una estructura de lavado de dinero del narcotráfico. Keiko Fujimori dijo el 31 de octubre de 2013 que no lo conocía y anunció la devolución. La sanción es posterior al aporte: no demuestra que ella conociera entonces su procedencia ni que esa donación concreta viniera del narcotráfico.',
+      'El 4 de junio de 2011, víspera de la segunda vuelta, la esposa de Jaime Yoshiyama denunció un robo en su vivienda, con computadoras y laptops que, según información posterior, contenían documentación financiera de campaña. América Noticias informó que los denunciantes no acudieron a rendir sus manifestaciones ni acreditaron que los bienes existieran, y que la investigación se archivó en abril de 2012 sin probar el hurto. El archivo no prueba que el robo fuera inventado, pero deja sin confirmar qué pasó con esos equipos.',
+
+      '## Documentos destruidos y agendas paralelas',
+      '?? Dos declaraciones hablan de destrucción de documentos partidarios y de agendas paralelas. Los señalados lo niegan o cuestionan la corroboración, y la presencia de ciertos archivos no prueba espionaje.',
+      'Luis Mejía Lecca declaró que Ana Herz le pidió organizar la eliminación de documentación partidaria trasladada fuera del local de campaña. Una testigo dijo haberlos visto junto a una parrilla donde quemaban algo, pero no pudo precisar qué material ardía. El reportaje de 2019 sitúa el episodio el 9 de marzo de 2018, y otras publicaciones lo mezclan con el allanamiento de diciembre de 2017: no conviene fusionar ambos hechos. Mejía Lecca entregó además, según Perú21, correos y archivos Excel el 12 de agosto de 2019 sobre la asignación de cantidades a aportantes, y no culminó su colaboración eficaz.',
+      'En noviembre de 2018, el fiscal Pérez expuso una declaración que atribuía a Carmela Paucará, secretaria de Keiko, el manejo de registros separados de reuniones oficiales y no oficiales y la posterior destrucción de los segundos. Paucará negó haber cometido delitos y su defensa cuestionó la corroboración del testimonio. En el allanamiento se encontraron también copias de investigaciones relacionadas con Martín Vizcarra, junto con documentación de Fuerza 2011 y Lava Jato. La Fiscalía cuestionó cómo llegaron allí y la defensa respondió que era información pública. Su mera presencia no demuestra espionaje ni una filtración ilícita.',
+
+      '## Presiones a testigos: lo que hay y lo que no',
+      '?? Hay denuncias de amenazas e imputaciones de inducir a testigos a mentir, pero no pruebas públicas de quién las hizo ni de pagos por callar. Tampoco hay evidencia verificable de asesinatos.',
+      'Hay imputaciones de presunta obstrucción: inducir a testigos a mentir, coordinar versiones y advertirles de querellas si negaban aportes registrados con su firma. La Fiscalía incluyó a seis abogados, entre ellos Giulliana Loza y Arsenio Oré, por presuntamente intervenir en la preparación de versiones falsas. Los abogados las rechazaron: sostuvieron que prestaban asistencia legal voluntaria y que las acusaciones se basaban en testigos protegidos que mentían. Preparar una declaración o tener un abogado común no prueba obstrucción.',
+      'Según la acusación, en noviembre de 2017 Luis Mejía Lecca, Walter Rengifo y Danae Calderón viajaron a Nueva Cajamarca, en San Martín, y entregaron a personas registradas como aportantes carpetas con nombres, recibos y copias de vouchers de supuestos aportes de unos US$5.000. Se habría buscado que los ratificaran como propios. Esos US$5.000 eran el monto del aporte a justificar, no el precio pagado por callar. La defensa de Mejía aceptó que entregó una carpeta con comprobantes, pero dijo que desconocía que fueran falsos.',
+      'Un testigo protegido denunció amenazas de muerte en octubre de 2018, y en diciembre de 2019 relató una llamada con la advertencia cuídate, que Keiko va a salir. Un congresista fujimorista declaró en noviembre de 2018 que había recibido amenazas tras colaborar con la Fiscalía. Son denuncias documentadas: las fuentes no acreditan quién hizo la llamada ni que Keiko la ordenara. Tampoco hay una lista verificada de quién cobró, cuánto y cuándo por guardar silencio. Los reportajes describen presuntas entregas de dinero para obtener declaraciones falsas, que es distinto de pagar para que alguien no declare.',
+      'El 19 de agosto de 2024 se dejó sin efecto lo actuado por obstrucción dentro del juicio, por un fallo del TC: la investigación debía conducirla otro fiscal para preservar la imparcialidad, pues José Domingo Pérez podía ser testigo de los hechos. Esa resolución no estableció que las amenazas hubieran sido probadas. Los chats del grupo de Telegram La Botica, difundidos por IDL-Reporteros en 2018, mostraron coordinación entre dirigentes y congresistas fujimoristas para respaldar al fiscal de la Nación de entonces, Pedro Chávarry, y atacar la actuación fiscal. Chávarry anunció el 31 de diciembre de 2018 la separación de Rafael Vela y José Domingo Pérez del Equipo Especial, y el 2 de enero de 2019 dejó sin efecto la decisión. Todo ello es relevante para analizar interferencias, pero no demuestra que Keiko ordenara esa remoción ni el pago de sobornos.',
+      'En diciembre de 2019 la Procuraduría Anticorrupción denunció por supuesto tráfico de influencias a Keiko Fujimori, Miguel Torres y Héctor Becerril, a partir de versiones sobre intermediaciones de Antonio Camayo ante César Hinostroza para favorecer una casación vinculada a la investigación. La fuente acredita que la denuncia se presentó, no una coima pagada ni una condena. En 2024, Jaime Villanueva declaró sobre una supuesta negociación de apoyo político a Patricia Benavides a cambio de la salida de Vela y Pérez; OjoPúblico advirtió que estaba pendiente de corroboración.',
+      'En 2025, el programa Punto Final difundió cuatro audios atribuidos a Juan Antonio Fernández Jerí, entonces jefe de la Autoridad Nacional de Control del Ministerio Público, dirigidos al abogado de Fuerza Popular. En uno se oye decir yo me voy a encargar de Pérez. Los señalados negaron las comunicaciones y la ANC rechazó la autenticidad. Convoca explicó el 23 de mayo de 2025 que seguían sin acreditarse los interlocutores ni la autenticidad, y no hay un peritaje público concluyente. Pérez fue suspendido seis meses en abril de 2025 y repuesto tras apelar; la coincidencia temporal no autentica una grabación ni prueba que Keiko ordenara la suspensión.',
+      '!! No hay evidencia pública verificable de asesinatos cometidos para silenciar a testigos del caso Cócteles, ni de pagos a sicarios, envenenamientos o un homicidio encubierto como muerte natural. La muerte de Juan Rassmuss en 2016 no se vincula con ningún homicidio. En junio de 2024 Perú21 desmintió los rumores sobre la muerte de Luis Mejía Lecca: estaba vivo. Que exista una amenaza denunciada no equivale a un crimen probado, y la ausencia de pruebas no demuestra que nunca ocurriera nada: significa que no hay base para armar una lista de víctimas.',
+
+      '## Quiénes fueron acusados y qué pena pidió la Fiscalía',
+      '?? La República publicó una lista de 48 implicados. Aquí solo figuran los acusados formales, con el rol que les atribuyó la Fiscalía y la pena que pidió. Son pedidos, no sentencias.',
+      'La República publicó la lista de 48 implicados. Lo que sigue son pedidos de pena y roles atribuidos por la acusación, no sentencias: el caso quedó archivado y rige la presunción de inocencia.',
+      '- 30 años y 10 meses: Keiko Fujimori (presidenta del partido); Vicente Silva Checa, Pier Figari y Ana Herz (asesores, acusados de acarrear fondos); Jaime Yoshiyama (receptor de fondos y organizador de falsos aportantes); José Chlimper (acarrear fondos y pagar campañas en medios); Adriana Tarazona (distribuir fondos que luego depositaban los falsos aportantes).',
+      '- 22 años y 8 meses: Augusto Bedoya; Mark Vito (uso de MVV Bienes Raíces con contratos simulados de terrenos); Carmela Paucará (administrar aportes y eliminar documentos); Luis Mejía Lecca (plan de encubrimiento y destrucción de documentos); Rafael Herrera y Érika Yoshiyama (estados financieros ante la ONPE); Antonieta Gutiérrez; Ana Matsuno (recoger dinero de Sudamericana de Fibras); Jorge Trelles (falsa rifa de 2011); Giancarlo Bertini (captar falsos aportantes para 2016); Luis Barboza, exjefe de verificación de la ONPE (aceptar rendiciones fraguadas).',
+      '- 18 años: Juan Luna Frisancho (entidad en Delaware para simular donaciones desde Estados Unidos).',
+      '- 14 años: Efraín Goldenberg (en su casa se habría guardado dinero de Odebrecht) y Carlos Luna Venero, entre otros.',
+      '- 12 años y 6 meses: Walter Rengifo, entre otros.',
+      '- 4 años y 6 meses: los abogados Arsenio Oré, Edward García, Luis Lazo, Giulliana Loza, Lorena Gamero y Danae Calderón. A García se le atribuye haber recibido fondos de Jorge Yoshiyama para financiar la defensa de los falsos aportantes.',
+      'La acusación incluye también un mecanismo distinto al de los depósitos: sostiene que un acusado fundó una entidad en Delaware para simular donaciones de supuestos peruanos residentes en Estados Unidos, con dinero que le entregó Jorge Yoshiyama. En diciembre de 2023 el juez Víctor Zúñiga dictó el auto de enjuiciamiento contra 38 personas naturales y dos jurídicas, y al empezar el juicio la Fiscalía tenía más de 1.030 testigos admitidos. Otros acusados siguieron procedimientos especiales. No se publican los nombres de los ciudadanos particulares señalados como aportantes nominales.',
+      '## Qué se sabe y qué no sobre Keiko Fujimori',
+      '?? La Fiscalía pidió 30 y luego 35 años de prisión para Keiko Fujimori, que rechazó las imputaciones. No hay una condena que establezca que recibió el dinero como coima a cambio de obras.',
+      'La Fiscalía le atribuía dirigir la presunta organización, y en marzo de 2021 pidió 30 años de prisión; en la acusación reformulada del 2 de julio de 2025, que comprendió a 14 personas más Fuerza Popular y MVV, pidió 35 años. Pidió también una reparación civil de unos S/151 millones y la disolución de Fuerza Popular y MVV: eran pretensiones, no una indemnización firme ni una cuantificación judicial de dinero sustraído al presupuesto público. En esa misma actuación pidió el sobreseimiento de 19 investigados.',
+      'En Cócteles las imputaciones centrales fueron lavado, organización criminal y falsedades relacionadas con la financiación. No hay una condena que establezca que Keiko recibió los US$17,3 millones como coimas a cambio de adjudicar obras públicas. Un aporte empresarial oculto puede plantear problemas de transparencia y responsabilidades legales según el caso, pero para hablar de soborno hace falta una contraprestación indebida: qué decisión, contrato, protección o favor se buscaba. Ocultar a los financiadores sí afecta a los electores, que no pueden conocer posibles relaciones de influencia.',
+      '>> No hay una condena que establezca que Keiko recibió los US$17,3 millones como coimas a cambio de adjudicar obras públicas.',
+
+      '## Cronología judicial',
+      '?? De la investigación de 2015 al archivo confirmado el 16 de junio de 2026: detención, prisión preventiva, un juicio oral anulado y la sentencia del Tribunal Constitucional.',
+      '- Octubre de 2015: la 26.ª Fiscalía Provincial Penal de Lima investiga los aportes de 2011, porque personas de la lista de aportantes dijeron que no habían depositado.',
+      '- 8 de marzo de 2016: investigación preliminar contra Keiko Fujimori y Mark Vito por cócteles y rifas de Fuerza 2011.',
+      '- Agosto de 2016: se formaliza la investigación por lavado y se delega a José Domingo Pérez.',
+      '- Agosto de 2017: IDL-Reporteros revela la anotación "aumentar Keiko para 500 eu fazer visita" en la agenda de Marcelo Odebrecht y se abre la línea Odebrecht.',
+      '- Febrero de 2018: Jorge Barata declara en São Paulo que se entregaron US$1,2 millones para las dos vueltas de 2011.',
+      '- 10 al 17 de octubre de 2018: detención preliminar de Keiko Fujimori; una sala la anula y la libera a los siete días.',
+      '- 31 de octubre de 2018: el juez Concepción Carhuancho dicta 36 meses de prisión preventiva.',
+      '- 2019: el TC ordena su excarcelación tras más de doce meses.',
+      '- 28 de enero de 2020: vuelve a prisión preventiva por 15 meses, de los que cumple tres.',
+      '- Marzo de 2021: acusación formal con pedido de 30 años y 10 meses.',
+      '- Diciembre de 2023: auto de enjuiciamiento contra 38 personas naturales y dos jurídicas.',
+      '- 1 de julio de 2024: comienza el juicio oral.',
+      '- 19 de agosto de 2024: se deja sin efecto lo actuado por obstrucción, por una sentencia del TC (04382-2023-PA/TC).',
+      '- 13 de enero de 2025: se anula el juicio oral y el procedimiento retrocede.',
+      '- 2 de julio de 2025: nueva acusación, con 35 años solicitados.',
+      '- Octubre de 2025: el TC declara fundado el hábeas corpus y deja sin efecto lo actuado, incluida la acusación de julio.',
+      '- Enero de 2026: el juez Wilson Verástegui ejecuta la sentencia constitucional y dispone el sobreseimiento.',
+      '- 16 de junio de 2026: la Segunda Sala Penal de Apelaciones Nacional confirma el archivo y rechaza las apelaciones del Ministerio Público y de la Procuraduría. También archiva la imputación por lavado contra Mark Vito y MVV Bienes Raíces.',
+      'No deben confundirse la anulación del juicio de 2025 y el archivo confirmado en 2026: son resoluciones distintas. Al 19 de octubre de 2026 no hay un juicio oral en curso por lavado de activos ni organización criminal. Sobre las imputaciones de falsa declaración en procedimiento administrativo y de falsedad genérica, la Sala señaló que los extremos no comprendidos por el cierre constitucional solo podrían continuar si tienen autonomía fáctica, típica y probatoria, y exigió un nuevo pronunciamiento fiscal motivado y evaluar la prescripción. Eso no permite afirmar que exista hoy un nuevo juicio por falsedad: la fuente fija las condiciones de una eventual continuación, no que haya ocurrido.',
+
+      '## Por qué se archivó',
+      '?? El Tribunal Constitucional consideró que se aplicó de forma retroactiva una figura de lavado creada en noviembre de 2016. Fue una decisión jurídica: no declara inocencia ni culpabilidad.',
+      'El TC consideró que se vulneraba el principio de legalidad penal. La figura de receptación patrimonial usada para sustentar el lavado se incorporó en noviembre de 2016, después de los hechos, y aplicarla era una aplicación retroactiva y desfavorable de la ley penal. Cuestionó además el encaje de la acusación por organización criminal. El fallo precisa que no se está declarando la inocencia o culpabilidad. Los magistrados Luz Pacheco y Manuel Monteagudo discreparon.',
+      '>> El fallo precisa que no se está declarando la inocencia o culpabilidad.',
+      'El penalista Yvan Montoya, en un análisis del IDEHPUCP, sostuvo que la imputación era por actos de conversión, una modalidad ya prevista, y que debía evaluarla la justicia penal. Es una crítica jurídica al fallo; no es evidencia de corrupción de quienes lo dictaron. El caso terminó por decisiones sobre la viabilidad jurídica de la persecución penal, no por una sentencia que valorara toda la prueba. El archivo no convierte en falsas las declaraciones sobre aportes, y las acusaciones fiscales tampoco son delitos demostrados. Decir que todo quedó cerrado sería demasiado amplio: el archivo es por lavado y organización criminal, y algunas imputaciones de falsedad quedaron sujetas a condiciones.',
+      'La sentencia salió con cinco votos a favor y tres en contra, según una de las fuentes, y declaró nulas todas las resoluciones fiscales y judiciales del caso, que incluía lavado, organización criminal, falsa declaración y falsedad genérica. Según la mayoría, antes de noviembre de 2016 no existía el delito de aportes ilícitos a campañas, la receptación patrimonial se incorporó el 26 de noviembre de 2016 mediante el Decreto Legislativo 1249 y no cabe imputar organización criminal por el solo hecho de que exista un partido político. El juez Wilson Verástegui extendió el archivo a coprocesados en igual situación, entre ellos Figari, Herz, Jaime Yoshiyama, Chlimper y Fuerza Popular, por igualdad ante la ley, y en junio de 2026 la Sala lo extendió a Mark Vito y MVV. El TC y el juzgado calificaron además el proceso como persecución fiscal y cuestionaron el debido proceso: es la lectura de las resoluciones, y la Fiscalía y sus defensores sostuvieron lo contrario durante años.',
+      'Hubo críticas. La presidenta del TC, Luz Pacheco, y Manuel Monteagudo discreparon: según el IDEHPUCP, el voto de Pacheco señala que la sentencia no explica con claridad qué imputaciones decidía la resolución cuestionada y que no se ve cómo el TC podía determinar una aplicación retroactiva perjudicial del Decreto Legislativo 1249. La asociación Jusdem advirtió riesgos para la independencia judicial y Marianella Ledesma sostuvo que la sentencia es contraria a la Constitución. José Domingo Pérez dijo que la decisión genera impunidad y argumenta que la Casación 617-2021 de la Corte Suprema, de diciembre de 2022, ya había establecido que el ingreso de dinero ilícito a partidos sí constituye lavado; el TC no compartió esa posición. La defensa y el abogado Percy García Cavero sostuvieron que se procesaba por hechos que no eran delito cuando ocurrieron. En octubre de 2026, Pérez declaró que nunca le perdonaron haber llevado a Keiko Fujimori al banquillo.',
+      'La doctrina ya habría tenido efectos en otros expedientes: en septiembre de 2026, según Expreso, la Sala archivó los cargos por lavado contra José Luna Gálvez por gastos de campaña de 2011 y 2014 con el criterio de los casos Cócteles, Humala y PPK, y Pier Figari presentó una demanda de indemnización por S/2 millones contra los jueces y fiscales del caso. Son reportes que conviene confirmar con las resoluciones.',
+
+      '## Fuentes y correcciones',
+      '?? De dónde sale cada dato y cómo avisarnos si detectas un error o algo desactualizado.',
+      'Fuentes principales: sentencia del Tribunal Constitucional, Resolución 012-2021-SMV/11 y documentos de Credicorp ante la SEC, Agencia Andina, El Peruano, La República, OjoPúblico, IDL-Reporteros, El Comercio, RPP, Perú21, América Noticias, Convoca, IDEHPUCP y Ministerio Público. Si detectas un dato incorrecto o desactualizado, escríbenos por Telegram para corregirlo.'
     ]
   },
 

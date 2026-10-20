@@ -87,7 +87,7 @@ export const FIGURE_PROFILES: Record<string, FigureProfile> = {
         status: 'archivado',
         period: 'TC oct. 2025 · archivo ejecutado ene. 2026 · apelación rechazada 16 jun. 2026',
         summary:
-          'Proceso por presunto lavado de activos y organización criminal. En octubre de 2025 el Tribunal Constitucional declaró fundada su demanda y dejó sin efecto lo actuado desde las investigaciones preliminares, incluida la acusación fiscal de julio de 2025. En enero de 2026 el juzgado ejecutó el fallo y archivó el caso; el 16 de junio de 2026 la Sala de Apelaciones declaró infundada la apelación del Ministerio Público y le prohibió reactivar la misma matriz fáctica y jurídica.',
+          'Proceso por presunto lavado de activos y organización criminal. En octubre de 2025 el Tribunal Constitucional declaró fundada su demanda y dejó sin efecto lo actuado desde las investigaciones preliminares, incluida la acusación fiscal de julio de 2025. En enero de 2026 el juzgado ejecutó el fallo y archivó el caso; el 16 de junio de 2026 la Sala de Apelaciones declaró infundada la apelación del Ministerio Público y le prohibió reactivar la misma matriz fáctica y jurídica. La Sala dejó abierta, con condiciones, la evaluación de algunas imputaciones de falsedad (solo si tienen autonomía y no han prescrito, y con un nuevo pronunciamiento fiscal motivado): no hay hoy un juicio en curso por esos cargos.',
         sources: [
           {
             title: 'La República: Poder Judicial archiva definitivamente el caso Cócteles',
