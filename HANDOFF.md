@@ -10,8 +10,10 @@ Web de **Descuentos Perú**: catálogo de productos y servicios digitales con de
 | Tema | Estado |
 |---|---|
 | Hosting | Vercel, desde el repo `descuentoperu346-cmyk/descuento`, rama `main`. |
-| Último commit | `df864ea` (revista Leak #2, panel #ironcat, seguridad, base de leaks). |
-| **Sin commit** | **70 archivos** modificados o nuevos: todo el panel rediseñado, el módulo de ventas, SQL 06–12, login con Google, Ganancias, Garantías, Mensajes. El usuario dijo "no hagas commit aún". **Nunca hagas commit ni push sin que lo pida.** |
+| Último commit | `a917dac` (2026-10-21): panel de ventas, ganancias y soporte, login con Google, política de privacidad, roles del panel. Ya subido a GitHub (`origin/main`). El `git push` lo hace el usuario en su terminal: desde la sesión de Claude Git no puede pedir credenciales. |
+| Web publicada | `https://descuentos-peru.vercel.app` (política en `/privacidad`). Vercel tiene `VITE_CONTENT_SUPABASE_URL` y `VITE_CONTENT_SUPABASE_ANON_KEY` como tipo Config. |
+| Google | **Activo** (2026-10-21): app publicada en Google Cloud (proyecto `descuentos-peru`), cliente OAuth "Descuentos Peru Web", Google encendido en Supabase. El botón abre Google. Falta probar el flujo completo de punta a punta (volver a la web ya con sesión de comprador). |
+| Commits | **Nunca hagas commit ni push sin que el usuario lo pida.** Cambios hechos después de `a917dac` (solo este HANDOFF) quedan sin commit. |
 | Base de datos | Supabase, proyecto `ncqegvituteypivmfyoo`. SQL 01–05 ejecutados por el usuario (2026-10-20). SQL 06–12: **por ejecutar, uno por uno** (ver sección 4). |
 | Verificación | Todo lo nuevo pasó pruebas con una base **imitada** (stub y PGlite). **Nada se probó contra el Supabase real ni contra Google real.** |
 
@@ -25,7 +27,7 @@ Web de **Descuentos Perú**: catálogo de productos y servicios digitales con de
   - Papelera: para todos los roles; los vendedores solo ven sus productos.
   - Historial de cambios y copia de seguridad: **solo DEV**.
   - Login con Google: **solo compradores**, nunca el equipo.
-  - Sin commit hasta que lo pida.
+  - Commit y push solo cuando el usuario lo pida (el 2026-10-21 lo pidió y se hizo el commit `a917dac`).
 - Yo (Claude) **nunca ejecuto SQL en su Supabase** ni pido claves `service_role` / secret.
 
 ## 3. Arquitectura
@@ -34,7 +36,7 @@ Web de **Descuentos Perú**: catálogo de productos y servicios digitales con de
 - **Rutas por hash:** `#/servicios`, `#/leaks`, `#/nosotros`, `#/contacto`, `#/tienda/<id>`, `#/leaks/figura/<id>`, y el panel `#ironcat` (`src/lib/panelRoute.ts`). Páginas en `src/pages/`; la raíz es `src/App.tsx`.
 - **Variables de entorno** (`.env.example` las documenta; `.env` está en `.gitignore`):
   - `VITE_CONTENT_SUPABASE_URL` y `VITE_CONTENT_SUPABASE_ANON_KEY`: solo la clave **pública** (anon/publishable). `src/lib/contentEnv.ts` rechaza claves `service_role` / `sb_secret_`.
-  - **Pendiente:** ponerlas también en Vercel → Settings → Environment Variables y volver a desplegar.
+  - Ya están en Vercel (2026-10-21). Sin ellas la web publicada esconde el botón "Ingresar".
 - **Modo del panel:**
   - Con `VITE_CONTENT_*`: modo Supabase (correo/usuario + contraseña con Supabase Auth). Es el modo principal.
   - Sin ellas: modo anterior con el servidor Express de `server/` (`npm run server`, `ADMIN_PIN_HASH`). Tiene sus propias pruebas viejas. Vercel **no** lo despliega.
@@ -61,13 +63,16 @@ Ejecutar **en orden numérico, uno por uno**, en el SQL Editor. Todos son re-eje
 | `03-catalogo-y-panel.sql` | `staff`, `buyers`, `products`, `vendors`, `payment_methods`, buckets, funciones `is_admin()`, `is_dev()`, `my_vendor_id()`, `set_updated_at()` | Ejecutado |
 | `02-leaks-seed.sql`, `04-catalogo-seed.sql` | datos iniciales de leaks y catálogo | Ejecutados |
 | `05-crear-cuentas.local.sql` | cuentas del equipo (**ignorado por git**; trae contraseñas) | Ejecutado |
-| `06-ventas-y-clientes.sql` | `customers`, `sales` | **Por ejecutar** (no confirmado) |
-| `07-visitas-y-clics.sql` | `events`, RPC `track_event` (anon) y `traffic_report` (staff) | **Por ejecutar** |
-| `08-papelera.sql` | `trash`, triggers de borrado, `restore_from_trash`, `trash_delete_forever` (30 días) | **Por ejecutar** |
-| `09-historial-de-cambios.sql` | `audit_log` + triggers; solo DEV; 12 meses | **Por ejecutar** |
-| `10-respaldo.sql` | `export_backup()`, `restore_backup()`; solo DEV; restaurar solo agrega lo que falta | **Por ejecutar** |
-| `11-costos-y-ganancias.sql` | `product_costs` (privado) | **Por ejecutar** |
-| `12-garantias-y-soporte.sql` | `support_cases` (**requiere 06**) | **Por ejecutar** |
+| `06-ventas-y-clientes.sql` | `customers`, `sales` | Ejecutado (verificado 2026-10-21) |
+| `07-visitas-y-clics.sql` | `events`, RPC `track_event` (anon) y `traffic_report` (staff) | Ejecutado (verificado 2026-10-21) |
+| `08-papelera.sql` | `trash`, triggers de borrado, `restore_from_trash`, `trash_delete_forever` (30 días) | Ejecutado (verificado 2026-10-21) |
+| `09-historial-de-cambios.sql` | `audit_log` + triggers; solo DEV; 12 meses | Ejecutado (verificado 2026-10-21) |
+| `10-respaldo.sql` | `export_backup()`, `restore_backup()`; solo DEV; restaurar solo agrega lo que falta | Ejecutado (verificado 2026-10-21) |
+| `11-costos-y-ganancias.sql` | `product_costs` (privado) | Ejecutado (verificado 2026-10-21) |
+| `12-garantias-y-soporte.sql` | `support_cases` (**requiere 06**) | Ejecutado (verificado 2026-10-21) |
+| `13-endurecimiento.sql` | Lo nuevo nace cerrado (default privileges), RLS en toda tabla, `anon` sin escritura ni TRUNCATE, tablas privadas sin acceso para `anon`, funciones en lista blanca, informe final. Re-ejecutable. Probado en PGlite (`hardening-test.cjs`, 54/54). | **Ejecutado** el 2026-10-21 en el Supabase real: informe "OK · Sin hallazgos de atención". |
+
+"Verificado" = con la clave anon (solo lectura) esas tablas y funciones responden 401 (existen y están cerradas), mientras algo inexistente responde 404. Eso prueba que existen, no que sea la última versión de cada archivo.
 
 `diagnostico.sql` es una consulta de solo lectura (tamaño de tablas, índices, políticas RLS, consultas lentas). No es parte de la instalación. Mientras un SQL no corra, su pantalla del panel dice **"Falta activar…"** con el archivo y los pasos. Eso es lo esperado, no un error.
 
@@ -75,6 +80,7 @@ Ejecutar **en orden numérico, uno por uno**, en el SQL Editor. Todos son re-eje
 Equipo actual: DEV `@Tin9o`; ADMIN `@whiskyper`, `@AbbysPeru`, `@elnanovip`. Los compradores se registran solos.
 
 **Reglas de diseño que no debes romper:**
+- La clave `anon` es pública y visible en el navegador: eso es normal y no se "arregla". La seguridad son las RLS. Con la clave anon (solo lectura) el 2026-10-21 se comprobó que `staff`, `buyers`, `sales`, `customers`, `product_costs`, `events`, `audit_log`, `trash`, `support_cases` y las RPC `export_backup` / `traffic_report` responden sin acceso (401 = existen y están cerradas; 404 = no existen). Tras el paso 13, toda tabla o función nueva necesita `grant` explícito.
 - Los **costos** nunca van en `products.data` (es público). Viven en `product_costs`.
 - En las funciones SQL de permisos usa `coalesce(..., false)`: con `my_vendor_id()` nulo, `false or null` da NULL y se colaba un comprador. Ya se arregló una vez.
 - Nadie borra casos de soporte: se cierran como "Resuelto".
@@ -134,17 +140,20 @@ Las pruebas viven **fuera del repo**, en carpetas temporales que se pueden borra
   - El portapapeles de Windows convierte `\n` en `\r\n`.
 - **TypeScript no estricto:** para estrechar uniones usa `'error' in res` y no `!res.ok`.
 - **Accesibilidad:** el estado se muestra con icono + palabra (no solo color). El `aria-label` debe contener el texto visible.
+- **Contadores de leaks:** hay dos, independientes, en `src/hooks/useLeakCountdown.ts`. `LEAK_DEADLINE_ISO` es el del #02 (Keiko) y **controla qué parte de su expediente se ve**: no lo cambies para anunciar otro leak. El del #03 está en `NEXT_LEAK` (fecha, textos, enlace); la barra superior y el bloque rojo de la portada lo usan vía `useFeaturedLeak()` cuando el #02 ya salió. La fecha del #03 (1 nov 2026, 8 pm Lima) es provisional. Al vencer, esos avisos dicen "LIBERADO" aunque el artículo del #03 todavía no exista: publica el artículo antes.
 - **Hash routing:** cualquier ruta nueva debe respetar `isPanelHash` y los `includes()` de `App.tsx`.
 
 ## 9. Pendientes
 
 **Del usuario:**
-1. Ejecutar los SQL 06 → 12 uno por uno.
-2. Configurar Google (sección 6).
-3. Agregar `VITE_CONTENT_*` en Vercel y volver a desplegar.
+1. (Hecho) Los SQL 06 → 12 ya están en la base real (verificado 2026-10-21), y el 13 también.
+2. (Hecho el 2026-10-21) Google probado de punta a punta: una cuenta creada con Google entró a la web y aparece en "Equipo y compradores". Comprobado también que esa cuenta NO entra al panel (`#ironcat` le muestra el login del equipo). Falta borrar el cliente OAuth repetido "Descuentos Perú web" en Google Cloud (el que se usa es "Descuentos Peru Web").
+3. (Hecho) `VITE_CONTENT_*` en Vercel.
 4. Cambiar el número de pago de ejemplo `999 888 777` (el Resumen avisa cuando un método o una tienda todavía lo usa).
-5. Cambiar la contraseña compartida débil del equipo.
+5. Cambiar la contraseña compartida débil del equipo: cada persona la cambia ella misma en el panel (menú de la cuenta, arriba a la derecha → **Mi perfil y datos** → "Nueva contraseña", mínimo 10 caracteres). Usa `auth.updateUser` de Supabase con la sesión abierta; no se probó contra el Supabase real (solo con base imitada). **No vuelvas a ejecutar `05-crear-cuentas.local.sql`**: reinicia las claves de las cuentas a las del archivo y borraría los cambios. No hay "Olvidé mi contraseña" para el equipo (los correos internos `.invalid` no reciben mensajes): si alguien la olvida, el DEV la restablece desde Supabase.
 6. Encender "Confirm email" con SMTP.
+7. **Que Google muestre el nombre de la web y no `ncqegvituteypivmfyoo.supabase.co`.** Hoy la pantalla "Elige una cuenta" dice "Ir a ncqegvituteypivmfyoo.supabase.co" porque Google muestra la dirección de retorno (la de Supabase) mientras la marca de la app no esté verificada. No es un error ni un riesgo. Dos caminos: (a) verificar la marca en Google Cloud (Centro de verificación) comprobando `descuentos-peru.vercel.app` en Search Console con la etiqueta HTML; probablemente se atore porque `supabase.co` es otro dominio autorizado que no es del usuario y no se puede verificar; (b) comprar un dominio propio y usarlo como dominio de autenticación en Supabase (servicio de pago). Mientras tanto el inicio con Google funciona igual. Si se hace (a), cambiar el enlace "Política de Privacidad" del pie por un `<a href="/privacidad">` real para que Google lo detecte.
+8. Seguridad en el panel de Supabase (el SQL 13 ya está ejecutado y dio "OK"): **Confirm email**, crear de nuevo la clave secreta si alguna vez se mostró, apagar proveedores que no se usan. **CAPTCHA (Cloudflare Turnstile)**: la web ya lo soporta (`src/lib/captcha.ts`, `src/components/CaptchaWidget.tsx`; `AuthModal` y `PanelLogin` envían el `captchaToken` a `signUp` / `signInWithPassword`) y queda **inactivo mientras no exista `VITE_TURNSTILE_SITE_KEY`** (comprobado: sin la variable la llave no entra en el build). Orden obligatorio, en `supabase/LEEME.md` Parte I: (1) crear el widget en Cloudflare, (2) poner `VITE_TURNSTILE_SITE_KEY` en Vercel y redesplegar (el código nuevo debe estar subido), (3) recién entonces encender CAPTCHA en Supabase con la llave secreta. Encenderlo antes rompe todos los registros e ingresos, incluido el del equipo; si pasa, apagarlo en Supabase. El ingreso con Google no usa este CAPTCHA. No se probó el widget real en un navegador. **Max rows: dejarlo en 1000**: `salesApi.ts` pide de 1000 en 1000 (`PAGE = 1000`) y corta al recibir menos de `PAGE`; con un máximo menor se cargarían solo las primeras filas sin aviso (si se quiere bajar, bajar antes `PAGE`; `costsStore` pide `limit(5000)`).
 
 **Nuestros, sin construir (el usuario aún no eligió):**
 - Stock de cuentas y perfiles (solo cantidades; sin guardar contraseñas de cuentas).

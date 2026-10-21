@@ -5,6 +5,8 @@ import { isStaffAdmin, roleLabel } from '../lib/roles';
 import { setAdminHint } from '../lib/adminHint';
 import { goToPanel } from '../lib/panelRoute';
 import { PasswordChange } from './PasswordChange';
+import { CaptchaWidget, type CaptchaHandle } from './CaptchaWidget';
+import { CAPTCHA_ENABLED } from '../lib/captcha';
 
 type View = 'login' | 'register' | 'confirm' | 'done' | 'account';
 
@@ -29,6 +31,9 @@ export const AuthModal: React.FC<Props> = ({ request }) => {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState('');
   const [googleError, setGoogleError] = useState('');
+  // Verificación "no soy un robot" (solo si hay llave configurada): cada resultado sirve para un solo intento
+  const [captcha, setCaptcha] = useState<string | null>(null);
+  const captchaRef = useRef<CaptchaHandle>(null);
   const [notice, setNotice] = useState('');
   const dialogRef = useRef<HTMLDivElement>(null);
 
@@ -149,14 +154,19 @@ export const AuthModal: React.FC<Props> = ({ request }) => {
       setError('Escribe tu correo y tu contraseña.');
       return;
     }
+    if (CAPTCHA_ENABLED && !captcha) {
+      setError('Completa la verificación de seguridad.');
+      return;
+    }
     setBusy(true);
     setError('');
     const m = await import('../lib/supabaseBrowser');
-    const res = await m.accountSignIn(identifier, password);
+    const res = await m.accountSignIn(identifier, password, captcha ?? undefined);
     setBusy(false);
     if (!res.ok) {
       setError(res.error || 'Algo salió mal. Inténtalo de nuevo.');
       setPassword('');
+      captchaRef.current?.reset();
       return;
     }
     if (res.account) finishAuth(res.account);
@@ -170,13 +180,15 @@ export const AuthModal: React.FC<Props> = ({ request }) => {
     if (!EMAIL_RE.test(email.trim())) return setError('Escribe un correo válido.');
     if (phone.trim() && !PHONE_RE.test(phone.trim())) return setError('El teléfono solo puede tener números, espacios, guiones y un + al inicio.');
     if (password.length < MIN_PASSWORD) return setError(`La contraseña debe tener al menos ${MIN_PASSWORD} caracteres.`);
+    if (CAPTCHA_ENABLED && !captcha) return setError('Completa la verificación de seguridad.');
     setBusy(true);
     setError('');
     const m = await import('../lib/supabaseBrowser');
-    const res = await m.buyerSignUp({ email, password, name, phone });
+    const res = await m.buyerSignUp({ email, password, name, phone }, captcha ?? undefined);
     setBusy(false);
     if (!res.ok) {
       setError(res.error || 'Algo salió mal. Inténtalo de nuevo.');
+      captchaRef.current?.reset();
       return;
     }
     if (res.needsConfirm || !res.account) {
@@ -312,8 +324,9 @@ export const AuthModal: React.FC<Props> = ({ request }) => {
               />
             </div>
             <PasswordField id="auth-pass" label="Contraseña" value={password} onChange={setPassword} show={showPassword} onToggle={() => setShowPassword((v) => !v)} autoComplete="current-password" />
+            <CaptchaWidget ref={captchaRef} onToken={setCaptcha} />
             <FormError message={error} />
-            <SubmitButton busy={busy} label="Ingresar" busyLabel="Verificando…" />
+            <SubmitButton busy={busy} label="Ingresar" busyLabel="Verificando…" disabled={CAPTCHA_ENABLED && !captcha} />
             <p className="text-center text-xs text-slate-400">
               ¿Primera vez?{' '}
               <button type="button" onClick={() => switchView('register')} className="font-bold text-[#00ff88] hover:underline cursor-pointer">
@@ -362,8 +375,9 @@ export const AuthModal: React.FC<Props> = ({ request }) => {
               onToggle={() => setShowPassword((v) => !v)}
               autoComplete="new-password"
             />
+            <CaptchaWidget ref={captchaRef} onToken={setCaptcha} />
             <FormError message={error} />
-            <SubmitButton busy={busy} label="Crear mi cuenta" busyLabel="Creando…" />
+            <SubmitButton busy={busy} label="Crear mi cuenta" busyLabel="Creando…" disabled={CAPTCHA_ENABLED && !captcha} />
             <p className="text-center text-[11px] leading-relaxed text-slate-500">
               Usamos tus datos solo para atender tus compras. No los compartimos con terceros.
             </p>
@@ -518,10 +532,10 @@ const FormError: React.FC<{ message: string }> = ({ message }) =>
     </p>
   ) : null;
 
-const SubmitButton: React.FC<{ busy: boolean; label: string; busyLabel: string }> = ({ busy, label, busyLabel }) => (
+const SubmitButton: React.FC<{ busy: boolean; label: string; busyLabel: string; disabled?: boolean }> = ({ busy, label, busyLabel, disabled }) => (
   <button
     type="submit"
-    disabled={busy}
+    disabled={busy || disabled}
     className="flex w-full items-center justify-center gap-2 rounded-2xl bg-[#00ff88] py-3 text-sm font-black text-slate-950 transition-colors hover:bg-[#00e676] disabled:opacity-60 cursor-pointer"
   >
     {busy && <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" />}

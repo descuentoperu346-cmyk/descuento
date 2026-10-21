@@ -20,7 +20,7 @@ interface NavListProps {
 }
 
 const NavList: React.FC<NavListProps> = ({ groups, current, onNavigate, compact }) => (
-  <nav aria-label="Menú del panel" className="flex-1 overflow-y-auto px-2.5 py-3">
+  <nav aria-label="Menú del panel" className="panel-scroll flex-1 overflow-y-auto px-2.5 py-3">
     {groups.map((group, gi) => (
       <div key={group.key} className={gi === 0 ? '' : 'mt-5'}>
         {group.title &&

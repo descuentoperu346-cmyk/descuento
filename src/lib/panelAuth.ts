@@ -12,10 +12,10 @@ export const PANEL_AUTH_MODE: 'supabase' | 'server' = CONTENT_DB_ENABLED ? 'supa
 
 type LoginResult = { success: boolean; user?: AuthUser; error?: string };
 
-export async function panelLogin(identifier: string, secret: string): Promise<LoginResult> {
+export async function panelLogin(identifier: string, secret: string, captchaToken?: string): Promise<LoginResult> {
   if (PANEL_AUTH_MODE === 'supabase') {
     const m = await import('./supabaseBrowser');
-    const result = await m.panelSignIn(identifier, secret);
+    const result = await m.panelSignIn(identifier, secret, captchaToken);
     if (result.success) void refreshAccount(); // la barra de la tienda pasa a mostrar la cuenta
     return result;
   }

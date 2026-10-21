@@ -64,6 +64,7 @@ function authErrorMessage(error: { message?: string; status?: number; code?: str
   if (/signup_disabled/i.test(code)) return 'El registro de cuentas está desactivado por ahora.';
   if (/email_provider_disabled/i.test(code)) return 'El acceso con correo está desactivado en este momento. Avisa al administrador de la web.';
   if (/email_not_confirmed/i.test(code)) return 'Falta confirmar tu correo. Revisa tu bandeja de entrada.';
+  if (/captcha/i.test(code) || /captcha/i.test(msg)) return 'No se pudo comprobar la verificación de seguridad. Inténtalo de nuevo.';
   if (/invalid_credentials/i.test(code) || error?.status === 400 || error?.status === 401 || /invalid login/i.test(msg)) {
     return 'Usuario o contraseña incorrectos.';
   }
@@ -71,10 +72,10 @@ function authErrorMessage(error: { message?: string; status?: number; code?: str
 }
 
 /** Inicio de sesión del equipo: acepta el usuario (p. ej. "@Tin9o") o un correo. */
-export async function panelSignIn(identifier: string, password: string): Promise<{ success: boolean; user?: AuthUser; error?: string }> {
+export async function panelSignIn(identifier: string, password: string, captchaToken?: string): Promise<{ success: boolean; user?: AuthUser; error?: string }> {
   try {
     const email = staffLoginEmail(identifier);
-    const { data, error } = await sb().auth.signInWithPassword({ email, password });
+    const { data, error } = await sb().auth.signInWithPassword({ email, password, options: captchaToken ? { captchaToken } : undefined });
     if (error || !data?.user) {
       return { success: false, error: authErrorMessage(error, 'No se pudo iniciar sesión. Inténtalo de nuevo.') };
     }
@@ -157,13 +158,13 @@ export async function accountGet(): Promise<AccountInfo | null> {
   }
 }
 
-export async function buyerSignUp(input: { email: string; password: string; name: string; phone: string }): Promise<AccountResult> {
+export async function buyerSignUp(input: { email: string; password: string; name: string; phone: string }, captchaToken?: string): Promise<AccountResult> {
   try {
     me = undefined;
     const { data, error } = await sb().auth.signUp({
       email: input.email.trim(),
       password: input.password,
-      options: { data: { display_name: input.name.trim(), phone: input.phone.trim() } }
+      options: { data: { display_name: input.name.trim(), phone: input.phone.trim() }, ...(captchaToken ? { captchaToken } : {}) }
     });
     if (error) return { ok: false, error: authErrorMessage(error, 'No se pudo crear la cuenta. Inténtalo de nuevo.') };
     // Con "confirmar correo" activado, un correo ya registrado vuelve sin error pero sin identidades.
@@ -177,11 +178,11 @@ export async function buyerSignUp(input: { email: string; password: string; name
   }
 }
 
-export async function accountSignIn(identifier: string, password: string): Promise<AccountResult> {
+export async function accountSignIn(identifier: string, password: string, captchaToken?: string): Promise<AccountResult> {
   try {
     me = undefined;
     const email = staffLoginEmail(identifier);
-    const { data, error } = await sb().auth.signInWithPassword({ email, password });
+    const { data, error } = await sb().auth.signInWithPassword({ email, password, options: captchaToken ? { captchaToken } : undefined });
     if (error || !data?.user) {
       return { ok: false, error: authErrorMessage(error, 'No se pudo iniciar sesión. Inténtalo de nuevo.') };
     }

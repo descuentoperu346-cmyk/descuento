@@ -55,7 +55,7 @@ Registrarse en la web **nunca** da permisos de equipo: los permisos salen de la 
    - **Allow new users to sign up**: déjalo **ACTIVADO** (los compradores se registran solos).
    - **Confirm email**: recomendado **DESACTIVADO** para que el comprador entre al instante. Si lo dejas activo, cada registro envía un correo y el plan
      gratis permite muy pocos por hora (configura un SMTP propio si lo quieres activo).
-   - No actives CAPTCHA todavía: el formulario aún no lo soporta y los registros fallarían.
+   - CAPTCHA: no lo actives hasta seguir la **Parte I** (primero la web debe enviar la verificación; si no, los registros y los ingresos fallarían).
 7. **Comprobar la seguridad.** En una consulta nueva ejecuta esto (los conteos deben dar lo indicado y las dos últimas líneas **deben fallar**):
    ```sql
    set role anon;
@@ -193,6 +193,9 @@ El botón se ve siempre en «Ya tengo cuenta» y «Crear cuenta»; **mientras Go
 
 **4. Probar.** Abre la web → *Ingresar* → pulsa «Continuar con Google»: debe abrirse Google para elegir cuenta. Si sale el aviso «todavía no está activado», revisa que Google esté encendido en Supabase (paso 2).
 
+Nota: al elegir la cuenta, Google puede mostrar «Ir a <tu-proyecto>.supabase.co» en vez del nombre de tu web. Es normal y no es un error: Google muestra la dirección de retorno mientras
+la marca de la app no esté verificada. Para que salga el nombre de tu web hay que verificar la marca en Google Cloud (*Centro de verificación*) o usar un dominio propio en Supabase (servicio de pago). Mientras tanto el ingreso funciona igual.
+
 Seguridad:
 - El **Secreto de cliente** se pega **solo en Supabase**. Nunca en la web, en este proyecto ni en un chat.
 - Antes de abrirlo al público, enciende **Confirm email** (*Authentication → Sign In / Providers → Email*). Así nadie puede registrarse con el correo de otra persona
@@ -224,6 +227,41 @@ Quién ve qué (lo exige la base de datos):
 | **DEV / ADMIN** | Ven y editan los costos de todas las tiendas | Ven y atienden los casos de todas las tiendas | Sí |
 | **VENDEDOR** | Solo los de **su** tienda | Solo los casos de **su** tienda | Sí (con sus ventas) |
 | **COMPRADOR / público** | Nada | Nada | — |
+
+## Parte H — Endurecimiento de seguridad (paso 13)
+
+La clave «anon» que se ve en «Inspeccionar» es pública a propósito y **no se puede ocultar**. Lo que protege la base son las **reglas de acceso (RLS)**.
+Este paso las refuerza: lo que se cree desde hoy nace cerrado, la clave pública no puede escribir ni vaciar nada, las tablas privadas ni siquiera le responden
+y solo se pueden llamar las funciones que la web usa.
+
+21. *SQL Editor* → *New query* → pega todo `supabase/13-endurecimiento.sql` → *Run* (necesita el paso 3; conviene haber corrido antes el 06 al 12).
+    Al final muestra un informe: debe haber una fila **OK · Sin hallazgos de atención** y varias **INFO** (lo público: productos, tiendas, métodos de pago y leaks).
+    Si sale alguna fila **ATENCIÓN**, es algo por revisar: mándale una captura a quien te ayuda.
+    - Se puede repetir las veces que quieras. No borra datos.
+    - **Desde este paso, una tabla o función nueva necesita un `grant` explícito** para abrirse a alguien (los archivos 03 al 12 ya lo hacen). Si creas tablas desde el
+      *Table Editor* y la web no las ve, es por esto a propósito.
+    - Después del paso, entra a la web y al panel y comprueba que todo cargue igual (catálogo, ventas, tráfico). Si algo se rompe, avisa qué pantalla.
+
+Lo que SQL no puede hacer, se revisa en el panel de Supabase (también está al final del archivo 13): **Confirm email**, **límites de velocidad**, crear de nuevo la clave secreta si alguna vez se mostró, y apagar los proveedores de acceso que no uses.
+**El CAPTCHA se enciende siguiendo la Parte I** (no antes) y **deja «Max rows» en 1000**
+(la web carga las ventas y los clientes de 1000 en 1000; con un valor menor se cargarían solo las primeras filas, sin aviso).
+
+## Parte I — Verificación «no soy un robot» (CAPTCHA con Cloudflare Turnstile, gratis)
+
+Frena a quien crea miles de cuentas falsas con programas. Se pide al **crear cuenta** y al **ingresar** (compradores y equipo). **El orden importa**: si enciendes el CAPTCHA en Supabase
+antes de que la web lo envíe, fallan **todos** los registros y los ingresos (también el del equipo). Mientras no pongas la llave pública en Vercel, la web funciona igual que antes.
+
+1. **Cloudflare** (dash.cloudflare.com → *Turnstile* → *Add widget*): nombre «Descuentos Perú»; en *Hostname* agrega `descuentos-peru.vercel.app` (y `localhost` si quieres probar en tu computadora);
+   modo *Managed*. Te da una **Site Key** (pública) y una **Secret Key** (secreta).
+2. **Vercel** → *Settings → Environment Variables*: agrega `VITE_TURNSTILE_SITE_KEY` con la **Site Key** (tipo *Config*; es pública). Después *Redeploy*.
+   Para probar en tu computadora, agrégala también en tu archivo `.env`. (La llave de prueba de Cloudflare `1x00000000000000000000AA` siempre aprueba.)
+3. Comprueba en la web publicada que al abrir *Ingresar* o *Crear cuenta* aparece la verificación y que ingresar sigue funcionando. El panel (`#ironcat`) también la muestra.
+4. **Solo entonces**, en Supabase → *Authentication → Attack Protection*: enciende **CAPTCHA protection**, elige **Cloudflare Turnstile** y pega la **Secret Key** (esa va **solo en Supabase**, nunca en la web ni en un chat). *Save*.
+5. Prueba de nuevo: crear una cuenta de prueba, ingresar como comprador e ingresar al panel con el equipo.
+   **Si algo falla, apaga CAPTCHA protection en Supabase** (vuelve a funcionar al instante) y avisa.
+
+Notas: el ingreso con Google no usa este CAPTCHA. La verificación sirve para un solo intento: tras un error se renueva sola. Si alguien tiene un bloqueador de anuncios que bloquea Cloudflare,
+verá un aviso para desactivarlo en esta página.
 
 ## Cómo se usa
 

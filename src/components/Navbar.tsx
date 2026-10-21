@@ -1,7 +1,7 @@
 import React from 'react';
 import { Send, Menu, X, Shield, Clock, ShieldAlert } from 'lucide-react';
 import { TELEGRAM_URL } from '../data/servicesData';
-import { useLeakCountdown } from '../hooks/useLeakCountdown';
+import { useFeaturedLeak } from '../hooks/useLeakCountdown';
 import { AccountButton } from './AccountButton';
 
 interface NavbarProps {
@@ -20,7 +20,8 @@ export const Navbar: React.FC<NavbarProps> = ({
   onOpenAdmin
 }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false);
-  const { days, hours, minutes, seconds, isExpired } = useLeakCountdown();
+  const leak = useFeaturedLeak();
+  const { days, hours, minutes, seconds, isExpired } = leak.time;
 
   const handleNavClick = (tabId: string) => {
     onTabChange(tabId);
@@ -43,10 +44,10 @@ export const Navbar: React.FC<NavbarProps> = ({
             </span>
             <span className="text-[10px] sm:text-xs font-mono font-bold text-rose-300 uppercase tracking-wider shrink-0 flex items-center gap-1">
               <ShieldAlert className="w-3.5 h-3.5 text-rose-400 inline" />
-              <span>{isExpired ? 'LEAK #02 DISPONIBLE:' : 'PRÓXIMO LEAK #02:'}</span>
+              <span>{isExpired ? `LEAK #0${leak.number} DISPONIBLE:` : `PRÓXIMO LEAK #0${leak.number}:`}</span>
             </span>
             <span className="text-[11px] sm:text-xs font-bold text-white tracking-tight truncate hidden sm:inline">
-              EXPEDIENTE KEIKO FUJIMORI - LO QUE DICEN LOS DOCUMENTOS DEL CASO CÓCTELES
+              {leak.ticker}
             </span>
           </div>
 
@@ -63,7 +64,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             </div>)}
 
             <span className="text-[10px] font-mono font-bold text-rose-300 hover:text-white bg-rose-900/40 px-2 py-0.5 rounded border border-rose-500/40 hidden lg:inline-flex items-center gap-1">
-              Ver Dossier & 9 Implicados →
+              {leak.tickerLink}
             </span>
           </div>
         </div>

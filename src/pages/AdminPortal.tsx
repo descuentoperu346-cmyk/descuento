@@ -303,8 +303,8 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
   }, [remoteStatus.at]);
 
   // Inicio de sesión contra el servidor. Devuelve el mensaje de error, o null si entró.
-  const handleLogin = async (username: string, pin: string): Promise<string | null> => {
-    const res = await panelLogin(username, pin);
+  const handleLogin = async (username: string, pin: string, captchaToken?: string): Promise<string | null> => {
+    const res = await panelLogin(username, pin, captchaToken);
     if (!res.success || !res.user) {
       return res.error || 'Usuario o clave incorrectos.';
     }

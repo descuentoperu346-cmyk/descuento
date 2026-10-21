@@ -1,9 +1,11 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { AlertCircle, ArrowLeft, Eye, EyeOff, Loader2, Shield, Unlock } from 'lucide-react';
+import { CaptchaWidget, type CaptchaHandle } from './CaptchaWidget';
+import { CAPTCHA_ENABLED } from '../lib/captcha';
 
 interface PanelLoginProps {
   /** Devuelve el mensaje de error, o null si el acceso fue correcto. */
-  onLogin: (username: string, pin: string) => Promise<string | null>;
+  onLogin: (username: string, pin: string, captchaToken?: string) => Promise<string | null>;
   onBackToStore: () => void;
   /** 'supabase': usuario (p. ej. @Tin9o) o correo + contraseña de la cuenta del panel. 'server': usuario + clave del servidor propio. */
   mode?: 'supabase' | 'server';
@@ -17,6 +19,10 @@ export const PanelLogin: React.FC<PanelLoginProps> = ({ onLogin, onBackToStore, 
   const [showPin, setShowPin] = useState(false);
   const [error, setError] = useState('');
   const [busy, setBusy] = useState(false);
+  // La verificación "no soy un robot" solo aplica al acceso con la base de datos y si hay llave configurada
+  const needsCaptcha = byEmail && CAPTCHA_ENABLED;
+  const [captcha, setCaptcha] = useState<string | null>(null);
+  const captchaRef = useRef<CaptchaHandle>(null);
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -25,13 +31,18 @@ export const PanelLogin: React.FC<PanelLoginProps> = ({ onLogin, onBackToStore, 
       setError(byEmail ? 'Escribe tu usuario y tu contraseña.' : 'Escribe tu usuario y tu clave.');
       return;
     }
+    if (needsCaptcha && !captcha) {
+      setError('Completa la verificación de seguridad.');
+      return;
+    }
     setBusy(true);
     setError('');
-    const message = await onLogin(username.trim(), pin);
+    const message = await onLogin(username.trim(), pin, captcha ?? undefined);
     if (message) {
       setError(message);
       setPin('');
       setBusy(false);
+      captchaRef.current?.reset(); // cada verificación sirve para un solo intento
     }
   };
 
@@ -104,6 +115,8 @@ export const PanelLogin: React.FC<PanelLoginProps> = ({ onLogin, onBackToStore, 
             </div>
           </div>
 
+          {needsCaptcha && <CaptchaWidget ref={captchaRef} onToken={setCaptcha} />}
+
           {error && (
             <p role="alert" className="flex items-start gap-2 font-mono text-xs text-rose-400">
               <AlertCircle className="mt-0.5 h-3.5 w-3.5 shrink-0" aria-hidden="true" />
@@ -113,7 +126,7 @@ export const PanelLogin: React.FC<PanelLoginProps> = ({ onLogin, onBackToStore, 
 
           <button
             type="submit"
-            disabled={busy}
+            disabled={busy || (needsCaptcha && !captcha)}
             className="flex w-full items-center justify-center gap-2 rounded-2xl bg-[#00ff88] py-3.5 font-mono text-sm font-black uppercase tracking-wide text-slate-950 transition-colors hover:bg-[#00e676] disabled:opacity-60 cursor-pointer"
           >
             {busy ? <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" /> : <Unlock className="h-4 w-4 stroke-[3]" aria-hidden="true" />}

@@ -548,6 +548,25 @@ export default function App() {
               onNavigateToLeaks={() => handleTabChange('leaks')}
             />
 
+            {/* Banner del equipo: solo imagen; al pulsarla lleva a Nosotros (no a ningún chat) */}
+            <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-2 pb-6 sm:pb-8">
+              <button
+                type="button"
+                onClick={() => handleTabChange('nosotros')}
+                className="group block w-full cursor-pointer overflow-hidden rounded-2xl border border-zinc-800 transition-colors hover:border-[#00ff88]/60 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#00ff88]"
+              >
+                <img
+                  src="/imagenes/banner-equipo.webp"
+                  alt="Descuentos Perú: el Perú necesita una voz, una voz unida. El equipo: @elnanovip, @Tin9o, @whiskyper, @DIESTRApe y @AbbysPeru. Pulsa para conocer al equipo."
+                  width={1600}
+                  height={800}
+                  loading="lazy"
+                  decoding="async"
+                  className="block h-auto w-full transition-transform duration-500 group-hover:scale-[1.01]"
+                />
+              </button>
+            </section>
+
             {/* Quick Section Jump Cards */}
             <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-1 pb-6 sm:pt-2 sm:pb-8">
               <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">

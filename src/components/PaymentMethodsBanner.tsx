@@ -1,5 +1,5 @@
-import React from 'react';
-import { ShieldCheck, Zap, Lock, Clock } from 'lucide-react';
+import React, { useState } from 'react';
+import { ShieldCheck, Zap, Lock, Clock, Pause, Play } from 'lucide-react';
 import { PaymentMethodItem } from '../data/paymentsData';
 
 interface PaymentMethodsBannerProps {
@@ -66,6 +66,10 @@ export const PaymentMethodsBanner: React.FC<PaymentMethodsBannerProps> = ({
 
   const displayMethods = peruvianMethods.length > 0 ? peruvianMethods : defaultPeruvianList;
 
+  // Con pocos métodos el carrusel se repite hasta llenar el ancho: así nunca queda un hueco al reiniciar el ciclo
+  const marqueeSet = Array.from({ length: Math.max(1, Math.ceil(8 / displayMethods.length)) }).flatMap(() => displayMethods);
+  const [paused, setPaused] = useState(false);
+
   // Logos oficiales (SVG horizontales) para las marcas conocidas.
   const brandInfo: Record<string, { name: string; sub: string; badge: string; logo: string }> = {
     yape: { name: 'Yape', sub: 'Billetera móvil BCP', badge: 'Al instante', logo: '/imagenes/iconos-pago/yape-app.jpg' },
@@ -101,7 +105,7 @@ export const PaymentMethodsBanner: React.FC<PaymentMethodsBannerProps> = ({
           <ShieldCheck className="w-3.5 h-3.5" />
           Pagos oficiales en Perú
         </span>
-        <span className="hidden sm:inline text-zinc-500">Moneda local · S/.</span>
+        <span className="hidden sm:inline text-zinc-400">Moneda local · S/.</span>
       </div>
 
       <div className="p-4 sm:p-6 lg:p-8 space-y-6">
@@ -130,17 +134,32 @@ export const PaymentMethodsBanner: React.FC<PaymentMethodsBannerProps> = ({
           </div>
         </div>
 
-        {/* Métodos de pago: carrusel continuo (se pausa al pasar el cursor) */}
-        <div className="marquee relative -mx-4 sm:-mx-6 lg:-mx-8" aria-label="Métodos de pago aceptados">
-          <ul className="marquee-track py-1">
-            {[...displayMethods, ...displayMethods].map((method, i) => {
+        {/* Métodos de pago: carrusel continuo (se pausa al pasar el cursor o con el botón) */}
+        <div className="space-y-3">
+        <div className="flex items-center justify-between gap-3 font-mono text-[11px] text-zinc-400">
+          <span>
+            {displayMethods.length} métodos de pago <span className="hidden sm:inline">· pasa el cursor para detener</span>
+          </span>
+          <button
+            type="button"
+            onClick={() => setPaused((p) => !p)}
+            aria-pressed={paused}
+            className="marquee-toggle inline-flex cursor-pointer items-center gap-1.5 rounded-md border border-zinc-700 px-2.5 py-1 font-semibold text-zinc-200 transition-colors hover:border-emerald-500/60 hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-300"
+          >
+            {paused ? <Play className="h-3 w-3" aria-hidden="true" /> : <Pause className="h-3 w-3" aria-hidden="true" />}
+            {paused ? 'Reanudar' : 'Pausar'}
+          </button>
+        </div>
+        <div className={`marquee relative -mx-4 sm:-mx-6 lg:-mx-8${paused ? ' is-paused' : ''}`} aria-label="Métodos de pago aceptados">
+          <ul className="marquee-track py-1.5">
+            {[...marqueeSet, ...marqueeSet].map((method, i) => {
               const brand = getBrand(method);
-              const isClone = i >= displayMethods.length;
+              const isClone = i >= marqueeSet.length;
               return (
                 <li
                   key={`${method.id}-${i}`}
                   aria-hidden={isClone || undefined}
-                  className="mr-3 w-36 sm:w-40 shrink-0 flex flex-col items-center text-center gap-2 rounded-xl border border-zinc-800 bg-zinc-900/50 px-3 py-4"
+                  className={`${isClone ? 'marquee-clone ' : ''}group mr-3 w-40 sm:w-44 shrink-0 flex flex-col items-center text-center gap-2 rounded-xl border border-zinc-800 bg-zinc-900/50 px-3 py-4 transition-all duration-300 hover:-translate-y-0.5 hover:border-emerald-500/50 hover:bg-zinc-900`}
                 >
                   <img
                     loading="lazy"
@@ -149,11 +168,11 @@ export const PaymentMethodsBanner: React.FC<PaymentMethodsBannerProps> = ({
                     alt={isClone ? '' : `Icono de ${brand.name}`}
                     width={64}
                     height={64}
-                    className="w-16 h-16 rounded-[22%] object-cover shadow-md shadow-black/50"
+                    className="w-16 h-16 rounded-[22%] object-cover shadow-md shadow-black/50 transition-transform duration-300 group-hover:scale-105"
                   />
                   <div className="space-y-0.5">
                     <h4 className="text-sm font-extrabold text-white">{brand.name}</h4>
-                    <p className="text-[11px] font-mono text-zinc-500 leading-tight">{brand.sub}</p>
+                    <p className="text-[11px] font-mono text-zinc-400 leading-tight">{brand.sub}</p>
                   </div>
                   <span className="px-2 py-0.5 rounded border border-zinc-700 text-[10px] font-mono text-zinc-300">
                     {brand.badge}
@@ -162,6 +181,7 @@ export const PaymentMethodsBanner: React.FC<PaymentMethodsBannerProps> = ({
               );
             })}
           </ul>
+        </div>
         </div>
 
         {/* Garantías */}
