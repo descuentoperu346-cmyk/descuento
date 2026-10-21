@@ -19,6 +19,7 @@ import { Vendor } from '../data/vendorsData';
 import { PaymentMethodItem } from '../data/paymentsData';
 import { recordVendorClickEvent } from '../data/telemetryData';
 import { ServiceAppLogo, PaymentBrandLogo } from './BrandLogos';
+import { canBuy, requestAuth, useAccount } from '../lib/accountStore';
 
 interface ServiceDetailModalProps {
   service: ServiceItem | null;
@@ -36,6 +37,7 @@ export const ServiceDetailModal: React.FC<ServiceDetailModalProps> = ({
   const [selectedPlanIndex, setSelectedPlanIndex] = useState<number>(0);
   const [showQrModal, setShowQrModal] = useState<boolean>(false);
   const [selectedVendorId, setSelectedVendorId] = useState<string>('');
+  const account = useAccount();
 
   if (!service) return null;
 
@@ -60,7 +62,8 @@ export const ServiceDetailModal: React.FC<ServiceDetailModalProps> = ({
       chosenVendor?.id || 'vendedor-central',
       chosenVendor?.name || 'Descuentos Perú Central',
       'telegram',
-      service.title
+      service.title,
+      service.id
     );
 
     const targetUrl = chosenVendor?.telegramUrl || TELEGRAM_URL;
@@ -84,7 +87,8 @@ export const ServiceDetailModal: React.FC<ServiceDetailModalProps> = ({
       chosenVendor?.id || 'vendedor-central',
       chosenVendor?.name || 'Descuentos Perú Central',
       'whatsapp',
-      service.title
+      service.title,
+      service.id
     );
 
     const cleanPhone = chosenVendor.whatsapp.replace(/\D/g, '');
@@ -96,6 +100,19 @@ export const ServiceDetailModal: React.FC<ServiceDetailModalProps> = ({
     window.open(url, '_blank', 'noopener,noreferrer');
   };
 
+  // Con la base de datos conectada, comprar requiere cuenta: si no hay sesión se abre el registro/ingreso
+  // y, al entrar, el botón "Continuar con mi compra" ejecuta la acción elegida.
+  const guarded = (action: () => void) => () => {
+    if (canBuy(account)) {
+      action();
+      return;
+    }
+    requestAuth({
+      mode: 'login',
+      reason: 'Para comprar necesitas una cuenta. Es gratis y toma un minuto.',
+      onContinue: action
+    });
+  };
   const getServiceBanner = () => {
     if (service.customImageUrl) return service.customImageUrl;
     if (service.category === 'leaks') return '/imagenes/card-leaks.jpg';
@@ -418,7 +435,7 @@ export const ServiceDetailModal: React.FC<ServiceDetailModalProps> = ({
             {(chosenVendor?.whatsapp && (chosenVendor.username === 'Tin9o' || chosenVendor.id === 'vendedor-tino')) && (
               <button
                 type="button"
-                onClick={handleOrderWhatsApp}
+                onClick={guarded(handleOrderWhatsApp)}
                 className="w-full sm:w-auto inline-flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-2xl text-xs sm:text-sm font-bold text-white bg-[#292929] hover:bg-[#13522d] border border-zinc-700 transition-all cursor-pointer whitespace-nowrap"
                 title="Escribir por WhatsApp a Tin9o (+51 919 192 244)"
               >
@@ -429,7 +446,7 @@ export const ServiceDetailModal: React.FC<ServiceDetailModalProps> = ({
 
             <button
               type="button"
-              onClick={handleOrderTelegram}
+              onClick={guarded(handleOrderTelegram)}
               className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-2.5 rounded-2xl text-xs sm:text-sm font-black text-slate-950 bg-[#00ff88] hover:bg-[#00e676] active:scale-95 transition-all cursor-pointer whitespace-nowrap"
             >
               <img loading="lazy" decoding="async"

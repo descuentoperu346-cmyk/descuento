@@ -7,3 +7,6 @@ coverage/
 .env*
 !.env.example
 scratch/
+
+# Cuentas del equipo con claves (privado)
+supabase/*.local.sql

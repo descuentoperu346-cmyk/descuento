@@ -49,7 +49,6 @@ import {
 import { LeakArticle, EvidenceFigure } from '../data/leaksData';
 import { recordVendorClickEvent } from '../data/telemetryData';
 import { UpcomingLeakCountdownBanner } from './UpcomingLeakCountdownBanner';
-import { ArticleBody } from './ArticleBody';
 import { LeaksCover } from './LeaksCover';
 import { MagazineArticle } from './MagazineArticle';
 import { useLeakCountdown } from '../hooks/useLeakCountdown';
@@ -182,10 +181,18 @@ const PAYMENT_VOUCHERS = [
   }
 ];
 
+/** Artículo indicado en el enlace (#/leaks?id=...), si existe. */
+const findArticleInHash = (list: LeakArticle[]): LeakArticle | null => {
+  if (typeof window === 'undefined') return null;
+  const m = window.location.hash.match(/[?&]id=([^&]+)/);
+  return m ? list.find((a) => a.id === decodeURIComponent(m[1])) ?? null : null;
+};
+
 export const LeaksTab: React.FC<LeaksTabProps> = ({ articles, onOpenContact }) => {
   const [selectedCategory, setSelectedCategory] = useState<string>('todo');
   const [searchQuery, setSearchQuery] = useState<string>('');
-  const [activeArticle, setActiveArticle] = useState<LeakArticle | null>(null);
+  // Un enlace compartido (#/leaks?id=...) abre el artículo desde el primer pintado, sin pasar antes por la portada.
+  const [activeArticle, setActiveArticle] = useState<LeakArticle | null>(() => findArticleInHash(articles));
 
   const [showPeople, setShowPeople] = useState(false);
   const { isExpired: leakExpired } = useLeakCountdown();
@@ -368,203 +375,28 @@ export const LeaksTab: React.FC<LeaksTabProps> = ({ articles, onOpenContact }) =
       .filter((a) => a.id !== activeArticle.id)
       .slice(0, 3);
 
-    if (activeArticle.fullBody) {
-      return (
-        <MagazineArticle
-          article={activeArticle}
-          related={relatedArticles}
-          copied={copiedLink}
-          authorAvatar={getAuthorAvatar(activeArticle.authorTelegram)}
-          onBack={handleBackToNews}
-          onShare={() => handleCopyArticleLink(activeArticle)}
-          onAsk={() => handleOpenTelegram(activeArticle)}
-          onSelect={handleSelectArticle}
-        />
-      );
-    }
+    // Módulos interactivos de investigación (evidencias, peritaje, red criminal…): solo los expedientes que los traen
+    const hasDossier =
+      isChinaPoloReport ||
+      !!activeArticle.ballisticsCases?.length ||
+      !!activeArticle.suspects?.length ||
+      !!activeArticle.evidenceFigures?.length;
 
     return (
-      <article className="w-full max-w-[1560px] mx-auto space-y-8 animate-in fade-in slide-in-from-bottom-2 duration-300 pb-24">
-        
-        {/* Sticky Tactical Navigation Bar */}
-        <div className="flex items-center justify-between gap-4 pt-2 pb-4 border-b border-zinc-900/80 sticky top-16 z-30 bg-[#07090a]/95 backdrop-blur-md">
-          <button
-            type="button"
-            onClick={handleBackToNews}
-            className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full text-xs font-mono font-bold text-[#00ff88] bg-[#121212] hover:bg-[#1e1e1e] border border-emerald-500/50 hover:border-[#00ff88] transition-all cursor-pointer group"
-          >
-            <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
-            <span>Volver a la Revista & Leaks</span>
-          </button>
-
-          <div className="flex items-center gap-2">
-            {activeArticle.dossierCode && (
-              <span className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-mono text-emerald-400 bg-black/80 border border-zinc-700">
-                <FileSearch className="w-3 h-3 text-[#00ff88]" />
-                <span>{activeArticle.dossierCode}</span>
-              </span>
-            )}
-            <button
-              type="button"
-              onClick={() => handleCopyArticleLink(activeArticle)}
-              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-mono text-slate-300 hover:text-white bg-[#111111] border border-zinc-800 hover:border-emerald-500/60 transition-all cursor-pointer shadow-sm"
-              title="Copiar enlace del reporte"
-            >
-              {copiedLink ? (
-                <>
-                  <CheckCircle2 className="w-3.5 h-3.5 text-[#00ff88]" />
-                  <span className="text-[#00ff88]">Enlace copiado</span>
-                </>
-              ) : (
-                <>
-                  <Share2 className="w-3.5 h-3.5 text-slate-400" />
-                  <span className="hidden sm:inline">Compartir</span>
-                </>
-              )}
-            </button>
-          </div>
-        </div>
-
-        {/* ======================================================== */}
-        {/* EDITORIAL DOSSIER COVER & TITLE BANNER */}
-        {/* ======================================================== */}
-        <div className="rounded-3xl overflow-hidden border border-zinc-700 bg-[#090909] relative">
-          
-          {/* Top Military Classification Bar */}
-          <div className="bg-gradient-to-r from-red-950 via-[#180808] to-[#0c0c0c] px-6 py-2.5 border-b border-red-500/40 flex flex-wrap items-center justify-between gap-3 text-[11px] font-mono font-bold tracking-wider">
-            <div className="flex items-center gap-2 text-red-300">
-              <ShieldAlert className="w-4 h-4 text-red-400 shrink-0" />
-              <span>EXPEDIENTE FILTRADO // INTELIGENCIA FORENSE & POLICIAL</span>
-            </div>
-            <div className="flex items-center gap-3 text-slate-300">
-              <span>{activeArticle.fullBody ? 'ESTADO: CASO ARCHIVADO · SIN CONDENA' : 'ESTADO: CASO EN CURSO'}</span>
-              <span className="text-emerald-500">·</span>
-              <span className="text-emerald-300">{activeArticle.date}</span>
-            </div>
-          </div>
-
-          {/* Hero Cover Frame */}
-          <div className="relative h-72 sm:h-96 md:h-[460px] w-full overflow-hidden bg-black group cursor-pointer"
-               onClick={() => setZoomedImage({ url: activeArticle.imageUrl, title: activeArticle.title, caption: activeArticle.summary, tag: 'PORTADA PRINCIPAL' })}>
-            <img loading="lazy" decoding="async"
-              src={activeArticle.imageUrl}
-              alt={activeArticle.title}
-              className="w-full h-full object-cover group-hover:scale-103 transition-transform duration-700"
-              onError={(e) => {
-                const target = e.currentTarget as HTMLImageElement;
-                target.onerror = null;
-                target.src = '/imagenes/leak-doc-analysis.jpg';
-              }}
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-[#070707] via-[#070707]/60 to-transparent" />
-
-            {/* Tactical Badges */}
-            <div className="absolute top-5 left-5 z-10 flex flex-wrap items-center gap-2">
-              <span className={`px-3 py-1 rounded-full text-[10px] font-mono font-black uppercase tracking-wider ${getTagBadgeStyle(activeArticle.categoryLabel)}`}>
-                {activeArticle.categoryLabel}
-              </span>
-              <span className="px-3 py-1 rounded-full bg-black/85 text-[10px] text-slate-200 font-mono border border-slate-700/80 backdrop-blur-md flex items-center gap-1.5">
-                <Clock className="w-3 h-3 text-[#00ff88]" />
-                <span>{activeArticle.readTime}</span>
-              </span>
-            </div>
-
-            {/* Magnify Hint */}
-            <div className="absolute bottom-4 right-4 z-10 px-3.5 py-1.5 rounded-full bg-black/80 border border-emerald-500/50 text-xs font-mono text-emerald-300 backdrop-blur-md flex items-center gap-1.5 opacity-90 group-hover:opacity-100 group-hover:bg-[#00ff88] group-hover:text-black transition-all">
-              <Maximize2 className="w-3.5 h-3.5" />
-              <span>Ver imagen de cabecera</span>
-            </div>
-          </div>
-
-          {/* Title & Editorial Lead */}
-          <div className="p-6 sm:p-9 md:p-12 space-y-6 relative z-10 bg-[#070707]">
-            <div className="space-y-4">
-              <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-[44px] font-black text-white leading-tight tracking-tight">
-                {activeArticle.title}
-              </h1>
-
-              {activeArticle.subtitle && (
-                <p className="text-base sm:text-lg md:text-xl text-slate-300 font-normal leading-relaxed border-l-4 border-emerald-400 pl-4 py-1">
-                  {activeArticle.subtitle}
-                </p>
-              )}
-            </div>
-
-            {/* Legal / Archival Disclaimer Notice */}
-            {activeArticle.classificationNotice && (
-              <div className="p-4 rounded-2xl bg-[#161616] border border-zinc-700 text-emerald-300 text-xs sm:text-sm font-mono leading-relaxed flex items-start gap-3 shadow-inner">
-                <ShieldCheck className="w-4 h-4 text-[#00ff88] shrink-0 mt-0.5" />
-                <span>{activeArticle.classificationNotice}</span>
-              </div>
-            )}
-
-            {/* Author Profile Bar */}
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-4 border-t border-zinc-900">
-              <div className="flex items-center gap-3.5">
-                <div className="relative w-12 h-12 rounded-2xl overflow-hidden border-2 border-emerald-400 p-0.5 bg-black shrink-0">
-                  <img loading="lazy" decoding="async"
-                    src={getAuthorAvatar(activeArticle.authorTelegram)}
-                    alt={activeArticle.author}
-                    className="w-full h-full object-cover"
-                    onError={(e) => {
-                      const target = e.currentTarget as HTMLImageElement;
-                      target.onerror = null;
-                      target.src = '/imagenes/monograma.png';
-                    }}
-                  />
-                  <span className="absolute bottom-0 right-0 w-3 h-3 rounded-full bg-[#00ff88] border-2 border-black animate-pulse" />
-                </div>
-                <div>
-                  <div className="flex items-center gap-2">
-                    <span className="font-bold text-white text-sm">{activeArticle.author}</span>
-                    <span className="px-2 py-0.5 rounded bg-zinc-900 border border-zinc-700 text-[9px] font-mono text-[#00ff88] uppercase font-bold">
-                      UNIDAD DE INVESTIGACIÓN
-                    </span>
-                  </div>
-                  <span className="text-xs text-slate-400 font-mono">
-                    {activeArticle.authorRole} · Telegram: @{activeArticle.authorTelegram}
-                  </span>
-                </div>
-              </div>
-
-              {/* Direct Telegram Chat with Author */}
-              <button
-                type="button"
-                onClick={() => handleOpenTelegram(activeArticle)}
-                className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-full font-bold text-xs text-slate-950 bg-[#00ff88] hover:bg-[#00e676] transition-all cursor-pointer font-mono whitespace-nowrap active:scale-95"
-              >
-                <Send className="w-3.5 h-3.5 fill-slate-950 -rotate-12" />
-                <span>Consultar con la Redacción OSINT</span>
-              </button>
-            </div>
-          </div>
-        </div>
-
-        {/* Lead Executive Summary */}
-        <div className="p-6 sm:p-8 rounded-3xl bg-gradient-to-r from-[#131313] via-[#1c1c1c] to-[#0d0d0d] border border-emerald-500/50 text-emerald-100 text-sm sm:text-base font-medium leading-relaxed shadow-xl relative overflow-hidden">
-          <div className="absolute top-0 right-0 w-72 h-full bg-emerald-500/10 blur-3xl pointer-events-none" />
-          <div className="relative z-10 flex items-start gap-4">
-            <div className="w-10 h-10 rounded-2xl bg-black/60 border border-emerald-400/60 flex items-center justify-center text-[#00ff88] shrink-0 mt-1 shadow-md">
-              <Scale className="w-5 h-5 text-[#00ff88]" />
-            </div>
-            <div className="space-y-1.5">
-              <span className="text-[10px] font-mono font-bold text-emerald-400 uppercase tracking-widest block">
-                SÍNTESIS EDITORIAL DEL CASO
-              </span>
-              <p className="italic text-slate-100 text-sm sm:text-base leading-relaxed font-sans">
-                "{activeArticle.summary}"
-              </p>
-            </div>
-          </div>
-        </div>
-
-        {/* Cuerpo completo del expediente (solo artículos que lo piden) */}
-        {activeArticle.fullBody && activeArticle.content.length > 0 && (
-          <section className="p-5 sm:p-9 rounded-3xl bg-[#0c0c0c] border border-zinc-800 space-y-4">
-            <ArticleBody blocks={activeArticle.content} stats={activeArticle.keyStats} />
-          </section>
-        )}
-
+      <>
+      <MagazineArticle
+        article={activeArticle}
+        related={relatedArticles}
+        copied={copiedLink}
+        authorAvatar={getAuthorAvatar(activeArticle.authorTelegram)}
+        onBack={handleBackToNews}
+        onShare={() => handleCopyArticleLink(activeArticle)}
+        onAsk={() => handleOpenTelegram(activeArticle)}
+        onSelect={handleSelectArticle}
+        hideOpenQuestions={hasDossier}
+      >
+      {hasDossier ? (
+      <div className="space-y-8">
         {/* ======================================================== */}
         {/* DOSSIER COMMAND BAR: INTERACTIVE HUB & SECTION SELECTOR */}
         {/* ======================================================== */}
@@ -1371,102 +1203,9 @@ export const LeaksTab: React.FC<LeaksTabProps> = ({ articles, onOpenContact }) =
           </section>
         )}
 
-        {/* Tags */}
-        <div className="flex flex-wrap items-center gap-2 pt-2">
-          <span className="text-xs font-mono text-slate-400">Etiquetas del caso:</span>
-          {activeArticle.tags.map((tag) => (
-            <span
-              key={tag}
-              className="px-3 py-1 rounded-full text-xs font-mono bg-[#121212] text-emerald-400 border border-zinc-700"
-            >
-              {tag}
-            </span>
-          ))}
-        </div>
-
-        {/* Bottom Contact / OSINT Assistance Banner */}
-        <div className="p-6 sm:p-8 rounded-3xl bg-gradient-to-r from-[#101010] via-[#1c1c1c] to-[#0c0c0c] border-2 border-emerald-500/50 flex flex-col md:flex-row items-center justify-between gap-6">
-          <div className="space-y-1.5 text-center md:text-left">
-            <span className="text-[10px] font-mono font-bold text-[#00ff88] uppercase tracking-wider">
-              ASISTENCIA TÉCNICA // INVESTIGACIÓN OSINT
-            </span>
-            <h3 className="text-xl sm:text-2xl font-black text-white">
-              ¿Posees información o requieres verificar este expediente?
-            </h3>
-            <p className="text-xs sm:text-sm text-slate-300 max-w-xl">
-              Nuestros analistas reciben reportes con estricta reserva de identidad y cifrado extremo a extremo.
-            </p>
-          </div>
-
-          <button
-            type="button"
-            onClick={() => handleOpenTelegram(activeArticle)}
-            className="px-7 py-3.5 rounded-full font-black text-xs sm:text-sm text-slate-950 bg-[#00ff88] hover:bg-[#00e676] transition-all cursor-pointer whitespace-nowrap font-mono uppercase active:scale-95"
-          >
-            Contactar con @{activeArticle.authorTelegram}
-          </button>
-        </div>
-
-        {/* Related Articles Showcase */}
-        {relatedArticles.length > 0 && (
-          <div className="space-y-4 pt-6 border-t border-zinc-900">
-            <div className="flex items-center justify-between">
-              <h3 className="text-xl font-black text-white tracking-tight">
-                Otras publicaciones de la revista
-              </h3>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-5">
-              {relatedArticles.map((rel) => (
-                <div
-                  key={rel.id}
-                  onClick={() => handleSelectArticle(rel)}
-                  className="p-4 rounded-2xl bg-[#0c0c0c] border border-zinc-800/60 hover:border-emerald-400/80 transition-all cursor-pointer flex flex-col justify-between group shadow-md"
-                >
-                  <div className="space-y-2.5">
-                    <div className="w-full h-32 rounded-xl overflow-hidden bg-black">
-                      <img loading="lazy" decoding="async"
-                        src={rel.imageUrl}
-                        alt={rel.title}
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform"
-                        onError={(e) => {
-                          const target = e.currentTarget as HTMLImageElement;
-                          target.onerror = null;
-                          target.src = '/imagenes/leak-doc-analysis.jpg';
-                        }}
-                      />
-                    </div>
-                    <span className="text-[10px] font-mono text-[#00ff88] block">
-                      {rel.categoryLabel}
-                    </span>
-                    <h4 className="text-sm font-bold text-white group-hover:text-[#00ff88] transition-colors line-clamp-2">
-                      {rel.title}
-                    </h4>
-                  </div>
-                  <div className="pt-3 mt-3 border-t border-zinc-900 flex items-center justify-between text-[11px] font-mono text-slate-400">
-                    <span>{rel.readTime}</span>
-                    <span className="text-[#00ff88] font-bold group-hover:translate-x-1 transition-transform flex items-center gap-1">
-                      <span>Leer informe</span>
-                      <ArrowRight className="w-3 h-3" />
-                    </span>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {/* Bottom Back Button */}
-        <div className="pt-6 text-center">
-          <button
-            type="button"
-            onClick={handleBackToNews}
-            className="inline-flex items-center gap-2 px-6 py-3 rounded-full text-xs sm:text-sm font-mono font-bold text-slate-300 hover:text-white bg-[#111111] hover:bg-[#1e1e1e] border border-zinc-700 hover:border-[#00ff88] shadow-lg transition-all cursor-pointer"
-          >
-            <ArrowLeft className="w-4 h-4 text-[#00ff88]" />
-            <span>Volver a la Revista & Leaks</span>
-          </button>
-        </div>
+      </div>
+      ) : null}
+      </MagazineArticle>
 
         {/* ======================================================== */}
         {/* LIGHTBOX MODAL: FULL-SCREEN IMAGE INSPECTOR */}
@@ -1518,7 +1257,7 @@ export const LeaksTab: React.FC<LeaksTabProps> = ({ articles, onOpenContact }) =
           </div>
         )}
 
-      </article>
+      </>
     );
   }
 

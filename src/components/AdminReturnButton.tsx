@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { LayoutDashboard } from 'lucide-react';
-import { checkSessionApi } from '../lib/api';
+import { panelCheckSession, PANEL_AUTH_MODE } from '../lib/panelAuth';
+import { useAccount } from '../lib/accountStore';
 import { goToPanel } from '../lib/panelRoute';
 import { hasAdminHint, setAdminHint } from '../lib/adminHint';
+import { isStaffAdmin } from '../lib/roles';
 
 /**
  * Botón flotante "Volver al panel" para administradores con sesión activa.
@@ -11,13 +13,15 @@ import { hasAdminHint, setAdminHint } from '../lib/adminHint';
  */
 export const AdminReturnButton: React.FC = () => {
   const [visible, setVisible] = useState(false);
+  const account = useAccount();
 
+  // Con base de datos conectada, la cuenta con sesión sale del almacén de cuentas (reacciona a entrar y salir al instante).
   useEffect(() => {
-    if (!hasAdminHint()) return;
+    if (PANEL_AUTH_MODE === 'supabase' || !hasAdminHint()) return;
     let cancelled = false;
-    checkSessionApi().then((user) => {
+    panelCheckSession().then((user) => {
       if (cancelled) return;
-      if (user && user.role === 'admin') {
+      if (user && isStaffAdmin(user.role)) {
         setVisible(true);
       } else {
         setAdminHint(false); // la sesión venció o ya no es admin
@@ -28,7 +32,11 @@ export const AdminReturnButton: React.FC = () => {
     };
   }, []);
 
-  if (!visible) return null;
+  const show =
+    PANEL_AUTH_MODE === 'supabase'
+      ? account.status === 'in' && account.account?.kind === 'staff' && isStaffAdmin(account.account.role)
+      : visible;
+  if (!show) return null;
 
   return (
     <button

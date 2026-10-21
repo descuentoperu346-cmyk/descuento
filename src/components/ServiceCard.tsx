@@ -4,6 +4,8 @@ import { ServiceItem } from '../data/servicesData';
 import { Vendor } from '../data/vendorsData';
 import { StreamingVisual, InvestigacionVisual, EducacionVisual, LeaksVisual } from './CardVisuals';
 import { ServiceAppLogo } from './BrandLogos';
+import { CONTENT_DB_ENABLED } from '../lib/contentEnv';
+import { hasAdminHint } from '../lib/adminHint';
 
 interface ServiceCardProps {
   service: ServiceItem;
@@ -140,7 +142,8 @@ export const ServiceCard: React.FC<ServiceCardProps> = ({
         </div>
 
         {/* Hidden upload trigger for quick inline test */}
-        {onImageUpload && (
+        {/* Solo para administradores y sin base de datos: con base de datos las fotos se cambian desde el panel */}
+        {onImageUpload && !CONTENT_DB_ENABLED && hasAdminHint() && (
           <div
             className="absolute bottom-2.5 right-2.5 z-20 opacity-0 group-hover/visual:opacity-100 transition-opacity"
             onClick={(e) => e.stopPropagation()}

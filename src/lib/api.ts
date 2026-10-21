@@ -11,7 +11,7 @@ export interface AuthUser {
   id: string;
   name: string;
   username: string;
-  role: 'admin' | 'vendor';
+  role: 'dev' | 'admin' | 'vendor';
   allowedCategories?: string[];
   allowedServiceIds?: string[];
   csrfToken?: string;

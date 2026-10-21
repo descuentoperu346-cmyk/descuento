@@ -54,6 +54,8 @@ export interface LeakArticle {
   featured?: boolean;
   leakNumber?: number;
   dossierCode?: string;
+  /** Estado del caso que se muestra en la portada (p. ej. "Caso archivado · sin condena") */
+  statusLabel?: string;
   classificationNotice?: string;
   evidenceFigures?: EvidenceFigure[];
   ballisticsCases?: BallisticsCase[];
@@ -96,6 +98,7 @@ export const INITIAL_LEAKS_ARTICLES: LeakArticle[] = [
     authorTelegram: 'Tin9o',
     imageUrl: '/imagenes/china-polo-dossier.jpg',
     dossierCode: 'DOSSIER-DIVINCRI-ANC-2026-001',
+    statusLabel: 'Caso en curso',
     classificationNotice: 'Información contrastada hasta la noche del 14 de octubre de 2026, hora de Perú. Este artículo reconstruye fuentes públicas; las declaraciones y documentos difundidos por medios se atribuyen a sus respectivas publicaciones.',
     summary: 'Un arma vinculada a otros cinco ataques, pagos por aplicaciones, conversaciones divulgadas por la prensa y una captura en Venezuela permiten reconstruir parte del asesinato de Susy Aponte Polo. La identidad de quien habría encargado el crimen sigue siendo la pieza decisiva.',
     affectedScope: 'Crimen organizado, sicariato político y peritaje balístico DIRINCRI',
@@ -110,6 +113,14 @@ export const INITIAL_LEAKS_ARTICLES: LeakArticle[] = [
     ],
     tags: ['#ChinaPolo', '#Caraz', '#PeritajeBalistico', '#RutaDelDinero', '#Ancash', '#Dirincri', '#LeakExclusivo'],
     featured: true,
+    keyStats: [
+      { value: '19 sep 2026', label: 'Asesinato de Susy Aponte Polo en Caraz' },
+      { value: 'S/15.000', label: 'Oferta al ejecutor, según declaraciones publicadas' },
+      { value: '6 ataques', label: 'Vinculados a la misma Glock 9 mm por la pericia balística' },
+      { value: 'S/80', label: 'Por noche de hospedaje en Caraz · 4 personas, 3 noches' },
+      { value: '2 km', label: 'Persecución en mototaxi antes de la captura de Obispo' },
+      { value: '9 oct 2026', label: 'Captura de Adrián Solís en Calabozo, Venezuela (La República)' }
+    ],
     evidenceFigures: [
       {
         id: 'fig-01',
@@ -265,28 +276,45 @@ export const INITIAL_LEAKS_ARTICLES: LeakArticle[] = [
       '¿Qué revelarán las pericias técnicas de los teléfonos y registros íntegros, más allá de los fragmentos divulgados por la prensa?'
     ],
     content: [
+      '## Lo esencial',
       'La novedad más reciente cambia una parte importante del caso: Adrián José Solís Ruiz, señalado como presunto coordinador del asesinato de "La China" Polo, está vivo y fue detenido en Venezuela. La República informó el 14 de octubre que su captura ocurrió el día 9 en Calabozo, estado de Guárico. Su detención podría permitir avanzar hacia la persona que contrató al grupo. En la información pública revisada, esa persona sigue apareciendo principalmente detrás de un alias: "Pure" o "Viejo".',
       'La investigación también incluye una muerte que sí está documentada: la de una mujer señalada como integrante del grupo que acompañó al presunto ejecutor. Falleció en un accidente de tránsito en Venezuela junto con su hija. Sin embargo, las noticias sobre ese accidente, la fuga de su pareja y otras personas fallecidas han terminado mezclándose. Separar esas historias resulta indispensable para entender qué ocurrió.',
+      '## El crimen en Caraz',
+      '?? Susy Aponte Polo, periodista y candidata, fue asesinada el 19 de septiembre de 2026 en Caraz mientras daba una entrevista transmitida en directo. El sospechoso Luis Iván Obispo Díaz fue capturado tras una persecución de unos dos kilómetros.',
       'Susy Aponte Polo era periodista y candidata al Gobierno Regional de Áncash por Socios por Áncash. Fue asesinada el 19 de septiembre de 2026, durante una actividad proselitista en las inmediaciones del mercado La Explanada, en Caraz. El ataque ocurrió mientras concedía una entrevista que se transmitía en directo. La Defensoría del Pueblo confirmó ese mismo día el asesinato y reportó inicialmente cinco personas heridas.',
       'La grabación del ataque hizo visible el crimen. La reconstrucción posterior comenzó a revelar los desplazamientos previos, las personas que acompañaron al sospechoso y las cuentas utilizadas para cubrir gastos.',
       'Una testigo, Ana Armijos Julca, declaró que estaba a pocos metros de Polo y reconoció al hombre que disparó. También resultó herida. Después del ataque, el sospechoso Luis Iván Obispo Díaz, que había recibido disparos durante su huida, intentó escapar en una mototaxi. La suboficial Kimberlly Tanta Leiva, que estaba de franco, lo observó, lo siguió y avisó a sus compañeros. Según su testimonio publicado por La República, la persecución se prolongó aproximadamente dos kilómetros antes de que otros agentes lo capturaran.',
+      '## El seguimiento y el alojamiento',
+      '?? Según la versión atribuida al detenido, el grupo siguió a la candidata por Nuevo Chimbote, Huaraz y Caraz. Las recepcionistas del alojamiento aportan un dato más concreto: cuatro personas llegaron el 16 de septiembre, se quedaron tres noches a 80 soles la noche y salieron el día del crimen.',
       'Los indicios publicados describen un seguimiento previo de la víctima. En declaraciones atribuidas a Obispo, el grupo intentó encontrar una oportunidad para atacarla en Nuevo Chimbote y siguió sus desplazamientos hacia Huaraz y Caraz. La presencia de seguridad habría frustrado intentos anteriores. También se habrían utilizado las publicaciones y transmisiones de la candidata para conocer sus movimientos. Son detalles procedentes de la versión del detenido, que necesitan contrastarse con registros y otras pruebas.',
       'Las declaraciones de las recepcionistas del alojamiento de Caraz aportan una referencia más concreta: cuatro personas llegaron el 16 de septiembre, permanecieron tres noches y salieron el día del asesinato, poco después del mediodía. El hospedaje costaba 80 soles por noche y los pagos se relacionaron con una cuenta a nombre de Ronald Toro. Estos testimonios permiten contrastar parte de la narración del detenido con personas ajenas al grupo.',
+      '## El encargo: 15.000 soles y un alias',
+      '?? La cifra de 15.000 soles es el monto que, según las declaraciones publicadas, se habría ofrecido al ejecutor; una cobertura habla de una oferta inicial de 10.000. El detenido señaló a un contacto, "José", y según su versión "Pure" o "Viejo" era quien pagaba, sin una identificación comprobable.',
       'La cifra de 15.000 soles necesita una precisión: corresponde al monto que, según las declaraciones publicadas, se habría ofrecido al ejecutor. Una cobertura de la audiencia judicial señaló que la oferta inicial habría sido de 10.000 soles y después aumentó. Eso no demuestra que se pagara íntegramente ni que fuera el presupuesto total de la operación. Traslados, alojamiento, comunicaciones y otras personas podían representar gastos adicionales.',
       'Obispo habría identificado a un hombre conocido como "José", posteriormente relacionado con Adrián Solís Ruiz, como su contacto para el encargo. En esa cadena aparece "Pure" o "Viejo": según la versión publicada, José le habría dicho que esa persona pagaba. Obispo no ofreció una identificación comprobable del supuesto contratante final. La referencia permite formular una línea de investigación; por sí sola no permite atribuir el crimen a alguien concreto.',
+      '## Los mensajes divulgados',
+      '?? La prensa difundió mensajes atribuidos a "Morocho", entre ellos "Si no la matas tú, la mato yo", y a Andrea Gonzáles Monserrate, pareja de Obispo, que reclamaba dinero. En las fuentes revisadas no hay condena ni una identificación completa de quienes aparecen en esos mensajes.',
       'Las conversaciones divulgadas por la prensa muestran, además, presiones para ejecutar el ataque. La República publicó mensajes atribuidos a "Ricardo Morocho" o "Morocho", entre ellos: "Si no la matas tú, la mato yo". La cobertura lo presenta como otro integrante del grupo y posible ejecutor alternativo. También describe comunicaciones cercanas al momento del crimen y coordinaciones posteriores. En las fuentes revisadas no encontré una confirmación fiable de su captura ni una identificación completa que permita ir más allá del nombre o alias publicado.',
       'Otra conversación difundida corresponde a Andrea Gonzáles Monserrate, identificada como pareja de Obispo. La República publicó mensajes atribuidos a ella que reclamaban dinero y preguntaban por la demora del encargo. Su aparición en esos intercambios merece investigación, pero la cobertura consultada no permite afirmar que exista una condena ni establecer por sí sola su responsabilidad penal.',
+      '## La ruta del dinero',
+      '?? Las cuentas conducen a Ronald José Toro Ardila, detenido en Lima y señalado como presunto financista o responsable logístico; su defensa sostiene que prestó la cuenta a su media hermana sin conocer el propósito. La transferencia de 200 soles y los mensajes atribuidos a Beángel Toro son material difundido por medios, pendiente de autenticación.',
       'ATV añadió un movimiento específico: una supuesta transferencia de 200 soles, el 18 de septiembre, de Beángel Toro a Andrea. Ese dato, tal como fue divulgado, puede contribuir a reconstruir relaciones y movimientos económicos. No acredita el pago completo de los 15.000 soles ni demuestra por sí mismo cuál era el conocimiento de cada receptora sobre el destino del dinero.',
       'La ruta del dinero conduce también a Ronald José Toro Ardila, detenido en Lima y señalado por la investigación como presunto financista o responsable logístico. Su defensa sostiene una versión distinta: habría permitido que su media hermana utilizara su cuenta y no habría conocido el propósito criminal de las operaciones. La República recogió su negativa a conocer al ejecutor y su explicación sobre el uso de la cuenta. La diferencia es central: identificar al titular de una cuenta permite seguir transferencias, pero todavía hay que establecer quién la operaba, quién aportaba los fondos y qué sabía cada participante.',
       'Uno de los hallazgos más recientes son las conversaciones atribuidas a Beángel Toro con sus familiares. Willax informó el 13 de octubre que, después de la detención de Ronald, ella habría reconocido que manejaba la cuenta utilizada para distintos gastos, mientras negaba haber salido de Lima. Según la publicación, compartió capturas de movimientos entre el 16 y el 19 de septiembre, incluido un pago de 80 soles por hospedaje en Caraz. La noticia también recogió la interpretación del abogado de Ronald, Eduardo Medina Almonte, favorable a su defendido.',
       'Hay una diferencia importante entre ese material y una pericia judicial concluida: la propia nota de Willax anunciaba que las conversaciones y registros serían entregados formalmente a la Fiscalía. Por ello, corresponde tratarlos como material difundido por un medio y por personas interesadas en el caso, pendiente de la valoración y autenticación que procedan. La publicación de capturas no sustituye esa comprobación.',
+      '## Un alias incompleto y el arma',
+      '?? Las versiones sobre "Gocha" no coinciden y no permiten completar su identidad. Una pericia balística relacionó la Glock 9 mm recuperada con otros cinco ataques: es una conexión balística, no prueba que hubiera un mismo ejecutor o autor intelectual.',
       'Otro nombre incompleto es "Gocha" o "Gotcha". Las versiones recogidas por la prensa no coinciden: Ronald la habría descrito como una peruana llamada Geraldine, vinculada al Callao; Obispo habló de una venezolana que vendía comida en Bayóvar. Esa discrepancia impide asegurar que ambos se refieran a la misma persona. Tampoco permite completar su identidad a partir de semejanzas de nombres o apodos.',
       'El arma abre una investigación que excede Caraz. América Noticias informó que una pericia balística relacionó la Glock de nueve milímetros recuperada en el caso con otros cinco ataques. Según esa reconstrucción, había sido robada de la vivienda de un policía en Villa El Salvador en 2023.',
       'La conexión publicada es balística: relaciona el arma con los hechos. No demuestra que todos tuvieran el mismo ejecutor o autor intelectual, ni que el propietario al que se la robaron participara en ellos.',
+      '## Amenazas previas y protección',
+      '?? Antes del crimen, Polo había pedido garantías en julio y, según se publicó, el general Víctor Revoredo la advirtió el 10 de septiembre de amenazas desde tres penales. Las autoridades dieron versiones distintas sobre qué protección existía y la Defensoría reclamó medidas urgentes.',
       'Antes del crimen, Polo había dejado advertencias. Willax difundió una solicitud de garantías de julio en la que la periodista señalaba a Juan Lázaro Calderón Altamirano, descrito como expolicía y familiar, como una persona de la que temía una agresión. El mismo medio recogió su rechazo a esas acusaciones y su afirmación de que respondían a motivaciones políticas. La existencia de la denuncia acredita que Polo expresó ese temor; no prueba que Calderón haya encargado el asesinato.',
       'También se publicó que el 10 de septiembre el general Víctor Revoredo le habría advertido sobre amenazas procedentes de tres establecimientos penitenciarios. Esa información ayuda a entender por qué su seguridad era una preocupación anterior al ataque y por qué su muerte provocó cuestionamientos sobre las medidas de protección.',
       'En este punto conviven declaraciones que parecen contradictorias, aunque se refieren a situaciones diferentes. El mando policial informó que Polo había contado con acompañamiento en Chimbote, incluso la noche del 18 de septiembre. La subprefecta de Huaylas, Sheila Herrera Pablo, sostuvo que el partido no había solicitado garantías para la actividad específica de Caraz. Una afirmación no elimina la otra: recibir protección en una ciudad y tramitar garantías para un acto en otra son hechos distintos.',
       'La Defensoría del Pueblo reclamó medidas urgentes y expresó preocupación por la falta de protección efectiva. La cuestión que sigue abierta es concreta: qué amenazas conocía cada autoridad, qué medidas se dispusieron y cómo se coordinó la protección durante los desplazamientos de la candidata.',
+      '## Hipótesis políticas y otras pistas',
+      '?? Se plantearon hipótesis políticas, un posible cambio de objetivo, una carta atribuida a "La Gringa" y una gestión para reunirse con la Fiscalía. Cada una viene con descargos o sin prueba pública que la confirme: haber sido investigado por la periodista o aparecer en una carta no prueba que alguien ordenara el crimen.',
       'Las hipótesis políticas aparecieron desde los primeros días. En la cobertura se mencionaron las denuncias y reportajes que Polo preparaba sobre autoridades locales. La República recogió referencias a Walter Soto, alcalde provincial del Santa, y a Ladislao Cruz Villachica, "Lalo Villa", alcalde de Nuevo Chimbote. También publicó sus descargos: Soto rechazó que Calderón fuera su asesor o amigo, y Cruz Villachica negó relación con el asesinato. Que una autoridad fuera objeto de una investigación periodística no establece su participación en el crimen.',
       'Una versión adicional surgió de un audio difundido por Beto a Saber y recogido por Expreso: el objetivo inicial habría sido Brenda Campos, una fiscalizadora ciudadana, y posteriormente el grupo habría dirigido el ataque contra Polo. Campos habló de denuncias por presuntas irregularidades municipales y de sus solicitudes de protección. El elemento central de esa historia, sin embargo, era una grabación atribuida a una fuente anónima. No encontré una resolución fiscal o judicial pública que confirme ese supuesto cambio de objetivo.',
       'En medio de esos señalamientos, Rosa Bartra, abogada de Walter Soto, rechazó en una entrevista con Exitosa que su patrocinado tuviera vinculación con el asesinato. Ese descargo debe acompañar la acusación: el audio difundido no permite presentar al alcalde como autor intelectual probado.',
@@ -294,14 +322,20 @@ export const INITIAL_LEAKS_ARTICLES: LeakArticle[] = [
       'ATV relacionó además el ataque al bus de Estrellas de la Cumbia con la denuncia de la agrupación sobre extorsiones de La Jauría Nueva Generación. Son conexiones que justifican contrastar documentos, comunicaciones y testimonios. La carta, la llamada y la coincidencia del arma no acreditan por sí solas que La Rosa, Arriola o esa organización ordenaran matar a Polo. Tampoco he autenticado independientemente la carta ni la condición que su autora afirmaba tener.',
       'Existe otro episodio relevante en los días previos al crimen. Según una reconstrucción de Día D, recogida por Áncash Noticias, Polo había coordinado encontrarse con Luis Miguel Llanos el domingo 20 de septiembre para explorar una futura reunión con la Fiscalía de la Nación y compartir información que consideraba importante. Conviene conservar la distinción: la noticia describe una gestión para conseguir una reunión, no una cita oficial ya confirmada con el fiscal de la Nación. Tampoco demuestra que ese material fuera el móvil del asesinato.',
       'El cambio de puesto de Víctor Revoredo, conocido poco después del ataque, alimentó más sospechas. El ministro del Interior, César Astudillo, negó relación entre el relevo y el crimen y sostuvo que los cambios habían sido preparados antes. La proximidad temporal explica las preguntas públicas, pero no prueba una maniobra para facilitar el asesinato o encubrirlo.',
+      '## Las muertes que se han mezclado',
+      '?? Hay varias muertes distintas que conviene no confundir: Beángel Toro murió en un accidente en Venezuela junto con su hija (la hipótesis de que fue silenciada no tiene prueba pública), Adrián Solís sobrevivió, Olimpia Pachas falleció tras ser herida en el ataque de Caraz y Edwin Cotrina fue asesinado en marzo de 2025, antes del crimen.',
       'La muerte en Venezuela corresponde a Beángel Alexandra Toro, identificada también en distintas noticias como Alexandra Toro Montezuma. Era media hermana de Ronald y pareja de Adrián Solís. La investigación la situaba entre las personas que acompañaron al grupo y le atribuía funciones de apoyo. RPP informó que murió en un accidente de tránsito en el estado Portuguesa, junto con su hija menor, y que el fallecimiento fue comunicado durante una audiencia del caso.',
       'La fecha que recogen RPP y otras reconstrucciones posteriores es el 30 de septiembre. También existen diferencias entre publicaciones sobre la escritura de su nombre y la edad de la niña. Esas inconsistencias aconsejan evitar precisiones que las fuentes no sostienen de manera uniforme. La menor fue una víctima del accidente; no una integrante de la organización investigada.',
       'La muerte de una persona que podía aportar información sobre los contactos del grupo originó la sospecha de que hubiera sido silenciada. Panamericana informó que el juez Miguel Ángel Dueñas planteó que esa posibilidad debía esclarecerse. Se trata de una hipótesis, no de una conclusión pericial. En las fuentes revisadas no aparece una prueba pública de sabotaje del vehículo o de un homicidio encubierto como accidente.',
       'Adrián Solís viajaba con ella y sobrevivió. La República informó que recibió atención hospitalaria y después abandonó el establecimiento mientras era buscado. Su posterior captura permite corregir la versión de que ambos integrantes de la pareja habrían muerto.',
       'Hay otra muerte que pertenece a una historia diferente: Olimpia Pachas Osorio, de 72 años, herida durante el ataque en Caraz, falleció posteriormente en un hospital de Huaraz. RPP informó el deceso el 30 de septiembre. Era una víctima de la balacera, no una sospechosa. Su muerte amplía las consecuencias humanas del ataque más allá de la periodista.',
       'También aparece Edwin Iván Cotrina Quijano, "Cojo Giordano" o "Cojo Jordano". Según la advertencia de Polo difundida por Willax, él le habría hablado de una amenaza contra su vida. Pero Cotrina fue asesinado en marzo de 2025, mucho antes del crimen de Caraz. Su muerte no debe incorporarse a una supuesta secuencia de cómplices eliminados después del asesinato de la periodista. La relación que se publica procede del relato de Polo sobre una advertencia anterior.',
+      '## Registros y antecedentes',
+      '?? Sinadef registró la muerte de Polo como "no se conoce/ignorado" en la consulta de septiembre: es relevante para la calidad de las estadísticas, pero no prueba por sí solo un encubrimiento. Polo también afrontaba acusaciones en el caso "Los Elegantes de Áncash", que no equivalen a una condena ni explican el crimen.',
       'Entre los detalles menos comentados aparece el registro de la muerte en Sinadef. La República informó que, en la consulta examinada en septiembre, el tipo de muerte figuraba como "no se conoce/ignorado", pese a que el asesinato era investigado penalmente. La observación resulta relevante para la calidad de las estadísticas, pero no demuestra por sí sola un encubrimiento. Además, describe una consulta de ese momento: no he verificado que el registro continúe igual actualmente.',
       'La cobertura también recordó que Polo afrontaba acusaciones en el caso conocido como "Los Elegantes de Áncash", relacionado con presuntas irregularidades en licencias de conducir. Se difundió un pedido fiscal de pena y ella había rechazado las imputaciones. Ese antecedente forma parte de su trayectoria pública, pero no equivale a una condena ni establece el motivo de su asesinato. Las fuentes consultadas no permiten unir ambos casos como una relación probada.',
+      '## Lo que falta para llegar al contratante',
+      '?? La captura de un presunto coordinador puede acercar respuestas, pero identificar a quien ordenó el crimen exige demostrar la conexión entre el encargo, el dinero y quienes tomaron las decisiones. Los nombres de denuncias previas, los contactos políticos o una conversación difundida no sustituyen esa prueba.',
       'La captura de un presunto coordinador puede acercar esas respuestas. Pero para identificar a quien ordenó matar a China Polo hace falta demostrar la conexión entre el encargo, el dinero y las personas que tomaron las decisiones. Los nombres mencionados en denuncias previas, los contactos políticos o una conversación difundida no sustituyen esa prueba.'
     ]
   },
@@ -323,6 +357,7 @@ export const INITIAL_LEAKS_ARTICLES: LeakArticle[] = [
     authorTelegram: 'Tin9o',
     imageUrl: '/imagenes/caso-keiko/keiko-cocteles-dossier.webp',
     dossierCode: 'DOSSIER-KF-COCTELES-2026-002',
+    statusLabel: 'Caso archivado · sin condena',
     classificationNotice: 'Reconstrucción a partir de resoluciones judiciales, documentos de la Superintendencia del Mercado de Valores y reportajes con fuente. Una acusación no es una condena y rige la presunción de inocencia. No se incluyen datos personales de ciudadanos particulares.',
     summary: 'El caso Cócteles investigó si las campañas presidenciales de Keiko Fujimori de 2011 y 2016 ocultaron el origen de aportes millonarios mediante aportantes ficticios y actividades de recaudación. La Fiscalía atribuyó más de US$17,3 millones. Hubo aportes reconocidos por empresas y denuncias de presión sobre testigos, pero el caso terminó archivado en 2026 por una sentencia del Tribunal Constitucional, sin condena y sin prueba pública de asesinatos ni de coimas por obras.',
     affectedScope: 'Financiamiento electoral 2011 y 2016, Fuerza Popular, empresas aportantes y Ministerio Público',
@@ -584,7 +619,7 @@ export const INITIAL_LEAKS_ARTICLES: LeakArticle[] = [
     author: 'Tin9o (@Tin9o)',
     authorRole: 'Especialista en Inteligencia OSINT & Brechas',
     authorTelegram: 'Tin9o',
-    imageUrl: '/imagenes/banner-filtraciones.png',
+    imageUrl: '/imagenes/banner-filtraciones.webp',
     summary: 'Protocolo inmediato y exhaustivo de respuesta ante incidentes de exfiltración de bases de datos masivas: verificación de integridad, contención de credenciales y auditoría de accesos no autorizados.',
     affectedScope: 'Bases de datos SQL/NoSQL & credenciales expuestas',
     compromisedData: [
@@ -616,7 +651,7 @@ export const INITIAL_LEAKS_ARTICLES: LeakArticle[] = [
     author: 'Redacción DP',
     authorRole: 'Ciberseguridad & Prevención',
     authorTelegram: 'DESCUENTOSPER2',
-    imageUrl: '/imagenes/banner-phishing.png',
+    imageUrl: '/imagenes/banner-phishing.webp',
     summary: 'Identifica las tácticas de alarmismo psicológico y phishing con supuestas alertas rojas que buscan forzar clics desesperados o la descarga de troyanos.',
     affectedScope: 'Navegación web y notificaciones push fraudulentas',
     compromisedData: [
@@ -646,7 +681,7 @@ export const INITIAL_LEAKS_ARTICLES: LeakArticle[] = [
     author: 'Tin9o (@Tin9o)',
     authorRole: 'Especialista en Inteligencia OSINT & Brechas',
     authorTelegram: 'Tin9o',
-    imageUrl: '/imagenes/card-investigacion.png',
+    imageUrl: '/imagenes/card-investigacion.webp',
     summary: 'Aprende a interpretar hashes criptográficos, metadatos de exfiltración, volcados SQL y campos comprometidos para medir el verdadero alcance de una filtración.',
     affectedScope: 'Auditoría y análisis técnico de volcados de datos',
     compromisedData: [
@@ -739,7 +774,7 @@ export const INITIAL_LEAKS_ARTICLES: LeakArticle[] = [
     author: 'Redacción DP',
     authorRole: 'Especialista Anti-Phishing',
     authorTelegram: 'DESCUENTOSPER2',
-    imageUrl: '/imagenes/banner-escudo.png',
+    imageUrl: '/imagenes/banner-escudo.webp',
     summary: 'Encabezados fraudulentos, spoofing de dominios bancarios y lenguaje de coacción psicológica: radiografía de una campaña de phishing moderna.',
     affectedScope: 'Bandejas de correo corporativo y personal',
     compromisedData: [
@@ -770,7 +805,7 @@ export const INITIAL_LEAKS_ARTICLES: LeakArticle[] = [
     author: 'Tin9o (@Tin9o)',
     authorRole: 'Protección & Privacidad OSINT',
     authorTelegram: 'Tin9o',
-    imageUrl: '/imagenes/llama-investigacion.png',
+    imageUrl: '/imagenes/llama-investigacion.webp',
     summary: 'Pasos para auditar tu huella digital, eliminar perfiles olvidados y reducir las probabilidades de suplantación de identidad en línea.',
     affectedScope: 'Huella digital y privacidad personal',
     compromisedData: [
@@ -789,13 +824,13 @@ export const INITIAL_LEAKS_ARTICLES: LeakArticle[] = [
   }
 ];
 
-export const LEAKS_ARTICLES_STORAGE_KEY = 'dp_leaks_articles_v7';
+export const LEAKS_ARTICLES_STORAGE_KEY = 'dp_leaks_articles_v8';
 
 export function getStoredLeakArticles(): LeakArticle[] {
   try {
     // Purge old stale caches so updated media and URLs immediately propagate
     if (typeof window !== 'undefined' && window.localStorage) {
-      ['dp_leaks_articles', 'dp_leaks_articles_v2', 'dp_leaks_articles_v3', 'dp_leaks_articles_v4', 'dp_leaks_articles_v5', 'dp_leaks_articles_v6'].forEach(k => {
+      ['dp_leaks_articles', 'dp_leaks_articles_v2', 'dp_leaks_articles_v3', 'dp_leaks_articles_v4', 'dp_leaks_articles_v5', 'dp_leaks_articles_v6', 'dp_leaks_articles_v7'].forEach(k => {
         try { localStorage.removeItem(k); } catch {}
       });
     }

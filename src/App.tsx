@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect, lazy, Suspense } from 'react';
+import React, { useState, useMemo, useEffect, useRef, lazy, Suspense } from 'react';
 import { Navbar } from './components/Navbar';
 import { Hero } from './components/Hero';
 import { ServiceCard } from './components/ServiceCard';
@@ -28,8 +28,11 @@ import {
   recordProductViewEvent
 } from './data/telemetryData';
 import { useLeakArticles } from './hooks/useLeakArticles';
+import { CONTENT_DB_ENABLED } from './lib/contentEnv';
+import { enqueueSave, friendlyError, setRemoteStatus } from './lib/remoteStatus';
 import { isPanelHash, PANEL_HASH } from './lib/panelRoute';
 import { AdminReturnButton } from './components/AdminReturnButton';
+import { useAuthRequest } from './lib/accountStore';
 import {
   fetchProductsApi,
   fetchVendorsApi
@@ -50,12 +53,19 @@ import {
 // Carga bajo demanda: el visitante de la portada no descarga el panel admin, leaks, etc.
 const ServiceDetailModal = lazy(() => import('./components/ServiceDetailModal').then((m) => ({ default: m.ServiceDetailModal })));
 const AdminPortal = lazy(() => import('./pages/AdminPortal').then((m) => ({ default: m.AdminPortal })));
+const AuthModal = lazy(() => import('./components/AuthModal'));
 const ServicesPage = lazy(() => import('./pages/ServicesPage').then((m) => ({ default: m.ServicesPage })));
 const AboutPage = lazy(() => import('./pages/AboutPage').then((m) => ({ default: m.AboutPage })));
 const FigureProfilePage = lazy(() => import('./pages/FigureProfilePage').then((m) => ({ default: m.FigureProfilePage })));
 const VendorCatalogPage = lazy(() => import('./pages/VendorCatalogPage').then((m) => ({ default: m.VendorCatalogPage })));
 const ContactPage = lazy(() => import('./pages/ContactPage').then((m) => ({ default: m.ContactPage })));
+const PrivacyPage = lazy(() => import('./pages/PrivacyPage').then((m) => ({ default: m.PrivacyPage })));
 const LeaksTab = lazy(() => import('./components/LeaksTab').then((m) => ({ default: m.LeaksTab })));
+
+// Dirección corta para Google y los buscadores: https://<web>/privacidad abre la política (#/privacidad).
+if (typeof window !== 'undefined' && /^\/privacidad\/?$/i.test(window.location.pathname)) {
+  window.history.replaceState(null, '', '/#/privacidad');
+}
 
 // Catálogo por vendedor: #/tienda/<username>. Se evalúa antes que el resto de rutas.
 const readVendorSlug = (): string | null => {
@@ -71,8 +81,19 @@ const readFigureId = (): string | null => {
   return m ? decodeURIComponent(m[1]) : null;
 };
 
-const PageFallback =() => <div className="min-h-[60vh]" aria-busy="true" />;
+// Alto de pantalla completa: mientras carga, el pie de página queda fuera de la vista y no "salta" al llegar el contenido.
+const PageFallback = () => <div className="min-h-screen" aria-busy="true" />;
 
+/** Formulario de cuenta (ingresar, crear cuenta, "Mi cuenta"): se descarga solo cuando alguien lo abre. */
+function AuthHost() {
+  const request = useAuthRequest();
+  if (!request) return null;
+  return (
+    <Suspense fallback={null}>
+      <AuthModal request={request} />
+    </Suspense>
+  );
+}
 export default function App() {
   // Navigation tabs: 'inicio' | 'servicios' | 'leaks' | 'nosotros' | 'contacto'
   const [vendorSlug, setVendorSlug] = useState<string | null>(readVendorSlug);
@@ -86,6 +107,7 @@ export default function App() {
       if (hash.includes('servicios') || hash.includes('catalogo')) return 'servicios';
       if (hash.includes('nosotros') || hash.includes('about')) return 'nosotros';
       if (hash.includes('contacto') || hash.includes('contact')) return 'contacto';
+      if (hash.includes('privacidad')) return 'privacidad';
     }
     return 'inicio';
   });
@@ -105,8 +127,37 @@ export default function App() {
     }
   }, []);
 
+  // Con base de datos de contenido: el catálogo, los vendedores y los pagos se leen de Supabase.
+  // "ready" = la base ya tiene datos; solo entonces se permite guardar cambios desde el panel
+  // (evita que un guardado parcial deje la base con la mitad del catálogo).
+  const remoteReady = useRef({ products: false, vendors: false, payments: false });
+
   // Hydrate catalog and vendors from backend API
   useEffect(() => {
+    if (CONTENT_DB_ENABLED) {
+      import('./lib/leaksDb').then(async (m) => {
+        const [p, v, pm] = await Promise.all([m.fetchProductsFromDb(), m.fetchVendorsFromDb(), m.fetchPaymentMethodsFromDb()]);
+        if (p) {
+          remoteReady.current.products = true;
+          servicesRef.current = p;
+          setServices(p);
+          saveStoredServices(p);
+        }
+        if (v) {
+          remoteReady.current.vendors = true;
+          vendorsRef.current = v;
+          setVendors(v);
+          saveStoredVendors(v);
+        }
+        if (pm) {
+          remoteReady.current.payments = true;
+          paymentsRef.current = pm;
+          setPaymentMethods(pm);
+          saveStoredPaymentMethods(pm);
+        }
+      });
+      return;
+    }
     fetchProductsApi().then((serverServices) => {
       if (serverServices && serverServices.length > 0) {
         setServices(serverServices);
@@ -131,19 +182,86 @@ export default function App() {
   // Payment methods state (persisted in localStorage)
   const [paymentMethods, setPaymentMethods] = useState<PaymentMethodItem[]>(getStoredPaymentMethods);
 
+  // Últimos valores confirmados (para calcular qué cambió al guardar)
+  const vendorsRef = useRef<Vendor[]>(vendors);
+  const servicesRef = useRef<ServiceItem[]>(services);
+  const paymentsRef = useRef<PaymentMethodItem[]>(paymentMethods);
+
+  // Guarda en la base solo lo que cambió. Si falla, la pantalla ya muestra el cambio pero el panel avisa del error.
+  const saveRemote = <T,>(
+    kind: 'products' | 'vendors' | 'payments',
+    label: string,
+    task: () => Promise<T>,
+    onDone: (result: T) => void
+  ) => {
+    if (!remoteReady.current[kind]) {
+      setRemoteStatus({
+        state: 'error',
+        message: `La base de datos aún no tiene ${label}. Ejecuta los pasos 3 y 4 de supabase/LEEME.md antes de editar desde el panel.`
+      });
+      return;
+    }
+    setRemoteStatus({ state: 'saving', message: `Guardando ${label}…` });
+    enqueueSave(task)
+      .then((result) => {
+        onDone(result);
+        setRemoteStatus({ state: 'saved', message: `Cambios guardados en la base de datos (${label}).` });
+      })
+      .catch((e) => setRemoteStatus({ state: 'error', message: friendlyError(e) }));
+  };
+
   const handleUpdateVendors = (updatedVendors: Vendor[]) => {
+    const prev = vendorsRef.current;
+    vendorsRef.current = updatedVendors;
     setVendors(updatedVendors);
     saveStoredVendors(updatedVendors);
+    if (!CONTENT_DB_ENABLED) return;
+    saveRemote(
+      'vendors',
+      'vendedores',
+      async () => (await import('./lib/supabaseBrowser')).syncVendors(prev, updatedVendors),
+      (normalized) => {
+        vendorsRef.current = normalized;
+        setVendors(normalized);
+        saveStoredVendors(normalized);
+      }
+    );
   };
 
   const handleUpdateServices = (updatedServices: ServiceItem[]) => {
+    const prev = servicesRef.current;
+    servicesRef.current = updatedServices;
     setServices(updatedServices);
     saveStoredServices(updatedServices);
+    if (!CONTENT_DB_ENABLED) return;
+    saveRemote(
+      'products',
+      'productos',
+      async () => (await import('./lib/supabaseBrowser')).syncProducts(prev, updatedServices, 'admin'),
+      (normalized) => {
+        servicesRef.current = normalized;
+        setServices(normalized);
+        saveStoredServices(normalized);
+      }
+    );
   };
 
   const handleUpdatePaymentMethods = (updatedMethods: PaymentMethodItem[]) => {
+    const prev = paymentsRef.current;
+    paymentsRef.current = updatedMethods;
     setPaymentMethods(updatedMethods);
     saveStoredPaymentMethods(updatedMethods);
+    if (!CONTENT_DB_ENABLED) return;
+    saveRemote(
+      'payments',
+      'métodos de pago',
+      async () => (await import('./lib/supabaseBrowser')).syncPaymentMethods(prev, updatedMethods),
+      (normalized) => {
+        paymentsRef.current = normalized;
+        setPaymentMethods(normalized);
+        saveStoredPaymentMethods(normalized);
+      }
+    );
   };
 
   // Custom images state (persisted in localStorage)
@@ -181,12 +299,47 @@ export default function App() {
   });
 
   // Artículos de Leaks: se descargan solo al abrir Leaks o el panel (no pesan en el inicio)
-  const { articles: leakArticles, update: handleUpdateLeakArticles } = useLeakArticles(
+  const {
+    articles: leakArticles,
+    update: handleUpdateLeakArticles,
+    replace: replaceLeakArticles
+  } = useLeakArticles(
     activeNavTab === 'leaks' || currentView === 'portal'
   );
   useEffect(() => {
     if (activeNavTab === 'leaks') void import('./components/LeaksTab');
   }, [activeNavTab]);
+
+  // Al iniciar sesión en el panel se recarga el contenido con la cuenta del staff:
+  // así se ven también los productos ocultos y (admin) los leaks en borrador.
+  const handleStaffSession = async () => {
+    if (!CONTENT_DB_ENABLED) return;
+    try {
+      const m = await import('./lib/supabaseBrowser');
+      const c = await m.readStaffContent();
+      if (c.products) {
+        remoteReady.current.products = true;
+        servicesRef.current = c.products;
+        setServices(c.products);
+        saveStoredServices(c.products);
+      }
+      if (c.vendors) {
+        remoteReady.current.vendors = true;
+        vendorsRef.current = c.vendors;
+        setVendors(c.vendors);
+        saveStoredVendors(c.vendors);
+      }
+      if (c.payments) {
+        remoteReady.current.payments = true;
+        paymentsRef.current = c.payments;
+        setPaymentMethods(c.payments);
+        saveStoredPaymentMethods(c.payments);
+      }
+      if (c.leaks) replaceLeakArticles(c.leaks);
+    } catch (e) {
+      console.warn('No se pudo cargar el contenido del panel', e);
+    }
+  };
 
   // Sync state with browser hash navigation (#/portal, #/servicios, #/leaks, #/nosotros, #/contacto)
   useEffect(() => {
@@ -220,6 +373,8 @@ export default function App() {
           setActiveNavTab('nosotros');
         } else if (hash.includes('contacto') || hash.includes('contact')) {
           setActiveNavTab('contacto');
+        } else if (hash.includes('privacidad')) {
+          setActiveNavTab('privacidad');
         } else {
           setActiveNavTab('inicio');
         }
@@ -277,6 +432,7 @@ export default function App() {
         onUpdatePaymentMethods={handleUpdatePaymentMethods}
         leakArticles={leakArticles ?? []}
         onUpdateLeakArticles={handleUpdateLeakArticles}
+        onStaffSession={handleStaffSession}
       />
       </Suspense>
     );
@@ -303,7 +459,7 @@ export default function App() {
               customImages={customImages}
               onImageUpload={handleImageUpload}
               onOpenDetails={(s) => {
-                recordProductViewEvent(s.id, s.title);
+                recordProductViewEvent(s.id, s.title, s.vendorId);
                 setSelectedService(s);
               }}
               paymentMethods={paymentMethods}
@@ -329,7 +485,7 @@ export default function App() {
               customImages={customImages}
               onImageUpload={handleImageUpload}
               onOpenDetails={(s) => {
-                recordProductViewEvent(s.id, s.title);
+                recordProductViewEvent(s.id, s.title, s.vendorId);
                 setSelectedService(s);
               }}
               paymentMethods={paymentMethods}
@@ -368,6 +524,13 @@ export default function App() {
         {activeNavTab === 'contacto' && (
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 pb-16">
             <ContactPage vendors={vendors} />
+          </div>
+        )}
+
+        {/* ======================= PAGE: POLÍTICA DE PRIVACIDAD ======================= */}
+        {activeNavTab === 'privacidad' && (
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 pb-16">
+            <PrivacyPage onNavigateToContact={() => handleTabChange('contacto')} />
           </div>
         )}
 
@@ -547,7 +710,7 @@ export default function App() {
                     customImage={customImages[service.id]}
                     onImageUpload={handleImageUpload}
                     onOpenDetails={(s) => {
-                      recordProductViewEvent(s.id, s.title);
+                      recordProductViewEvent(s.id, s.title, s.vendorId);
                       setSelectedService(s);
                     }}
                     vendors={vendors}
@@ -596,6 +759,8 @@ export default function App() {
         vendors={vendors}
         paymentMethods={paymentMethods}
       /></Suspense>)}
+
+      <AuthHost />
 
       {/* Global Floating Creators Dock */}
       <FloatingVendorsDock />

@@ -2,6 +2,7 @@ import React from 'react';
 import { Send, Menu, X, Shield, Clock, ShieldAlert } from 'lucide-react';
 import { TELEGRAM_URL } from '../data/servicesData';
 import { useLeakCountdown } from '../hooks/useLeakCountdown';
+import { AccountButton } from './AccountButton';
 
 interface NavbarProps {
   activeTab: string;
@@ -163,6 +164,9 @@ export const Navbar: React.FC<NavbarProps> = ({
 
         {/* Right Action Buttons */}
         <div className="flex items-center gap-2.5 sm:gap-3 shrink-0">
+          {/* Cuenta: ingresar / crear cuenta / mi cuenta (solo con base de datos conectada) */}
+          <AccountButton />
+
           {/* Telegram CTA Button */}
           <a
             href={TELEGRAM_URL}

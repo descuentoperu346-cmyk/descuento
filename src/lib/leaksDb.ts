@@ -1,75 +1,82 @@
 import type { LeakArticle } from '../data/leaksData';
+import type { ServiceItem } from '../data/servicesData';
+import type { Vendor } from '../data/vendorsData';
+import type { PaymentMethodItem } from '../data/paymentsData';
+import { CONTENT_DB_ENABLED, CONTENT_URL, publicHeaders } from './contentEnv';
 
 /**
- * Lectura de los leaks desde Supabase (solo lectura, con la clave PÚBLICA).
- * Variables (se escriben en .env y en Vercel > Settings > Environment Variables):
- *   VITE_LEAKS_SUPABASE_URL        https://<proyecto>.supabase.co
- *   VITE_LEAKS_SUPABASE_ANON_KEY   la clave "anon" o "publishable" (NUNCA la service_role / secret)
- * Lo que decide qué se ve es la política de seguridad de la base (RLS): solo filas publicadas.
+ * Lectura del contenido (leaks, catálogo, vendedores, métodos de pago) desde Supabase.
+ * Aquí se lee con la clave PÚBLICA: lo que se ve lo decide la seguridad de la base (RLS).
+ * Si algo falla devuelve null y la web usa la copia incluida en el código.
  */
-const URL_BASE = ((import.meta.env.VITE_LEAKS_SUPABASE_URL as string | undefined) || '').trim().replace(/\/+$/, '');
-const KEY = ((import.meta.env.VITE_LEAKS_SUPABASE_ANON_KEY as string | undefined) || '').trim();
-
-export const LEAKS_DB_ENABLED = Boolean(URL_BASE && KEY);
-
-/** Seguro anti-error: una clave de administrador nunca debe viajar al navegador. */
-function isForbiddenKey(key: string): boolean {
-  if (key.startsWith('sb_secret_')) return true;
-  const parts = key.split('.');
-  if (parts.length !== 3) return false;
-  try {
-    const payload = JSON.parse(atob(parts[1].replace(/-/g, '+').replace(/_/g, '/')));
-    return payload?.role === 'service_role';
-  } catch {
-    return false;
-  }
-}
-
-interface LeakRow {
+export interface Row<T> {
   id: string;
-  data: LeakArticle;
+  active?: boolean;
+  data: T;
 }
 
+// ---- Conversión de filas de la base a los objetos que usa la web (compartido con el panel)
 const looksLikeArticle = (a: unknown): a is LeakArticle => {
   const x = a as LeakArticle;
   return !!x && typeof x.title === 'string' && typeof x.slug === 'string' && Array.isArray(x.content);
 };
 
-let cached: Promise<LeakArticle[] | null> | null = null;
+export const mapLeaks = (rows: Row<LeakArticle>[] | null): LeakArticle[] | null => {
+  const list = (rows || []).filter((r) => looksLikeArticle(r?.data)).map((r) => ({ ...r.data, id: r.id }));
+  return list.length > 0 ? list : null;
+};
 
-/**
- * Devuelve los leaks publicados (ya ordenados), o null si no se pudo leer
- * (en ese caso la web usa la copia incluida en el código).
- */
-export function fetchLeaksFromDb(): Promise<LeakArticle[] | null> {
-  if (!LEAKS_DB_ENABLED) return Promise.resolve(null);
-  if (cached) return cached;
+export const mapProducts = (rows: Row<ServiceItem>[] | null): ServiceItem[] | null => {
+  const list = (rows || [])
+    .filter((r) => r?.data && typeof r.data.title === 'string')
+    .map((r) => ({ ...r.data, id: r.id, active: r.active !== false }));
+  return list.length > 0 ? list : null;
+};
 
-  cached = (async () => {
-    if (isForbiddenKey(KEY)) {
-      console.error('[leaks] La clave configurada es de administrador. No se usa: pon la clave pública (anon/publishable).');
-      return null;
-    }
-    try {
-      const headers: Record<string, string> = { apikey: KEY, Accept: 'application/json' };
-      // Las claves "publishable" nuevas no son JWT: solo se envían como apikey.
-      if (KEY.startsWith('eyJ')) headers.Authorization = `Bearer ${KEY}`;
+export const mapVendors = (rows: Row<Vendor>[] | null): Vendor[] | null => {
+  const list = (rows || [])
+    .filter((r) => r?.data && typeof r.data.name === 'string')
+    .map((r) => ({ ...r.data, id: r.id, active: r.active !== false, pin: '' }));
+  return list.length > 0 ? list : null;
+};
 
-      const qs = new URLSearchParams({ select: 'id,data', order: 'sort_order.asc' });
-      const res = await fetch(`${URL_BASE}/rest/v1/leaks?${qs.toString()}`, { headers });
-      if (!res.ok) return null;
-      const rows = (await res.json()) as LeakRow[];
-      if (!Array.isArray(rows)) return null;
-      const articles = rows.filter((r) => looksLikeArticle(r?.data)).map((r) => ({ ...r.data, id: r.id }));
-      return articles.length > 0 ? articles : null;
-    } catch {
-      return null;
-    }
-  })();
+export const mapPaymentMethods = (rows: Row<PaymentMethodItem>[] | null): PaymentMethodItem[] | null => {
+  const list = (rows || [])
+    .filter((r) => r?.data && typeof r.data.name === 'string')
+    .map((r) => ({ ...r.data, id: r.id, active: r.active !== false }));
+  return list.length > 0 ? list : null;
+};
 
-  // Si falló, permite reintentar en la próxima visita a Leaks
-  cached.then((r) => {
-    if (r === null) cached = null;
-  });
-  return cached;
+// ---- Lectura pública
+async function readRows<T>(table: string, select = 'id,active,data'): Promise<Row<T>[] | null> {
+  if (!CONTENT_DB_ENABLED) return null;
+  try {
+    const qs = new URLSearchParams({ select, order: 'sort_order.asc' });
+    const res = await fetch(`${CONTENT_URL}/rest/v1/${table}?${qs.toString()}`, { headers: publicHeaders() });
+    if (!res.ok) return null;
+    const rows = (await res.json()) as Row<T>[];
+    return Array.isArray(rows) ? rows : null;
+  } catch {
+    return null;
+  }
 }
+
+const once = <T>(fn: () => Promise<T | null>) => {
+  let p: Promise<T | null> | null = null;
+  return () => {
+    if (!p) {
+      p = fn();
+      p.then((r) => {
+        if (r === null) p = null; // si falló, permite reintentar
+      });
+    }
+    return p;
+  };
+};
+
+export const fetchLeaksFromDb = once<LeakArticle[]>(async () => mapLeaks(await readRows<LeakArticle>('leaks', 'id,data')));
+export const fetchProductsFromDb = once<ServiceItem[]>(async () => mapProducts(await readRows<ServiceItem>('products')));
+export const fetchVendorsFromDb = once<Vendor[]>(async () => mapVendors(await readRows<Vendor>('vendors')));
+export const fetchPaymentMethodsFromDb = once<PaymentMethodItem[]>(async () =>
+  mapPaymentMethods(await readRows<PaymentMethodItem>('payment_methods'))
+);

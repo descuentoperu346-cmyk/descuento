@@ -5,10 +5,13 @@ interface PanelLoginProps {
   /** Devuelve el mensaje de error, o null si el acceso fue correcto. */
   onLogin: (username: string, pin: string) => Promise<string | null>;
   onBackToStore: () => void;
+  /** 'supabase': usuario (p. ej. @Tin9o) o correo + contraseña de la cuenta del panel. 'server': usuario + clave del servidor propio. */
+  mode?: 'supabase' | 'server';
 }
 
 /** Acceso al panel: usuario + clave contra el servidor. No lista usuarios ni da pistas. */
-export const PanelLogin: React.FC<PanelLoginProps> = ({ onLogin, onBackToStore }) => {
+export const PanelLogin: React.FC<PanelLoginProps> = ({ onLogin, onBackToStore, mode = 'server' }) => {
+  const byEmail = mode === 'supabase';
   const [username, setUsername] = useState('');
   const [pin, setPin] = useState('');
   const [showPin, setShowPin] = useState(false);
@@ -19,7 +22,7 @@ export const PanelLogin: React.FC<PanelLoginProps> = ({ onLogin, onBackToStore }
     e.preventDefault();
     if (busy) return;
     if (!username.trim() || !pin) {
-      setError('Escribe tu usuario y tu clave.');
+      setError(byEmail ? 'Escribe tu usuario y tu contraseña.' : 'Escribe tu usuario y tu clave.');
       return;
     }
     setBusy(true);
@@ -61,7 +64,7 @@ export const PanelLogin: React.FC<PanelLoginProps> = ({ onLogin, onBackToStore }
         <form onSubmit={submit} className="mt-7 space-y-4" noValidate>
           <div>
             <label htmlFor="panel-user" className="mb-1.5 block font-mono text-[11px] font-bold uppercase tracking-wider text-slate-400">
-              Usuario
+              {byEmail ? 'Usuario o correo' : 'Usuario'}
             </label>
             <input
               id="panel-user"
@@ -79,7 +82,7 @@ export const PanelLogin: React.FC<PanelLoginProps> = ({ onLogin, onBackToStore }
 
           <div>
             <label htmlFor="panel-pin" className="mb-1.5 block font-mono text-[11px] font-bold uppercase tracking-wider text-slate-400">
-              Clave
+              {byEmail ? 'Contraseña' : 'Clave'}
             </label>
             <div className="relative">
               <input

@@ -21,7 +21,7 @@ interface ArticleBodyProps {
   aiNote?: string;
 }
 
-interface Section {
+export interface Section {
   id: string;
   title: string;
   /** Resumen de una o dos frases (línea "?? "). Sin resumen, la sección va siempre abierta. */
@@ -52,7 +52,7 @@ const splitLabel = (text: string): [string, string] | null => {
 
 const isMoney = (value: string) => /^((US\$|S\/)\s?[\d.,]+|[\d.,]+\.?$)/.test(value) && value.length <= 110;
 
-const buildSections = (blocks: string[]): Section[] => {
+export const buildSections = (blocks: string[]): Section[] => {
   const sections: Section[] = [];
   let current: Section | null = null;
   blocks.forEach((b) => {
@@ -273,10 +273,10 @@ export const ArticleBody: React.FC<ArticleBodyProps> = ({ blocks, stats, section
       {/* Lo esencial: siempre visible */}
       {essential.map((s) => (
         <section key={s.id} id={s.id} className="scroll-mt-24 space-y-5">
-          <h3 className="flex items-baseline gap-3 border-b border-zinc-800 pb-3 font-serif text-2xl font-black tracking-tight text-white sm:text-[28px]">
+          <h2 className="flex items-baseline gap-3 border-b border-zinc-800 pb-3 font-serif text-2xl font-black tracking-tight text-white sm:text-[28px]">
             <span className="font-mono text-sm font-bold text-rose-400">{minutes(s.words)} min</span>
             <span>{s.title}</span>
-          </h3>
+          </h2>
           {renderBlocks(s.blocks, 'cards')}
         </section>
       ))}
@@ -285,7 +285,7 @@ export const ArticleBody: React.FC<ArticleBodyProps> = ({ blocks, stats, section
         <div className="space-y-5">
           <div className="flex flex-col gap-3 border-b border-zinc-800 pb-4 sm:flex-row sm:items-end sm:justify-between">
             <div>
-              <p className="font-mono text-[11px] uppercase tracking-widest text-rose-400">El expediente por capítulos</p>
+              <h2 className="font-mono text-[11px] font-normal uppercase tracking-widest text-rose-400">El expediente por capítulos</h2>
               <p className="mt-1 max-w-md text-sm leading-snug text-zinc-400">
                 Cada capítulo empieza con su idea central. Abre solo los que te interesen.
               </p>
@@ -315,7 +315,7 @@ export const ArticleBody: React.FC<ArticleBodyProps> = ({ blocks, stats, section
                         <span className="mx-2 text-zinc-700">/</span>
                         {minutes(s.words)} min de detalle
                       </p>
-                      <h4 className="font-serif text-xl font-black leading-snug tracking-tight text-white sm:text-2xl">{s.title}</h4>
+                      <h3 className="font-serif text-xl font-black leading-snug tracking-tight text-white sm:text-2xl">{s.title}</h3>
                       <p className="text-[15px] leading-relaxed text-slate-300">{s.summary}</p>
                       <button
                         type="button"
