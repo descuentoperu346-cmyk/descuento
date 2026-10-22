@@ -10,10 +10,10 @@ Web de **Descuentos Perú**: catálogo de productos y servicios digitales con de
 | Tema | Estado |
 |---|---|
 | Hosting | Vercel, desde el repo `descuentoperu346-cmyk/descuento`, rama `main`. |
-| Último commit | `1772370` (2026-10-22): despedida al cerrar sesión y «Ir al panel» solo para el equipo. Todo lo anterior ya está subido a GitHub (`origin/main`): `17a3052` (mensajes claros si Supabase rechaza contraseña o correo), `0338ed9` (confirmar con código de 6 dígitos y 13 plantillas de correo), `6eff928` (HANDOFF), `725aef8` (CAPTCHA Turnstile, SQL 13, banner del equipo, contador del Leak #3, carrusel, barra lateral, selector de perfil solo DEV). Antes: `a917dac` (panel de ventas, ganancias y soporte, login con Google, política de privacidad, roles). El `git push` lo hace el usuario en su terminal: desde la sesión de Claude Git no puede pedir credenciales. |
+| Último commit | `0d1022b` (2026-10-22, **local: el usuario aún debe hacer `git push`**): olvidé mi contraseña, ingresar con código, cambiar correo, código de seguridad y las 3 plantillas con código en `plantillas-correo/volver-a-pegar/`. Antes, ya subido a GitHub (`origin/main`): `1772370` (despedida al cerrar sesión y «Ir al panel» solo para el equipo), `17a3052` (mensajes claros si Supabase rechaza contraseña o correo), `0338ed9` (confirmar con código de 6 dígitos y 13 plantillas de correo), `6eff928` (HANDOFF), `725aef8` (CAPTCHA Turnstile, SQL 13, banner del equipo, contador del Leak #3, carrusel, barra lateral, selector de perfil solo DEV). Antes: `a917dac` (panel de ventas, ganancias y soporte, login con Google, política de privacidad, roles). El `git push` lo hace el usuario en su terminal: desde la sesión de Claude Git no puede pedir credenciales. |
 | Web publicada | `https://descuentos-peru.vercel.app` (política en `/privacidad`). Vercel tiene `VITE_CONTENT_SUPABASE_URL` y `VITE_CONTENT_SUPABASE_ANON_KEY` como tipo Config. |
 | Google | **Activo** (2026-10-21): app publicada en Google Cloud (proyecto `descuentos-peru`), cliente OAuth "Descuentos Peru Web", Google encendido en Supabase. El botón abre Google y el flujo completo funciona (ver Pendientes, punto 2). |
-| Commits | **Nunca hagas commit ni push sin que el usuario lo pida.** Los cambios hechos después de `1772370` (por ejemplo, esta actualización del HANDOFF) quedan sin commit hasta que el usuario lo pida. |
+| Commits | **Nunca hagas commit ni push sin que el usuario lo pida.** Los cambios hechos después de `0d1022b` quedan sin commit hasta que el usuario lo pida. |
 | Base de datos | Supabase, proyecto `ncqegvituteypivmfyoo`. SQL 01–13 ya ejecutados por el usuario (ver sección 4). |
 | Verificación | Las pruebas automáticas usan una base **imitada** (stub y PGlite). Contra lo real se probaron a mano (2026-10-21 y 22): lectura con la clave anon, Google, CAPTCHA y el envío de correo por SMTP; Confirm email figura encendido. **Aún no se probó de punta a punta el registro con código por correo.** |
 
@@ -119,7 +119,7 @@ Notas: `isSuperAdmin` = rol `dev` o `admin` de `staff` (igual que `is_admin()` e
   - Supabase → URL Configuration: Site URL y Redirect URLs con `/**`.
   - **"Confirm email" está encendido** (2026-10-22), con código de 6 dígitos y SMTP propio (Pendientes, punto 6). Evita que alguien se registre con el correo de otra persona.
   - Pasos completos: `supabase/LEEME.md`, Parte F.
-- **Correos con código (compradores), agregados el 2026-10-22, sin commit y NO probados contra el Supabase real** (solo con base imitada, 55/55 en Chrome real; la parte con CAPTCHA activo no se pudo probar porque no cargó el widget de Cloudflare):
+- **Correos con código (compradores), agregados el 2026-10-22 (commit `0d1022b`) y NO probados contra el Supabase real** (solo con base imitada, 55/55 en Chrome real; la parte con CAPTCHA activo no se pudo probar porque no cargó el widget de Cloudflare):
   - **«¿Olvidaste tu contraseña?»** (vistas `forgot` → `confirm` con `codeKind='recovery'` → `newpass` de `AuthModal`): `buyerRequestPasswordReset`, `buyerVerifyRecoveryCode` (`verifyOtp` tipo `recovery`, abre sesión) y `buyerSetNewPassword` (`updateUser`). Si la contraseña nueva falla, la sesión ya está abierta y se puede reintentar.
   - **«Entrar con un código por correo»** (vista `otp` → `confirm` con `codeKind='login'`): `buyerRequestLoginCode` (`signInWithOtp` con `shouldCreateUser: false`; `otp_disabled` se trata como enviado para no revelar quién tiene cuenta) y `buyerVerifyCode(..., 'email')`.
   - **Mi cuenta → «Cambiar correo»** (`EmailChange.tsx`): `buyerRequestEmailChange` (`updateUser({email})`) y `buyerConfirmEmailChange` (`verifyOtp` tipo `email_change` con el código del correo actual y/o el del nuevo; lo que cuenta es el estado final leído con `getUser()`). **Es lo más incierto:** cómo reparte Supabase los dos códigos con «Secure email change» está armado de la documentación, no probado. Si falla con el real, probar con ese interruptor apagado (llega un solo código).
@@ -198,7 +198,7 @@ Las pruebas viven **fuera del repo**, en carpetas temporales que se pueden borra
 
 ## 10. Primeros pasos para quien llega
 
-1. `git status` y `git log -5` (el último commit es `1772370`; este HANDOFF puede estar sin commit). Pregunta al usuario antes de hacer commit.
+1. `git status` y `git log -5` (el último commit es `0d1022b`; si `git status` muestra plantillas de correo «modificadas» sin cambios reales, son solo saltos de línea: ignóralas). Pregunta al usuario antes de hacer commit.
 2. `npm install` y luego `npm run lint` y `npm run build`.
 3. Lee `supabase/LEEME.md`, que está escrito para el usuario no técnico.
 4. Antes de afirmar que la BD está lista, comprueba con la clave anon (solo lectura): `GET <URL>/rest/v1/leaks?select=id&limit=1`.
