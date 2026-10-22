@@ -65,6 +65,7 @@ function authErrorMessage(error: { message?: string; status?: number; code?: str
   if (/email_provider_disabled/i.test(code)) return 'El acceso con correo está desactivado en este momento. Avisa al administrador de la web.';
   if (/email_not_confirmed/i.test(code)) return 'Falta confirmar tu correo. Revisa tu bandeja de entrada.';
   if (/captcha/i.test(code) || /captcha/i.test(msg)) return 'No se pudo comprobar la verificación de seguridad. Inténtalo de nuevo.';
+  if (/otp_expired|otp_disabled/i.test(code) || /token has expired|token.*invalid|invalid.*token/i.test(msg)) return 'El código es incorrecto o ya venció. Revisa los 6 dígitos o pide uno nuevo.';
   if (/invalid_credentials/i.test(code) || error?.status === 400 || error?.status === 401 || /invalid login/i.test(msg)) {
     return 'Usuario o contraseña incorrectos.';
   }
@@ -184,11 +185,37 @@ export async function accountSignIn(identifier: string, password: string, captch
     const email = staffLoginEmail(identifier);
     const { data, error } = await sb().auth.signInWithPassword({ email, password, options: captchaToken ? { captchaToken } : undefined });
     if (error || !data?.user) {
+      // Cuenta creada pero sin confirmar: la web pasa a pedir el código del correo
+      if (error?.code === 'email_not_confirmed') return { ok: false, needsConfirm: true, error: authErrorMessage(error, 'Falta confirmar tu correo.') };
       return { ok: false, error: authErrorMessage(error, 'No se pudo iniciar sesión. Inténtalo de nuevo.') };
     }
     return { ok: true, account: await accountGet() };
   } catch {
     return { ok: false, error: 'No se pudo conectar con el servidor. Inténtalo de nuevo.' };
+  }
+}
+
+/** Confirma el correo con el código de 6 dígitos que llegó por correo y deja la sesión iniciada. */
+export async function buyerVerifyCode(email: string, code: string): Promise<AccountResult> {
+  try {
+    me = undefined;
+    const { data, error } = await sb().auth.verifyOtp({ email: email.trim(), token: code.trim(), type: 'signup' });
+    if (error || !data?.session) {
+      return { ok: false, error: authErrorMessage(error, 'No se pudo confirmar el código. Inténtalo de nuevo.') };
+    }
+    return { ok: true, account: await accountGet() };
+  } catch {
+    return { ok: false, error: 'No se pudo conectar con el servidor. Inténtalo de nuevo.' };
+  }
+}
+
+/** Pide un código nuevo para confirmar el correo. Devuelve un mensaje de error o null si salió bien. */
+export async function buyerResendCode(email: string, captchaToken?: string): Promise<string | null> {
+  try {
+    const { error } = await sb().auth.resend({ type: 'signup', email: email.trim(), options: captchaToken ? { captchaToken } : undefined });
+    return error ? authErrorMessage(error, 'No se pudo enviar el código. Inténtalo de nuevo en un momento.') : null;
+  } catch {
+    return 'No se pudo conectar con el servidor. Inténtalo de nuevo.';
   }
 }
 

@@ -263,6 +263,53 @@ antes de que la web lo envíe, fallan **todos** los registros y los ingresos (ta
 Notas: el ingreso con Google no usa este CAPTCHA. La verificación sirve para un solo intento: tras un error se renueva sola. Si alguien tiene un bloqueador de anuncios que bloquea Cloudflare,
 verá un aviso para desactivarlo en esta página.
 
+## Parte J — Confirmar el correo con un código de 6 dígitos (Confirm email)
+
+Al crear cuenta, la persona recibe un **código de 6 dígitos** por correo y lo escribe en la web (también si intenta ingresar con una cuenta aún sin confirmar). Sirve aunque abra el correo en otro dispositivo,
+y evita que alguien se registre con el correo de otra persona. **El orden importa**: el código nuevo de la web debe estar subido y publicado antes de encender «Confirm email».
+
+1. **Envío de correos (SMTP):** el servicio que trae Supabase no sirve para público. Conecta uno en *Authentication → Emails → SMTP Settings* (por ejemplo un Gmail aparte con una
+   «contraseña de aplicación»: host `smtp.gmail.com`, puerto `465`; esa contraseña va **solo** en Supabase). Prueba con *Authentication → Users → Invite user* a otro correo tuyo.
+2. **Correo con el diseño de la web:** *Authentication → Emails → Templates → Confirm signup*. Asunto: `Tu código de Descuentos Perú`. En el cuerpo (*Message*) borra lo que haya y pega **todo** el contenido de
+   `supabase/plantillas-correo/confirmar-registro.html` (ábrelo, Ctrl + A, Ctrl + C). Es solo texto (sin imágenes), con estilo de terminal: lema «El Perú necesita una voz. Una voz unida.» arriba, los colores de la marca, el código grande en un recuadro con barra de vigencia, los 3 pasos, un botón a la web, un aviso de seguridad y el contacto de Telegram (@Tin9o).
+   Trae animaciones suaves (se escribe «verificando cuenta», el cursor parpadea, el código brilla y la barra de vigencia se mueve). Se ven en Apple Mail y en el iPhone; Gmail y Outlook no las reproducen y muestran el correo igual de completo, pero quieto.
+   - No cambies `{{ .Token }}` (el código que genera Supabase) ni `{{ .SiteURL }}` (la dirección de tu web, que el correo usa para el botón).
+   - **Site URL** (*Authentication → URL Configuration*) debe estar **sin barra al final**: `https://descuentos-peru.vercel.app`.
+   - No pongas `{{ .ConfirmationURL }}`: sería un enlace, no un código.
+   - Si abres el `.html` directamente en tu computadora, el código sale como `{{ .Token }}`: es normal, Supabase lo llena al enviar el correo.
+3. *Authentication → Sign In / Providers → Email*: comprueba que el largo del código (**Email OTP Length**) sea **6** y enciende **Confirm email**. *Save*.
+4. **Probar** en una ventana de incógnito: *Crear cuenta* → llega el correo → escribir los 6 dígitos → queda dentro. Prueba también «No me llegó, enviar otro código» (espera 60 s entre envíos).
+   Borra la cuenta de prueba en *Authentication → Users*. Si algo falla, apaga «Confirm email» y todo vuelve a como estaba.
+
+Las cuentas que ya existen, las del equipo y las de Google no se ven afectadas.
+
+## Parte K — Los demás correos de Supabase con el mismo diseño
+
+Todos están en `supabase/plantillas-correo/`, con el mismo estilo que el de confirmar cuenta (sin imágenes). Para cada uno: *Authentication → Emails*, abre la tarjeta, pega **todo** el archivo en *Message*,
+escribe el **Asunto** de la tabla y *Save*. No cambies lo que va entre llaves `{{ ... }}`: Supabase lo llena al enviar.
+
+| Tarjeta en Supabase | Archivo | Asunto |
+|---|---|---|
+| Confirm sign up | `confirmar-registro.html` | Tu código de Descuentos Perú |
+| Invite user | `invitar-usuario.html` | Te invitaron a Descuentos Perú |
+| Magic link or OTP | `enlace-magico-o-codigo.html` | Tu acceso a Descuentos Perú |
+| Change email address | `cambiar-correo.html` | Confirma tu nuevo correo en Descuentos Perú |
+| Reset password | `restablecer-contrasena.html` | Restablece tu contraseña de Descuentos Perú |
+| Reauthentication | `reautenticacion.html` | Tu código de seguridad de Descuentos Perú |
+| Password changed | `seguridad-contrasena-cambiada.html` | Tu contraseña de Descuentos Perú cambió |
+| Email address changed | `seguridad-correo-cambiado.html` | El correo de tu cuenta de Descuentos Perú cambió |
+| Phone number changed | `seguridad-telefono-cambiado.html` | El teléfono de tu cuenta de Descuentos Perú cambió |
+| Sign-in method linked | `seguridad-metodo-vinculado.html` | Se vinculó un método de acceso a tu cuenta |
+| Sign-in method removed | `seguridad-metodo-eliminado.html` | Se quitó un método de acceso de tu cuenta |
+| MFA method added | `seguridad-mfa-agregado.html` | Se agregó un método de verificación a tu cuenta |
+| MFA method removed | `seguridad-mfa-eliminado.html` | Se quitó un método de verificación de tu cuenta |
+
+- Los 12 (todos menos `confirmar-registro.html`) los genera `generar-plantillas.cjs` a partir de `confirmar-registro.html`. Si un día cambias el diseño ahí, corre `node supabase/plantillas-correo/generar-plantillas.cjs` y se actualizan los 12. Si prefieres editarlos a mano, también se puede.
+- Las 7 de **seguridad** (*Security*) solo se envían si enciendes el interruptor de cada una y pulsas *Save changes*. Sirven para avisar a la persona si alguien toca su cuenta. Los de teléfono y verificación en dos pasos hoy no se usan en la web.
+- Las de seguridad llevan la dirección de la web escrita fija (`https://descuentos-peru.vercel.app`): si algún día cambias de dirección, hay que cambiarla en esos 7 archivos.
+- Hoy la web solo usa **Confirm sign up**. «Reset password» y «Change email address» funcionarán cuando la web tenga esos botones (aún no los tiene); «Invite user» se usa al invitar desde *Authentication → Users*.
+- «Magic link or OTP» y «Reauthentication» no se usan todavía; quedan listos.
+
 ## Cómo se usa
 
 - **Compradores:** botón **Ingresar** (barra superior) → *Crear cuenta* (nombre, correo, teléfono opcional, contraseña de 8+ caracteres).

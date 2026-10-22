@@ -34,6 +34,10 @@ export const AuthModal: React.FC<Props> = ({ request }) => {
   // Verificación "no soy un robot" (solo si hay llave configurada): cada resultado sirve para un solo intento
   const [captcha, setCaptcha] = useState<string | null>(null);
   const captchaRef = useRef<CaptchaHandle>(null);
+  // Confirmación del correo con el código de 6 dígitos
+  const [confirmEmail, setConfirmEmail] = useState('');
+  const [code, setCode] = useState('');
+  const [cooldown, setCooldown] = useState(0);
   const [notice, setNotice] = useState('');
   const dialogRef = useRef<HTMLDivElement>(null);
 
@@ -135,6 +139,58 @@ export const AuthModal: React.FC<Props> = ({ request }) => {
     setGoogleError('');
     setNotice('');
     setPassword('');
+    setCode('');
+    setCaptcha(null); // la verificación de la vista anterior ya no sirve: cada formulario pide la suya
+  };
+
+  // Espera entre un código y el siguiente (evita pedir correos sin parar)
+  useEffect(() => {
+    if (cooldown <= 0) return;
+    const t = setTimeout(() => setCooldown((c) => c - 1), 1000);
+    return () => clearTimeout(t);
+  }, [cooldown]);
+
+  const submitCode = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (busy) return;
+    if (!/^\d{6}$/.test(code)) {
+      setError('Escribe los 6 dígitos del código.');
+      return;
+    }
+    setBusy(true);
+    setError('');
+    setNotice('');
+    const m = await import('../lib/supabaseBrowser');
+    const res = await m.buyerVerifyCode(confirmEmail, code);
+    setBusy(false);
+    if (!res.ok || !res.account) {
+      setError(res.error || 'No se pudo confirmar el código. Inténtalo de nuevo.');
+      setCode('');
+      return;
+    }
+    finishAuth(res.account);
+  };
+
+  const resendCode = async () => {
+    if (busy || cooldown > 0) return;
+    if (CAPTCHA_ENABLED && !captcha) {
+      setError('Completa la verificación de seguridad para pedir otro código.');
+      return;
+    }
+    setBusy(true);
+    setError('');
+    setNotice('');
+    const m = await import('../lib/supabaseBrowser');
+    const msg = await m.buyerResendCode(confirmEmail, captcha ?? undefined);
+    setBusy(false);
+    captchaRef.current?.reset(); // cada verificación sirve para un solo envío
+    if (msg) {
+      setError(msg);
+      return;
+    }
+    setCode('');
+    setNotice('Te enviamos un código nuevo. Revisa tu correo y la carpeta de spam.');
+    setCooldown(60);
   };
 
   const finishAuth = (acc: AccountInfo) => {
@@ -164,6 +220,13 @@ export const AuthModal: React.FC<Props> = ({ request }) => {
     const res = await m.accountSignIn(identifier, password, captcha ?? undefined);
     setBusy(false);
     if (!res.ok) {
+      // Cuenta creada pero sin confirmar: se pasa a pedir el código (se puede pedir uno nuevo)
+      if (res.needsConfirm && identifier.includes('@')) {
+        setConfirmEmail(identifier.trim());
+        setCooldown(0);
+        switchView('confirm');
+        return;
+      }
       setError(res.error || 'Algo salió mal. Inténtalo de nuevo.');
       setPassword('');
       captchaRef.current?.reset();
@@ -192,6 +255,8 @@ export const AuthModal: React.FC<Props> = ({ request }) => {
       return;
     }
     if (res.needsConfirm || !res.account) {
+      setConfirmEmail(email.trim());
+      setCooldown(60); // el código recién salió: se espera un minuto antes de pedir otro
       switchView('confirm');
       return;
     }
@@ -385,15 +450,52 @@ export const AuthModal: React.FC<Props> = ({ request }) => {
         )}
 
         {view === 'confirm' && (
-          <div className="mt-5 space-y-4 text-center">
+          <form onSubmit={submitCode} className="mt-5 space-y-4 text-center" noValidate>
             <MailCheck className="mx-auto h-12 w-12 text-[#00ff88]" aria-hidden="true" />
             <p className="text-sm leading-relaxed text-slate-300">
-              Te enviamos un enlace de confirmación a <strong className="text-white">{email.trim()}</strong>. Ábrelo y luego vuelve aquí para ingresar.
+              Te enviamos un código de 6 dígitos a <strong className="text-white">{confirmEmail}</strong>. Escríbelo aquí para confirmar tu correo.
             </p>
-            <button type="button" onClick={() => switchView('login')} className="w-full rounded-2xl bg-[#00ff88] py-3 text-sm font-black text-slate-950 hover:bg-[#00e676] cursor-pointer">
-              Ya confirmé, ingresar
-            </button>
-          </div>
+            <div>
+              <label htmlFor="auth-code" className="sr-only">
+                Código de 6 dígitos
+              </label>
+              <input
+                id="auth-code"
+                type="text"
+                inputMode="numeric"
+                autoComplete="one-time-code"
+                pattern="[0-9]*"
+                maxLength={6}
+                placeholder="000000"
+                value={code}
+                onChange={(e) => setCode(e.target.value.replace(/\D/g, '').slice(0, 6))}
+                className={`${fieldClass} text-center font-mono text-2xl tracking-[0.5em]`}
+              />
+            </div>
+            {notice && (
+              <p role="status" className="flex items-center justify-center gap-1.5 font-mono text-xs text-[#00ff88]">
+                <CheckCircle2 className="h-3.5 w-3.5" aria-hidden="true" /> {notice}
+              </p>
+            )}
+            <FormError message={error} />
+            <SubmitButton busy={busy} label="Confirmar" busyLabel="Verificando…" disabled={code.length !== 6} />
+            <div className="space-y-3 border-t border-zinc-800 pt-4">
+              <CaptchaWidget ref={captchaRef} onToken={setCaptcha} />
+              <button
+                type="button"
+                onClick={() => void resendCode()}
+                disabled={busy || cooldown > 0 || (CAPTCHA_ENABLED && !captcha)}
+                className="text-xs font-bold text-[#00ff88] hover:underline disabled:opacity-50 disabled:no-underline cursor-pointer"
+              >
+                {cooldown > 0 ? `Pedir otro código en ${cooldown} s` : 'No me llegó, enviar otro código'}
+              </button>
+              <p>
+                <button type="button" onClick={() => switchView('login')} className="text-xs text-slate-400 hover:text-white hover:underline cursor-pointer">
+                  Volver a ingresar
+                </button>
+              </p>
+            </div>
+          </form>
         )}
 
         {view === 'done' && account && (
