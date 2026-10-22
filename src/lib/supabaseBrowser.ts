@@ -54,13 +54,24 @@ async function loadStaffUser(userId: string, email: string): Promise<AuthUser | 
 }
 
 /** Mensaje en español para los errores de Supabase Authentication. */
-function authErrorMessage(error: { message?: string; status?: number; code?: string } | null, fallback: string): string {
+function authErrorMessage(error: { message?: string; status?: number; code?: string; reasons?: string[] } | null, fallback: string): string {
   const code = error?.code || '';
   const msg = error?.message || '';
   if (error?.status === 429 || /rate_limit/i.test(code)) return 'Demasiados intentos. Espera unos minutos e inténtalo de nuevo.';
   if (/user_already_exists|email_exists/i.test(code) || /already registered/i.test(msg)) return 'Ese correo ya tiene una cuenta. Inicia sesión.';
-  if (/weak_password/i.test(code)) return 'La contraseña es muy fácil de adivinar. Usa otra más larga o con más variedad.';
-  if (/email_address_invalid|validation_failed/i.test(code) || /invalid.*email|email.*invalid/i.test(msg)) return 'Escribe un correo válido.';
+  if (/weak_password/i.test(code)) {
+    // Supabase dice por qué la rechaza: muy corta, le faltan tipos de caracteres o salió en filtraciones conocidas
+    const reasons = error?.reasons || [];
+    const parts: string[] = [];
+    if (reasons.includes('length')) {
+      const min = msg.match(/at least (\d+) characters/i)?.[1];
+      parts.push(min ? `Debe tener al menos ${min} caracteres.` : 'Es muy corta.');
+    }
+    if (reasons.includes('characters')) parts.push('Combina mayúsculas, minúsculas, números y símbolos (por ejemplo ! o #).');
+    if (reasons.includes('pwned')) parts.push('Esa contraseña apareció en filtraciones de datos: elige otra distinta.');
+    return parts.length ? `Contraseña no aceptada. ${parts.join(' ')}` : 'La contraseña es muy fácil de adivinar. Usa otra más larga o con más variedad.';
+  }
+  if (/email_address_invalid|validation_failed/i.test(code) || /invalid.*email|email.*invalid/i.test(msg)) return 'No se aceptó ese correo. Usa uno real que puedas abrir (por ejemplo de Gmail u Outlook).';
   if (/signup_disabled/i.test(code)) return 'El registro de cuentas está desactivado por ahora.';
   if (/email_provider_disabled/i.test(code)) return 'El acceso con correo está desactivado en este momento. Avisa al administrador de la web.';
   if (/email_not_confirmed/i.test(code)) return 'Falta confirmar tu correo. Revisa tu bandeja de entrada.';
