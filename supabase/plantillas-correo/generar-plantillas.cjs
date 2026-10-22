@@ -3,6 +3,7 @@
 // Uso: node supabase/plantillas-correo/generar-plantillas.cjs
 // Si cambias el diseno en confirmar-registro.html, vuelve a correrlo y se actualizan las 12.
 // Ojo: reescribe esos 12 archivos; confirmar-registro.html no lo toca.
+// Los que tienen `dir` (hoy 3: los que funcionan con código) se escriben en esa subcarpeta, aparte de los demás.
 const fs = require('fs');
 const path = require('path');
 
@@ -174,9 +175,46 @@ const notice = (heading, text, tone = 'green') => {
 `;
 };
 
+// Pasos "cómo hacerlo": el último es el resultado (con ✓ y en verde). steps: [[negrita, texto], ...]
+const stepsBlock = (heading, steps) => {
+  const cards = steps.map(([bold, text], i) => {
+    const last = i === steps.length - 1;
+    const badge = last
+      ? `<td width="28" height="28" align="center" bgcolor="#00ff88" style="width:28px;height:28px;background-color:#00ff88;border-radius:8px;font-family:${MONO};font-size:13px;font-weight:bold;color:#050505;">&#10003;</td>`
+      : `<td width="28" height="28" align="center" bgcolor="#0b2417" style="width:28px;height:28px;background-color:#0b2417;border:1px solid #14532d;border-radius:8px;font-family:${MONO};font-size:13px;font-weight:bold;color:#00ff88;">${i + 1}</td>`;
+    const bg = last ? '#0b2417' : '#0e1712';
+    const bd = last ? '#14532d' : '#1a2e22';
+    return `              <tr>
+                <td bgcolor="${bg}" style="background-color:${bg};border:1px solid ${bd};border-radius:12px;padding:14px 16px;">
+                  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+                    <tr>
+                      <td width="34" valign="top" style="width:34px;"><table role="presentation" cellpadding="0" cellspacing="0" border="0"><tr>${badge}</tr></table></td>
+                      <td valign="top" style="font-family:${SANS};font-size:14px;line-height:20px;color:#a1a1aa;"><strong style="color:${last ? '#00ff88' : '#ffffff'};">${bold}</strong><br>${text}</td>
+                    </tr>
+                  </table>
+                </td>
+              </tr>
+`;
+  });
+  return `
+        <!-- Pasos -->
+        <tr>
+          <td style="padding:30px 24px 0;">
+            <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+              <tr>
+                <td style="font-family:${MONO};font-size:11px;font-weight:bold;letter-spacing:3px;color:#7b9a88;padding:0 4px 12px;">${heading}</td>
+              </tr>
+${cards.join('              <tr><td height="8" style="height:8px;font-size:0;line-height:0;">&nbsp;</td></tr>\n')}            </table>
+          </td>
+        </tr>
+`;
+};
+
 const tg = (color = '#febc2e') => `<a href="${TG}" style="color:${color};font-weight:bold;text-decoration:none;">@Tin9o</a>`;
 
 const VENCE = 'Vence en <strong style="color:#ffffff;">1 hora</strong>. Si vence, pide uno nuevo desde la web.';
+// Los códigos sirven una sola vez; `donde` dice en qué pantalla de la web se pide otro
+const VENCE_UNA_VEZ = (donde) => `Vence en <strong style="color:#ffffff;">1 hora</strong> y sirve una sola vez.<br>Si vence, pide otro en ${donde}.`;
 const NOFUI = (extra) => notice('¿No fuiste tú?', `${extra} Escríbenos cuanto antes por Telegram: ${tg()}.`, 'amber');
 const SEGURIDAD_CODIGO = notice('Tu seguridad.', 'Nadie del equipo te pedirá este código por Telegram, WhatsApp ni llamada. Si no fuiste tú, ignora este correo y cambia tu contraseña.');
 
@@ -195,6 +233,8 @@ const plantillas = [
       notice('Tu seguridad.', 'Si no esperabas esta invitación, ignora este correo: no pasará nada si no la aceptas.'),
   },
   {
+    // Estas 3 funcionan con código (no con enlace) y van en su propia carpeta: son las que hay que volver a pegar en Supabase.
+    dir: 'volver-a-pegar',
     file: 'enlace-magico-o-codigo.html',
     term: 'abriendo tu acceso',
     subject: 'Tu acceso a Descuentos Perú',
@@ -203,40 +243,60 @@ const plantillas = [
     footer: 'Recibiste este correo porque alguien pidió entrar a Descuentos Perú con esta dirección.',
     body:
       pill('ACCESO A TU CUENTA') +
-      title('Entra a tu cuenta', 'Usa este código en la web o pulsa el botón para entrar directamente.') +
-      codeModule('// CÓDIGO DE ACCESO', VENCE) +
-      button('Entrar a Descuentos Perú &rarr;', '{{ .ConfirmationURL }}', true) +
-      SEGURIDAD_CODIGO.replace('ignora este correo y cambia tu contraseña', 'ignora este correo'),
+      title('Entra a tu cuenta', 'Pediste entrar a <strong style="color:#ffffff;">Descuentos Perú</strong> sin contraseña.<br>Escribe este código en la web para entrar.') +
+      codeModule('// CÓDIGO DE ACCESO', VENCE_UNA_VEZ('«Entrar con un código por correo»')) +
+      stepsBlock('CÓMO ENTRAR', [
+        ['Vuelve a la web', 'Regresa a la pestaña donde pediste el código.'],
+        ['Escribe el código', 'Los 6 dígitos de arriba, sin espacios.'],
+        ['¡Listo, ya estás dentro!', 'Entras a tu cuenta sin escribir tu contraseña.'],
+      ]) +
+      button('Ir a Descuentos Perú &rarr;', '{{ .SiteURL }}') +
+      notice('Tu seguridad.', 'Nadie del equipo te pedirá este código por Telegram, WhatsApp ni llamada. Si no fuiste tú, ignora este correo: sin el código nadie puede entrar a tu cuenta.'),
   },
   {
+    dir: 'volver-a-pegar',
     file: 'cambiar-correo.html',
     term: 'verificando el cambio',
     subject: 'Confirma tu nuevo correo en Descuentos Perú',
     window: 'cambio-de-correo',
-    preheader: 'Confirma que {{ .NewEmail }} será el nuevo correo de tu cuenta.',
+    preheader: 'Tu código para confirmar el cambio de correo es {{ .Token }}. Vence en 1 hora.',
     footer: 'Recibiste este correo porque se pidió cambiar el correo de una cuenta de Descuentos Perú.',
+    // Con "Secure email change" Supabase manda este mismo correo al correo actual y al nuevo, cada uno con su código.
     body:
       pill('CAMBIO DE CORREO') +
-      title('Confirma tu nuevo correo', 'Pediste cambiar el correo de tu cuenta.<br>Revisa los datos y confirma el cambio.') +
+      title('Confirma el cambio de correo', 'Pediste cambiar el correo de tu cuenta.<br>Revisa los datos y escribe este código en la web.') +
       infoCard([
         ['CORREO ACTUAL', '{{ .Email }}'],
         ['CORREO NUEVO', '{{ .NewEmail }}', true],
       ]) +
-      button('Confirmar el cambio &rarr;', '{{ .ConfirmationURL }}', true) +
-      NOFUI('No pulses el botón: el correo de tu cuenta no cambiará.'),
+      codeModule('// CÓDIGO DE CAMBIO', VENCE_UNA_VEZ('<em>Mi cuenta &rarr; Cambiar correo</em>')) +
+      notice('¿Te llegaron dos correos?', 'Por seguridad puede llegar un código a cada dirección, la actual y la nueva. Si te llegan los dos, escribe <strong style="color:#ffffff;">los dos códigos</strong> en la web.') +
+      stepsBlock('CÓMO CONFIRMARLO', [
+        ['Vuelve a la web', 'Abre <em>Mi cuenta &rarr; Cambiar correo</em> en la pestaña donde lo pediste.'],
+        ['Escribe el código', 'Los 6 dígitos de arriba. Si llegó otro a la otra dirección, escribe también ese.'],
+        ['¡Listo, correo nuevo!', 'Desde ahora entras con <strong style="color:#ffffff;">{{ .NewEmail }}</strong>.'],
+      ]) +
+      NOFUI('No escribas el código: el correo de tu cuenta no cambiará. Cambia tu contraseña por si acaso.'),
   },
   {
+    dir: 'volver-a-pegar',
     file: 'restablecer-contrasena.html',
     term: 'protegiendo tu cuenta',
-    subject: 'Restablece tu contraseña de Descuentos Perú',
+    subject: 'Tu código para restablecer la contraseña',
     window: 'restablecer',
-    preheader: 'Pulsa el botón para elegir una contraseña nueva.',
+    preheader: 'Tu código para elegir una contraseña nueva es {{ .Token }}. Vence en 1 hora.',
     footer: 'Recibiste este correo porque alguien pidió restablecer la contraseña de una cuenta de Descuentos Perú.',
     body:
       pill('RESTABLECER CONTRASEÑA') +
-      title('Crea una contraseña nueva', 'Recibimos una solicitud para cambiar la contraseña de tu cuenta.<br>Pulsa el botón para elegir una nueva.') +
-      button('Cambiar mi contraseña &rarr;', '{{ .ConfirmationURL }}', true) +
-      notice('Tu seguridad.', 'Si no lo pediste, ignora este correo: tu contraseña actual sigue igual. Nadie del equipo te pedirá este enlace.'),
+      title('Crea una contraseña nueva', 'Recibimos una solicitud para cambiar la contraseña de tu cuenta.<br>Escribe este código en la web y elige una nueva.') +
+      codeModule('// RECUPERAR CLAVE', VENCE_UNA_VEZ('«¿Olvidaste tu contraseña?»')) +
+      stepsBlock('CÓMO RECUPERARLA', [
+        ['Vuelve a la web', 'Regresa a la pestaña donde pediste el código y escribe los 6 dígitos de arriba.'],
+        ['Elige tu contraseña nueva', 'Mínimo 8 caracteres. Mejor si no la usas en otros sitios.'],
+        ['¡Listo, de vuelta en tu cuenta!', 'Entras directo y usas la contraseña nueva desde ahora.'],
+      ]) +
+      button('Ir a Descuentos Perú &rarr;', '{{ .SiteURL }}') +
+      NOFUI('Ignora este correo: tu contraseña actual sigue igual y nadie puede cambiarla sin este código. No se lo des a nadie; el equipo nunca te lo pedirá por Telegram, WhatsApp ni llamada.'),
   },
   {
     file: 'reautenticacion.html',
@@ -369,6 +429,8 @@ for (const p of plantillas) {
   head = must(head, '>verificando cuenta<', `>${p.term}<`);
   let tail = TAIL;
   tail = must(tail, 'Recibiste este correo porque alguien creó una cuenta con esta dirección en Descuentos Perú.', p.footer);
-  fs.writeFileSync(path.join(DIR, p.file), head + p.body + '\n' + tail, 'utf8');
-  console.log('OK', p.file, '|', p.subject);
+  const outDir = p.dir ? path.join(DIR, p.dir) : DIR;
+  fs.mkdirSync(outDir, { recursive: true });
+  fs.writeFileSync(path.join(outDir, p.file), head + p.body + '\n' + tail, 'utf8');
+  console.log('OK', (p.dir ? p.dir + '/' : '') + p.file, '|', p.subject);
 }

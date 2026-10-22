@@ -292,9 +292,9 @@ escribe el **Asunto** de la tabla y *Save*. No cambies lo que va entre llaves `{
 |---|---|---|
 | Confirm sign up | `confirmar-registro.html` | Tu código de Descuentos Perú |
 | Invite user | `invitar-usuario.html` | Te invitaron a Descuentos Perú |
-| Magic link or OTP | `enlace-magico-o-codigo.html` | Tu acceso a Descuentos Perú |
-| Change email address | `cambiar-correo.html` | Confirma tu nuevo correo en Descuentos Perú |
-| Reset password | `restablecer-contrasena.html` | Restablece tu contraseña de Descuentos Perú |
+| Magic link or OTP | `volver-a-pegar/enlace-magico-o-codigo.html` | Tu acceso a Descuentos Perú |
+| Change email address | `volver-a-pegar/cambiar-correo.html` | Confirma tu nuevo correo en Descuentos Perú |
+| Reset password | `volver-a-pegar/restablecer-contrasena.html` | Tu código para restablecer la contraseña |
 | Reauthentication | `reautenticacion.html` | Tu código de seguridad de Descuentos Perú |
 | Password changed | `seguridad-contrasena-cambiada.html` | Tu contraseña de Descuentos Perú cambió |
 | Email address changed | `seguridad-correo-cambiado.html` | El correo de tu cuenta de Descuentos Perú cambió |
@@ -304,12 +304,26 @@ escribe el **Asunto** de la tabla y *Save*. No cambies lo que va entre llaves `{
 | MFA method added | `seguridad-mfa-agregado.html` | Se agregó un método de verificación a tu cuenta |
 | MFA method removed | `seguridad-mfa-eliminado.html` | Se quitó un método de verificación de tu cuenta |
 
-- Los 12 (todos menos `confirmar-registro.html`) los genera `generar-plantillas.cjs` a partir de `confirmar-registro.html`. Si un día cambias el diseño ahí, corre `node supabase/plantillas-correo/generar-plantillas.cjs` y se actualizan los 12. Si prefieres editarlos a mano, también se puede.
+- Los 12 (todos menos `confirmar-registro.html`) los genera `generar-plantillas.cjs` a partir de `confirmar-registro.html` (3 de ellos salen en la subcarpeta `volver-a-pegar/`). Si un día cambias el diseño ahí, corre `node supabase/plantillas-correo/generar-plantillas.cjs` y se actualizan los 12. Si prefieres editarlos a mano, también se puede.
 - Las 7 de **seguridad** (*Security*) solo se envían si enciendes el interruptor de cada una y pulsas *Save changes*. Sirven para avisar a la persona si alguien toca su cuenta. Los de teléfono y verificación en dos pasos hoy no se usan en la web.
 - Las de seguridad llevan la dirección de la web escrita fija (`https://descuentos-peru.vercel.app`): si algún día cambias de dirección, hay que cambiarla en esos 7 archivos.
-- Hoy la web solo usa **Confirm sign up**. «Reset password» y «Change email address» funcionarán cuando la web tenga esos botones (aún no los tiene); «Invite user» se usa al invitar desde *Authentication → Users*.
-- «Magic link or OTP» y «Reauthentication» no se usan todavía; quedan listos.
+- **Qué hace cada correo en la web hoy** (todos con código de 6 dígitos, como el de confirmar cuenta):
 
+  | Correo | Lo dispara en la web | Pantalla |
+  |---|---|---|
+  | Confirm sign up | Crear cuenta, o ingresar con una cuenta sin confirmar | «Revisa tu correo» |
+  | Reset password | «¿Olvidaste tu contraseña?» en *Ingresar* | «Recupera tu contraseña» → código → «Elige tu contraseña nueva» |
+  | Magic link or OTP | «Entrar con un código por correo» en *Ingresar* | «Ingresar con un código» → código |
+  | Change email address | *Mi cuenta → Cambiar correo* (solo compradores) | pide el código del correo nuevo y, si llegó, el del actual |
+  | Reauthentication | *Mi cuenta → Nueva contraseña*, solo si Supabase pide confirmar que eres tú | aparece un campo «Código de seguridad» |
+  | Password changed, Email address changed, Sign-in method linked | solos, cuando pasa lo que dicen | — |
+  | Invite user | Invitar desde *Authentication → Users* (no desde la web) | — |
+  | Phone number changed, Sign-in method removed, MFA added / removed | la web no tiene nada que los dispare | — |
+
+- **Si ya habías pegado las plantillas, vuelve a pegar estas tres** (cambiaron de enlace a código; están juntas en `plantillas-correo/volver-a-pegar/`): *Reset password*, *Change email address* y *Magic link or OTP*. Traen los pasos «cómo hacerlo», el vencimiento («sirve una sola vez») y un aviso de seguridad con el contacto de Telegram. Mientras *Reset password* siga con la plantilla vieja, «¿Olvidaste tu contraseña?» manda un enlace y no el código que la web pide.
+- «Ingresar con un código» **no crea cuentas**: si el correo no tiene cuenta, la web responde igual que si hubiera enviado el código (no se revela quién tiene cuenta). Las cuentas nuevas se crean solo con *Crear cuenta*.
+- *Authentication → Sign In / Providers → Email*: deja **Email OTP Length** en **6** y el vencimiento por defecto. Si algún día apagas **Secure email change**, solo llega un código (al correo nuevo): la web lo acepta. Con **Secure password change** encendido, la web pide el código de seguridad cuando la sesión es vieja.
+- Las cuentas del **equipo** tienen un correo interno que no recibe mensajes: «Olvidé mi contraseña» y «Ingresar con un código» no sirven para ellas (el DEV restablece la clave desde Supabase). Si el equipo cambia su clave desde el panel y Supabase pide el código de seguridad, la web les dice que cierren sesión, vuelvan a entrar y la cambien enseguida.
 ## Cómo se usa
 
 - **Compradores:** botón **Ingresar** (barra superior) → *Crear cuenta* (nombre, correo, teléfono opcional, contraseña de 8+ caracteres).

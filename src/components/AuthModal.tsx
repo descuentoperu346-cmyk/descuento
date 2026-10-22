@@ -1,14 +1,18 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { AlertCircle, CheckCircle2, Eye, EyeOff, LayoutDashboard, Loader2, LogOut, MailCheck, ShieldCheck, X } from 'lucide-react';
+import { AlertCircle, CheckCircle2, Eye, EyeOff, KeyRound, LayoutDashboard, Loader2, LogOut, MailCheck, ShieldCheck, X } from 'lucide-react';
 import { closeAuth, setAccount, signOutAccount, useAccount, type AccountInfo, type AuthRequest } from '../lib/accountStore';
 import { isStaffAdmin, roleLabel } from '../lib/roles';
 import { setAdminHint } from '../lib/adminHint';
 import { goToPanel } from '../lib/panelRoute';
 import { PasswordChange } from './PasswordChange';
+import { EmailChange } from './EmailChange';
 import { CaptchaWidget, type CaptchaHandle } from './CaptchaWidget';
 import { CAPTCHA_ENABLED } from '../lib/captcha';
 
-type View = 'login' | 'register' | 'confirm' | 'done' | 'account' | 'bye';
+// forgot / otp: piden el correo para mandar un código. confirm: se escribe el código (según `codeKind`). newpass: se elige la contraseña nueva.
+type View = 'login' | 'register' | 'forgot' | 'otp' | 'confirm' | 'newpass' | 'done' | 'account' | 'bye';
+/** Para qué se pidió el código de 6 dígitos. */
+type CodeKind = 'signup' | 'recovery' | 'login';
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const PHONE_RE = /^\+?[\d\s-]{6,20}$/;
@@ -34,11 +38,16 @@ export const AuthModal: React.FC<Props> = ({ request }) => {
   // Verificación "no soy un robot" (solo si hay llave configurada): cada resultado sirve para un solo intento
   const [captcha, setCaptcha] = useState<string | null>(null);
   const captchaRef = useRef<CaptchaHandle>(null);
-  // Confirmación del correo con el código de 6 dígitos
+  // Código de 6 dígitos que llega por correo (confirmar cuenta, recuperar contraseña o ingresar sin contraseña)
   const [confirmEmail, setConfirmEmail] = useState('');
+  const [codeKind, setCodeKind] = useState<CodeKind>('signup');
   const [code, setCode] = useState('');
   const [cooldown, setCooldown] = useState(0);
   const [notice, setNotice] = useState('');
+  // Correo que se escribe en "Olvidé mi contraseña" y "Ingresar con un código"
+  const [reqEmail, setReqEmail] = useState('');
+  // Frase de la pantalla final cuando no es un registro (p. ej. contraseña nueva)
+  const [doneNote, setDoneNote] = useState('');
   // Nombre que se muestra en la despedida al cerrar sesión (solo compradores)
   const [byeName, setByeName] = useState('');
   const dialogRef = useRef<HTMLDivElement>(null);
@@ -153,9 +162,16 @@ export const AuthModal: React.FC<Props> = ({ request }) => {
     setError('');
     setGoogleError('');
     setNotice('');
+    setDoneNote('');
     setPassword('');
     setCode('');
     setCaptcha(null); // la verificación de la vista anterior ya no sirve: cada formulario pide la suya
+  };
+
+  /** Abre "Olvidé mi contraseña" o "Ingresar con un código", con el correo que ya se había escrito en el ingreso. */
+  const openRequest = (next: 'forgot' | 'otp') => {
+    if (identifier.includes('@') && !reqEmail) setReqEmail(identifier.trim());
+    switchView(next);
   };
 
   // Espera entre un código y el siguiente (evita pedir correos sin parar)
@@ -176,13 +192,72 @@ export const AuthModal: React.FC<Props> = ({ request }) => {
     setError('');
     setNotice('');
     const m = await import('../lib/supabaseBrowser');
-    const res = await m.buyerVerifyCode(confirmEmail, code);
+    if (codeKind === 'recovery') {
+      // El código abre una sesión: con ella se elige la contraseña nueva en el paso siguiente
+      const msg = await m.buyerVerifyRecoveryCode(confirmEmail, code);
+      setBusy(false);
+      if (msg) {
+        setError(msg);
+        setCode('');
+        return;
+      }
+      switchView('newpass');
+      return;
+    }
+    const res = await m.buyerVerifyCode(confirmEmail, code, codeKind === 'login' ? 'email' : 'signup');
     setBusy(false);
     if (!res.ok || !res.account) {
       setError(res.error || 'No se pudo confirmar el código. Inténtalo de nuevo.');
       setCode('');
       return;
     }
+    finishAuth(res.account);
+  };
+
+  /** Manda el código de 6 dígitos según para qué se pidió (confirmar cuenta, recuperar contraseña o ingresar). */
+  const sendCode = async (kind: CodeKind, email: string): Promise<string | null> => {
+    const m = await import('../lib/supabaseBrowser');
+    if (kind === 'recovery') return m.buyerRequestPasswordReset(email, captcha ?? undefined);
+    if (kind === 'login') return m.buyerRequestLoginCode(email, captcha ?? undefined);
+    return m.buyerResendCode(email, captcha ?? undefined);
+  };
+
+  // "Olvidé mi contraseña" e "Ingresar con un código": piden el correo y pasan a escribir el código
+  const submitRequest = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (busy) return;
+    const kind: CodeKind = view === 'forgot' ? 'recovery' : 'login';
+    if (!EMAIL_RE.test(reqEmail.trim())) return setError('Escribe un correo válido.');
+    if (CAPTCHA_ENABLED && !captcha) return setError('Completa la verificación de seguridad.');
+    setBusy(true);
+    setError('');
+    const msg = await sendCode(kind, reqEmail);
+    setBusy(false);
+    if (msg) {
+      setError(msg);
+      captchaRef.current?.reset();
+      return;
+    }
+    setConfirmEmail(reqEmail.trim());
+    setCodeKind(kind);
+    setCooldown(60);
+    switchView('confirm');
+  };
+
+  const submitNewPassword = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (busy) return;
+    if (password.length < MIN_PASSWORD) return setError(`La contraseña debe tener al menos ${MIN_PASSWORD} caracteres.`);
+    setBusy(true);
+    setError('');
+    const m = await import('../lib/supabaseBrowser');
+    const res = await m.buyerSetNewPassword(password);
+    setBusy(false);
+    if (!res.ok || !res.account) {
+      setError(res.error || 'No se pudo guardar la contraseña. Inténtalo de nuevo.');
+      return;
+    }
+    setDoneNote('Tu contraseña se actualizó y ya entraste a tu cuenta.');
     finishAuth(res.account);
   };
 
@@ -195,8 +270,7 @@ export const AuthModal: React.FC<Props> = ({ request }) => {
     setBusy(true);
     setError('');
     setNotice('');
-    const m = await import('../lib/supabaseBrowser');
-    const msg = await m.buyerResendCode(confirmEmail, captcha ?? undefined);
+    const msg = await sendCode(codeKind, confirmEmail);
     setBusy(false);
     captchaRef.current?.reset(); // cada verificación sirve para un solo envío
     if (msg) {
@@ -238,6 +312,7 @@ export const AuthModal: React.FC<Props> = ({ request }) => {
       // Cuenta creada pero sin confirmar: se pasa a pedir el código (se puede pedir uno nuevo)
       if (res.needsConfirm && identifier.includes('@')) {
         setConfirmEmail(identifier.trim());
+        setCodeKind('signup');
         setCooldown(0);
         switchView('confirm');
         return;
@@ -271,6 +346,7 @@ export const AuthModal: React.FC<Props> = ({ request }) => {
     }
     if (res.needsConfirm || !res.account) {
       setConfirmEmail(email.trim());
+      setCodeKind('signup');
       setCooldown(60); // el código recién salió: se espera un minuto antes de pedir otro
       switchView('confirm');
       return;
@@ -314,8 +390,30 @@ export const AuthModal: React.FC<Props> = ({ request }) => {
   };
 
   const isStaff = account?.kind === 'staff';
-  const title =
-    view === 'register' ? 'Crea tu cuenta' : view === 'login' ? 'Ingresar' : view === 'confirm' ? 'Revisa tu correo' : view === 'done' ? '¡Listo!' : view === 'bye' ? '¡Hasta pronto!' : 'Mi cuenta';
+  const TITLES: Record<View, string> = {
+    register: 'Crea tu cuenta',
+    login: 'Ingresar',
+    forgot: 'Recupera tu contraseña',
+    otp: 'Ingresar con un código',
+    confirm: 'Revisa tu correo',
+    newpass: 'Elige tu contraseña nueva',
+    done: '¡Listo!',
+    bye: '¡Hasta pronto!',
+    account: 'Mi cuenta'
+  };
+  const title = TITLES[view];
+  // Texto de la pantalla del código y del botón, según para qué se pidió
+  const codeIntro =
+    codeKind === 'signup' ? (
+      <>
+        Te enviamos un código de 6 dígitos a <strong className="text-white">{confirmEmail}</strong>. Escríbelo aquí para confirmar tu correo.
+      </>
+    ) : (
+      <>
+        Si <strong className="text-white">{confirmEmail}</strong> tiene una cuenta, te enviamos un código de 6 dígitos. Escríbelo aquí para {codeKind === 'recovery' ? 'elegir una contraseña nueva' : 'entrar'}.
+      </>
+    );
+  const codeButton = codeKind === 'signup' ? 'Confirmar' : codeKind === 'recovery' ? 'Continuar' : 'Entrar';
 
   return (
     <div
@@ -414,13 +512,61 @@ export const AuthModal: React.FC<Props> = ({ request }) => {
               />
             </div>
             <PasswordField id="auth-pass" label="Contraseña" value={password} onChange={setPassword} show={showPassword} onToggle={() => setShowPassword((v) => !v)} autoComplete="current-password" />
+            <p className="-mt-1 text-right">
+              <button type="button" onClick={() => openRequest('forgot')} className="text-xs font-bold text-[#00ff88] hover:underline cursor-pointer">
+                ¿Olvidaste tu contraseña?
+              </button>
+            </p>
             <CaptchaWidget ref={captchaRef} onToken={setCaptcha} />
             <FormError message={error} />
             <SubmitButton busy={busy} label="Ingresar" busyLabel="Verificando…" disabled={CAPTCHA_ENABLED && !captcha} />
             <p className="text-center text-xs text-slate-400">
+              <button type="button" onClick={() => openRequest('otp')} className="font-bold text-[#00ff88] hover:underline cursor-pointer">
+                Entrar con un código por correo
+              </button>
+            </p>
+            <p className="text-center text-xs text-slate-400">
               ¿Primera vez?{' '}
               <button type="button" onClick={() => switchView('register')} className="font-bold text-[#00ff88] hover:underline cursor-pointer">
                 Crea tu cuenta
+              </button>
+            </p>
+          </form>
+        )}
+
+        {(view === 'forgot' || view === 'otp') && (
+          <form onSubmit={submitRequest} className="mt-5 space-y-4" noValidate>
+            <KeyRound className="mx-auto h-12 w-12 text-[#00ff88]" aria-hidden="true" />
+            <p className="text-center text-sm leading-relaxed text-slate-300">
+              {view === 'forgot'
+                ? 'Escribe el correo de tu cuenta y te enviamos un código de 6 dígitos para elegir una contraseña nueva.'
+                : 'Escribe el correo de tu cuenta y te enviamos un código de 6 dígitos para entrar, sin contraseña.'}
+            </p>
+            <div>
+              <label htmlFor="auth-req-email" className={labelClass}>
+                Correo
+              </label>
+              <input
+                id="auth-req-email"
+                type="email"
+                autoComplete="email"
+                autoCapitalize="none"
+                autoCorrect="off"
+                spellCheck={false}
+                value={reqEmail}
+                onChange={(e) => setReqEmail(e.target.value)}
+                className={fieldClass}
+              />
+            </div>
+            <CaptchaWidget ref={captchaRef} onToken={setCaptcha} />
+            <FormError message={error} />
+            <SubmitButton busy={busy} label="Enviarme el código" busyLabel="Enviando…" disabled={CAPTCHA_ENABLED && !captcha} />
+            <p className="text-center text-[11px] leading-relaxed text-slate-400">
+              Esto es solo para compradores. Si eres del equipo, pídele tu clave al desarrollador.
+            </p>
+            <p className="text-center">
+              <button type="button" onClick={() => switchView('login')} className="text-xs text-slate-400 hover:text-white hover:underline cursor-pointer">
+                Volver a ingresar
               </button>
             </p>
           </form>
@@ -477,9 +623,7 @@ export const AuthModal: React.FC<Props> = ({ request }) => {
         {view === 'confirm' && (
           <form onSubmit={submitCode} className="mt-5 space-y-4 text-center" noValidate>
             <MailCheck className="mx-auto h-12 w-12 text-[#00ff88]" aria-hidden="true" />
-            <p className="text-sm leading-relaxed text-slate-300">
-              Te enviamos un código de 6 dígitos a <strong className="text-white">{confirmEmail}</strong>. Escríbelo aquí para confirmar tu correo.
-            </p>
+            <p className="text-sm leading-relaxed text-slate-300">{codeIntro}</p>
             <div>
               <label htmlFor="auth-code" className="sr-only">
                 Código de 6 dígitos
@@ -503,7 +647,7 @@ export const AuthModal: React.FC<Props> = ({ request }) => {
               </p>
             )}
             <FormError message={error} />
-            <SubmitButton busy={busy} label="Confirmar" busyLabel="Verificando…" disabled={code.length !== 6} />
+            <SubmitButton busy={busy} label={codeButton} busyLabel="Verificando…" disabled={code.length !== 6} />
             <div className="space-y-3 border-t border-zinc-800 pt-4">
               <CaptchaWidget ref={captchaRef} onToken={setCaptcha} />
               <button
@@ -523,6 +667,29 @@ export const AuthModal: React.FC<Props> = ({ request }) => {
           </form>
         )}
 
+        {view === 'newpass' && (
+          <form onSubmit={submitNewPassword} className="mt-5 space-y-4" noValidate>
+            <KeyRound className="mx-auto h-12 w-12 text-[#00ff88]" aria-hidden="true" />
+            <p className="text-center text-sm leading-relaxed text-slate-300">Código correcto. Ahora escribe la contraseña nueva de tu cuenta.</p>
+            <PasswordField
+              id="auth-newpass"
+              label={`Contraseña nueva (mín. ${MIN_PASSWORD} caracteres)`}
+              value={password}
+              onChange={setPassword}
+              show={showPassword}
+              onToggle={() => setShowPassword((v) => !v)}
+              autoComplete="new-password"
+            />
+            <FormError message={error} />
+            <SubmitButton busy={busy} label="Guardar contraseña" busyLabel="Guardando…" disabled={password.length === 0} />
+            <p className="text-center">
+              <button type="button" onClick={() => openRequest('forgot')} className="text-xs text-slate-400 hover:text-white hover:underline cursor-pointer">
+                Pedir un código nuevo
+              </button>
+            </p>
+          </form>
+        )}
+
         {view === 'done' && account && (
           <div className="mt-5 space-y-4 text-center">
             <CheckCircle2 className="mx-auto h-12 w-12 text-[#00ff88]" aria-hidden="true" />
@@ -533,7 +700,7 @@ export const AuthModal: React.FC<Props> = ({ request }) => {
                 </>
               ) : (
                 <>
-                  Hola, <strong className="text-white">{account.name}</strong>. Tu cuenta está lista.
+                  Hola, <strong className="text-white">{account.name}</strong>. {doneNote || 'Tu cuenta está lista.'}
                 </>
               )}
             </p>
@@ -642,9 +809,19 @@ export const AuthModal: React.FC<Props> = ({ request }) => {
               <PasswordChange
                 minLength={MIN_PASSWORD}
                 onDone={(m) => {
-                  const good = /^Contraseña actualizada/.test(m);
+                  // El aviso de que se envió el código de seguridad no es un error: se muestra como aviso
+                  const good = /^(Contraseña actualizada|Te enviamos un código)/.test(m);
                   setError(good ? '' : m);
                   setNotice(good ? m : '');
+                }}
+              />
+            )}
+
+            {state.account?.kind === 'buyer' && (
+              <EmailChange
+                currentEmail={state.account.email}
+                onChanged={(next) => {
+                  if (state.account) setAccount({ ...state.account, email: next });
                 }}
               />
             )}

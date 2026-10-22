@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="color-scheme" content="dark">
 <meta name="supported-color-schemes" content="dark">
-<title>Restablece tu contraseña de Descuentos Perú</title>
+<title>Tu acceso a Descuentos Perú</title>
 <style>
 /* Animaciones suaves: se ven en Apple Mail / iPhone. Donde no se soportan (Gmail, Outlook) el correo se ve igual, pero quieto. */
 @keyframes dp-type{from{max-width:0}to{max-width:40ch}}
@@ -26,7 +26,7 @@
 </head>
 <body style="margin:0;padding:0;background-color:#040807;">
 <!-- Texto que se ve en la vista previa de la bandeja de entrada -->
-<div style="display:none;max-height:0;overflow:hidden;opacity:0;color:#040807;font-size:1px;line-height:1px;">Pulsa el botón para elegir una contraseña nueva.&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;</div>
+<div style="display:none;max-height:0;overflow:hidden;opacity:0;color:#040807;font-size:1px;line-height:1px;">Tu código para entrar es {{ .Token }}. Vence en 1 hora.&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;</div>
 
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#040807" style="background-color:#040807;">
   <tr>
@@ -52,7 +52,7 @@
                   </table>
                 </td>
                 <td align="right" valign="middle" style="font-family:'SF Mono',Menlo,Consolas,'Courier New',monospace;font-size:11px;letter-spacing:1px;color:#7b9a88;">
-                  descuentos.peru ~ restablecer
+                  descuentos.peru ~ acceso
                 </td>
               </tr>
             </table>
@@ -70,7 +70,7 @@
                 <td width="56" height="3" bgcolor="#00ff88" style="width:56px;height:3px;background-color:#00ff88;border-radius:2px;font-size:0;line-height:0;">&nbsp;</td>
               </tr>
             </table>
-            <div style="padding-top:20px;font-family:'SF Mono',Menlo,Consolas,'Courier New',monospace;font-size:13px;line-height:18px;color:#9fd9b8;"><span style="color:#00ff88;">$</span>&nbsp;<span class="dp-type" style="display:inline-block;overflow:hidden;white-space:nowrap;vertical-align:bottom;">protegiendo tu cuenta</span><span class="dp-cur" style="color:#00ff88;">&#9608;</span></div>
+            <div style="padding-top:20px;font-family:'SF Mono',Menlo,Consolas,'Courier New',monospace;font-size:13px;line-height:18px;color:#9fd9b8;"><span style="color:#00ff88;">$</span>&nbsp;<span class="dp-type" style="display:inline-block;overflow:hidden;white-space:nowrap;vertical-align:bottom;">abriendo tu acceso</span><span class="dp-cur" style="color:#00ff88;">&#9608;</span></div>
           </td>
         </tr>
         <tr>
@@ -83,7 +83,7 @@
             <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="border-collapse:separate;">
               <tr>
                 <td bgcolor="#0b2417" style="background-color:#0b2417;border:1px solid #14532d;border-radius:999px;padding:7px 16px;font-family:'SF Mono',Menlo,Consolas,'Courier New',monospace;font-size:11px;font-weight:bold;letter-spacing:2px;color:#00ff88;">
-                  <span class="dp-pls">&#9679;</span> RESTABLECER CONTRASEÑA
+                  <span class="dp-pls">&#9679;</span> ACCESO A TU CUENTA
                 </td>
               </tr>
             </table>
@@ -93,12 +93,98 @@
         <!-- Título y mensaje -->
         <tr>
           <td align="center" style="padding:18px 28px 0;font-family:'Segoe UI',Arial,Helvetica,sans-serif;font-size:30px;font-weight:800;line-height:36px;color:#ffffff;">
-            Crea una contraseña nueva
+            Entra a tu cuenta
           </td>
         </tr>
         <tr>
           <td align="center" style="padding:12px 40px 0;font-family:'Segoe UI',Arial,Helvetica,sans-serif;font-size:15px;line-height:25px;color:#a1a1aa;">
-            Recibimos una solicitud para cambiar la contraseña de tu cuenta.<br>Pulsa el botón para elegir una nueva.
+            Pediste entrar a <strong style="color:#ffffff;">Descuentos Perú</strong> sin contraseña.<br>Escribe este código en la web para entrar.
+          </td>
+        </tr>
+
+        <!-- Módulo del código -->
+        <tr>
+          <td class="dp-fade" align="center" style="padding:26px 22px 0;">
+            <table class="dp-glow" role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#07130d" style="max-width:380px;background-color:#07130d;background-image:linear-gradient(180deg,#0c2a1a 0%,#06100a 100%);border:2px solid #00ff88;border-radius:18px;border-collapse:separate;box-shadow:0 0 28px rgba(0,255,136,.28);">
+              <tr>
+                <td style="padding:14px 18px 0;">
+                  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+                    <tr>
+                      <td align="left" style="font-family:'SF Mono',Menlo,Consolas,'Courier New',monospace;font-size:11px;font-weight:bold;letter-spacing:2px;color:#00ff88;">// CÓDIGO DE ACCESO</td>
+                      <td align="right" style="font-family:'SF Mono',Menlo,Consolas,'Courier New',monospace;font-size:11px;letter-spacing:1px;color:#7b9a88;">6 DÍGITOS</td>
+                    </tr>
+                  </table>
+                </td>
+              </tr>
+              <tr>
+                <td height="12" style="height:12px;font-size:0;line-height:0;">&nbsp;</td>
+              </tr>
+              <tr>
+                <td height="1" bgcolor="#14532d" style="height:1px;background-color:#14532d;font-size:0;line-height:0;">&nbsp;</td>
+              </tr>
+              <tr>
+                <td align="center" style="padding:22px 0 20px 12px;font-family:'SF Mono',Menlo,Consolas,'Courier New',monospace;font-size:42px;font-weight:bold;letter-spacing:12px;line-height:48px;color:#00ff88;text-shadow:0 0 18px rgba(0,255,136,.55);">
+                  {{ .Token }}
+                </td>
+              </tr>
+              <tr>
+                <td style="padding:0 18px 18px;">
+                  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:separate;">
+                    <tr>
+                      <td class="dp-shim" height="6" bgcolor="#00ff88" style="height:6px;background-color:#00ff88;background-image:linear-gradient(90deg,#00a85a 0%,#00ff88 35%,#d6ffe9 50%,#00ff88 65%,#00a85a 100%);border-radius:3px;font-size:0;line-height:0;">&nbsp;</td>
+                    </tr>
+                  </table>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+        <tr>
+          <td align="center" style="padding:14px 36px 0;font-family:'Segoe UI',Arial,Helvetica,sans-serif;font-size:13px;line-height:20px;color:#a1a1aa;">
+            Vence en <strong style="color:#ffffff;">1 hora</strong> y sirve una sola vez.<br>Si vence, pide otro en «Entrar con un código por correo».
+          </td>
+        </tr>
+
+        <!-- Pasos -->
+        <tr>
+          <td style="padding:30px 24px 0;">
+            <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+              <tr>
+                <td style="font-family:'SF Mono',Menlo,Consolas,'Courier New',monospace;font-size:11px;font-weight:bold;letter-spacing:3px;color:#7b9a88;padding:0 4px 12px;">CÓMO ENTRAR</td>
+              </tr>
+              <tr>
+                <td bgcolor="#0e1712" style="background-color:#0e1712;border:1px solid #1a2e22;border-radius:12px;padding:14px 16px;">
+                  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+                    <tr>
+                      <td width="34" valign="top" style="width:34px;"><table role="presentation" cellpadding="0" cellspacing="0" border="0"><tr><td width="28" height="28" align="center" bgcolor="#0b2417" style="width:28px;height:28px;background-color:#0b2417;border:1px solid #14532d;border-radius:8px;font-family:'SF Mono',Menlo,Consolas,'Courier New',monospace;font-size:13px;font-weight:bold;color:#00ff88;">1</td></tr></table></td>
+                      <td valign="top" style="font-family:'Segoe UI',Arial,Helvetica,sans-serif;font-size:14px;line-height:20px;color:#a1a1aa;"><strong style="color:#ffffff;">Vuelve a la web</strong><br>Regresa a la pestaña donde pediste el código.</td>
+                    </tr>
+                  </table>
+                </td>
+              </tr>
+              <tr><td height="8" style="height:8px;font-size:0;line-height:0;">&nbsp;</td></tr>
+              <tr>
+                <td bgcolor="#0e1712" style="background-color:#0e1712;border:1px solid #1a2e22;border-radius:12px;padding:14px 16px;">
+                  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+                    <tr>
+                      <td width="34" valign="top" style="width:34px;"><table role="presentation" cellpadding="0" cellspacing="0" border="0"><tr><td width="28" height="28" align="center" bgcolor="#0b2417" style="width:28px;height:28px;background-color:#0b2417;border:1px solid #14532d;border-radius:8px;font-family:'SF Mono',Menlo,Consolas,'Courier New',monospace;font-size:13px;font-weight:bold;color:#00ff88;">2</td></tr></table></td>
+                      <td valign="top" style="font-family:'Segoe UI',Arial,Helvetica,sans-serif;font-size:14px;line-height:20px;color:#a1a1aa;"><strong style="color:#ffffff;">Escribe el código</strong><br>Los 6 dígitos de arriba, sin espacios.</td>
+                    </tr>
+                  </table>
+                </td>
+              </tr>
+              <tr><td height="8" style="height:8px;font-size:0;line-height:0;">&nbsp;</td></tr>
+              <tr>
+                <td bgcolor="#0b2417" style="background-color:#0b2417;border:1px solid #14532d;border-radius:12px;padding:14px 16px;">
+                  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+                    <tr>
+                      <td width="34" valign="top" style="width:34px;"><table role="presentation" cellpadding="0" cellspacing="0" border="0"><tr><td width="28" height="28" align="center" bgcolor="#00ff88" style="width:28px;height:28px;background-color:#00ff88;border-radius:8px;font-family:'SF Mono',Menlo,Consolas,'Courier New',monospace;font-size:13px;font-weight:bold;color:#050505;">&#10003;</td></tr></table></td>
+                      <td valign="top" style="font-family:'Segoe UI',Arial,Helvetica,sans-serif;font-size:14px;line-height:20px;color:#a1a1aa;"><strong style="color:#00ff88;">¡Listo, ya estás dentro!</strong><br>Entras a tu cuenta sin escribir tu contraseña.</td>
+                    </tr>
+                  </table>
+                </td>
+              </tr>
+            </table>
           </td>
         </tr>
 
@@ -108,16 +194,10 @@
             <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="border-collapse:separate;">
               <tr>
                 <td align="center" bgcolor="#00ff88" style="background-color:#00ff88;background-image:linear-gradient(180deg,#2dffa0 0%,#00e57a 100%);border-radius:14px;border-bottom:3px solid #00a85a;box-shadow:0 8px 26px rgba(0,255,136,.30);">
-                  <a href="{{ .ConfirmationURL }}" style="display:inline-block;padding:15px 36px;font-family:'Segoe UI',Arial,Helvetica,sans-serif;font-size:16px;font-weight:800;color:#04130b;text-decoration:none;border-radius:14px;">Cambiar mi contraseña &rarr;</a>
+                  <a href="{{ .SiteURL }}" style="display:inline-block;padding:15px 36px;font-family:'Segoe UI',Arial,Helvetica,sans-serif;font-size:16px;font-weight:800;color:#04130b;text-decoration:none;border-radius:14px;">Ir a Descuentos Perú &rarr;</a>
                 </td>
               </tr>
             </table>
-          </td>
-        </tr>
-        <tr>
-          <td align="center" style="padding:16px 32px 0;font-family:'Segoe UI',Arial,Helvetica,sans-serif;font-size:12px;line-height:18px;color:#8e8e97;">
-            ¿El botón no funciona? Copia este enlace y pégalo en tu navegador:
-            <div style="padding-top:6px;font-family:'SF Mono',Menlo,Consolas,'Courier New',monospace;font-size:11px;line-height:17px;color:#7b9a88;word-break:break-all;">{{ .ConfirmationURL }}</div>
           </td>
         </tr>
 
@@ -130,7 +210,7 @@
                   <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
                     <tr>
                       <td width="36" valign="top" style="width:36px;"><table role="presentation" cellpadding="0" cellspacing="0" border="0"><tr><td width="24" height="24" align="center" bgcolor="#0b2417" style="width:24px;height:24px;background-color:#0b2417;border:1px solid #14532d;border-radius:12px;font-family:'Segoe UI',Arial,Helvetica,sans-serif;font-size:13px;font-weight:bold;color:#00ff88;">!</td></tr></table></td>
-                      <td valign="top" style="font-family:'Segoe UI',Arial,Helvetica,sans-serif;font-size:13px;line-height:20px;color:#d4d4d8;"><strong style="color:#ffffff;">Tu seguridad.</strong> Si no lo pediste, ignora este correo: tu contraseña actual sigue igual. Nadie del equipo te pedirá este enlace.</td>
+                      <td valign="top" style="font-family:'Segoe UI',Arial,Helvetica,sans-serif;font-size:13px;line-height:20px;color:#d4d4d8;"><strong style="color:#ffffff;">Tu seguridad.</strong> Nadie del equipo te pedirá este código por Telegram, WhatsApp ni llamada. Si no fuiste tú, ignora este correo: sin el código nadie puede entrar a tu cuenta.</td>
                     </tr>
                   </table>
                 </td>
@@ -171,7 +251,7 @@
         </tr>
         <tr>
           <td align="center" style="padding:14px 36px 30px;font-family:'Segoe UI',Arial,Helvetica,sans-serif;font-size:11px;line-height:17px;color:#7b9a88;">
-            Recibiste este correo porque alguien pidió restablecer la contraseña de una cuenta de Descuentos Perú.<br>&copy; 2026 Descuentos Perú
+            Recibiste este correo porque alguien pidió entrar a Descuentos Perú con esta dirección.<br>&copy; 2026 Descuentos Perú
           </td>
         </tr>
 

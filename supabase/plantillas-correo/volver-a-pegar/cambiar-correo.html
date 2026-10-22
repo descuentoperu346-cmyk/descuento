@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="color-scheme" content="dark">
 <meta name="supported-color-schemes" content="dark">
-<title>Tu acceso a Descuentos Perú</title>
+<title>Confirma tu nuevo correo en Descuentos Perú</title>
 <style>
 /* Animaciones suaves: se ven en Apple Mail / iPhone. Donde no se soportan (Gmail, Outlook) el correo se ve igual, pero quieto. */
 @keyframes dp-type{from{max-width:0}to{max-width:40ch}}
@@ -26,7 +26,7 @@
 </head>
 <body style="margin:0;padding:0;background-color:#040807;">
 <!-- Texto que se ve en la vista previa de la bandeja de entrada -->
-<div style="display:none;max-height:0;overflow:hidden;opacity:0;color:#040807;font-size:1px;line-height:1px;">Tu código para entrar es {{ .Token }}. Vence en 1 hora.&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;</div>
+<div style="display:none;max-height:0;overflow:hidden;opacity:0;color:#040807;font-size:1px;line-height:1px;">Tu código para confirmar el cambio de correo es {{ .Token }}. Vence en 1 hora.&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;</div>
 
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#040807" style="background-color:#040807;">
   <tr>
@@ -52,7 +52,7 @@
                   </table>
                 </td>
                 <td align="right" valign="middle" style="font-family:'SF Mono',Menlo,Consolas,'Courier New',monospace;font-size:11px;letter-spacing:1px;color:#7b9a88;">
-                  descuentos.peru ~ acceso
+                  descuentos.peru ~ cambio-de-correo
                 </td>
               </tr>
             </table>
@@ -70,7 +70,7 @@
                 <td width="56" height="3" bgcolor="#00ff88" style="width:56px;height:3px;background-color:#00ff88;border-radius:2px;font-size:0;line-height:0;">&nbsp;</td>
               </tr>
             </table>
-            <div style="padding-top:20px;font-family:'SF Mono',Menlo,Consolas,'Courier New',monospace;font-size:13px;line-height:18px;color:#9fd9b8;"><span style="color:#00ff88;">$</span>&nbsp;<span class="dp-type" style="display:inline-block;overflow:hidden;white-space:nowrap;vertical-align:bottom;">abriendo tu acceso</span><span class="dp-cur" style="color:#00ff88;">&#9608;</span></div>
+            <div style="padding-top:20px;font-family:'SF Mono',Menlo,Consolas,'Courier New',monospace;font-size:13px;line-height:18px;color:#9fd9b8;"><span style="color:#00ff88;">$</span>&nbsp;<span class="dp-type" style="display:inline-block;overflow:hidden;white-space:nowrap;vertical-align:bottom;">verificando el cambio</span><span class="dp-cur" style="color:#00ff88;">&#9608;</span></div>
           </td>
         </tr>
         <tr>
@@ -83,7 +83,7 @@
             <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="border-collapse:separate;">
               <tr>
                 <td bgcolor="#0b2417" style="background-color:#0b2417;border:1px solid #14532d;border-radius:999px;padding:7px 16px;font-family:'SF Mono',Menlo,Consolas,'Courier New',monospace;font-size:11px;font-weight:bold;letter-spacing:2px;color:#00ff88;">
-                  <span class="dp-pls">&#9679;</span> ACCESO A TU CUENTA
+                  <span class="dp-pls">&#9679;</span> CAMBIO DE CORREO
                 </td>
               </tr>
             </table>
@@ -93,12 +93,33 @@
         <!-- Título y mensaje -->
         <tr>
           <td align="center" style="padding:18px 28px 0;font-family:'Segoe UI',Arial,Helvetica,sans-serif;font-size:30px;font-weight:800;line-height:36px;color:#ffffff;">
-            Entra a tu cuenta
+            Confirma el cambio de correo
           </td>
         </tr>
         <tr>
           <td align="center" style="padding:12px 40px 0;font-family:'Segoe UI',Arial,Helvetica,sans-serif;font-size:15px;line-height:25px;color:#a1a1aa;">
-            Usa este código en la web o pulsa el botón para entrar directamente.
+            Pediste cambiar el correo de tu cuenta.<br>Revisa los datos y escribe este código en la web.
+          </td>
+        </tr>
+
+        <!-- Datos -->
+        <tr>
+          <td style="padding:28px 24px 0;">
+            <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#0e1712" style="background-color:#0e1712;border:1px solid #1a2e22;border-radius:12px;border-collapse:separate;">
+              <tr>
+                <td style="padding:14px 18px;">
+                  <div style="font-family:'SF Mono',Menlo,Consolas,'Courier New',monospace;font-size:10px;font-weight:bold;letter-spacing:2px;color:#7b9a88;">CORREO ACTUAL</div>
+                  <div style="padding-top:5px;font-family:'Segoe UI',Arial,Helvetica,sans-serif;font-size:16px;font-weight:bold;line-height:22px;color:#ffffff;word-break:break-all;">{{ .Email }}</div>
+                </td>
+              </tr>
+              <tr><td height="1" bgcolor="#1a2e22" style="height:1px;background-color:#1a2e22;font-size:0;line-height:0;">&nbsp;</td></tr>
+              <tr>
+                <td style="padding:14px 18px;">
+                  <div style="font-family:'SF Mono',Menlo,Consolas,'Courier New',monospace;font-size:10px;font-weight:bold;letter-spacing:2px;color:#7b9a88;">CORREO NUEVO</div>
+                  <div style="padding-top:5px;font-family:'Segoe UI',Arial,Helvetica,sans-serif;font-size:16px;font-weight:bold;line-height:22px;color:#00ff88;word-break:break-all;">{{ .NewEmail }}</div>
+                </td>
+              </tr>
+            </table>
           </td>
         </tr>
 
@@ -110,7 +131,7 @@
                 <td style="padding:14px 18px 0;">
                   <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
                     <tr>
-                      <td align="left" style="font-family:'SF Mono',Menlo,Consolas,'Courier New',monospace;font-size:11px;font-weight:bold;letter-spacing:2px;color:#00ff88;">// CÓDIGO DE ACCESO</td>
+                      <td align="left" style="font-family:'SF Mono',Menlo,Consolas,'Courier New',monospace;font-size:11px;font-weight:bold;letter-spacing:2px;color:#00ff88;">// CÓDIGO DE CAMBIO</td>
                       <td align="right" style="font-family:'SF Mono',Menlo,Consolas,'Courier New',monospace;font-size:11px;letter-spacing:1px;color:#7b9a88;">6 DÍGITOS</td>
                     </tr>
                   </table>
@@ -141,26 +162,7 @@
         </tr>
         <tr>
           <td align="center" style="padding:14px 36px 0;font-family:'Segoe UI',Arial,Helvetica,sans-serif;font-size:13px;line-height:20px;color:#a1a1aa;">
-            Vence en <strong style="color:#ffffff;">1 hora</strong>. Si vence, pide uno nuevo desde la web.
-          </td>
-        </tr>
-
-        <!-- Botón -->
-        <tr>
-          <td class="dp-fade2" align="center" style="padding:30px 28px 0;">
-            <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="border-collapse:separate;">
-              <tr>
-                <td align="center" bgcolor="#00ff88" style="background-color:#00ff88;background-image:linear-gradient(180deg,#2dffa0 0%,#00e57a 100%);border-radius:14px;border-bottom:3px solid #00a85a;box-shadow:0 8px 26px rgba(0,255,136,.30);">
-                  <a href="{{ .ConfirmationURL }}" style="display:inline-block;padding:15px 36px;font-family:'Segoe UI',Arial,Helvetica,sans-serif;font-size:16px;font-weight:800;color:#04130b;text-decoration:none;border-radius:14px;">Entrar a Descuentos Perú &rarr;</a>
-                </td>
-              </tr>
-            </table>
-          </td>
-        </tr>
-        <tr>
-          <td align="center" style="padding:16px 32px 0;font-family:'Segoe UI',Arial,Helvetica,sans-serif;font-size:12px;line-height:18px;color:#8e8e97;">
-            ¿El botón no funciona? Copia este enlace y pégalo en tu navegador:
-            <div style="padding-top:6px;font-family:'SF Mono',Menlo,Consolas,'Courier New',monospace;font-size:11px;line-height:17px;color:#7b9a88;word-break:break-all;">{{ .ConfirmationURL }}</div>
+            Vence en <strong style="color:#ffffff;">1 hora</strong> y sirve una sola vez.<br>Si vence, pide otro en <em>Mi cuenta &rarr; Cambiar correo</em>.
           </td>
         </tr>
 
@@ -173,7 +175,68 @@
                   <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
                     <tr>
                       <td width="36" valign="top" style="width:36px;"><table role="presentation" cellpadding="0" cellspacing="0" border="0"><tr><td width="24" height="24" align="center" bgcolor="#0b2417" style="width:24px;height:24px;background-color:#0b2417;border:1px solid #14532d;border-radius:12px;font-family:'Segoe UI',Arial,Helvetica,sans-serif;font-size:13px;font-weight:bold;color:#00ff88;">!</td></tr></table></td>
-                      <td valign="top" style="font-family:'Segoe UI',Arial,Helvetica,sans-serif;font-size:13px;line-height:20px;color:#d4d4d8;"><strong style="color:#ffffff;">Tu seguridad.</strong> Nadie del equipo te pedirá este código por Telegram, WhatsApp ni llamada. Si no fuiste tú, ignora este correo.</td>
+                      <td valign="top" style="font-family:'Segoe UI',Arial,Helvetica,sans-serif;font-size:13px;line-height:20px;color:#d4d4d8;"><strong style="color:#ffffff;">¿Te llegaron dos correos?</strong> Por seguridad puede llegar un código a cada dirección, la actual y la nueva. Si te llegan los dos, escribe <strong style="color:#ffffff;">los dos códigos</strong> en la web.</td>
+                    </tr>
+                  </table>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+
+        <!-- Pasos -->
+        <tr>
+          <td style="padding:30px 24px 0;">
+            <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+              <tr>
+                <td style="font-family:'SF Mono',Menlo,Consolas,'Courier New',monospace;font-size:11px;font-weight:bold;letter-spacing:3px;color:#7b9a88;padding:0 4px 12px;">CÓMO CONFIRMARLO</td>
+              </tr>
+              <tr>
+                <td bgcolor="#0e1712" style="background-color:#0e1712;border:1px solid #1a2e22;border-radius:12px;padding:14px 16px;">
+                  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+                    <tr>
+                      <td width="34" valign="top" style="width:34px;"><table role="presentation" cellpadding="0" cellspacing="0" border="0"><tr><td width="28" height="28" align="center" bgcolor="#0b2417" style="width:28px;height:28px;background-color:#0b2417;border:1px solid #14532d;border-radius:8px;font-family:'SF Mono',Menlo,Consolas,'Courier New',monospace;font-size:13px;font-weight:bold;color:#00ff88;">1</td></tr></table></td>
+                      <td valign="top" style="font-family:'Segoe UI',Arial,Helvetica,sans-serif;font-size:14px;line-height:20px;color:#a1a1aa;"><strong style="color:#ffffff;">Vuelve a la web</strong><br>Abre <em>Mi cuenta &rarr; Cambiar correo</em> en la pestaña donde lo pediste.</td>
+                    </tr>
+                  </table>
+                </td>
+              </tr>
+              <tr><td height="8" style="height:8px;font-size:0;line-height:0;">&nbsp;</td></tr>
+              <tr>
+                <td bgcolor="#0e1712" style="background-color:#0e1712;border:1px solid #1a2e22;border-radius:12px;padding:14px 16px;">
+                  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+                    <tr>
+                      <td width="34" valign="top" style="width:34px;"><table role="presentation" cellpadding="0" cellspacing="0" border="0"><tr><td width="28" height="28" align="center" bgcolor="#0b2417" style="width:28px;height:28px;background-color:#0b2417;border:1px solid #14532d;border-radius:8px;font-family:'SF Mono',Menlo,Consolas,'Courier New',monospace;font-size:13px;font-weight:bold;color:#00ff88;">2</td></tr></table></td>
+                      <td valign="top" style="font-family:'Segoe UI',Arial,Helvetica,sans-serif;font-size:14px;line-height:20px;color:#a1a1aa;"><strong style="color:#ffffff;">Escribe el código</strong><br>Los 6 dígitos de arriba. Si llegó otro a la otra dirección, escribe también ese.</td>
+                    </tr>
+                  </table>
+                </td>
+              </tr>
+              <tr><td height="8" style="height:8px;font-size:0;line-height:0;">&nbsp;</td></tr>
+              <tr>
+                <td bgcolor="#0b2417" style="background-color:#0b2417;border:1px solid #14532d;border-radius:12px;padding:14px 16px;">
+                  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+                    <tr>
+                      <td width="34" valign="top" style="width:34px;"><table role="presentation" cellpadding="0" cellspacing="0" border="0"><tr><td width="28" height="28" align="center" bgcolor="#00ff88" style="width:28px;height:28px;background-color:#00ff88;border-radius:8px;font-family:'SF Mono',Menlo,Consolas,'Courier New',monospace;font-size:13px;font-weight:bold;color:#050505;">&#10003;</td></tr></table></td>
+                      <td valign="top" style="font-family:'Segoe UI',Arial,Helvetica,sans-serif;font-size:14px;line-height:20px;color:#a1a1aa;"><strong style="color:#00ff88;">¡Listo, correo nuevo!</strong><br>Desde ahora entras con <strong style="color:#ffffff;">{{ .NewEmail }}</strong>.</td>
+                    </tr>
+                  </table>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+
+        <!-- Aviso -->
+        <tr>
+          <td style="padding:30px 24px 0;">
+            <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#111114" style="background-color:#111114;border:1px solid #27272a;border-left:4px solid #febc2e;border-radius:12px;border-collapse:separate;">
+              <tr>
+                <td style="padding:16px 18px;">
+                  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+                    <tr>
+                      <td width="36" valign="top" style="width:36px;"><table role="presentation" cellpadding="0" cellspacing="0" border="0"><tr><td width="24" height="24" align="center" bgcolor="#261c06" style="width:24px;height:24px;background-color:#261c06;border:1px solid #6b5212;border-radius:12px;font-family:'Segoe UI',Arial,Helvetica,sans-serif;font-size:13px;font-weight:bold;color:#febc2e;">!</td></tr></table></td>
+                      <td valign="top" style="font-family:'Segoe UI',Arial,Helvetica,sans-serif;font-size:13px;line-height:20px;color:#d4d4d8;"><strong style="color:#ffffff;">¿No fuiste tú?</strong> No escribas el código: el correo de tu cuenta no cambiará. Cambia tu contraseña por si acaso. Escríbenos cuanto antes por Telegram: <a href="https://t.me/Tin9o" style="color:#febc2e;font-weight:bold;text-decoration:none;">@Tin9o</a>.</td>
                     </tr>
                   </table>
                 </td>
@@ -214,7 +277,7 @@
         </tr>
         <tr>
           <td align="center" style="padding:14px 36px 30px;font-family:'Segoe UI',Arial,Helvetica,sans-serif;font-size:11px;line-height:17px;color:#7b9a88;">
-            Recibiste este correo porque alguien pidió entrar a Descuentos Perú con esta dirección.<br>&copy; 2026 Descuentos Perú
+            Recibiste este correo porque se pidió cambiar el correo de una cuenta de Descuentos Perú.<br>&copy; 2026 Descuentos Perú
           </td>
         </tr>
 

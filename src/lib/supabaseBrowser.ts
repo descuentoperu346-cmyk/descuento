@@ -76,6 +76,9 @@ function authErrorMessage(error: { message?: string; status?: number; code?: str
   if (/email_provider_disabled/i.test(code)) return 'El acceso con correo está desactivado en este momento. Avisa al administrador de la web.';
   if (/email_not_confirmed/i.test(code)) return 'Falta confirmar tu correo. Revisa tu bandeja de entrada.';
   if (/captcha/i.test(code) || /captcha/i.test(msg)) return 'No se pudo comprobar la verificación de seguridad. Inténtalo de nuevo.';
+  if (/same_password/i.test(code)) return 'La contraseña nueva debe ser distinta de la actual.';
+  if (/reauthentication_needed/i.test(code)) return 'Por seguridad, hay que confirmar que eres tú con un código.';
+  if (/reauthentication_not_valid/i.test(code)) return 'El código de seguridad es incorrecto o ya venció. Pide uno nuevo.';
   if (/otp_expired|otp_disabled/i.test(code) || /token has expired|token.*invalid|invalid.*token/i.test(msg)) return 'El código es incorrecto o ya venció. Revisa los 6 dígitos o pide uno nuevo.';
   if (/invalid_credentials/i.test(code) || error?.status === 400 || error?.status === 401 || /invalid login/i.test(msg)) {
     return 'Usuario o contraseña incorrectos.';
@@ -113,13 +116,33 @@ export async function panelGetUser(): Promise<AuthUser | null> {
   }
 }
 
-/** Cambia la contraseña de la cuenta con sesión iniciada. Devuelve un mensaje de error o null si salió bien. */
-export async function panelChangePassword(password: string): Promise<string | null> {
+/**
+ * Cambia la contraseña de la cuenta con sesión iniciada.
+ * Si Supabase pide confirmar la identidad ("Secure password change" con la sesión vieja) devuelve `needsReauth`:
+ * se pide el código con `panelRequestReauth` y se vuelve a llamar con ese código en `nonce`.
+ */
+export async function panelChangePassword(password: string, nonce?: string): Promise<{ error: string | null; needsReauth?: boolean }> {
   try {
-    const { error } = await sb().auth.updateUser({ password });
-    return error ? error.message : null;
+    const { error } = await sb().auth.updateUser(nonce ? { password, nonce } : { password });
+    if (!error) return { error: null };
+    if (error.code === 'reauthentication_needed') return { error: authErrorMessage(error, error.message), needsReauth: true };
+    return { error: authErrorMessage(error, error.message) };
   } catch {
-    return 'No se pudo conectar con el servidor de acceso.';
+    return { error: 'No se pudo conectar con el servidor de acceso.' };
+  }
+}
+
+/** Envía al correo de la cuenta un código de seguridad (correo «Reauthentication»). Devuelve un mensaje de error o null. */
+export async function panelRequestReauth(): Promise<string | null> {
+  try {
+    const { data } = await sb().auth.getSession();
+    if (!data.session) return 'Tu sesión venció. Vuelve a iniciar sesión.';
+    // Las cuentas del equipo tienen un correo interno que no recibe mensajes: ahí el código nunca llegaría
+    if ((data.session.user.email || '').endsWith('.invalid')) return 'Por seguridad, cierra sesión, vuelve a entrar y cambia la contraseña enseguida.';
+    const { error } = await sb().auth.reauthenticate();
+    return error ? authErrorMessage(error, 'No se pudo enviar el código. Inténtalo de nuevo en un momento.') : null;
+  } catch {
+    return 'No se pudo conectar con el servidor. Inténtalo de nuevo.';
   }
 }
 
@@ -206,11 +229,14 @@ export async function accountSignIn(identifier: string, password: string, captch
   }
 }
 
-/** Confirma el correo con el código de 6 dígitos que llegó por correo y deja la sesión iniciada. */
-export async function buyerVerifyCode(email: string, code: string): Promise<AccountResult> {
+/**
+ * Comprueba el código de 6 dígitos que llegó por correo y deja la sesión iniciada.
+ * `signup`: confirmar el correo al crear la cuenta. `email`: ingresar con un código, sin contraseña.
+ */
+export async function buyerVerifyCode(email: string, code: string, type: 'signup' | 'email' = 'signup'): Promise<AccountResult> {
   try {
     me = undefined;
-    const { data, error } = await sb().auth.verifyOtp({ email: email.trim(), token: code.trim(), type: 'signup' });
+    const { data, error } = await sb().auth.verifyOtp({ email: email.trim(), token: code.trim(), type });
     if (error || !data?.session) {
       return { ok: false, error: authErrorMessage(error, 'No se pudo confirmar el código. Inténtalo de nuevo.') };
     }
@@ -227,6 +253,106 @@ export async function buyerResendCode(email: string, captchaToken?: string): Pro
     return error ? authErrorMessage(error, 'No se pudo enviar el código. Inténtalo de nuevo en un momento.') : null;
   } catch {
     return 'No se pudo conectar con el servidor. Inténtalo de nuevo.';
+  }
+}
+
+// ---------------------------------------------------------------- olvidé mi contraseña, ingresar con código y cambiar correo
+const NO_CONNECTION = 'No se pudo conectar con el servidor. Inténtalo de nuevo.';
+const CODE_NOT_SENT = 'No se pudo enviar el código. Inténtalo de nuevo en un momento.';
+
+/** Pide el código de 6 dígitos para elegir una contraseña nueva. Si el correo no tiene cuenta, Supabase responde igual: no se revela quién tiene cuenta. */
+export async function buyerRequestPasswordReset(email: string, captchaToken?: string): Promise<string | null> {
+  try {
+    const { error } = await sb().auth.resetPasswordForEmail(email.trim(), captchaToken ? { captchaToken } : undefined);
+    return error ? authErrorMessage(error, CODE_NOT_SENT) : null;
+  } catch {
+    return NO_CONNECTION;
+  }
+}
+
+/** Comprueba el código de recuperación. Si es correcto queda una sesión abierta, con la que se elige la contraseña nueva. */
+export async function buyerVerifyRecoveryCode(email: string, code: string): Promise<string | null> {
+  try {
+    me = undefined;
+    const { data, error } = await sb().auth.verifyOtp({ email: email.trim(), token: code.trim(), type: 'recovery' });
+    return error || !data?.session ? authErrorMessage(error, 'No se pudo confirmar el código. Inténtalo de nuevo.') : null;
+  } catch {
+    return NO_CONNECTION;
+  }
+}
+
+/** Guarda la contraseña nueva (después de comprobar el código de recuperación) y deja a la persona dentro. */
+export async function buyerSetNewPassword(password: string): Promise<AccountResult> {
+  try {
+    const { error } = await sb().auth.updateUser({ password });
+    if (error) {
+      // Sin sesión válida, Supabase responde 401: no es "usuario o contraseña incorrectos"
+      if (error.status === 401 || /session_not_found|bad_jwt|no_authorization/i.test(error.code || '')) return { ok: false, error: 'Tu sesión venció. Pide un código nuevo.' };
+      return { ok: false, error: authErrorMessage(error, 'No se pudo guardar la contraseña. Inténtalo de nuevo.') };
+    }
+    me = undefined;
+    return { ok: true, account: await accountGet() };
+  } catch {
+    return { ok: false, error: NO_CONNECTION };
+  }
+}
+
+/**
+ * Pide un código de 6 dígitos para ingresar sin contraseña. No crea cuentas: para eso está el registro.
+ * Un correo sin cuenta responde "otp_disabled"; se trata como enviado para no revelar quién tiene cuenta.
+ */
+export async function buyerRequestLoginCode(email: string, captchaToken?: string): Promise<string | null> {
+  try {
+    const { error } = await sb().auth.signInWithOtp({ email: email.trim(), options: { shouldCreateUser: false, ...(captchaToken ? { captchaToken } : {}) } });
+    if (error && !/otp_disabled/i.test(error.code || '')) return authErrorMessage(error, CODE_NOT_SENT);
+    return null;
+  } catch {
+    return NO_CONNECTION;
+  }
+}
+
+/** Pide el cambio de correo de la cuenta con sesión. Supabase manda un código al correo nuevo (y, con "Secure email change", otro al actual). */
+export async function buyerRequestEmailChange(newEmail: string): Promise<string | null> {
+  try {
+    const { error } = await sb().auth.updateUser({ email: newEmail.trim() });
+    if (!error) return null;
+    if (/email_exists/i.test(error.code || '')) return 'Ese correo ya está en uso en otra cuenta.';
+    return authErrorMessage(error, CODE_NOT_SENT);
+  } catch {
+    return NO_CONNECTION;
+  }
+}
+
+/**
+ * Confirma el cambio de correo con los códigos recibidos (el del correo actual y el del nuevo; basta el que llegó).
+ * Lo que cuenta es el estado final de la cuenta: `email` si ya cambió, `pending` si falta el otro código.
+ */
+export async function buyerConfirmEmailChange(
+  currentEmail: string,
+  newEmail: string,
+  codeCurrent: string,
+  codeNew: string
+): Promise<{ email?: string; pending?: boolean; error?: string }> {
+  try {
+    const target = newEmail.trim().toLowerCase();
+    const pairs: Array<[string, string]> = [];
+    if (codeCurrent.trim()) pairs.push([currentEmail.trim(), codeCurrent.trim()]);
+    if (codeNew.trim()) pairs.push([target, codeNew.trim()]);
+    let problem = '';
+    for (const [email, token] of pairs) {
+      const { error } = await sb().auth.verifyOtp({ email, token, type: 'email_change' });
+      if (error && !problem) problem = authErrorMessage(error, 'No se pudo confirmar el código. Inténtalo de nuevo.');
+    }
+    const { data } = await sb().auth.getUser();
+    const user = data.user;
+    if (user && (user.email || '').toLowerCase() === target && !user.new_email) {
+      me = undefined;
+      return { email: user.email };
+    }
+    if (problem) return { error: problem };
+    return { pending: true };
+  } catch {
+    return { error: NO_CONNECTION };
   }
 }
 
