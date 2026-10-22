@@ -8,7 +8,7 @@ import { PasswordChange } from './PasswordChange';
 import { CaptchaWidget, type CaptchaHandle } from './CaptchaWidget';
 import { CAPTCHA_ENABLED } from '../lib/captcha';
 
-type View = 'login' | 'register' | 'confirm' | 'done' | 'account';
+type View = 'login' | 'register' | 'confirm' | 'done' | 'account' | 'bye';
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const PHONE_RE = /^\+?[\d\s-]{6,20}$/;
@@ -39,6 +39,8 @@ export const AuthModal: React.FC<Props> = ({ request }) => {
   const [code, setCode] = useState('');
   const [cooldown, setCooldown] = useState(0);
   const [notice, setNotice] = useState('');
+  // Nombre que se muestra en la despedida al cerrar sesión (solo compradores)
+  const [byeName, setByeName] = useState('');
   const dialogRef = useRef<HTMLDivElement>(null);
 
   // login
@@ -59,6 +61,19 @@ export const AuthModal: React.FC<Props> = ({ request }) => {
       setView(request.mode === 'account' ? 'account' : 'done');
     }
   }, [state.status, state.account, view, request.mode]);
+
+  // Si la sesión se cierra con "Mi cuenta" abierta (otra pestaña, por ejemplo), la ventana se cierra:
+  // sin sesión nunca se ofrece entrar al panel.
+  useEffect(() => {
+    if (view === 'account' && state.status === 'out') closeAuth();
+  }, [view, state.status]);
+
+  // La despedida se cierra sola después de unos segundos
+  useEffect(() => {
+    if (view !== 'bye') return;
+    const t = window.setTimeout(closeAuth, 6000);
+    return () => window.clearTimeout(t);
+  }, [view]);
 
   // Cerrar con Escape, mantener el foco dentro y devolverlo al cerrar
   useEffect(() => {
@@ -284,13 +299,23 @@ export const AuthModal: React.FC<Props> = ({ request }) => {
   };
 
   const logout = async () => {
-    await signOutAccount();
+    if (state.account?.kind === 'buyer') {
+      // El comprador ve una despedida; la sesión se cierra mientras tanto
+      setByeName((state.account.name || '').trim().split(/\s+/)[0] || '');
+      setError('');
+      setNotice('');
+      setView('bye');
+      await signOutAccount();
+      return;
+    }
+    // La ventana se cierra primero: así no queda "Mi cuenta" sin datos mientras termina de cerrarse la sesión.
     closeAuth();
+    await signOutAccount();
   };
 
   const isStaff = account?.kind === 'staff';
   const title =
-    view === 'register' ? 'Crea tu cuenta' : view === 'login' ? 'Ingresar' : view === 'confirm' ? 'Revisa tu correo' : view === 'done' ? '¡Listo!' : 'Mi cuenta';
+    view === 'register' ? 'Crea tu cuenta' : view === 'login' ? 'Ingresar' : view === 'confirm' ? 'Revisa tu correo' : view === 'done' ? '¡Listo!' : view === 'bye' ? '¡Hasta pronto!' : 'Mi cuenta';
 
   return (
     <div
@@ -544,6 +569,29 @@ export const AuthModal: React.FC<Props> = ({ request }) => {
           </div>
         )}
 
+        {view === 'bye' && (
+          <div className="mt-5 space-y-4 text-center">
+            <CheckCircle2 className="mx-auto h-12 w-12 text-[#00ff88]" aria-hidden="true" />
+            <p role="status" className="text-sm leading-relaxed text-slate-300">
+              {byeName ? (
+                <>
+                  Gracias por visitarnos, <strong className="text-white">{byeName}</strong>.
+                </>
+              ) : (
+                'Gracias por visitarnos.'
+              )}
+              <br />
+              Tu sesión se cerró. ¡Te esperamos pronto en Descuentos Perú!
+            </p>
+            <button type="button" onClick={closeAuth} className="w-full rounded-2xl bg-[#00ff88] py-3 text-sm font-black text-slate-950 hover:bg-[#00e676] cursor-pointer">
+              Seguir navegando
+            </button>
+            <button type="button" onClick={() => switchView('login')} className="w-full rounded-2xl border border-zinc-700 py-2.5 text-xs font-bold text-slate-300 hover:text-white cursor-pointer">
+              Volver a ingresar
+            </button>
+          </div>
+        )}
+
         {view === 'account' && (
           <div className="mt-5 space-y-5">
             <div className="rounded-2xl border border-zinc-800 bg-black/40 px-4 py-3 text-sm">
@@ -576,7 +624,7 @@ export const AuthModal: React.FC<Props> = ({ request }) => {
                 )}
                 <SubmitButton busy={busy} label="Guardar datos" busyLabel="Guardando…" />
               </form>
-            ) : (
+            ) : state.account?.kind === 'staff' ? (
               <button
                 type="button"
                 onClick={() => {
@@ -588,7 +636,7 @@ export const AuthModal: React.FC<Props> = ({ request }) => {
                 <LayoutDashboard className="h-4 w-4" aria-hidden="true" />
                 Ir al panel
               </button>
-            )}
+            ) : null}
 
             {state.account?.kind === 'buyer' && (
               <PasswordChange
