@@ -51,6 +51,13 @@ export const AuthModal: React.FC<Props> = ({ request }) => {
   // Nombre que se muestra en la despedida al cerrar sesión (solo compradores)
   const [byeName, setByeName] = useState('');
   const dialogRef = useRef<HTMLDivElement>(null);
+  // Las dos casillas son obligatorias para crear cuenta e ingresar (con correo, con código o con Google):
+  // `terms` = Términos y Condiciones y Política de Privacidad; `secrecy` = no divulgación del contenido de la venta.
+  // Las mismas casillas sirven para las dos pestañas; no se guardan para la próxima vez.
+  const [accepted, setAccepted] = useState({ terms: false, secrecy: false });
+  const [acceptError, setAcceptError] = useState(false);
+  const termsRef = useRef<HTMLInputElement>(null);
+  const secrecyRef = useRef<HTMLInputElement>(null);
 
   // login
   const [identifier, setIdentifier] = useState('');
@@ -118,7 +125,8 @@ export const AuthModal: React.FC<Props> = ({ request }) => {
   }, []);
 
   useEffect(() => {
-    const el = dialogRef.current?.querySelector<HTMLElement>('input');
+    // El primer campo de texto (no la casilla de aceptar, que va arriba)
+    const el = dialogRef.current?.querySelector<HTMLElement>('input:not([type="checkbox"])');
     el?.focus();
   }, [view]);
 
@@ -136,8 +144,21 @@ export const AuthModal: React.FC<Props> = ({ request }) => {
     };
   }, []);
 
+  /** Guarda en la base la constancia de que marcó las dos casillas (SQL 14). Se pide sin esperar: nunca demora ni impide entrar. */
+  const saveConsent = (m: typeof import('../lib/supabaseBrowser'), context: 'signup' | 'login' | 'code') => {
+    if (accepted.terms && accepted.secrecy) void m.recordConsent(context);
+  };
+
+  /** true si ya se marcaron las dos casillas; si no, lo avisa y le da el foco a la primera que falta. */
+  const requireAccepted = (): boolean => {
+    if (accepted.terms && accepted.secrecy) return true;
+    setAcceptError(true);
+    (accepted.terms ? secrecyRef : termsRef).current?.focus();
+    return false;
+  };
+
   const googleLogin = async () => {
-    if (busy) return;
+    if (busy || !requireAccepted()) return;
     setBusy(true);
     setError('');
     setGoogleError('');
@@ -211,6 +232,7 @@ export const AuthModal: React.FC<Props> = ({ request }) => {
       setCode('');
       return;
     }
+    saveConsent(m, codeKind === 'login' ? 'code' : 'signup');
     finishAuth(res.account);
   };
 
@@ -228,6 +250,8 @@ export const AuthModal: React.FC<Props> = ({ request }) => {
     if (busy) return;
     const kind: CodeKind = view === 'forgot' ? 'recovery' : 'login';
     if (!EMAIL_RE.test(reqEmail.trim())) return setError('Escribe un correo válido.');
+    // Entrar con un código es una forma de ingresar: pide la casilla (recuperar la contraseña no)
+    if (kind === 'login' && !requireAccepted()) return;
     if (CAPTCHA_ENABLED && !captcha) return setError('Completa la verificación de seguridad.');
     setBusy(true);
     setError('');
@@ -299,6 +323,7 @@ export const AuthModal: React.FC<Props> = ({ request }) => {
       setError('Escribe tu correo y tu contraseña.');
       return;
     }
+    if (!requireAccepted()) return;
     if (CAPTCHA_ENABLED && !captcha) {
       setError('Completa la verificación de seguridad.');
       return;
@@ -322,8 +347,10 @@ export const AuthModal: React.FC<Props> = ({ request }) => {
       captchaRef.current?.reset();
       return;
     }
-    if (res.account) finishAuth(res.account);
-    else setError('No se pudo iniciar sesión. Inténtalo de nuevo.');
+    if (res.account) {
+      saveConsent(m, 'login');
+      finishAuth(res.account);
+    } else setError('No se pudo iniciar sesión. Inténtalo de nuevo.');
   };
 
   const submitRegister = async (e: React.FormEvent) => {
@@ -333,6 +360,7 @@ export const AuthModal: React.FC<Props> = ({ request }) => {
     if (!EMAIL_RE.test(email.trim())) return setError('Escribe un correo válido.');
     if (phone.trim() && !PHONE_RE.test(phone.trim())) return setError('El teléfono solo puede tener números, espacios, guiones y un + al inicio.');
     if (password.length < MIN_PASSWORD) return setError(`La contraseña debe tener al menos ${MIN_PASSWORD} caracteres.`);
+    if (!requireAccepted()) return;
     if (CAPTCHA_ENABLED && !captcha) return setError('Completa la verificación de seguridad.');
     setBusy(true);
     setError('');
@@ -351,6 +379,7 @@ export const AuthModal: React.FC<Props> = ({ request }) => {
       switchView('confirm');
       return;
     }
+    saveConsent(m, 'signup');
     finishAuth(res.account);
   };
 
@@ -414,6 +443,20 @@ export const AuthModal: React.FC<Props> = ({ request }) => {
       </>
     );
   const codeButton = codeKind === 'signup' ? 'Confirmar' : codeKind === 'recovery' ? 'Continuar' : 'Entrar';
+  // Las casillas de aceptar (se muestran en Ingresar, Crear cuenta y Entrar con un código)
+  const acceptBoxes = (
+    <AcceptTerms
+      accepted={accepted}
+      invalid={acceptError}
+      termsRef={termsRef}
+      secrecyRef={secrecyRef}
+      onChange={(key, value) => {
+        const next = { ...accepted, [key]: value };
+        setAccepted(next);
+        if (next.terms && next.secrecy) setAcceptError(false);
+      }}
+    />
+  );
 
   return (
     <div
@@ -470,6 +513,7 @@ export const AuthModal: React.FC<Props> = ({ request }) => {
 
         {(view === 'login' || view === 'register') && (
           <div className="mt-5">
+            {acceptBoxes}
             <button
               type="button"
               onClick={() => void googleLogin()}
@@ -558,6 +602,7 @@ export const AuthModal: React.FC<Props> = ({ request }) => {
                 className={fieldClass}
               />
             </div>
+            {view === 'otp' && acceptBoxes}
             <CaptchaWidget ref={captchaRef} onToken={setCaptcha} />
             <FormError message={error} />
             <SubmitButton busy={busy} label="Enviarme el código" busyLabel="Enviando…" disabled={CAPTCHA_ENABLED && !captcha} />
@@ -849,6 +894,69 @@ const GoogleMark: React.FC = () => (
     <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z" />
     <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z" />
   </svg>
+);
+
+/**
+ * Las dos casillas obligatorias para crear cuenta e ingresar: (1) Términos y Condiciones + Política de Privacidad,
+ * (2) no divulgación del contenido de la venta. Los enlaces abren otra pestaña para no perder lo escrito.
+ */
+const AcceptTerms: React.FC<{
+  accepted: { terms: boolean; secrecy: boolean };
+  invalid: boolean;
+  onChange: (key: 'terms' | 'secrecy', value: boolean) => void;
+  termsRef: React.Ref<HTMLInputElement>;
+  secrecyRef: React.Ref<HTMLInputElement>;
+}> = ({ accepted, invalid, onChange, termsRef, secrecyRef }) => (
+  <div className="mb-4">
+    <div className={`space-y-3 rounded-2xl border px-3 py-2.5 transition-colors ${invalid ? 'border-rose-500/60 bg-rose-500/5' : 'border-zinc-800 bg-black/40'}`}>
+      <label htmlFor="auth-accept" className="flex cursor-pointer items-start gap-3 text-xs leading-relaxed text-slate-300">
+        <input
+          id="auth-accept"
+          ref={termsRef}
+          type="checkbox"
+          checked={accepted.terms}
+          onChange={(e) => onChange('terms', e.target.checked)}
+          aria-required="true"
+          aria-invalid={invalid && !accepted.terms}
+          aria-describedby={invalid ? 'auth-accept-error' : undefined}
+          className="mt-0.5 h-4 w-4 shrink-0 cursor-pointer accent-[#00ff88]"
+        />
+        <span>
+          He leído y acepto los{' '}
+          <a href="/terminos" target="_blank" rel="noopener noreferrer" className="font-semibold text-[#00ff88] hover:underline">
+            Términos y Condiciones
+            <span className="sr-only"> (se abre en una pestaña nueva)</span>
+          </a>{' '}
+          y la{' '}
+          <a href="/privacidad" target="_blank" rel="noopener noreferrer" className="font-semibold text-[#00ff88] hover:underline">
+            Política de Privacidad
+            <span className="sr-only"> (se abre en una pestaña nueva)</span>
+          </a>{' '}
+          de Descuentos Peru.
+        </span>
+      </label>
+      <label htmlFor="auth-accept-secrecy" className="flex cursor-pointer items-start gap-3 text-xs leading-relaxed text-slate-300">
+        <input
+          id="auth-accept-secrecy"
+          ref={secrecyRef}
+          type="checkbox"
+          checked={accepted.secrecy}
+          onChange={(e) => onChange('secrecy', e.target.checked)}
+          aria-required="true"
+          aria-invalid={invalid && !accepted.secrecy}
+          aria-describedby={invalid ? 'auth-accept-error' : undefined}
+          className="mt-0.5 h-4 w-4 shrink-0 cursor-pointer accent-[#00ff88]"
+        />
+        <span>Acepto que el contenido de la venta no será divulgado, salvo respecto a leaks y reportes.</span>
+      </label>
+    </div>
+    {invalid && (
+      <p id="auth-accept-error" role="alert" className="mt-2 flex items-start gap-2 font-mono text-xs text-rose-400">
+        <AlertCircle className="mt-0.5 h-3.5 w-3.5 shrink-0" aria-hidden="true" />
+        <span>Para continuar, marca las dos casillas: son obligatorias.</span>
+      </p>
+    )}
+  </div>
 );
 
 const FormError: React.FC<{ message: string }> = ({ message }) =>

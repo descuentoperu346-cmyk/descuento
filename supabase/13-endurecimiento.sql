@@ -14,7 +14,7 @@
 --   B. Enciende las reglas de acceso (RLS) en cualquier tabla de «public» que no las tuviera.
 --   C. Quita permisos peligrosos: la clave pública no puede escribir ni vaciar nada; nadie puede
 --      vaciar tablas por la API; las tablas privadas (equipo, compradores, ventas, costos, visitas,
---      historial, papelera y soporte) ya no responden ni siquiera «vacío» a la clave pública.
+--      historial, papelera, soporte, constancias de aceptación y Libro de Reclamaciones) ya no responden ni siquiera «vacío» a la clave pública.
 --   D. Funciones: solo se pueden llamar las que la web usa. El resto queda cerrado.
 --   E. Las vistas (si algún día hay) respetan las reglas de quien las consulta.
 --   F. Al final muestra un informe: «ATENCIÓN» = algo por revisar, «INFO» = lo público (previsto).
@@ -68,7 +68,7 @@ revoke all on all sequences in schema public from anon;
 do $$
 declare t text;
 begin
-  foreach t in array array['staff', 'buyers', 'customers', 'sales', 'product_costs', 'events', 'audit_log', 'trash', 'support_cases']
+  foreach t in array array['staff', 'buyers', 'customers', 'sales', 'product_costs', 'events', 'audit_log', 'trash', 'support_cases', 'consent_log', 'complaints']
   loop
     if to_regclass('public.' || t) is not null then
       execute format('revoke all on public.%I from anon', t);
@@ -104,6 +104,8 @@ begin
       ('public.my_vendor_id()',                                    'anon, authenticated'),
       -- visitas y clics (la web la llama sin sesión; no guarda IP)
       ('public.track_event(text, text, text, text, text, text)',   'anon, authenticated'),
+      -- Libro de Reclamaciones: cualquier persona puede registrar una hoja (la función valida y limita los envíos)
+      ('public.submit_complaint(jsonb)',                           'anon, authenticated'),
       -- solo con sesión del equipo (la propia función revisa el rol)
       ('public.traffic_report(integer, text)',                     'authenticated'),
       ('public.restore_from_trash(bigint)',                        'authenticated'),
@@ -157,7 +159,7 @@ from (
   select 'ATENCIÓN', 'La clave pública puede ejecutar una función no prevista', p.oid::regprocedure::text
     from pg_proc p join pg_namespace n on n.oid = p.pronamespace
    where n.nspname = 'public' and p.prokind in ('f', 'p') and has_function_privilege('anon', p.oid, 'execute')
-     and p.proname not in ('is_admin', 'is_dev', 'my_vendor_id', 'track_event')
+     and p.proname not in ('is_admin', 'is_dev', 'my_vendor_id', 'track_event', 'submit_complaint')
      and not exists (select 1 from pg_depend d where d.objid = p.oid and d.deptype = 'e')
   union all
   select 'ATENCIÓN', 'Función con permisos elevados sin «search_path» fijo', p.oid::regprocedure::text

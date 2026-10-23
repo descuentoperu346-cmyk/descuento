@@ -81,18 +81,27 @@ export const Footer: React.FC<FooterProps> = ({ onOpenAdmin, onNavigateTab, acti
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-400 text-center sm:text-left">
           <p>© {new Date().getFullYear()} Descuentos Perú. Todos los derechos reservados. Activaciones oficiales y soporte 24/7.</p>
           <div className="flex flex-wrap items-center justify-center sm:justify-end gap-2 sm:gap-4 text-[11px] text-slate-400">
-            {onNavigateTab ? (
-              <button
-                type="button"
-                onClick={() => onNavigateTab('privacidad')}
-                className={`cursor-pointer transition-colors hover:text-white hover:underline ${activeTab === 'privacidad' ? 'text-[#00ff88]' : ''}`}
-              >
-                Política de Privacidad
-              </button>
-            ) : (
-              <span>Privacidad Protegida</span>
-            )}
-            <span>·</span>
+            {/* Enlaces reales (/privacidad, /terminos y /reclamaciones): así Google y los buscadores los detectan; al pulsarlos no se recarga la página */}
+            {([
+              ['/privacidad', 'privacidad', 'Política de Privacidad'],
+              ['/terminos', 'terminos', 'Términos y Condiciones'],
+              ['/reclamaciones', 'reclamaciones', 'Libro de Reclamaciones']
+            ] as const).map(([href, tab, label]) => (
+              <React.Fragment key={tab}>
+                <a
+                  href={href}
+                  onClick={(e) => {
+                    if (!onNavigateTab || e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0) return;
+                    e.preventDefault();
+                    onNavigateTab(tab);
+                  }}
+                  className={`cursor-pointer transition-colors hover:text-white hover:underline ${activeTab === tab ? 'text-[#00ff88]' : ''}`}
+                >
+                  {label}
+                </a>
+                <span>·</span>
+              </React.Fragment>
+            ))}
             <span>Garantía de Reposición</span>
             <span>·</span>
             <span>Soporte Perú</span>

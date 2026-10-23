@@ -324,6 +324,33 @@ escribe el **Asunto** de la tabla y *Save*. No cambies lo que va entre llaves `{
 - «Ingresar con un código» **no crea cuentas**: si el correo no tiene cuenta, la web responde igual que si hubiera enviado el código (no se revela quién tiene cuenta). Las cuentas nuevas se crean solo con *Crear cuenta*.
 - *Authentication → Sign In / Providers → Email*: deja **Email OTP Length** en **6** y el vencimiento por defecto. Si algún día apagas **Secure email change**, solo llega un código (al correo nuevo): la web lo acepta. Con **Secure password change** encendido, la web pide el código de seguridad cuando la sesión es vieja.
 - Las cuentas del **equipo** tienen un correo interno que no recibe mensajes: «Olvidé mi contraseña» y «Ingresar con un código» no sirven para ellas (el DEV restablece la clave desde Supabase). Si el equipo cambia su clave desde el panel y Supabase pide el código de seguridad, la web les dice que cierren sesión, vuelvan a entrar y la cambien enseguida.
+
+## Parte L — Constancia de que cada persona aceptó los Términos y la Política (paso 14)
+
+Para crear una cuenta o ingresar (con correo, con código o con Google) hay que marcar **dos casillas**: (1) *«He leído y acepto los Términos y Condiciones y la Política de Privacidad…»* y
+(2) *«Acepto que el contenido de la venta no será divulgado, salvo respecto a leaks y reportes.»* Este paso hace que la base **guarde la constancia** de cada aceptación.
+
+22. *SQL Editor* → *New query* → pega todo `supabase/14-aceptacion-de-terminos.sql` → *Run* (necesita el paso 3). Termina con una fila «constancias» (al principio, 0). Se puede repetir sin problema.
+    - **Conviene ejecutarlo ANTES de publicar la web** con las casillas (el `git push`). Si la web sale primero, no pasa nada grave: entra todo el mundo igual, pero esas aceptaciones **no quedan guardadas**.
+    - Qué guarda, por cada vez que alguien marca las dos casillas y entra: de qué cuenta es, **cuándo** (la fecha la pone la base, no se puede falsificar), la **versión** de los textos (la fecha de «Última actualización», hoy `2026-10-22`) y **cómo entró** (`signup` cuenta nueva, `login` correo y contraseña, `code` código por correo, `google`).
+    - Quién la ve: cada persona solo las suyas; **ADMIN y DEV** las de todos. **Nadie** edita ni borra constancias (solo desaparecen si se elimina la cuenta de la persona).
+    - Para consultarla: *Table Editor → consent_log*, o la consulta de ejemplo que está al final del archivo (última aceptación de cada comprador).
+    - «Recuperar la contraseña» no pide las casillas ni guarda constancia; el panel del equipo (`#ironcat`) tampoco.
+    - Cuando cambies el texto de la Política o de los Términos, cambia también la fecha y la versión en `src/lib/legal.ts` (`LEGAL_VERSION` y `LEGAL_UPDATED`): así cada constancia dice qué texto se aceptó.
+
+## Parte M — Libro de Reclamaciones virtual (paso 15)
+
+La ley peruana (Código de Protección y Defensa del Consumidor, Ley N.º 29571) obliga a tener un Libro de Reclamaciones, también en las ventas por internet. La web tiene la página **Libro de Reclamaciones** (`/reclamaciones`, enlazada en el pie y en la cláusula 16 de los Términos). Cualquier persona puede presentar un **reclamo** (disconformidad con el producto o servicio) o una **queja** (malestar por la atención), **sin cuenta**.
+
+23. *SQL Editor* → *New query* → pega todo `supabase/15-libro-de-reclamaciones.sql` → *Run* (necesita el paso 3). Termina con una fila «hojas» y «sin_responder» (al principio, 0 y 0). Se puede repetir sin problema.
+    - **Ejecútalo ANTES de publicar la web** (el `git push`). Si la web sale primero, el formulario avisa «todavía no está activo» y pide escribir al correo: no se pierde nada en silencio, pero tampoco queda guardado.
+    - Cada hoja guarda lo que pide la hoja oficial: datos de quien reclama, el bien contratado, el detalle y el pedido, la conformidad (reemplaza a la firma en el libro virtual), **cuándo** se presentó (la fecha la pone la base) y la **fecha límite para responder: 15 días hábiles** (Ley N.º 31435). El cálculo no descuenta feriados: respondiendo antes de esa fecha siempre estás dentro del plazo.
+    - Quién puede qué: cualquiera puede **registrar** una hoja (solo con la función `submit_complaint`, que valida todo y limita los envíos: 5 por correo cada 24 horas y 100 por hora en total). **Solo ADMIN y DEV** las leen y escriben la respuesta (lo único que pueden cambiar es el estado y el texto de la respuesta). El vendedor no ve nada. **Nadie borra hojas** (el Libro se conserva por ley); si una persona borra su cuenta, su hoja se conserva sin el vínculo a la cuenta.
+    - Para atenderlas: panel → **Administración → Libro de reclamaciones**. Verás cuántas esperan respuesta (también en el menú), cuáles vencen en 3 días o menos y cuáles ya pasaron el plazo. Pulsa **Responder**, escribe la respuesta, guárdala y envíala con el botón **Correo** o **WhatsApp** (la respuesta queda guardada con su fecha; la persona la recibe cuando tú la envías).
+    - **Falta que completes tus datos de proveedor:** la hoja de reclamación debe llevar el nombre, el **RUC** y el **domicilio** del proveedor. Están en `src/lib/legal.ts` (`PROVIDER`); mientras `ruc` y `address` estén vacíos la hoja no los muestra y el panel te lo avisa.
+    - **Limitación:** la ley pide que la persona pueda recibir **copia de su hoja en su correo**. Hoy la web no envía correos por su cuenta: la hoja se puede **imprimir o guardar en PDF** y dice que, para recibir copia por correo, escriban al correo de contacto con su número de hoja. Para que sea automático hace falta un servidor que envíe el correo (Supabase Edge Function con un servicio de correo); no está hecho.
+    - Si el paso 13 (endurecimiento) se vuelve a ejecutar, ya incluye este paso en su lista de tablas privadas y de funciones permitidas.
+
 ## Cómo se usa
 
 - **Compradores:** botón **Ingresar** (barra superior) → *Crear cuenta* (nombre, correo, teléfono opcional, contraseña de 8+ caracteres).

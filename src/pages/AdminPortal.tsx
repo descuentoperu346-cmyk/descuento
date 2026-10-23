@@ -105,6 +105,8 @@ import { deleteNote, probeTrash, useTrashReady } from '../lib/vaultApi';
 import { ensureSupportLoaded, resetSupport, useSupport } from '../lib/supportStore';
 import { resetCosts } from '../lib/costsStore';
 import { isPending as isCasePending } from '../lib/supportLogic';
+import { ensureComplaintsLoaded, resetComplaints, useComplaints } from '../lib/complaintsStore';
+import { isPending as isComplaintPending } from '../lib/complaintsLogic';
 import { latestSubscriptions, money, subscriptionInfo } from '../lib/salesMath';
 import type { SaleDraft, SalesCtx, SalesIntent } from '../components/panel/sales/shared';
 
@@ -116,6 +118,7 @@ const ReportsPage = lazy(() => import('../components/panel/sales/ReportsPage'));
 const GainsPage = lazy(() => import('../components/panel/sales/GainsPage'));
 const SupportPage = lazy(() => import('../components/panel/sales/SupportPage'));
 const MessagesPage = lazy(() => import('../components/panel/sales/MessagesPage'));
+const ComplaintsAdminPage = lazy(() => import('../components/panel/ComplaintsAdminPage'));
 const TrashPage = lazy(() => import('../components/panel/TrashPage'));
 const HistoryPage = lazy(() => import('../components/panel/HistoryPage'));
 const BackupPage = lazy(() => import('../components/panel/BackupPage'));
@@ -529,6 +532,14 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
   }, [salesEnabled, isAuthenticated]);
   const supportState = useSupport();
 
+  // Libro de Reclamaciones: solo lo ve la administración. Se carga al entrar (para el número del menú) y se olvida al salir.
+  useEffect(() => {
+    if (!salesEnabled) return;
+    if (isAuthenticated && isSuperAdmin) void ensureComplaintsLoaded();
+    else resetComplaints();
+  }, [salesEnabled, isAuthenticated, isSuperAdmin]);
+  const complaintsState = useComplaints();
+
   // Papelera: se comprueba una vez al entrar si ya está instalada, para que los avisos de "eliminar" digan la verdad
   const trashReady = useTrashReady();
   useEffect(() => {
@@ -557,7 +568,8 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
   }, [salesEnabled, salesState.status, salesState.status === 'ready' ? salesState.sales : null, isSuperAdmin, currentUser?.id]);
   const supportPending =
     salesEnabled && supportState.status === 'ready' ? supportState.cases.filter((c) => isCasePending(c) && (isSuperAdmin || c.vendorId === currentUser?.id)).length : 0;
-  const navGroups = buildNav({ products: userAllowedServices.length, articles: localLeakArticles.length, salesEnabled, renewalsDue, supportPending, isSuperAdmin, isDev: isDevSession });
+  const complaintsPending = salesEnabled && isSuperAdmin && complaintsState.status === 'ready' ? complaintsState.items.filter(isComplaintPending).length : 0;
+  const navGroups = buildNav({ products: userAllowedServices.length, articles: localLeakArticles.length, salesEnabled, renewalsDue, supportPending, complaintsPending, isSuperAdmin, isDev: isDevSession });
 
   const openNewSale = (draft?: SaleDraft) => {
     setSalesIntent({ kind: 'new-sale', draft, seq: Date.now() });
@@ -860,6 +872,11 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
           {salesEnabled && currentNav === 'mensajes' && (
             <Suspense fallback={<PanelPageFallback />}>
               <MessagesPage ctx={salesCtx} />
+            </Suspense>
+          )}
+          {salesEnabled && isSuperAdmin && currentNav === 'reclamaciones' && (
+            <Suspense fallback={<PanelPageFallback />}>
+              <ComplaintsAdminPage onToast={showToast} />
             </Suspense>
           )}
 

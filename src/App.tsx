@@ -60,11 +60,14 @@ const FigureProfilePage = lazy(() => import('./pages/FigureProfilePage').then((m
 const VendorCatalogPage = lazy(() => import('./pages/VendorCatalogPage').then((m) => ({ default: m.VendorCatalogPage })));
 const ContactPage = lazy(() => import('./pages/ContactPage').then((m) => ({ default: m.ContactPage })));
 const PrivacyPage = lazy(() => import('./pages/PrivacyPage').then((m) => ({ default: m.PrivacyPage })));
+const TermsPage = lazy(() => import('./pages/TermsPage').then((m) => ({ default: m.TermsPage })));
+const ComplaintsPage = lazy(() => import('./pages/ComplaintsPage').then((m) => ({ default: m.ComplaintsPage })));
 const LeaksTab = lazy(() => import('./components/LeaksTab').then((m) => ({ default: m.LeaksTab })));
 
-// Dirección corta para Google y los buscadores: https://<web>/privacidad abre la política (#/privacidad).
-if (typeof window !== 'undefined' && /^\/privacidad\/?$/i.test(window.location.pathname)) {
-  window.history.replaceState(null, '', '/#/privacidad');
+// Direcciones cortas para Google y los buscadores: https://<web>/privacidad, /terminos y /reclamaciones abren cada página (#/privacidad, #/terminos, #/reclamaciones).
+if (typeof window !== 'undefined') {
+  const short = window.location.pathname.match(/^\/(privacidad|terminos|reclamaciones)\/?$/i);
+  if (short) window.history.replaceState(null, '', `/#/${short[1].toLowerCase()}`);
 }
 
 // Catálogo por vendedor: #/tienda/<username>. Se evalúa antes que el resto de rutas.
@@ -108,6 +111,8 @@ export default function App() {
       if (hash.includes('nosotros') || hash.includes('about')) return 'nosotros';
       if (hash.includes('contacto') || hash.includes('contact')) return 'contacto';
       if (hash.includes('privacidad')) return 'privacidad';
+      if (hash.includes('terminos')) return 'terminos';
+      if (hash.includes('reclamaciones')) return 'reclamaciones';
     }
     return 'inicio';
   });
@@ -375,6 +380,10 @@ export default function App() {
           setActiveNavTab('contacto');
         } else if (hash.includes('privacidad')) {
           setActiveNavTab('privacidad');
+        } else if (hash.includes('terminos')) {
+          setActiveNavTab('terminos');
+        } else if (hash.includes('reclamaciones')) {
+          setActiveNavTab('reclamaciones');
         } else {
           setActiveNavTab('inicio');
         }
@@ -530,7 +539,21 @@ export default function App() {
         {/* ======================= PAGE: POLÍTICA DE PRIVACIDAD ======================= */}
         {activeNavTab === 'privacidad' && (
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 pb-16">
-            <PrivacyPage onNavigateToContact={() => handleTabChange('contacto')} />
+            <PrivacyPage onNavigateToContact={() => handleTabChange('contacto')} onNavigateToTerms={() => handleTabChange('terminos')} />
+          </div>
+        )}
+
+        {/* ======================= PAGE: TÉRMINOS Y CONDICIONES ======================= */}
+        {activeNavTab === 'terminos' && (
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 pb-16">
+            <TermsPage onNavigateToContact={() => handleTabChange('contacto')} onNavigateToPrivacy={() => handleTabChange('privacidad')} />
+          </div>
+        )}
+
+        {/* ======================= PAGE: LIBRO DE RECLAMACIONES ======================= */}
+        {activeNavTab === 'reclamaciones' && (
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 pb-16">
+            <ComplaintsPage onNavigateToTerms={() => handleTabChange('terminos')} onNavigateToPrivacy={() => handleTabChange('privacidad')} />
           </div>
         )}
 

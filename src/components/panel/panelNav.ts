@@ -19,6 +19,7 @@ import {
   PiggyBank,
   LifeBuoy,
   MessageSquareText,
+  BookOpen,
   type LucideIcon
 } from 'lucide-react';
 
@@ -38,6 +39,7 @@ export type PanelNavId =
   | 'telemetria'
   | 'gestion-vendedores'
   | 'respaldos'
+  | 'reclamaciones'
   | 'equipo'
   | 'papelera'
   | 'historial'
@@ -69,12 +71,14 @@ interface BuildNavOptions {
   renewalsDue: number;
   /** Casos de garantía y soporte sin resolver (se muestra como número en el menú) */
   supportPending: number;
+  /** Hojas del Libro de Reclamaciones sin responder (se muestra como número en el menú) */
+  complaintsPending: number;
   isSuperAdmin: boolean;
   isDev: boolean;
 }
 
 /** Menú del panel agrupado por tarea. Lo que no corresponde al rol de la sesión no aparece. */
-export function buildNav({ products, articles, salesEnabled, renewalsDue, supportPending, isSuperAdmin, isDev }: BuildNavOptions): NavGroup[] {
+export function buildNav({ products, articles, salesEnabled, renewalsDue, supportPending, complaintsPending, isSuperAdmin, isDev }: BuildNavOptions): NavGroup[] {
   const groups: NavGroup[] = [
     { key: 'inicio', items: [{ id: 'resumen', label: 'Resumen', icon: LayoutDashboard }] },
     ...(salesEnabled
@@ -129,6 +133,8 @@ export function buildNav({ products, articles, salesEnabled, renewalsDue, suppor
       title: 'Administración',
       items: [
         { id: 'gestion-vendedores', label: 'Tiendas y vendedores', icon: Users },
+        // El Libro vive en la base de datos: solo existe cuando el panel trabaja con ella
+        ...(salesEnabled ? [{ id: 'reclamaciones' as const, label: 'Libro de reclamaciones', icon: BookOpen, ...(complaintsPending > 0 ? { count: complaintsPending } : {}) }] : []),
         { id: 'respaldos', label: 'Base de datos y copias', icon: Database }
       ]
     });
@@ -165,6 +171,7 @@ export const NAV_TITLES: Record<PanelNavId, string> = {
   telemetria: 'Tráfico y clics',
   'gestion-vendedores': 'Tiendas y vendedores',
   respaldos: 'Base de datos y copias',
+  reclamaciones: 'Libro de reclamaciones',
   equipo: 'Equipo y compradores',
   papelera: 'Papelera',
   historial: 'Historial de cambios',

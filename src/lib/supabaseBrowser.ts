@@ -9,6 +9,7 @@ import { mapLeaks, mapPaymentMethods, mapProducts, mapVendors, type Row } from '
 import { UserFacingError } from './remoteStatus';
 import { isStaffAdmin, staffLoginEmail, type StaffRole } from './roles';
 import { AUTH_STORAGE_KEY, type AccountInfo } from './accountStore';
+import { LEGAL_VERSION } from './legal';
 
 /**
  * Escritura y sesión del panel contra Supabase (se carga solo cuando alguien entra al panel).
@@ -356,6 +357,48 @@ export async function buyerConfirmEmailChange(
   }
 }
 
+// ---------------------------------------------------------------- constancia de aceptación (SQL 14, tabla consent_log)
+/** Cómo entró la persona: cuenta nueva, correo y contraseña, código por correo o Google. */
+export type ConsentContext = 'signup' | 'login' | 'code' | 'google';
+const CONSENT_PENDING_KEY = 'dp_consent_pending';
+
+/**
+ * Guarda la constancia de que la persona marcó las dos casillas (Términos y Condiciones + Política de Privacidad, y no divulgación).
+ * Se llama solo después de entrar, con la sesión ya abierta. La fecha la pone la base.
+ * Nunca impide entrar: si la tabla aún no existe (falta ejecutar el SQL 14) o no hay conexión, simplemente no se guarda.
+ */
+export async function recordConsent(context: ConsentContext, version: string = LEGAL_VERSION): Promise<void> {
+  try {
+    const { data } = await sb().auth.getSession();
+    const uid = data.session?.user.id;
+    if (!uid) return;
+    const { error } = await sb().from('consent_log').insert({ user_id: uid, version, context, terms_accepted: true, secrecy_accepted: true });
+    if (error) console.warn('No se pudo guardar la constancia de aceptación', error.message);
+  } catch {
+    // no debe impedir entrar
+  }
+}
+
+/** Con Google la persona sale de la web y vuelve: se anota que aceptó para guardar la constancia al volver. */
+function markConsentPending(): void {
+  try {
+    sessionStorage.setItem(CONSENT_PENDING_KEY, LEGAL_VERSION);
+  } catch {
+    // sin sessionStorage: no se guarda la constancia de este ingreso
+  }
+}
+
+async function recordPendingConsent(): Promise<void> {
+  let version: string | null = null;
+  try {
+    version = sessionStorage.getItem(CONSENT_PENDING_KEY);
+    sessionStorage.removeItem(CONSENT_PENDING_KEY);
+  } catch {
+    // ignorar
+  }
+  if (version) await recordConsent('google', version);
+}
+
 // ---------------------------------------------------------------- ingresar con Google (redirección)
 const OAUTH_RETURN_KEY = 'dp_oauth_return';
 let googleOn: Promise<boolean> | null = null;
@@ -375,7 +418,10 @@ export function googleEnabled(fresh = false): Promise<boolean> {
   return googleOn;
 }
 
-/** Abre Google para elegir cuenta. Si todo sale bien el navegador se va a Google y esta función no vuelve. */
+/**
+ * Abre Google para elegir cuenta. Si todo sale bien el navegador se va a Google y esta función no vuelve.
+ * Solo se llama después de que la persona marcó las dos casillas de aceptar (lo exige la ventana de cuenta).
+ */
 export async function startGoogleSignIn(): Promise<string | null> {
   try {
     try {
@@ -383,6 +429,7 @@ export async function startGoogleSignIn(): Promise<string | null> {
     } catch {
       // sin sessionStorage: al volver se queda en el inicio
     }
+    markConsentPending();
     me = undefined;
     const { error } = await sb().auth.signInWithOAuth({
       provider: 'google',
@@ -419,6 +466,7 @@ export async function finishOAuthRedirect(): Promise<{ account?: AccountInfo | n
     const { error } = await sb().auth.exchangeCodeForSession(code);
     if (error) return { error: 'No se pudo entrar con Google. Inténtalo de nuevo.' };
     me = undefined;
+    await recordPendingConsent();
     return { account: await accountGet() };
   } catch {
     return { error: 'No se pudo conectar con el servidor. Inténtalo de nuevo.' };
